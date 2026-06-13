@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Time Dilatometer | Einstein Engine | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           TIME DILATOMETER - INTERSTELLAR ENGINE (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-purple: #a855f7;
+            --accent-purple-glow: rgba(168, 85, 247, 0.3);
+            --accent-cyan: #22d3ee;
+            --accent-cyan-glow: rgba(34, 211, 238, 0.3);
+            --accent-pink: #ec4899;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden;
+        }
+
+        /* Space Background Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.3; z-index: -1; pointer-events: none;}
+        .glow-1 { top: 10%; right: -10%; width: 250px; height: 250px; background: var(--accent-purple); }
+        .glow-2 { bottom: 10%; left: -10%; width: 300px; height: 300px; background: var(--accent-cyan); }
+        .glow-3 { top: 50%; left: 50%; width: 200px; height: 200px; background: var(--accent-pink); transform: translate(-50%, -50%); opacity: 0.15; }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-cyan); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #a855f7, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--accent-cyan); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600;}
+
+        /* MAIN CONFIG CARD */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(34, 211, 238, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px var(--accent-cyan-glow);
+            position: relative; overflow: hidden;
+        }
+        .sec-lbl { font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+
+        /* VELOCITY SLIDER (EXTREME) */
+        .slider-wrap { margin-bottom: 25px; text-align: center; background: rgba(2, 6, 23, 0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px 15px;}
+        .v-val { font-size: 2.5rem; font-weight: 900; color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace; margin-bottom: 15px; text-shadow: 0 0 15px var(--accent-cyan-glow);}
+        .v-val small { font-size: 1rem; color: var(--text-sub); text-shadow: none;}
+        
+        input[type=range] {
+            -webkit-appearance: none; width: 100%; background: transparent;
+        }
+        input[type=range]:focus { outline: none; }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 8px; cursor: pointer; background: #0d0a15; border-radius: 10px; border: 1px solid rgba(34, 211, 238, 0.3);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.8);
+        }
+        input[type=range]::-webkit-slider-thumb {
+            height: 26px; width: 26px; border-radius: 50%; background: var(--accent-purple); cursor: pointer; -webkit-appearance: none; margin-top: -10px;
+            box-shadow: 0 0 15px var(--accent-purple-glow); border: 2px solid #fff; transition: 0.2s;
+        }
+        input[type=range]::-webkit-slider-thumb:active { transform: scale(1.2); }
+
+        /* INPUT FIELDS */
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        
+        .faux-input {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; box-sizing: border-box;
+        }
+        .faux-input:active { border-color: var(--accent-purple); transform: scale(0.97); background: rgba(168, 85, 247, 0.05); }
+        .faux-input i { color: var(--accent-purple); }
+
+        .real-input {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .real-input:focus { border-color: var(--accent-pink); box-shadow: 0 0 10px rgba(236, 72, 153, 0.2); }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #a855f7, #22d3ee);
+            color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 25px var(--accent-cyan-glow); display: flex; justify-content: center; gap: 10px; align-items: center;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 20px; 
+            padding: 25px 20px; margin-bottom: 30px; box-shadow: 0 10px 40px var(--accent-purple-glow); display: none; position: relative; overflow: hidden;
+        }
+        
+        .gamma-badge {
+            background: rgba(168, 85, 247, 0.15); border: 1px solid var(--accent-purple); color: var(--accent-purple);
+            padding: 8px 15px; border-radius: 30px; font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 0.9rem;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 25px; box-shadow: 0 0 15px var(--accent-purple-glow);
+        }
+
+        .res-grid-col { display: flex; flex-direction: column; gap: 20px; }
+        
+        .res-block { background: rgba(2, 6, 23, 0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 15px; position: relative;}
+        .res-block::before { content: ''; position: absolute; left: 0; top: 15px; bottom: 15px; width: 4px; border-radius: 0 4px 4px 0; }
+        .res-block.time-block::before { background: var(--accent-cyan); }
+        .res-block.dist-block::before { background: var(--accent-pink); }
+
+        .res-lbl-top { font-size: 0.7rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;}
+        
+        .res-split { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 10px;}
+        .res-split:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0;}
+        
+        .rs-left { font-size: 0.8rem; color: var(--text-sub); font-weight: 600;}
+        .rs-right { font-size: 1.1rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; color: var(--text-main); text-align: right;}
+        .rs-right.highlight { color: var(--accent-cyan); font-size: 1.3rem;}
+        .rs-right.highlight-pink { color: var(--accent-pink); font-size: 1.3rem;}
+
+        /* DRUM MODAL (BOTTOM SHEET) */
+        .drum-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(8px); }
+        .drum-sheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: #151322; border-top: 1px solid var(--accent-cyan); border-radius: 24px 24px 0 0; z-index: 1001; padding: 20px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 -10px 50px var(--accent-cyan-glow);}
+        .drum-overlay.show { display: block; opacity: 1; }
+        .drum-sheet.show { bottom: 0; }
+        
+        .drum-grid { display: flex; justify-content: center; align-items: center; gap: 20px; padding: 15px 0; position: relative; }
+        .drum-col { display: flex; flex-direction: column; align-items: center; width: 40%; z-index: 2; }
+        .drum-btn { background: transparent; border: none; color: var(--accent-cyan); font-size: 1.5rem; padding: 5px; cursor: pointer; transition: 0.2s;}
+        .drum-btn:active { transform: scale(0.8); }
+        .d-item { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: var(--text-dim); padding: 5px 0; transition: 0.3s;}
+        .d-item.active { font-size: 1.6rem; font-weight: 900; color: var(--text-main); }
+        .drum-highlight { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; height: 50px; border: 2px solid var(--accent-cyan); border-radius: 12px; background: rgba(34, 211, 238, 0.1); z-index: 1; pointer-events: none;}
+
+        .ds-actions { display: flex; gap: 15px; margin-top: 20px; }
+        .ds-btn { flex: 1; padding: 14px; border-radius: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; border: none; transition: 0.2s;}
+        .ds-cancel { background: transparent; border: 1px solid var(--text-dim); color: var(--text-sub); }
+        .ds-cancel:active { background: rgba(255,255,255,0.05); }
+        .ds-set { background: var(--accent-cyan); color: #000; box-shadow: 0 0 15px var(--accent-cyan-glow);}
+        .ds-set:active { transform: scale(0.95); }
+
+        /* ANIMATIONS */
+        .anim-up { animation: slideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="bg-glow glow-3"></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-rocket"></i> EINSTEIN ENGINE</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>Interstellar Mode</h1>
+            <p>> relativity_core --warp_space_time</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            
+            <div class="sec-lbl"><i class="fas fa-tachometer-alt" style="color:var(--accent-cyan);"></i> Velocity (% of Light Speed)</div>
+            <div class="slider-wrap">
+                <div class="v-val" id="v-display">50.000<small>% c</small></div>
+                <input type="range" id="v-range" min="1" max="99.999" step="0.001" value="50" oninput="SSJ4_Relativity.updateV()">
+            </div>
+
+            <div class="inp-grid">
+                <div>
+                    <span class="sec-lbl"><i class="fas fa-user-astronaut" style="color:var(--accent-purple);"></i> Traveler's Time</span>
+                    <div class="faux-input" onclick="SSJ4_Relativity.openPicker()">
+                        <span id="time-val-display">1 Year</span>
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                </div>
+                <div>
+                    <span class="sec-lbl"><i class="fas fa-route" style="color:var(--accent-pink);"></i> Earth Distance</span>
+                    <div style="position:relative;">
+                        <input type="number" id="dist-input" class="real-input" value="4.37" min="0.1" step="0.1">
+                        <small style="position:absolute; right:15px; top:15px; color:var(--text-sub); font-weight:800;">LY</small>
+                    </div>
+                </div>
+            </div>
+
+            <button class="calc-btn" onclick="SSJ4_Relativity.calculate()">
+                <i class="fas fa-atom"></i> Engage Warp Drive
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container">
+            
+            <div style="text-align: center;">
+                <div class="gamma-badge" id="res-gamma">
+                    <i class="fas fa-infinity"></i> Lorentz Factor (γ): 1.0000
+                </div>
+            </div>
+
+            <div class="res-grid-col">
+                <div class="res-block time-block">
+                    <div class="res-lbl-top"><i class="fas fa-clock" style="color:var(--accent-cyan);"></i> Time Dilation</div>
+                    
+                    <div class="res-split">
+                        <div class="rs-left">Time passed for YOU (Traveler)</div>
+                        <div class="rs-right" id="r-time-you">1.0000 Yrs</div>
+                    </div>
+                    <div class="res-split">
+                        <div class="rs-left">Time passed on EARTH (Observers)</div>
+                        <div class="rs-right highlight" id="r-time-earth">--</div>
+                    </div>
+                    <div class="res-split">
+                        <div class="rs-left" style="color:var(--accent-purple); font-weight:800;">Age Difference Gap</div>
+                        <div class="rs-right" style="color:var(--accent-purple);" id="r-time-gap">--</div>
+                    </div>
+                </div>
+
+                <div class="res-block dist-block">
+                    <div class="res-lbl-top"><i class="fas fa-compress-arrows-alt" style="color:var(--accent-pink);"></i> Length Contraction</div>
+                    
+                    <div class="res-split">
+                        <div class="rs-left">Distance observed from EARTH</div>
+                        <div class="rs-right" id="r-dist-earth">4.3700 LY</div>
+                    </div>
+                    <div class="res-split">
+                        <div class="rs-left">Distance experienced by YOU</div>
+                        <div class="rs-right highlight-pink" id="r-dist-you">--</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <div class="drum-overlay" id="p-overlay" onclick="SSJ4_Relativity.closePicker()"></div>
+    <div class="drum-sheet" id="p-sheet">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="font-weight:800; color:var(--text-main); text-transform:uppercase; font-size:0.9rem;">Travel Duration</span>
+            <i class="fas fa-times" style="color:var(--text-sub); cursor:pointer;" onclick="SSJ4_Relativity.closePicker()"></i>
+        </div>
+
+        <div class="drum-grid">
+            <div class="drum-highlight"></div>
+            <div class="drum-col">
+                <button class="drum-btn" onclick="SSJ4_Relativity.move(-1)"><i class="fas fa-chevron-up"></i></button>
+                <div id="drum-list" style="display:flex; flex-direction:column; align-items:center; gap:8px;"></div>
+                <button class="drum-btn" onclick="SSJ4_Relativity.move(1)"><i class="fas fa-chevron-down"></i></button>
+            </div>
+            <div style="font-size: 1.3rem; font-weight: 800; color:var(--text-sub); font-family: 'JetBrains Mono', monospace;">YEARS</div>
+        </div>
+        <div class="ds-actions">
+            <button class="ds-btn ds-cancel" onclick="SSJ4_Relativity.closePicker()">Cancel</button>
+            <button class="ds-btn ds-set" onclick="SSJ4_Relativity.setPicker()">Confirm</button>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - INTERSTELLAR RELATIVITY ENGINE */
+        window.SSJ4_Relativity = {
+            v: 50.000,
+            t_traveler: 1, // Base time experienced by the user in the ship
+            yearsArr: Array.from({length: 100}, (_, i) => i + 1),
+            currIdx: 0,
+
+            init: function() {
+                this.updateV();
+            },
+
+            haptic: function(intensity=20) { 
+                if(window.navigator && window.navigator.vibrate) { try { navigator.vibrate(intensity); } catch(e){} }
+            },
+
+            updateV: function() {
+                this.v = parseFloat(document.getElementById('v-range').value);
+                // Format to 3 decimal places for extreme precision (e.g. 99.999%)
+                let displayV = this.v % 1 === 0 ? this.v.toFixed(0) : this.v.toFixed(3);
+                document.getElementById('v-display').innerHTML = `${displayV}<small>% c</small>`;
+                
+                // Light haptic while sliding
+                this.haptic(5);
+            },
+
+            // --- CUSTOM DRUM PICKER LOGIC ---
+            openPicker: function() {
+                this.haptic();
+                this.renderDrum();
+                document.getElementById('p-overlay').classList.add('show');
+                setTimeout(() => document.getElementById('p-sheet').classList.add('show'), 10);
+            },
+            closePicker: function() {
+                this.haptic();
+                document.getElementById('p-sheet').classList.remove('show');
+                setTimeout(() => document.getElementById('p-overlay').classList.remove('show'), 300);
+            },
+            move: function(dir) {
+                this.haptic(15);
+                this.currIdx = (this.currIdx + dir + this.yearsArr.length) % this.yearsArr.length;
+                this.renderDrum();
+            },
+            renderDrum: function() {
+                const el = document.getElementById('drum-list');
+                let html = '';
+                for(let i = -1; i <= 1; i++) {
+                    let idx = (this.currIdx + i + this.yearsArr.length) % this.yearsArr.length;
+                    let cls = i === 0 ? 'd-item active' : 'd-item';
+                    html += `<div class="${cls}">${this.yearsArr[idx]}</div>`;
+                }
+                el.innerHTML = html;
+            },
+            setPicker: function() {
+                this.t_traveler = this.yearsArr[this.currIdx];
+                document.getElementById('time-val-display').innerText = `${this.t_traveler} Year${this.t_traveler > 1 ? 's' : ''}`;
+                this.closePicker();
+            },
+
+            // --- EINSTEIN MATH ENGINE ---
+            calculate: function() {
+                this.haptic([30, 50, 30]); // Heavy feedback for WARP
+                
+                const dist_earth = parseFloat(document.getElementById('dist-input').value) || 0;
+                
+                // 1. Calculate Lorentz Factor (Gamma)
+                // γ = 1 / sqrt(1 - v^2/c^2)
+                const v_decimal = this.v / 100;
+                const gamma = 1 / Math.sqrt(1 - Math.pow(v_decimal, 2));
+
+                // 2. Time Dilation
+                // If traveler experiences t_0, Earth experiences t = t_0 * γ
+                const time_earth = this.t_traveler * gamma;
+                const time_gap = time_earth - this.t_traveler;
+
+                // 3. Length Contraction
+                // L = L_0 / γ
+                const dist_traveler = dist_earth / gamma;
+
+                // --- RENDER RESULTS ---
+                document.getElementById('res-gamma').innerHTML = `<i class="fas fa-infinity"></i> Lorentz Factor (γ): ${gamma.toFixed(4)}`;
+                
+                // Time Updates
+                document.getElementById('r-time-you').innerText = `${this.t_traveler.toFixed(4)} Yrs`;
+                document.getElementById('r-time-earth').innerText = `${time_earth.toFixed(4)} Yrs`;
+                document.getElementById('r-time-gap').innerText = `${time_gap.toFixed(4)} Yrs`;
+
+                // Distance Updates
+                document.getElementById('r-dist-earth').innerText = `${dist_earth.toFixed(4)} LY`;
+                document.getElementById('r-dist-you').innerText = `${dist_traveler.toFixed(4)} LY`;
+
+                // Show Card with Animation
+                const resCard = document.getElementById('results-container');
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-up');
+                void resCard.offsetWidth; // trigger reflow
+                resCard.classList.add('anim-up');
+                
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'end' }); }, 100);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => { SSJ4_Relativity.init(); });
+    </script>
+</body>
+</html>

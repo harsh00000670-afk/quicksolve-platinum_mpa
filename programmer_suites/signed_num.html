@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Signed Numbers Lab | Two's Complement & Binary Representations | QuickSolve Platinum</title>
+    <meta name="description" content="Advanced Signed Numbers Lab for developers. Convert decimal integers to Two's Complement, One's Complement, and Sign-Magnitude representations instantly. Supports 8-bit to 64-bit precision with a logic visualizer.">
+    <meta name="keywords" content="twos complement calculator, signed binary converter, sign-magnitude representation, ones complement calculator, 64-bit signed numbers, binary overflow checker, programmer binary calculator, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/signed_num.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Signed Numbers Lab - Visualize Two's Complement">
+    <meta property="og:description" content="Understand how computers store negative numbers. Convert and visualize binary logic step-by-step.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           SIGNED NUMBERS LAB (ANTI-SQUISH OP EDITION)
+           Theme: Cyberpunk Terminal (Magenta/Blue)
+           ========================================= */
+        body { margin: 0; background-color: var(--bg-body, #09090b); }
+
+        #mod-signed-overlay {
+            width: 100vw; min-height: 100vh;
+            background-color: var(--bg-body, #09090b); 
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: monospace;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .sn-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; 
+            border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100;
+            flex-shrink: 0; /* Header na pichke */
+        }
+        .sn-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; }
+        .sn-tit { color: #d946ef; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .sn-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Bit Size Selector - FIXED GAYAB BUG */
+        .bit-selector { 
+            display: flex; 
+            flex-shrink: 0; /* ISSE BOX KABHI GAYAB NAHI HOGA */
+            min-height: 42px; /* Minimum height fix kar di */
+            background: #1e293b; border: 1px solid #475569; border-radius: 8px; overflow: hidden; 
+        }
+        .bit-opt { flex: 1; display: flex; justify-content: center; align-items: center; color: #94a3b8; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; border-right: 1px solid #475569; }
+        .bit-opt:last-child { border-right: none; }
+        .bit-opt.active { background: rgba(217, 70, 239, 0.15); color: #d946ef; font-weight: 900; box-shadow: inset 0 -3px 0 #d946ef; }
+
+        /* Input Group */
+        .sn-grp { 
+            flex-shrink: 0; /* Safe side */
+            background: #1e293b; 
+            border: 1px solid #475569; 
+            border-radius: 10px; padding: 15px; transition: 0.2s; position: relative; 
+        }
+        .sn-grp:focus-within { border-color: #d946ef; box-shadow: 0 0 15px rgba(217, 70, 239, 0.15); background: #1e293b; }
+        .sn-grp.error { border-color: #ef4444 !important; box-shadow: 0 0 15px rgba(239, 68, 68, 0.1) !important; }
+        
+        .sn-lbl { color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .range-lbl { color: #38bdf8; font-size: 0.65rem; }
+        
+        .sn-inp-wrap { display: flex; align-items: center; gap: 8px; }
+        .sn-inp { background: transparent; border: none; color: #fff; font-size: 1.3rem; font-weight: 800; width: 100%; outline: none; font-family: monospace; }
+        .sn-inp::placeholder { color: #475569; font-size: 1rem; }
+
+        /* Results Grid */
+        .rep-card { 
+            flex-shrink: 0; /* Safe side */
+            background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; gap: 8px; transition: 0.2s; 
+        }
+        .rep-card:hover { border-color: #3b82f6; background: #1e293b; }
+        .rep-card.highlight { border-color: #d946ef; background: rgba(217, 70, 239, 0.05); border-style: solid; }
+        
+        .rep-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 6px; }
+        .rep-tit { font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; }
+        .rep-tit.high-txt { color: #d946ef; }
+        .rep-hex { font-size: 0.75rem; color: #f59e0b; font-weight: bold; }
+        
+        .rep-bin { font-size: 1.1rem; color: #f8fafc; font-weight: bold; word-break: break-all; letter-spacing: 1px; line-height: 1.4; }
+        .err-txt { color: #ef4444; font-size: 0.85rem; font-style: italic; }
+
+        /* The "WHY" Button */
+        .btn-why { 
+            flex-shrink: 0; /* Safe side */
+            background: transparent; border: 1px dashed #3b82f6; color: #38bdf8; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; 
+        }
+        .btn-why:active { background: rgba(59, 130, 246, 0.15); transform: scale(0.98); }
+
+        /* STEPS MODAL */
+        #sn-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #sn-steps-box { background: #1e293b; border: 1px solid #3b82f6; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #38bdf8; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+
+        .math-board { background: #020617; border: 1px solid #334155; border-radius: 8px; padding: 15px; margin-top: 10px; overflow-x: auto; }
+        .math-row { font-family: monospace; font-size: 1rem; margin-bottom: 10px; letter-spacing: 2px; white-space: nowrap; display: flex; justify-content: space-between; }
+        .m-lbl { color: #94a3b8; font-size: 0.75rem; display: block; letter-spacing: 0; margin-bottom: 4px; font-weight: bold; }
+        .m-bits { color: #f8fafc; }
+        .m-hl-flip { color: #f59e0b; }
+        .m-hl-add { color: #22c55e; font-weight: bold; }
+        .m-hl-final { color: #d946ef; font-weight: bold; border-bottom: 2px solid #d946ef; padding-bottom: 2px; }
+    </style>
+</head>
+
+<body>
+
+<main id="mod-signed-overlay" role="main">
+    <header class="sn-head" role="banner">
+        <a href="../programmer.html" class="qs-back-btn" aria-label="Go back to Programmer Suite">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </a>
+<h1 class="sn-tit" style="position: absolute; left: 50%; transform: translateX(-50%); margin: 0; color: #38bdf8; font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);">
+    <i class="fas fa-plus-minus" aria-hidden="true"></i> SIGNED NUMBERS
+</h1>
+
+    </header>
+
+    <div class="sn-body">
+        
+        <section aria-labelledby="bit-size-heading">
+            <h2 id="bit-size-heading" class="sr-only" style="display:none;">Select Bit Boundary</h2>
+            <div class="bit-selector" id="sn-bit-selector" role="radiogroup" aria-label="Register bit size">
+                <div class="bit-opt active" data-bits="8" role="radio" aria-checked="true" tabindex="0" onclick="QS_Signed.setBits(8)">8-bit</div>
+                <div class="bit-opt" data-bits="16" role="radio" aria-checked="false" tabindex="0" onclick="QS_Signed.setBits(16)">16-bit</div>
+                <div class="bit-opt" data-bits="32" role="radio" aria-checked="false" tabindex="0" onclick="QS_Signed.setBits(32)">32-bit</div>
+                <div class="bit-opt" data-bits="64" role="radio" aria-checked="false" tabindex="0" onclick="QS_Signed.setBits(64)">64-bit</div>
+            </div>
+        </section>
+
+        <section class="sn-grp" id="grp-val" aria-labelledby="input-heading">
+            <h2 id="input-heading" class="sr-only" style="display:none;">Decimal Input</h2>
+            <div class="sn-lbl">
+                <label for="sn-inp-val">Decimal Input</label>
+                <span class="range-lbl" id="sn-range" aria-live="polite">Range: -128 to 127</span>
+            </div>
+            <div class="sn-inp-wrap">
+                <input type="text" id="sn-inp-val" class="sn-inp" placeholder="e.g. -42" aria-describedby="sn-range" oninput="QS_Signed.calc()" autocomplete="off">
+            </div>
+        </section>
+
+        <button class="btn-why" aria-haspopup="dialog" aria-expanded="false" aria-label="Visualize Two's Complement math steps" onclick="QS_Signed.showSteps()">
+            <i class="fas fa-layer-group" aria-hidden="true"></i> Visualize Two's Complement
+        </button>
+
+        <div style="height: 5px;" aria-hidden="true"></div>
+
+        <section aria-label="Binary Representations" aria-live="polite">
+            <div class="rep-card highlight">
+                <div class="rep-head">
+                    <span class="rep-tit high-txt" id="lbl-2c">Two's Complement (Standard)</span>
+                    <span class="rep-hex" id="res-2c-hex">0x00</span>
+                </div>
+                <div class="rep-bin" id="res-2c-bin" aria-labelledby="lbl-2c">0000 0000</div>
+            </div>
+
+            <div class="rep-card">
+                <div class="rep-head">
+                    <span class="rep-tit" id="lbl-1c">One's Complement</span>
+                    <span class="rep-hex" id="res-1c-hex">0x00</span>
+                </div>
+                <div class="rep-bin" id="res-1c-bin" aria-labelledby="lbl-1c">0000 0000</div>
+            </div>
+
+            <div class="rep-card">
+                <div class="rep-head">
+                    <span class="rep-tit" id="lbl-sm">Sign-Magnitude</span>
+                    <span class="rep-hex" id="res-sm-hex">0x00</span>
+                </div>
+                <div class="rep-bin" id="res-sm-bin" aria-labelledby="lbl-sm">0000 0000</div>
+            </div>
+
+            <div class="rep-card">
+                <div class="rep-head">
+                    <span class="rep-tit" id="lbl-un">Unsigned</span>
+                    <span class="rep-hex" id="res-un-hex">0x00</span>
+                </div>
+                <div class="rep-bin" id="res-un-bin" aria-labelledby="lbl-un">0000 0000</div>
+            </div>
+        </section>
+
+    </div>
+
+    <div id="sn-steps-modal" role="dialog" aria-modal="true" aria-labelledby="modal-logic-title">
+        <div id="sn-steps-box">
+            <header class="steps-head">
+                <h2 id="modal-logic-title" style="margin: 0; font-size: 1rem;"><i class="fas fa-cogs" aria-hidden="true"></i> TWO'S COMPLEMENT LOGIC</h2>
+                <button class="steps-close" aria-label="Close Math Breakdown" onclick="QS_Signed.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </header>
+            <div class="steps-content" id="sn-steps-content" aria-live="polite">
+                </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    /* QUICKSOLVE PLATINUM - SIGNED NUMBERS LAB (MPA STANDALONE)
+       Features: Two's Comp, One's Comp, Sign-Magnitude, Unsigned limits with 64-bit BigInt math.
+    */
+    const QS_Signed = {
+        
+        currentBits: 8,
+        isValid: false,
+        lastVal: 0n,
+        isNegative: false,
+
+        init: function() {
+            console.log("Signed Numbers Engine Ready 🚀");
+            this.resetUI();
+        },
+
+        setBits: function(bits) {
+            this.currentBits = bits;
+            
+            // Update ARIA and Active States
+            const opts = document.querySelectorAll('#sn-bit-selector .bit-opt');
+            opts.forEach(opt => {
+                opt.classList.remove('active');
+                opt.setAttribute('aria-checked', 'false');
+            });
+            const activeOpt = document.querySelector(`#sn-bit-selector .bit-opt[data-bits="${bits}"]`);
+            if(activeOpt) {
+                activeOpt.classList.add('active');
+                activeOpt.setAttribute('aria-checked', 'true');
+            }
+            
+            // Update Range Label
+            const maxPos = (1n << BigInt(bits - 1)) - 1n;
+            const maxNeg = -(1n << BigInt(bits - 1));
+            document.getElementById('sn-range').innerText = `Range: ${maxNeg} to ${maxPos}`;
+            
+            this.calc();
+            this.triggerHaptic();
+        },
+
+        calc: function() {
+            const rawVal = document.getElementById('sn-inp-val').value.trim();
+            const grpVal = document.getElementById('grp-val');
+            grpVal.classList.remove('error');
+            this.isValid = false;
+
+            if (!rawVal) {
+                this.clearResults();
+                return;
+            }
+
+            // Must be valid decimal (optional negative sign)
+            if (!/^-?\d+$/.test(rawVal)) {
+                grpVal.classList.add('error');
+                this.clearResults(true); // show error format
+                return;
+            }
+
+            let val = BigInt(rawVal);
+            this.lastVal = val;
+            this.isNegative = val < 0n;
+            
+            const bitsBig = BigInt(this.currentBits);
+            const maxPosSigned = (1n << (bitsBig - 1n)) - 1n;
+            const maxNegSigned = -(1n << (bitsBig - 1n));
+            const maxUnsigned = (1n << bitsBig) - 1n;
+
+            // Check if out of bounds for the selected bit length
+            if (val > maxPosSigned || val < maxNegSigned) {
+                grpVal.classList.add('error');
+                this.clearResults(true, "OVERFLOW");
+                return;
+            }
+
+            this.isValid = true;
+            let absVal = val < 0n ? -val : val;
+
+            // 1. Unsigned Math
+            let unBin = "OUT OF RANGE";
+            let unHex = "N/A";
+            if (val >= 0n && val <= maxUnsigned) {
+                unBin = val.toString(2).padStart(this.currentBits, '0');
+                unHex = "0x" + val.toString(16).toUpperCase();
+            }
+
+            // 2. Sign-Magnitude Math (Highest bit is 1 if negative, rest is absolute value)
+            let smBin = absVal.toString(2).padStart(this.currentBits - 1, '0');
+            smBin = (this.isNegative ? "1" : "0") + smBin;
+            let smHex = "0x" + BigInt("0b" + smBin).toString(16).toUpperCase();
+
+            // 3. One's Complement (Flip all bits of absolute value if negative)
+            let absBinStr = absVal.toString(2).padStart(this.currentBits, '0');
+            let ocBin = absBinStr;
+            if (this.isNegative) {
+                ocBin = absBinStr.split('').map(b => b === '1' ? '0' : '1').join('');
+            }
+            let ocHex = "0x" + BigInt("0b" + ocBin).toString(16).toUpperCase();
+
+            // 4. Two's Complement (Add 1 to One's complement if negative)
+            let tcBin = absBinStr;
+            if (this.isNegative) {
+                // Easy BigInt trick for 2's complement: (2^bits) + val
+                let tcVal = (1n << bitsBig) + val; 
+                tcBin = tcVal.toString(2).padStart(this.currentBits, '0');
+            }
+            let tcHex = "0x" + BigInt("0b" + tcBin).toString(16).toUpperCase();
+
+            // Format Output
+            document.getElementById('res-un-bin').innerHTML = this.fmtBin(unBin);
+            document.getElementById('res-un-hex').innerText = unHex;
+            
+            document.getElementById('res-sm-bin').innerHTML = this.fmtBin(smBin);
+            document.getElementById('res-sm-hex').innerText = smHex;
+            
+            document.getElementById('res-1c-bin').innerHTML = this.fmtBin(ocBin);
+            document.getElementById('res-1c-hex').innerText = ocHex;
+            
+            document.getElementById('res-2c-bin').innerHTML = this.fmtBin(tcBin);
+            document.getElementById('res-2c-hex').innerText = tcHex;
+        },
+
+        fmtBin: function(binStr) {
+            if (binStr.includes("OUT OF RANGE") || binStr.includes("OVERFLOW")) return `<span class="err-txt">${binStr}</span>`;
+            // Group by 4
+            return binStr.match(/.{1,4}/g)?.join(' ') || binStr;
+        },
+
+        triggerHaptic: function() {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        },
+
+        // --- PLATINUM FEATURE: TWO'S COMPLEMENT VISUALIZER ---
+        showSteps: function() {
+            const contentBox = document.getElementById('sn-steps-content');
+            
+            if (!this.isValid) {
+                contentBox.innerHTML = `<div style="text-align:center; padding:20px; color:#ef4444;"><i class="fas fa-exclamation-triangle fa-2x" aria-hidden="true"></i><br><br>Enter a valid number within range to visualize!</div>`;
+            } else if (!this.isNegative) {
+                contentBox.innerHTML = `
+                    <div style="text-align:center; padding:20px; color:#3b82f6;">
+                        <i class="fas fa-info-circle fa-2x" aria-hidden="true"></i><br><br>
+                        <b>${this.lastVal} is Positive!</b><br>
+                        Two's complement logic is only used to represent <i>negative</i> numbers in memory. Positive numbers are stored as standard binary. <br><br>Try entering a negative number (e.g., -42) to see the magic!
+                    </div>`;
+            } else {
+                contentBox.innerHTML = this.generateTwosComplementMath();
+            }
+
+            const modal = document.getElementById('sn-steps-modal');
+            const box = document.getElementById('sn-steps-box');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                box.style.transform = 'translateY(0)';
+            }, 10);
+            
+            this.triggerHaptic();
+        },
+
+        hideSteps: function() {
+            const modal = document.getElementById('sn-steps-modal');
+            const box = document.getElementById('sn-steps-box');
+            modal.style.opacity = '0';
+            box.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+            this.triggerHaptic();
+        },
+
+generateTwosComplementMath: function() {
+            let absVal = -this.lastVal;
+            let step1Bin = absVal.toString(2).padStart(this.currentBits, '0');
+            let step2Bin = step1Bin.split('').map(b => b === '1' ? '0' : '1').join('');
+            
+            let tcVal = (1n << BigInt(this.currentBits)) + this.lastVal; 
+            let step3Bin = tcVal.toString(2).padStart(this.currentBits, '0');
+
+            let html = `
+                <div style="margin-bottom:15px; border-left:3px solid #d946ef; padding-left:10px;">
+                    <span style="color:#d946ef; font-weight:bold;">How CPUs Store Negative Numbers:</span><br>
+                    Computers don't have a minus sign (-). They use Two's Complement to store ${this.lastVal} in ${this.currentBits}-bits.
+                </div>
+                
+                <div class="math-board" role="region" aria-label="Two's complement calculation steps">
+                    <span class="m-lbl">STEP 1: Find absolute binary (+${absVal})</span>
+                    <div class="math-row">
+                        <span class="m-bits">${this.fmtBinVisual(step1Bin)}</span>
+                    </div>
+
+                    <div style="height:1px; background:#27272a; margin: 10px 0;" aria-hidden="true"></div>
+
+                    <span class="m-lbl">STEP 2: Invert all bits (One's Complement)</span>
+                    <div class="math-row">
+                        <span class="m-hl-flip">${this.fmtBinVisual(step2Bin)}</span>
+                    </div>
+
+                    <div style="height:1px; background:#27272a; margin: 10px 0;" aria-hidden="true"></div>
+
+                    <span class="m-lbl">STEP 3: Add 1 to the result</span>
+                    <div class="math-row">
+                        <span class="m-hl-flip">${this.fmtBinVisual(step2Bin)}</span>
+                    </div>
+                    <div class="math-row" style="border-bottom: 1px solid #334155; padding-bottom: 5px;">
+                        <span class="m-hl-add">+ ${this.fmtBinVisual('1'.padStart(this.currentBits, '0'))}</span>
+                    </div>
+                    <div class="math-row" style="margin-top:5px;">
+                        <span class="m-hl-final">${this.fmtBinVisual(step3Bin)}</span>
+                    </div>
+                </div>
+                <div style="margin-top:15px; font-size:0.75rem; color:var(--text-muted); text-align:center;">
+                    *The leftmost bit is now 1, indicating a negative number!
+                </div>
+            `;
+            return html;
+        },
+
+        fmtBinVisual: function(binStr) {
+            return binStr.match(/.{1,4}/g)?.join(' ') || binStr;
+        },
+
+        clearResults: function(isError=false, errorText="--") {
+            const ids = ['un', 'sm', '1c', '2c'];
+            ids.forEach(id => {
+                const hexEl = document.getElementById(`res-${id}-hex`);
+                if(hexEl) hexEl.innerText = "N/A";
+                
+                const binEl = document.getElementById(`res-${id}-bin`);
+                if(binEl) {
+                    binEl.innerHTML = isError ? `<span class="err-txt">${errorText}</span>` : "0000 0000";
+                }
+            });
+            this.isValid = false;
+        },
+
+        resetUI: function() {
+            const inp = document.getElementById('sn-inp-val');
+            if(inp) inp.value = '';
+            this.setBits(8);
+            this.clearResults();
+        }
+    };
+
+    // Auto-Init on Load
+    window.onload = function() {
+        QS_Signed.init();
+    };
+</script>
+</body>
+</html>

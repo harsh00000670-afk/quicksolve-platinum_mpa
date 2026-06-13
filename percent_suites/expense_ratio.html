@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Expense Ratio Trap | Reality Check Suite | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           EXPENSE RATIO ENGINE - PLATINUM (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800;900&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-red: #ef4444;
+            --accent-red-glow: rgba(239, 68, 68, 0.3);
+            --accent-gold: #fbbd23;
+            --accent-gold-glow: rgba(251, 189, 35, 0.3);
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-green-glow: rgba(16, 185, 129, 0.3);
+            --accent-purple: #a855f7;
+            --accent-cyan: #06b6d4;
+            --accent-cyan-glow: rgba(6, 182, 212, 0.3);
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.25; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 250px; height: 250px; background: var(--accent-gold); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-red); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-gold); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #fbbd23, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--text-sub); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CARDS & INPUTS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(251, 189, 35, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(251, 189, 35, 0.15);
+        }
+        .inp-group { margin-bottom: 18px; position: relative; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        
+        .inp-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .inp-field:focus { border-color: var(--accent-gold); box-shadow: 0 0 10px var(--accent-gold-glow); }
+        .inp-field::placeholder { color: var(--text-dim); font-weight: 500; }
+
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        /* CUSTOM BOTTOM SHEET TRIGGER */
+        .custom-select-trigger {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; font-family: 'Inter', sans-serif;
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s;
+        }
+        .custom-select-trigger:active { transform: scale(0.98); border-color: var(--accent-gold); box-shadow: 0 0 10px var(--accent-gold-glow); }
+        
+        /* BOTTOM SHEET MODAL STYLES */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(4px); }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        
+        .custom-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--card-bg); border-radius: 24px 24px 0 0; z-index: 1000; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: env(safe-area-inset-bottom, 20px); border-top: 1px solid var(--border-subtle); box-shadow: 0 -10px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; max-height: 80vh; }
+        .custom-modal.active { bottom: 0; }
+        
+        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .modal-header h3 { margin: 0; color: var(--accent-gold); font-size: 1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .close-btn { background: rgba(255,255,255,0.05); border: none; color: var(--text-sub); width: 30px; height: 30px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+        
+        .modal-body { overflow-y: auto; padding: 10px 20px 20px; }
+        .modal-opt { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; }
+        .modal-opt:last-child { border-bottom: none; }
+        .modal-opt:active { transform: scale(0.98); opacity: 0.8; }
+        
+        .opt-text { font-size: 1rem; color: var(--text-main); font-weight: 600; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; gap: 4px;}
+        .opt-text small { color: var(--text-sub); font-size: 0.75rem; font-family: 'JetBrains Mono', monospace;}
+        
+        .opt-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--text-dim); position: relative; transition: 0.2s; flex-shrink: 0; margin-left: 15px;}
+        .modal-opt.active .opt-radio { border-color: var(--accent-gold); }
+        .modal-opt.active .opt-radio::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: var(--accent-gold); border-radius: 50%; }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #fbbd23, #ef4444);
+            color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px var(--accent-gold-glow); display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 10px;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD & GRID */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 20px; 
+            padding: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(239, 68, 68, 0.15); display: none; text-align: center;
+        }
+
+        .output-row { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
+        .res-box { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 18px 15px; text-align: left;}
+        
+        .res-box-lbl { font-size: 0.7rem; color: var(--text-sub); text-transform: uppercase; font-weight: 800; margin-bottom: 8px; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;}
+        .res-box-val { font-size: 1.6rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; line-height: 1.1; margin-bottom: 8px; word-break: break-word;}
+        .res-box-desc { font-size: 0.85rem; color: var(--text-dim); font-weight: 600; line-height: 1.5; }
+
+        .res-box.main-val { border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.05); box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1); }
+        .res-box.main-val .res-box-val { color: var(--accent-green); font-size: 2.2rem; }
+
+        .res-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .res-grid-2 .res-box-val { font-size: 1.4rem; }
+
+        /* THEMATIC COLORS */
+        .color-green { color: var(--accent-green) !important; }
+        .color-gold { color: var(--accent-gold) !important; }
+        .color-red { color: var(--accent-red) !important; }
+        .color-cyan { color: var(--accent-cyan) !important; }
+        .color-purple { color: var(--accent-purple) !important; }
+
+        /* ALERTS */
+        .trap-alert {
+            background: rgba(239, 68, 68, 0.1); border: 1px solid var(--accent-red); border-radius: 12px;
+            padding: 15px; text-align: left; display: none; align-items: flex-start; gap: 12px; margin-top: 15px;
+        }
+        .trap-icon { font-size: 1.5rem; color: var(--accent-red); margin-top: 2px;}
+        .trap-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.5; font-weight: 600;}
+        .trap-text b { color: var(--accent-red); font-weight: 900; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;}
+
+        .info-alert {
+            background: rgba(251, 189, 35, 0.1); border: 1px solid var(--accent-gold); border-radius: 12px;
+            padding: 15px; text-align: left; display: none; align-items: flex-start; gap: 12px; margin-top: 15px;
+        }
+        .info-icon { font-size: 1.5rem; color: var(--accent-gold); margin-top: 2px;}
+        .info-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.5; font-weight: 600;}
+
+        /* LIST STYLES */
+        .psy-list { list-style: none; padding: 0; margin: 0; }
+        .psy-list li { font-size: 0.85rem; color: var(--text-main); font-weight: 600; margin-bottom: 8px; display: flex; gap: 8px; align-items: flex-start;}
+        .psy-list li i { color: var(--accent-gold); margin-top: 3px; font-size: 0.75rem;}
+
+        /* SAVAGE QUOTE VERDICT */
+        .savage-quote {
+            background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--accent-red);
+            padding: 18px 15px; margin-top: 20px; border-radius: 0 12px 12px 0;
+            font-size: 0.9rem; color: var(--text-main); font-weight: 600; text-align: left;
+            line-height: 1.6;
+        }
+        .savage-quote b { color: var(--accent-red); font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
+
+        /* CUSTOM TOAST */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px var(--accent-red-glow); display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .toast.show { bottom: 30px; }
+
+        /* ANIMATIONS */
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-chart-pie"></i> WEALTH LEAK DETECTOR</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>The 1% Expense Trap</h1>
+            <p>> compounding --expose_fees --direct_vs_regular</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">1. Monthly SIP (₹)</label>
+                    <input type="number" id="inp-sip" class="inp-field" placeholder="e.g. 10000" min="0">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">2. Investment Years</label>
+                    <input type="number" id="inp-years" class="inp-field" placeholder="e.g. 20" min="1" max="50">
+                </div>
+            </div>
+
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">3. Expected Return (%)</label>
+                    <input type="number" id="inp-cagr" class="inp-field" placeholder="e.g. 12" min="1" max="40">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">4. Step-Up SIP (%) <span style="text-transform:none; color:var(--text-dim);">(Opt)</span></label>
+                    <input type="number" id="inp-stepup" class="inp-field" placeholder="e.g. 10" min="0" value="0">
+                </div>
+            </div>
+
+            <div class="inp-group">
+                <label class="inp-lbl">5. Broker Expense Ratio (%)</label>
+                <div class="custom-select-trigger" onclick="openExpenseModal()">
+                    <span id="expense-display">1.5% (Standard Regular Plan)</span>
+                    <i class="fas fa-chevron-down" style="color: var(--text-sub); font-size: 0.9rem;"></i>
+                </div>
+                <input type="hidden" id="inp-expense" value="1.5">
+            </div>
+
+            <button class="calc-btn" onclick="ExpenseEngine.calculate()">
+                <i class="fas fa-radiation"></i> Detect Wealth Leak
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container">
+            
+            <div class="output-row">
+                
+                <div class="res-box main-val">
+                    <div class="res-box-lbl"><i class="fas fa-rocket"></i> 1. Direct Plan Corpus (0% Broker Fee)</div>
+                    <div class="res-box-val" id="out-direct-val">₹0</div>
+                    <div class="res-box-desc" style="color:var(--text-main); font-weight:700;">
+                        If you invest directly, this is your uncompromised total corpus.
+                    </div>
+                    <hr style="border-color: rgba(16, 185, 129, 0.2); margin: 15px 0;">
+                    <div class="res-box-lbl" style="color: var(--accent-red);"><i class="fas fa-hand-holding-usd"></i> 2. Regular Plan Corpus (Broker Fee Applied)</div>
+                    <div class="res-box-val" id="out-regular-val" style="font-size: 1.8rem; color:var(--accent-red);">₹0</div>
+                    <div class="res-box-desc" style="color:var(--text-main); font-weight:700;">
+                        Investing via a broker drops your final portfolio value to this exact amount.
+                    </div>
+                </div>
+
+                <div class="res-grid-2">
+                    <div class="res-box">
+                        <div class="res-box-lbl" style="color:var(--accent-red);">3. Total Wealth Leaked</div>
+                        <div class="res-box-val color-red" id="out-wealth-eaten">₹0</div>
+                        <div class="res-box-desc" style="font-size: 0.75rem;">By saying 'It is just <span id="lbl-exp-pct"></span>%', the broker extracted this entire sum.</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-box-lbl" style="color:var(--accent-gold);">4. Profit Stolen</div>
+                        <div class="res-box-val color-gold" id="out-profit-lost">0%</div>
+                        <div class="res-box-desc" style="font-size: 0.75rem;">This exact percentage of your hard-earned net profit has been silently stripped away.</div>
+                    </div>
+                </div>
+
+                <div class="trap-alert" id="step-up-trap">
+                    <div class="trap-icon"><i class="fas fa-level-up-alt"></i></div>
+                    <div class="trap-text">
+                        <b>7. THE STEP-UP ESCALATION TRAP</b><br>
+                        By aggressively stepping up your SIP by <span id="out-step-pct">0</span>% annually, you artificially inflate the asset base faster. Consequently, the compounding damage of the expense ratio magnifies, dramatically accelerating the broker's absolute monetary extraction.
+                    </div>
+                </div>
+
+                <div class="res-box">
+                    <div class="res-box-lbl" style="color: var(--accent-cyan);"><i class="fas fa-chart-line"></i> 6. Growth Trajectory Divergence</div>
+                    <div class="res-box-desc" style="color:var(--text-main); font-weight:600;">
+                        Direct Plan: Sustains an unhindered exponential growth curve.<br>
+                        Regular Plan: Suppresses the compounding trajectory entirely. The gap mathematically widens as time progresses.
+                    </div>
+                    <hr style="border-color: rgba(255,255,255,0.05); margin: 12px 0;">
+                    <div class="res-box-lbl" style="color: var(--accent-purple);"><i class="fas fa-hourglass-half"></i> 5. The Compounding Leak Insight</div>
+                    <div class="res-box-desc" style="color:var(--text-main); font-weight:600;">
+                        This financial loss is not a one-time entry fee. It is deducted continuously every single year. You are financing the market, but a massive fraction of your yield is leaking passively.
+                    </div>
+                </div>
+
+                <div class="res-box">
+                    <div class="res-box-lbl" style="color: var(--accent-gold);"><i class="fas fa-brain"></i> 8. Investor Psychology Trap</div>
+                    <ul class="psy-list">
+                        <li><i class="fas fa-chevron-right"></i> "1%" sounds mathematically trivial.</li>
+                        <li><i class="fas fa-chevron-right"></i> Investors ignore absolute rupee value destruction.</li>
+                        <li><i class="fas fa-chevron-right"></i> This cognitive bias prevents investors from switching to Direct Plans for decades.</li>
+                    </ul>
+                    <hr style="border-color: rgba(255,255,255,0.05); margin: 12px 0;">
+                    <div class="res-box-lbl" style="color: var(--accent-green);"><i class="fas fa-shield-alt"></i> 9. Risk-Free Alpha Generation</div>
+                    <div class="res-box-desc" style="color:var(--text-main); font-weight:600;">
+                        Minimizing your expense ratio is mathematically identical to generating a guaranteed, risk-free increase in your annual returns.
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="savage-quote">
+                <b><i class="fas fa-skull"></i> 10. THE FINAL REALITY CHECK</b>
+                "Enduring market volatility to generate high returns is logical, but forfeiting capital to unnecessary intermediary fees is financial malpractice. Dismissing a '1% fee' will cost you millions over your lifetime. A sophisticated investor ruthlessly controls operational costs, ensuring the uncompromised velocity of exponential compounding."
+            </div>
+
+        </div>
+
+    </main>
+
+    <div class="modal-overlay" id="expense-overlay" onclick="closeExpenseModal()"></div>
+    <div class="custom-modal" id="expense-bottom-sheet">
+        <div class="modal-header">
+            <h3>Select Broker / Fund Setup</h3>
+            <button class="close-btn" onclick="closeExpenseModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-opt" onclick="selectExpense('0.5', '0.5% (Low Cost Regular)', this)">
+                <div class="opt-text">0.5% Ratio <small>Low Cost Regular / Index Regular</small></div><div class="opt-radio"></div>
+            </div>
+            <div class="modal-opt" onclick="selectExpense('1.0', '1.0% (Average Regular Fund)', this)">
+                <div class="opt-text">1.0% Ratio <small>Average Regular Fund</small></div><div class="opt-radio"></div>
+            </div>
+            <div class="modal-opt active" onclick="selectExpense('1.5', '1.5% (Standard Active Regular)', this)">
+                <div class="opt-text">1.5% Ratio <small>Standard Active Regular Fund</small></div><div class="opt-radio"></div>
+            </div>
+            <div class="modal-opt" onclick="selectExpense('2.0', '2.0% (Aggressive Regular Trap)', this)">
+                <div class="opt-text">2.0% Ratio <small>Aggressive Regular Commission Trap</small></div><div class="opt-radio"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - EXPENSE RATIO ENGINE */
+        
+        // --- CUSTOM MODAL LOGIC ---
+        function openExpenseModal() {
+            if(window.ExpenseEngine.haptic) window.ExpenseEngine.haptic();
+            document.getElementById('expense-overlay').classList.add('active');
+            document.getElementById('expense-bottom-sheet').classList.add('active');
+        }
+
+        function closeExpenseModal() {
+            document.getElementById('expense-overlay').classList.remove('active');
+            document.getElementById('expense-bottom-sheet').classList.remove('active');
+        }
+
+        function selectExpense(val, text, element) {
+            if(window.ExpenseEngine.haptic) window.ExpenseEngine.haptic();
+            
+            document.getElementById('inp-expense').value = val;
+            document.getElementById('expense-display').innerText = text;
+
+            document.querySelectorAll('.modal-opt').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            closeExpenseModal();
+        }
+
+        // --- MATH ENGINE ---
+        window.ExpenseEngine = {
+            haptic: function() { if(navigator.vibrate) navigator.vibrate(20); },
+
+            showToast: function(msg) {
+                const toast = document.getElementById('custom-toast');
+                document.getElementById('toast-msg').innerText = msg;
+                if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            },
+
+            formatCurrency: function(val) {
+                return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val).replace('₹', '₹');
+            },
+
+            calculate: function() {
+                this.haptic();
+
+                // 1. Get Inputs
+                const baseSip = parseFloat(document.getElementById('inp-sip').value);
+                const years = parseInt(document.getElementById('inp-years').value);
+                const cagr = parseFloat(document.getElementById('inp-cagr').value);
+                const expRatio = parseFloat(document.getElementById('inp-expense').value);
+                const stepUp = parseFloat(document.getElementById('inp-stepup').value) || 0;
+
+                // Validations
+                if(isNaN(baseSip) || baseSip <= 0) { this.showToast("Invalid Input: Monthly SIP is required."); return; }
+                if(isNaN(years) || years <= 0) { this.showToast("Invalid Input: Investment Years is required."); return; }
+                if(isNaN(cagr) || cagr <= 0) { this.showToast("Invalid Input: Expected Return Rate is required."); return; }
+                if(isNaN(expRatio) || expRatio < 0) { this.showToast("Invalid Input: Expense Ratio is required."); return; }
+
+                // 2. Loop Setup
+                let directRate = (cagr / 100) / 12;
+                let regularRate = ((cagr - expRatio) / 100) / 12;
+                
+                let months = years * 12;
+                let sipAmount = baseSip;
+                
+                let corpusDirect = 0;
+                let corpusRegular = 0;
+                let totalInvested = 0;
+
+                // 3. Month-by-Month Compounding Execution
+                for (let i = 1; i <= months; i++) {
+                    // Step-Up logic triggers every 12 months
+                    if (i > 1 && (i - 1) % 12 === 0 && stepUp > 0) {
+                        sipAmount = sipAmount * (1 + (stepUp / 100));
+                    }
+                    
+                    corpusDirect = (corpusDirect + sipAmount) * (1 + directRate);
+                    corpusRegular = (corpusRegular + sipAmount) * (1 + regularRate);
+                    totalInvested += sipAmount;
+                }
+
+                // 4. Differential Math
+                let wealthLost = corpusDirect - corpusRegular;
+                let profitDirect = corpusDirect - totalInvested;
+                
+                let pctProfitLost = 0;
+                if (profitDirect > 0) {
+                    pctProfitLost = (wealthLost / profitDirect) * 100;
+                }
+
+                // --- UI INJECTION ---
+
+                // Outputs 1 & 2
+                document.getElementById('out-direct-val').innerText = this.formatCurrency(corpusDirect);
+                document.getElementById('out-regular-val').innerText = this.formatCurrency(corpusRegular);
+
+                // Outputs 3 & 4
+                document.getElementById('out-wealth-eaten').innerText = this.formatCurrency(wealthLost);
+                document.getElementById('lbl-exp-pct').innerText = expRatio;
+                document.getElementById('out-profit-lost').innerText = `${pctProfitLost.toFixed(2)}%`;
+
+                // Output 7: Step-Up Alert Logic
+                const stepUpTrap = document.getElementById('step-up-trap');
+                if (stepUp > 0) {
+                    document.getElementById('out-step-pct').innerText = stepUp;
+                    stepUpTrap.style.display = 'flex';
+                } else {
+                    stepUpTrap.style.display = 'none';
+                }
+
+                // Reveal UI
+                const resCard = document.getElementById('results-container');
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-up');
+                void resCard.offsetWidth; // trigger reflow
+                resCard.classList.add('anim-up');
+                
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+        };
+    </script>
+</body>
+</html>

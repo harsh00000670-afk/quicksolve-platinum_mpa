@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Universal Fiat Converter | Live Exchange Rates | QuickSolve Platinum</title>
+    <meta name="description" content="Convert 163 global fiat currencies instantly with real-time mid-market exchange rates. Calculate exact currency values offline or online. Avoid hidden bank markup fees.">
+    <meta name="keywords" content="fiat converter, forex exchange calculator, live currency rates, usd to inr, euro converter, 163 currency calculator, mid-market rate checker, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/currency_suites/fiat_converter.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Universal Fiat Converter - 163 Currencies">
+    <meta property="og:description" content="Check real wholesale exchange rates and save money on hidden bank fees.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           UNIVERSAL FIAT CONVERTER (GOD MODE)
+           Theme: Forex Emerald Gold
+           ========================================= */
+        #mod-fiat-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: var(--bg-body, #09090b); z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .fi-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .fi-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .fi-tit { color: #10b981; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .fi-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Currency Cards */
+        .curr-card { 
+            background: #1e293b; border: 1px solid #475569; border-radius: 12px; 
+            padding: 15px; display: flex; flex-direction: column; gap: 10px; transition: 0.2s; position: relative;
+        }
+        .curr-card:focus-within { border-color: #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.15); }
+
+        .curr-lbl { font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .curr-main-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        
+        .curr-selector { 
+            display: flex; align-items: center; gap: 8px; background: rgba(2, 6, 23, 0.5); 
+            padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; cursor: pointer; 
+            min-width: 120px; transition: 0.2s; 
+        }
+        .curr-selector:active { border-color: #10b981; }
+        .curr-flag { font-size: 1.5rem; }
+        .curr-code { font-weight: 900; color: #f8fafc; font-size: 1.2rem; }
+        .curr-drop-icon { color: #10b981; margin-left: auto; font-size: 0.8rem; }
+
+        .curr-inp { 
+            flex: 1; background: transparent; border: none; color: #fff; font-size: 2rem; 
+            font-weight: 900; text-align: right; outline: none; width: 100%; 
+        }
+        .curr-inp::placeholder { color: #475569; }
+        .curr-name-hint { font-size: 0.75rem; color: #64748b; text-align: left; }
+
+        /* Swap Button */
+        .swap-wrap { display: flex; justify-content: center; margin: -15px 0; z-index: 10; }
+        .btn-swap { 
+            background: #10b981; color: #000; border: 4px solid var(--bg-body, #09090b); 
+            width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; 
+            align-items: center; font-size: 1.2rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .btn-swap:active { transform: scale(0.9) rotate(180deg); }
+
+        /* Info Bar */
+        .info-bar { background: rgba(245, 158, 11, 0.05); border: 1px dashed #f59e0b; border-radius: 8px; padding: 12px; text-align: center; }
+        .rate-text { color: #f8fafc; font-weight: bold; font-size: 0.95rem; }
+        .rate-hl { color: #f59e0b; font-size: 1.1rem; }
+        .upd-text { color: #64748b; font-size: 0.65rem; margin-top: 4px; text-transform: uppercase; font-family: monospace; }
+
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #3b82f6; color: #3b82f6; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(59, 130, 246, 0.15); transform: scale(0.98); }
+
+        /* =========================================
+           CUSTOM SEARCHABLE DROPDOWN MODAL
+           ========================================= */
+        #curr-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .cm-content { background: #1e293b; border-top-left-radius: 20px; border-top-right-radius: 20px; height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .cm-open .cm-content { transform: translateY(0); }
+        
+        .cm-head { padding: 15px 20px; border-bottom: 1px solid #334155; display: flex; align-items: center; gap: 15px; }
+        .cm-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .cm-search-wrap { flex: 1; position: relative; }
+        .cm-search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; }
+        .cm-search { width: 100%; background: #0f172a; border: 1px solid #475569; color: #fff; padding: 10px 10px 10px 35px; border-radius: 8px; outline: none; font-size: 1rem; }
+        .cm-search:focus { border-color: #10b981; }
+        
+        .cm-list { flex: 1; overflow-y: auto; padding: 10px 0; }
+        .cl-item { display: flex; align-items: center; padding: 12px 20px; gap: 15px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); cursor: pointer; transition: 0.2s; }
+        .cl-item:active { background: rgba(16, 185, 129, 0.1); }
+        .cl-flag { font-size: 1.8rem; }
+        .cl-details { flex: 1; display: flex; flex-direction: column; }
+        .cl-code { font-weight: 900; color: #f8fafc; font-size: 1rem; }
+        .cl-name { color: #94a3b8; font-size: 0.75rem; }
+
+        /* STEPS MODAL (Why) */
+        #fc-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #fc-steps-box { background: #1e293b; border: 1px solid #3b82f6; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #3b82f6; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <main id="mod-fiat-overlay" role="main" aria-label="Universal Fiat Converter">
+        <header class="fi-head">
+            <a href="../currency.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+            <div class="fi-tit"><i class="fas fa-globe" aria-hidden="true"></i> GLOBAL FIAT</div>
+        </header>
+
+        <section class="fi-body">
+            
+            <div class="curr-card">
+                <span class="curr-lbl" id="lbl-send">You Send (From)</span>
+                <div class="curr-main-row">
+                    <button class="curr-selector" onclick="QS_Fiat.openSelector('from')" aria-labelledby="lbl-send code-from">
+                        <span class="curr-flag" id="flag-from" aria-hidden="true">🇺🇸</span>
+                        <span class="curr-code" id="code-from">USD</span>
+                        <i class="fas fa-chevron-down curr-drop-icon" aria-hidden="true"></i>
+                    </button>
+                    <input type="number" id="inp-from" class="curr-inp" placeholder="0" value="1" oninput="QS_Fiat.calc('from')" aria-label="Amount to send">
+                </div>
+                <div class="curr-name-hint" id="name-from">US Dollar</div>
+            </div>
+
+            <div class="swap-wrap">
+                <button class="btn-swap" onclick="QS_Fiat.swapCurrencies()" aria-label="Swap Currencies">
+                    <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="curr-card" style="border-color: #10b981; background: rgba(16, 185, 129, 0.02);">
+                <span class="curr-lbl" style="color: #10b981;" id="lbl-get">You Get (To)</span>
+                <div class="curr-main-row">
+                    <button class="curr-selector" style="border-color: #10b981;" onclick="QS_Fiat.openSelector('to')" aria-labelledby="lbl-get code-to">
+                        <span class="curr-flag" id="flag-to" aria-hidden="true">🇮🇳</span>
+                        <span class="curr-code" id="code-to">INR</span>
+                        <i class="fas fa-chevron-down curr-drop-icon" aria-hidden="true"></i>
+                    </button>
+                    <input type="number" id="inp-to" class="curr-inp" placeholder="0" style="color: #10b981;" oninput="QS_Fiat.calc('to')" aria-label="Amount to receive">
+                </div>
+                <div class="curr-name-hint" id="name-to">Indian Rupee</div>
+            </div>
+
+            <div class="info-bar" aria-live="polite">
+                <div class="rate-text" id="live-rate-text">1 USD = <span class="rate-hl">-- INR</span></div>
+                <div class="upd-text" id="live-upd-text">Fetching live rates...</div>
+            </div>
+
+            <button class="btn-why" onclick="QS_Fiat.showSteps()" aria-label="Learn how Forex rates work">
+                <i class="fas fa-search-dollar" aria-hidden="true"></i> How Forex Rates Work
+            </button>
+
+        </section>
+
+        <div id="curr-modal" role="dialog" aria-label="Select Currency">
+            <div class="cm-content">
+                <div class="cm-head">
+                    <button class="cm-close" onclick="QS_Fiat.closeSelector()" aria-label="Close Selector"><i class="fas fa-times" aria-hidden="true"></i></button>
+                    <div class="cm-search-wrap">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input type="search" id="cm-search-inp" class="cm-search" placeholder="Search currency or country..." oninput="QS_Fiat.filterList()" aria-label="Search for currency">
+                    </div>
+                </div>
+                <div class="cm-list" id="cm-list-box">
+                    </div>
+            </div>
+        </div>
+
+        <div id="fc-steps-modal" role="dialog" aria-modal="true" aria-labelledby="forex-title">
+            <div id="fc-steps-box">
+                <div class="steps-head">
+                    <span id="forex-title"><i class="fas fa-landmark" aria-hidden="true"></i> FOREX MECHANICS</span>
+                    <button class="steps-close" onclick="QS_Fiat.hideSteps()" aria-label="Close Explanation"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="steps-content" id="fc-steps-content">
+                    </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - UNIVERSAL FIAT CONVERTER
+           Features: 163 Live Currencies, Custom Search Modal, Open.er-api integration, Offline Cache.
+        */
+
+        (function() {
+            window.QS_Fiat = {
+                
+                fromCode: 'USD',
+                toCode: 'INR',
+                targetMode: 'from', // Keeps track of which modal is open
+                ratesCache: {}, // Store rates for fast access
+                lastUpdate: null,
+
+                // The Ultimate 163 Currency List provided by the User!
+                currencies: [
+                    {c:"USD", n:"US Dollar", f:"🇺🇸"}, {c:"EUR", n:"Euro", f:"🇪🇺"}, {c:"GBP", n:"British Pound", f:"🇬🇧"},
+                    {c:"INR", n:"Indian Rupee", f:"🇮🇳"}, {c:"JPY", n:"Japanese Yen", f:"🇯🇵"}, {c:"CNY", n:"Chinese Yuan", f:"🇨🇳"},
+                    {c:"AUD", n:"Australian Dollar", f:"🇦🇺"}, {c:"CAD", n:"Canadian Dollar", f:"🇨🇦"}, {c:"CHF", n:"Swiss Franc", f:"🇨🇭"},
+                    {c:"HKD", n:"Hong Kong Dollar", f:"🇭🇰"}, {c:"SGD", n:"Singapore Dollar", f:"🇸🇬"}, {c:"SEK", n:"Swedish Krona", f:"🇸🇪"},
+                    {c:"KRW", n:"South Korean Won", f:"🇰🇷"}, {c:"AED", n:"UAE Dirham", f:"🇦🇪"}, {c:"SAR", n:"Saudi Riyal", f:"🇸🇦"},
+                    {c:"ZAR", n:"South African Rand", f:"🇿🇦"}, {c:"TRY", n:"Turkish Lira", f:"🇹🇷"}, {c:"RUB", n:"Russian Ruble", f:"🇷🇺"},
+                    {c:"BRL", n:"Brazilian Real", f:"🇧🇷"}, {c:"MXN", n:"Mexican Peso", f:"🇲🇽"}, {c:"THB", n:"Thai Baht", f:"🇹🇭"},
+                    {c:"IDR", n:"Indonesian Rupiah", f:"🇮🇩"}, {c:"MYR", n:"Malaysian Ringgit", f:"🇲🇾"}, {c:"VND", n:"Vietnamese Dong", f:"🇻🇳"},
+                    {c:"PHP", n:"Philippine Peso", f:"🇵🇭"}, {c:"PKR", n:"Pakistani Rupee", f:"🇵🇰"}, {c:"BDT", n:"Bangladeshi Taka", f:"🇧🇩"},
+                    {c:"LKR", n:"Sri Lankan Rupee", f:"🇱🇰"}, {c:"NPR", n:"Nepalese Rupee", f:"🇳🇵"}, {c:"KWD", n:"Kuwaiti Dinar", f:"🇰🇼"},
+                    {c:"BHD", n:"Bahraini Dinar", f:"🇧🇭"}, {c:"OMR", n:"Omani Rial", f:"🇴🇲"}, {c:"QAR", n:"Qatari Riyal", f:"🇶🇦"},
+                    {c:"JOD", n:"Jordanian Dinar", f:"🇯🇴"}, {c:"ILS", n:"Israeli Shekel", f:"🇮🇱"}, {c:"EGP", n:"Egyptian Pound", f:"🇪🇬"},
+                    {c:"NGN", n:"Nigerian Naira", f:"🇳🇬"}, {c:"KES", n:"Kenyan Shilling", f:"🇰🇪"}, {c:"GHS", n:"Ghanaian Cedi", f:"🇬🇭"},
+                    {c:"MAD", n:"Moroccan Dirham", f:"🇲🇦"}, {c:"NZD", n:"New Zealand Dollar", f:"🇳🇿"}, {c:"PLN", n:"Polish Zloty", f:"🇵🇱"},
+                    {c:"DKK", n:"Danish Krone", f:"🇩🇰"}, {c:"NOK", n:"Norwegian Krone", f:"🇳🇴"}, {c:"HUF", n:"Hungarian Forint", f:"🇭🇺"},
+                    {c:"CZK", n:"Czech Koruna", f:"🇨🇿"}, {c:"RON", n:"Romanian Leu", f:"🇷🇴"}, {c:"BGN", n:"Bulgarian Lev", f:"🇧🇬"},
+                    {c:"ARS", n:"Argentine Peso", f:"🇦🇷"}, {c:"CLP", n:"Chilean Peso", f:"🇨🇱"}, {c:"COP", n:"Colombian Peso", f:"🇨🇴"},
+                    {c:"PEN", n:"Peruvian Sol", f:"🇵🇪"}, {c:"UYU", n:"Uruguayan Peso", f:"🇺🇾"}, {c:"VEF", n:"Venezuelan Bolívar", f:"🇻🇪"},
+                    {c:"DZD", n:"Algerian Dinar", f:"🇩🇿"}, {c:"TND", n:"Tunisian Dinar", f:"🇹🇳"}, {c:"LBP", n:"Lebanese Pound", f:"🇱🇧"},
+                    {c:"IQD", n:"Iraqi Dinar", f:"🇮🇶"}, {c:"IRR", n:"Iranian Rial", f:"🇮🇷"}, {c:"AFN", n:"Afghan Afghani", f:"🇦🇫"},
+                    {c:"MVR", n:"Maldivian Rufiyaa", f:"🇲🇻"}, {c:"BTN", n:"Bhutanese Ngultrum", f:"🇧🇹"}, {c:"MMK", n:"Myanmar Kyat", f:"🇲🇲"},
+                    {c:"KHR", n:"Cambodian Riel", f:"🇰🇭"}, {c:"LAK", n:"Lao Kip", f:"🇱🇦"}, {c:"BND", n:"Brunei Dollar", f:"🇧🇳"},
+                    {c:"KZT", n:"Kazakhstani Tenge", f:"🇰🇿"}, {c:"UZS", n:"Uzbekistani Som", f:"🇺🇿"}, {c:"TMT", n:"Turkmenistani Manat", f:"🇹🇲"},
+                    {c:"UAH", n:"Ukrainian Hryvnia", f:"🇺🇦"}, {c:"BYN", n:"Belarusian Ruble", f:"🇧🇾"}, {c:"AMD", n:"Armenian Dram", f:"🇦🇲"},
+                    {c:"GEL", n:"Georgian Lari", f:"🇬🇪"}, {c:"AZN", n:"Azerbaijani Manat", f:"🇦🇿"}, {c:"ISK", n:"Icelandic Króna", f:"🇮🇸"},
+                    {c:"RSD", n:"Serbian Dinar", f:"🇷🇸"}, {c:"HRK", n:"Croatian Kuna", f:"🇭🇷"}, {c:"ALL", n:"Albanian Lek", f:"🇦🇱"},
+                    {c:"BAM", n:"Bosnia-Herz Mark", f:"🇧🇦"}, {c:"MDL", n:"Moldovan Leu", f:"🇲🇩"}, {c:"MKD", n:"Macedonian Denar", f:"🇲🇰"},
+                    {c:"ETB", n:"Ethiopian Birr", f:"🇪🇹"}, {c:"TZS", n:"Tanzanian Shilling", f:"🇹🇿"}, {c:"UGX", n:"Ugandan Shilling", f:"🇺🇬"},
+                    {c:"RWF", n:"Rwandan Franc", f:"🇷🇼"}, {c:"ZMW", n:"Zambian Kwacha", f:"🇿🇲"}, {c:"MZN", n:"Mozambican Metical", f:"🇲🇿"},
+                    {c:"AOA", n:"Angolan Kwanza", f:"🇦🇴"}, {c:"XOF", n:"West African CFA", f:"🇧🇯"}, {c:"XAF", n:"Central African CFA", f:"🇨🇲"},
+                    {c:"JMD", n:"Jamaican Dollar", f:"🇯🇲"}, {c:"TTD", n:"Trinidad Dollar", f:"🇹🇹"}, {c:"BBD", n:"Barbadian Dollar", f:"🇧🇧"},
+                    {c:"XCD", n:"East Caribbean $", f:"🇱🇨"}, {c:"CRC", n:"Costa Rican Colón", f:"🇨🇷"}, {c:"DOP", n:"Dominican Peso", f:"🇩🇴"},
+                    {c:"GTQ", n:"Guatemalan Quetzal", f:"🇬🇹"}, {c:"HNL", n:"Honduran Lempira", f:"🇭🇳"}, {c:"NIO", n:"Nicaraguan Córdoba", f:"🇳🇮"},
+                    {c:"PAB", n:"Panamanian Balboa", f:"🇵🇦"}, {c:"PYG", n:"Paraguayan Guaraní", f:"🇵🇾"}, {c:"BOB", n:"Bolivian Boliviano", f:"🇧🇴"},
+                    {c:"FJD", n:"Fijian Dollar", f:"🇫🇯"}, {c:"PGK", n:"PNG Kina", f:"🇵🇬"}, {c:"WST", n:"Samoan Tala", f:"🇼🇸"},
+                    {c:"TOP", n:"Tongan Paʻanga", f:"🇹🇴"}, {c:"VUV", n:"Vanuatu Vatu", f:"🇻🇺"}, {c:"SBD", n:"Solomon Islands $", f:"🇸🇧"},
+                    {c:"MOP", n:"Macanese Pataca", f:"🇲🇴"}, {c:"TWD", n:"Taiwan Dollar", f:"🇹🇼"}, {c:"MNT", n:"Mongolian Tögrög", f:"🇲🇳"},
+                    {c:"SYP", n:"Syrian Pound", f:"🇸🇾"}, {c:"YER", n:"Yemeni Rial", f:"🇾🇪"}, {c:"SCR", n:"Seychellois Rupee", f:"🇸🇨"},
+                    {c:"MUR", n:"Mauritian Rupee", f:"🇲🇺"}, {c:"MGA", n:"Malagasy Ariary", f:"🇲🇬"}, {c:"MWK", n:"Malawian Kwacha", f:"🇲🇼"},
+                    {c:"NAD", n:"Namibian Dollar", f:"🇳🇦"}, {c:"BWP", n:"Botswana Pula", f:"🇧🇼"}, {c:"SZL", n:"Swazi Lilangeni", f:"🇸🇿"},
+                    {c:"LSL", n:"Lesotho Loti", f:"🇱🇸"}, {c:"ANG", n:"Neth. Antillean Guilder", f:"🇨🇼"}, {c:"AWG", n:"Aruban Florin", f:"🇦🇼"},
+                    {c:"BSD", n:"Bahamian Dollar", f:"🇧🇸"}, {c:"BMD", n:"Bermudian Dollar", f:"🇧🇲"}, {c:"BZD", n:"Belize Dollar", f:"🇧🇿"},
+                    {c:"KYD", n:"Cayman Islands Dollar", f:"🇰🇾"}, {c:"CUP", n:"Cuban Peso", f:"🇨🇺"}, {c:"HTG", n:"Haitian Gourde", f:"🇭🇹"},
+                    {c:"GYD", n:"Guyanese Dollar", f:"🇬🇾"}, {c:"SRD", n:"Surinamese Dollar", f:"🇸🇷"}, {c:"FKP", n:"Falkland Islands £", f:"🇫🇰"},
+                    {c:"GIP", n:"Gibraltar Pound", f:"🇬🇮"}, {c:"SHP", n:"Saint Helena Pound", f:"🇸🇭"}, {c:"IMP", n:"Isle of Man Pound", f:"🇮🇲"},
+                    {c:"JEP", n:"Jersey Pound", f:"🇯🇪"}, {c:"GGP", n:"Guernsey Pound", f:"🇬🇬"}, {c:"SOS", n:"Somali Shilling", f:"🇸🇴"},
+                    {c:"DJF", n:"Djiboutian Franc", f:"🇩🇯"}, {c:"KMF", n:"Comorian Franc", f:"🇰🇲"}, {c:"ERN", n:"Eritrean Nakfa", f:"🇪🇷"},
+                    {c:"SDG", n:"Sudanese Pound", f:"🇸🇩"}, {c:"SSP", n:"South Sudanese £", f:"🇸🇸"}, {c:"BIF", n:"Burundian Franc", f:"🇧🇮"},
+                    {c:"CDF", n:"Congolese Franc", f:"🇨🇩"}, {c:"CVE", n:"Cape Verdean Escudo", f:"🇨🇻"}, {c:"GMD", n:"Gambian Dalasi", f:"🇬🇲"},
+                    {c:"GNF", n:"Guinean Franc", f:"🇬🇳"}, {c:"LRD", n:"Liberian Dollar", f:"🇱🇷"}, {c:"SLL", n:"Sierra Leonean Leone", f:"🇸🇱"},
+                    {c:"STN", n:"São Tomé and Príncipe", f:"🇸🇹"}, {c:"TJS", n:"Tajikistani Somoni", f:"🇹🇯"}, {c:"KGS", n:"Kyrgyzstani Som", f:"🇰🇬"}
+                ],
+
+                initListener: function() {
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'currency_suites/fiat_converter.js') {
+                            this.updateUIBoxes();
+                            this.fetchLiveRates();
+                        }
+                    });
+                    
+                    // Standalone Boot
+                    if(document.readyState === 'complete' || document.readyState === 'interactive'){
+                         setTimeout(() => this.bootStandalone(), 100);
+                    } else {
+                         document.addEventListener('DOMContentLoaded', () => this.bootStandalone());
+                    }
+                },
+
+                bootStandalone: function() {
+                    if(document.getElementById('inp-from')) {
+                        this.updateUIBoxes();
+                        this.fetchLiveRates();
+                    }
+                },
+
+                // --- PLATINUM FEATURE: Live Open Exchange API ---
+                fetchLiveRates: async function() {
+                    const updText = document.getElementById('live-upd-text');
+                    if(updText) {
+                        updText.innerText = "Fetching live market rates...";
+                        updText.style.color = "#f59e0b";
+                    }
+
+                    try {
+                        // Free, no API key required, reliable for 161 currencies
+                        const res = await fetch(`https://open.er-api.com/v6/latest/${this.fromCode}`);
+                        const data = await res.json();
+
+                        if(data.result === "success") {
+                            this.ratesCache = data.rates;
+                            this.lastUpdate = new Date(data.time_last_update_unix * 1000);
+                            
+                            if(updText) {
+                                const timeStr = this.lastUpdate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                                updText.innerText = `Last Updated: Today, ${timeStr}`;
+                                updText.style.color = "#10b981";
+                            }
+                            
+                            this.calc('from'); // Recalculate with new rates
+                        } else {
+                            throw "API Error";
+                        }
+                    } catch(e) {
+                        if(updText) {
+                            updText.innerText = "Offline Mode - Using cached rates (if available)";
+                            updText.style.color = "#ef4444";
+                        }
+                        console.error("Forex API Error: ", e);
+                    }
+                },
+
+                calc: function(source) {
+                    const inpFrom = document.getElementById('inp-from');
+                    const inpTo = document.getElementById('inp-to');
+                    const rateText = document.getElementById('live-rate-text');
+
+                    // If API hasn't loaded yet
+                    if(!this.ratesCache[this.toCode]) return;
+
+                    const rate = this.ratesCache[this.toCode]; // Rate is relative to 'fromCode' since we fetched base=fromCode
+                    
+                    // Format exchange rate for info bar
+                    let dispRate = rate < 1 ? rate.toFixed(4) : rate.toFixed(2);
+                    if(rateText) rateText.innerHTML = `1 ${this.fromCode} = <span class="rate-hl">${dispRate} ${this.toCode}</span>`;
+
+                    if(source === 'from') {
+                        let val = parseFloat(inpFrom.value) || 0;
+                        let converted = val * rate;
+                        if(inpTo) inpTo.value = converted === 0 ? "" : (converted % 1 === 0 ? converted : converted.toFixed(2));
+                    } else {
+                        let val = parseFloat(inpTo.value) || 0;
+                        let converted = val / rate;
+                        if(inpFrom) inpFrom.value = converted === 0 ? "" : (converted % 1 === 0 ? converted : converted.toFixed(2));
+                    }
+                },
+
+                swapCurrencies: function() {
+                    let temp = this.fromCode;
+                    this.fromCode = this.toCode;
+                    this.toCode = temp;
+                    
+                    this.updateUIBoxes();
+                    
+                    // Swap inputs
+                    let inpFrom = document.getElementById('inp-from');
+                    let inpTo = document.getElementById('inp-to');
+                    if(inpFrom && inpTo) {
+                        let tempVal = inpFrom.value;
+                        inpFrom.value = inpTo.value;
+                        inpTo.value = tempVal;
+                    }
+
+                    if(window.doHaptic) window.doHaptic();
+
+                    // We must re-fetch rates because the base currency changed
+                    this.fetchLiveRates();
+                },
+
+                updateUIBoxes: function() {
+                    let fromObj = this.currencies.find(c => c.c === this.fromCode) || this.currencies[0];
+                    let toObj = this.currencies.find(c => c.c === this.toCode) || this.currencies[3]; // INR default
+
+                    let flagFrom = document.getElementById('flag-from');
+                    let codeFrom = document.getElementById('code-from');
+                    let nameFrom = document.getElementById('name-from');
+                    if(flagFrom) flagFrom.innerText = fromObj.f;
+                    if(codeFrom) codeFrom.innerText = fromObj.c;
+                    if(nameFrom) nameFrom.innerText = fromObj.n;
+
+                    let flagTo = document.getElementById('flag-to');
+                    let codeTo = document.getElementById('code-to');
+                    let nameTo = document.getElementById('name-to');
+                    if(flagTo) flagTo.innerText = toObj.f;
+                    if(codeTo) codeTo.innerText = toObj.c;
+                    if(nameTo) nameTo.innerText = toObj.n;
+                },
+
+                // --- PLATINUM FEATURE: Bottom Sheet Searchable Modal ---
+                openSelector: function(mode) {
+                    this.targetMode = mode;
+                    let searchInp = document.getElementById('cm-search-inp');
+                    if(searchInp) searchInp.value = "";
+                    this.filterList(); // Renders full list initially
+                    
+                    const modal = document.getElementById('curr-modal');
+                    if(modal) {
+                        modal.style.display = 'flex';
+                        // Slight delay to allow display:flex to apply before adding class for transform animation
+                        setTimeout(() => { modal.classList.add('cm-open'); }, 10);
+                        
+                        // Focus search box automatically for quick typing
+                        setTimeout(() => { if(searchInp) searchInp.focus(); }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                closeSelector: function() {
+                    const modal = document.getElementById('curr-modal');
+                    if(modal) {
+                        modal.classList.remove('cm-open');
+                        setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                filterList: function() {
+                    const searchInp = document.getElementById('cm-search-inp');
+                    const q = searchInp ? searchInp.value.toLowerCase() : "";
+                    const listObj = document.getElementById('cm-list-box');
+                    if(!listObj) return;
+                    
+                    listObj.innerHTML = '';
+
+                    let filtered = this.currencies.filter(c => 
+                        c.n.toLowerCase().includes(q) || c.c.toLowerCase().includes(q)
+                    );
+
+                    if(filtered.length === 0) {
+                        listObj.innerHTML = `<div style="text-align:center; color:#64748b; padding:20px;">No currency found.</div>`;
+                        return;
+                    }
+
+                    filtered.forEach(c => {
+                        let div = document.createElement('div');
+                        div.className = "cl-item";
+                        div.onclick = () => this.selectCurrency(c.c);
+                        div.innerHTML = `
+                            <span class="cl-flag">${c.f}</span>
+                            <div class="cl-details">
+                                <span class="cl-code">${c.c}</span>
+                                <span class="cl-name">${c.n}</span>
+                            </div>
+                        `;
+                        listObj.appendChild(div);
+                    });
+                },
+
+                selectCurrency: function(code) {
+                    if(this.targetMode === 'from') {
+                        if (this.toCode === code) this.swapCurrencies(); // Prevent same currency
+                        else this.fromCode = code;
+                    } else {
+                        if (this.fromCode === code) this.swapCurrencies();
+                        else this.toCode = code;
+                    }
+
+                    this.updateUIBoxes();
+                    this.closeSelector();
+                    
+                    // Re-fetch rates if base ('from') changed, else just calc
+                    if(this.targetMode === 'from') this.fetchLiveRates();
+                    else this.calc('from');
+                },
+
+                // --- THE "WHY" FEATURE: Forex Mechanics ---
+                showSteps: function() {
+                    const contentBox = document.getElementById('fc-steps-content');
+                    if(!contentBox) return;
+                    
+                    let html = `
+                        <div style="margin-bottom:15px; border-left:3px solid #3b82f6; padding-left:10px;">
+                            <span style="color:#3b82f6; font-weight:bold;">The Mid-Market Rate:</span><br>
+                            The rate you see here is the <b>Interbank Rate</b>. This is the real, wholesale price that banks use to trade with each other.
+                        </div>
+                        
+                        <div style="background:#020617; border:1px solid #334155; border-radius:8px; padding:15px; margin-top:10px;">
+                            <span style="color:#f59e0b; font-weight:bold;"><i class="fas fa-user-secret"></i> The Bank's Dirty Secret:</span><br>
+                            <p style="margin-top:5px; font-size:0.8rem; color:#94a3b8;">When you send money abroad or use a credit card internationally, banks <b>NEVER</b> give you this rate. They add a hidden "Spread" (markup) of 2% to 5%.</p>
+                            
+                            <div style="background:rgba(239,68,68,0.1); border-left:2px solid #ef4444; padding:8px; margin-top:10px; color:#f8fafc; font-size:0.75rem;">
+                                <b>Example:</b> If real rate is 1 USD = 83 INR.<br>
+                                The bank will charge you 85 INR per USD, pocketing 2 INR on every single dollar you spend!
+                            </div>
+                        </div>
+
+                        <div style="margin-top:15px; font-size:0.75rem; color:#10b981; text-align:center; font-weight:bold;">
+                            *Use the "Hidden Bank Fees" tool on the dashboard to calculate exactly how much your bank is looting!
+                        </div>
+                    `;
+                    
+                    contentBox.innerHTML = html;
+
+                    const modal = document.getElementById('fc-steps-modal');
+                    const box = document.getElementById('fc-steps-box');
+                    if(modal && box) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => {
+                            modal.style.opacity = '1';
+                            box.style.transform = 'translateY(0)';
+                        }, 10);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                hideSteps: function() {
+                    const modal = document.getElementById('fc-steps-modal');
+                    const box = document.getElementById('fc-steps-box');
+                    if(modal && box) {
+                        modal.style.opacity = '0';
+                        box.style.transform = 'translateY(20px)';
+                        setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                }
+            };
+
+            window.QS_Fiat.initListener();
+        })();
+    </script>
+</body>
+</html>

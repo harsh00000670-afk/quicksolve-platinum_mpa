@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Waist-to-Hip Ratio (WHR) Calculator | Body Shape Analysis | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate your Waist-to-Hip ratio (WHR) to assess cardiovascular risk and body shape (Apple vs Pear). Accurate health tracking. 100% Offline.">
+    <meta name="keywords" content="whr calculator, waist to hip ratio, apple vs pear body shape, belly fat calculator, cardiovascular risk, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/health_suites/waist_hip.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#020617">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           WHR CALCULATOR (PLATINUM GOD MODE)
+           Theme: Obsidian / Crimson Rose
+           ========================================= */
+        #mod-whr-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: #020617; z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .wh-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #0f172a; border-bottom: 1px solid #1e293b;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .wh-head .qs-back-btn { background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .wh-tit { color: #f43f5e; font-weight: 900; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .wh-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 80px; }
+
+        /* Sleek Input Cards */
+        .wh-card { 
+            background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; 
+            padding: 15px; display: flex; flex-direction: column; gap: 10px;
+        }
+        
+        .wh-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .wh-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 12px; border-radius: 8px; border: 1px solid #1e293b; cursor: pointer; transition: 0.2s; }
+        .wh-inp-wrap:focus-within { border-color: #f43f5e; box-shadow: 0 0 10px rgba(244, 63, 94, 0.1); }
+        .wh-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.1rem; font-weight: 900; outline: none; width: 100%; text-align: center; font-family: monospace; }
+        .wh-unit { color: #475569; font-weight: bold; font-size: 0.75rem; }
+
+        /* Custom Select Trigger */
+        .wh-select-text { flex: 1; color: #fff; font-size: 0.95rem; font-weight: 900; display: flex; align-items: center; gap: 10px; }
+
+        /* Result Panel */
+        .res-panel { background: #020617; border: 1px solid #f43f5e; border-radius: 12px; padding: 25px 15px; text-align: center; position: relative; box-shadow: inset 0 0 30px rgba(244, 63, 94, 0.05); }
+        .res-panel::before { content: 'RATIO ANALYSIS'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #f43f5e; color: #fff; font-size: 0.6rem; font-weight: 900; padding: 2px 10px; border-radius: 4px; letter-spacing: 1px; }
+        
+        .ratio-val { font-size: 3.5rem; font-weight: 900; color: #f43f5e; font-family: monospace; line-height: 1; }
+        .ratio-cat { font-size: 0.9rem; font-weight: 900; text-transform: uppercase; color: #f8fafc; margin-top: 10px; letter-spacing: 2px; }
+
+        /* Shape Display */
+        .shape-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; border-top: 1px solid #1e293b; padding-top: 15px; }
+        .shape-box { background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 10px; padding: 12px; text-align: center; transition: 0.3s; }
+        .shape-box.active { border-color: #f43f5e; background: rgba(244, 63, 94, 0.1); }
+        .shape-icon { font-size: 1.8rem; margin-bottom: 5px; display: block; }
+        .shape-name { font-size: 0.65rem; font-weight: 900; color: #94a3b8; text-transform: uppercase; }
+
+        /* Risk Insight Box */
+        .risk-box { background: rgba(30, 41, 59, 0.5); border: 1px dashed #475569; border-radius: 8px; padding: 12px; margin-top: 15px; display: flex; align-items: center; gap: 12px; text-align: left; }
+        .risk-icon { font-size: 1.5rem; color: #f43f5e; }
+        .risk-txt { font-size: 0.75rem; color: #cbd5e1; font-weight: bold; line-height: 1.4; }
+
+        /* Modal Styles */
+        .wm-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .wm-content { background: #0f172a; border-top-left-radius: 20px; border-top-right-radius: 20px; display: flex; flex-direction: column; overflow: hidden; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .wm-open .wm-content { transform: translateY(0); }
+        .wm-head { padding: 15px 20px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; }
+        .wm-head span { color: #f43f5e; font-weight: 900; font-size: 1rem; text-transform: uppercase; }
+        .wm-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .wm-list { padding: 10px 0; }
+        .wl-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); cursor: pointer; }
+        .wl-name { font-weight: 900; color: #f8fafc; font-size: 0.95rem; }
+        .wl-check { color: #f43f5e; display: none; }
+        .wl-item.active .wl-check { display: block; }
+        .wl-item.active .wl-name { color: #f43f5e; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <main id="mod-whr-overlay" role="main" aria-label="Waist to Hip Ratio Calculator">
+        <header class="wh-head">
+            <a href="../health.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left"></i></a>
+            <div class="wh-tit"><i class="fas fa-ruler-horizontal"></i> WHR RATIO</div>
+        </header>
+
+        <section class="wh-body">
+            
+            <div class="wh-card">
+                <div class="wh-lbl">Biological Gender</div>
+                <div class="wh-inp-wrap" onclick="QS_WHR.openModal('gender')" aria-label="Select Gender">
+                    <div id="sel-gender-text" class="wh-select-text">
+                        <i class="fas fa-venus-mars" style="color:#f43f5e;"></i> Select Gender
+                    </div>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                </div>
+
+                <div class="wh-lbl">Measurement Unit</div>
+                <div class="wh-inp-wrap" onclick="QS_WHR.openModal('unit')">
+                    <div id="sel-unit-text" class="wh-select-text">
+                        <i class="fas fa-tape" style="color:#38bdf8;"></i> cm / inches
+                    </div>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                </div>
+
+                <div class="wh-lbl">Waist Circumference</div>
+                <div class="wh-inp-wrap" style="cursor: text;">
+                    <input type="number" id="inp-waist" class="wh-inp" placeholder="At narrowest point" oninput="QS_WHR.calculate()">
+                    <span id="lbl-waist-unit" class="wh-unit">CM</span>
+                </div>
+
+                <div class="wh-lbl">Hip Circumference</div>
+                <div class="wh-inp-wrap" style="cursor: text;">
+                    <input type="number" id="inp-hip" class="wh-inp" placeholder="At widest point" oninput="QS_WHR.calculate()">
+                    <span id="lbl-hip-unit" class="wh-unit">CM</span>
+                </div>
+            </div>
+
+            <div id="empty-state" style="text-align:center; padding:30px 20px; color:#475569;">
+                <i class="fas fa-heartbeat fa-3x" style="opacity:0.3; margin-bottom:15px;"></i>
+                <div style="font-size:0.85rem; font-weight:bold;">Input measurements to analyze body fat distribution.</div>
+            </div>
+
+            <div id="res-dashboard" class="hidden" aria-live="polite">
+                
+                <div class="res-panel">
+                    <div class="ratio-val" id="res-ratio">0.00</div>
+                    <div class="ratio-cat" id="res-cat">--</div>
+                </div>
+
+                <div class="shape-grid">
+                    <div id="shape-apple" class="shape-box">
+                        <i class="fas fa-apple-alt shape-icon" style="color:#ef4444;"></i>
+                        <span class="shape-name">Apple Shape</span>
+                    </div>
+                    <div id="shape-pear" class="shape-box">
+                        <i class="fas fa-lemon shape-icon" style="color:#facc15; transform: rotate(180deg);"></i>
+                        <span class="shape-name">Pear Shape</span>
+                    </div>
+                </div>
+
+                <div class="risk-box">
+                    <i class="fas fa-exclamation-triangle risk-icon" id="res-icon"></i>
+                    <div class="risk-txt" id="res-insight">
+                        Awaiting data for health risk assessment.
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <div id="cm-modal" class="wm-modal">
+        <div class="wm-content">
+            <div class="wm-head"><span id="cm-title">Select</span><button class="wm-close" onclick="QS_WHR.closeModal()"><i class="fas fa-times"></i></button></div>
+            <div class="wm-list" id="cm-list"></div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - WHR ENGINE
+           Features: WHO Cardiovascular Risk Logic, Body Shape Classification.
+        */
+        (function() {
+            window.QS_WHR = {
+                state: { gender: 'male', unit: 'cm' },
+                
+                initListener: function() {
+                    this.updateSelectionText();
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'health_suites/waist_hip.js') this.calculate();
+                    });
+                    if(document.readyState === 'complete') this.calculate();
+                    else document.addEventListener('DOMContentLoaded', () => this.calculate());
+                },
+
+                openModal: function(type) {
+                    const titleMap = { gender: 'Select Gender', unit: 'Measurement Unit' };
+                    document.getElementById('cm-title').innerText = titleMap[type];
+                    const list = document.getElementById('cm-list');
+                    list.innerHTML = '';
+
+                    let opts = [];
+                    if(type === 'gender') opts = [{v:'male', n:'Male'}, {v:'female', n:'Female'}];
+                    else opts = [{v:'cm', n:'Centimeters (cm)'}, {v:'in', n:'Inches (in)'}];
+
+                    opts.forEach(o => {
+                        const currentVal = (type === 'gender' ? this.state.gender : this.state.unit);
+                        const div = document.createElement('div');
+                        div.className = `wl-item ${currentVal === o.v ? 'active' : ''}`;
+                        div.onclick = () => this.setVal(type, o.v);
+                        div.innerHTML = `<span class="wl-name">${o.n}</span><i class="fas fa-check wl-check"></i>`;
+                        list.appendChild(div);
+                    });
+
+                    const m = document.getElementById('cm-modal');
+                    m.style.display = 'flex';
+                    setTimeout(() => m.classList.add('wm-open'), 10);
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                closeModal: function() {
+                    const m = document.getElementById('cm-modal');
+                    if(m) {
+                        m.classList.remove('wm-open');
+                        setTimeout(() => m.style.display = 'none', 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                setVal: function(type, v) {
+                    if(type === 'gender') this.state.gender = v;
+                    else this.state.unit = v;
+                    
+                    this.updateSelectionText();
+                    this.closeModal();
+                    this.calculate();
+                },
+
+                updateSelectionText: function() {
+                    document.getElementById('sel-gender-text').innerHTML = `<i class="fas ${this.state.gender === 'male' ? 'fa-mars' : 'fa-venus'}" style="color:#f43f5e;"></i> ${this.state.gender.toUpperCase()}`;
+                    document.getElementById('sel-unit-text').innerHTML = `<i class="fas fa-tape" style="color:#38bdf8;"></i> ${this.state.unit === 'cm' ? 'CENTIMETERS' : 'INCHES'}`;
+                    document.getElementById('lbl-waist-unit').innerText = this.state.unit.toUpperCase();
+                    document.getElementById('lbl-hip-unit').innerText = this.state.unit.toUpperCase();
+                },
+
+                calculate: function() {
+                    const waist = parseFloat(document.getElementById('inp-waist').value);
+                    const hip = parseFloat(document.getElementById('inp-hip').value);
+
+                    if(!waist || !hip || waist <= 0 || hip <= 0) return this.hide();
+
+                    document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('res-dashboard').classList.remove('hidden');
+
+                    const ratio = waist / hip;
+                    this.render(ratio);
+                },
+
+                render: function(ratio) {
+                    document.getElementById('res-ratio').innerText = ratio.toFixed(2);
+                    
+                    const isMale = this.state.gender === 'male';
+                    let cat = "";
+                    let risk = "";
+                    let isApple = false;
+
+                    // WHO Standards for WHR
+                    if(isMale) {
+                        if(ratio <= 0.90) { cat = "Low Risk"; risk = "Healthy fat distribution. Lower risk of heart disease."; isApple = false; }
+                        else if(ratio <= 0.99) { cat = "Moderate Risk"; risk = "Increased belly fat. Monitor your diet and activity."; isApple = true; }
+                        else { cat = "High Risk"; risk = "High cardiovascular risk. Apple shape detected."; isApple = true; }
+                    } else {
+                        if(ratio <= 0.80) { cat = "Low Risk"; risk = "Healthy fat distribution. Lower risk of metabolic issues."; isApple = false; }
+                        else if(ratio <= 0.84) { cat = "Moderate Risk"; risk = "Slight excess of abdominal fat."; isApple = true; }
+                        else { cat = "High Risk"; risk = "Significant health risk due to central obesity."; isApple = true; }
+                    }
+
+                    const catEl = document.getElementById('res-cat');
+                    catEl.innerText = cat;
+                    catEl.style.color = (cat === "Low Risk") ? "#10b981" : (cat === "Moderate Risk" ? "#facc15" : "#f43f5e");
+
+                    document.getElementById('res-insight').innerText = risk;
+                    document.getElementById('res-icon').style.color = (cat === "Low Risk") ? "#10b981" : (cat === "Moderate Risk" ? "#facc15" : "#f43f5e");
+
+                    // Shape Highlighting
+                    document.getElementById('shape-apple').classList.toggle('active', isApple);
+                    document.getElementById('shape-pear').classList.toggle('active', !isApple);
+                },
+
+                hide: function() {
+                    document.getElementById('empty-state').classList.remove('hidden');
+                    document.getElementById('res-dashboard').classList.add('hidden');
+                }
+            };
+            window.QS_WHR.initListener();
+        })();
+    </script>
+</body>
+</html>

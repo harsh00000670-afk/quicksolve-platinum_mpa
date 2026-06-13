@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+
+
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Flat vs Reducing Rate Calculator | Reveal True Interest Rate | QuickSolve Platinum</title>
+    <meta name="description" content="Stop being fooled by flat interest rates. Calculate the actual reducing interest rate (IRR) instantly. Reveal hidden loan costs, impact of advance EMIs, and processing fees. 100% Secure & Offline.">
+    <meta name="keywords" content="flat rate to reducing rate converter, true interest rate calculator, loan trap checker, actual irr calculator, hidden interest rate, finance tools, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/loan_suite/flat_reducing.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0f172a">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Actual Interest Rate Engine - Don't get trapped by Flat Rates">
+    <meta property="og:description" content="Convert any advertised flat rate to its true reducing balance equivalent instantly.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           REAL RATE ENGINE (Flat vs Reducing) OP V2
+           Theme: Truth Reveal (Neon Orange / Red Alert)
+           ========================================= */
+        body { 
+            margin: 0; 
+            background-color: var(--bg-body, #0f172a); 
+            /* Using Local JetBrains Mono */
+            font-family: var(--font-main, sans-serif);
+        }
+
+        #mod-flat-red-overlay {
+            width: 100vw; min-height: 100vh;
+            background-color: var(--bg-body, #0f172a); 
+            display: flex; flex-direction: column;
+            font-family: var(--font-main, sans-serif);
+            overflow: hidden; animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 1. HEADER */
+        .fr-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 15px; background: var(--surface, #1e293b); border-bottom: 1px solid var(--border, #334155);
+            flex-shrink: 0; position: sticky; top: 0; z-index: 10;
+        }
+        .fr-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f1f5f9); font-size: 1.2rem; cursor: pointer; padding: 5px; text-decoration: none;}
+        .fr-head .fr-tit { 
+            color: #f59e0b; /* Truth/Warning Orange */
+            font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* 2. BODY */
+        .fr-body {
+            flex: 1; overflow-y: auto; padding: 15px;
+            padding-bottom: 80px; 
+            display: flex; flex-direction: column; gap: 12px;
+        }
+
+        /* 3. INPUT COMPONENTS */
+        .lbl { color: var(--text-muted, #94a3b8); font-size: 0.7rem; font-weight: 700; margin-bottom: 5px; display: block; text-transform: uppercase; }
+        
+        .inp-box {
+            background: var(--surface, #1e293b); border: 1px solid var(--border, #334155); border-radius: 8px;
+            padding: 10px 12px; transition: border-color 0.2s;
+        }
+        .inp-box:focus-within { border-color: #f59e0b; box-shadow: 0 0 10px rgba(245, 158, 11, 0.1); }
+        
+        .inp-flex { display: flex; align-items: center; gap: 8px; }
+        .inp-unit { color: #f59e0b; font-weight: 800; font-size: 1rem; }
+        .inp-main {
+            flex: 1; background: transparent; border: none; color: var(--text-main, #fff); 
+            font-size: 1.15rem; font-family: var(--font-main); outline: none; width: 100%; min-width: 0;
+        }
+        .inp-main:focus { color: #f59e0b; }
+        .inp-main::placeholder { color: #475569; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        .cust-select {
+            background: rgba(2, 6, 23, 0.5); color: #f59e0b; border: 1px solid var(--border);
+            border-radius: 6px; padding: 6px 24px 6px 10px; font-weight: 700; font-size: 0.8rem;
+            appearance: none; -webkit-appearance: none; cursor: pointer; outline: none;
+            min-width: 60px; text-align: left;
+        }
+
+        /* 4. RESULTS CARD (THE TRUTH REVEAL) */
+        .truth-card {
+            background: rgba(15, 23, 42, 0.5); 
+            border: 2px solid; border-image: linear-gradient(45deg, #ef4444, #f59e0b) 1; 
+            border-radius: 12px; padding: 15px; display: flex; flex-direction: column; gap: 12px;
+            margin-top: 10px; text-align: center;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);
+        }
+        
+        .alert-box { background: rgba(239, 68, 68, 0.1); border: 1px dashed #ef4444; border-radius: 8px; padding: 15px; }
+        .alert-lbl { font-size: 0.75rem; text-transform: uppercase; color: #ef4444; font-weight: 800; letter-spacing: 1px; }
+        .alert-val { font-size: 2.2rem; font-weight: 800; color: #ef4444; margin-top: 5px; text-shadow: 0 0 10px rgba(239,68,68,0.3); }
+        .alert-sub { font-size: 0.7rem; color: var(--text-muted); margin-top: 5px; }
+
+        .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
+        .imp-item { background: rgba(2, 6, 23, 0.5); padding: 10px; border-radius: 8px; border: 1px solid var(--border); }
+        .imp-lbl { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; }
+        .imp-val { font-size: 1.1rem; font-weight: 800; color: #f1f5f9; margin-top: 3px; }
+
+        .info-banner {
+            background: rgba(56, 189, 248, 0.1); border-left: 3px solid #38bdf8;
+            padding: 10px; border-radius: 4px; font-size: 0.75rem; color: #94a3b8;
+            margin-top: 5px; line-height: 1.4; text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+<main id="mod-flat-red-overlay" role="main">
+    
+    <header class="fr-head" role="banner">
+        <a href="../loan.html" class="qs-back-btn" aria-label="Go back to Loan Menu">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </a>
+        <h1 class="fr-tit"><i class="fas fa-exchange-alt" aria-hidden="true"></i> REAL RATE %</h1>
+        <div style="width:24px;"></div> 
+    </header>
+
+    <div class="fr-body">
+
+        <div class="info-banner" role="alert" aria-live="polite">
+            <b style="color:#38bdf8;">Bank's Secret:</b> Fees and Advance EMIs drastically increase your true interest rate. Find the truth below!
+        </div>
+
+        <section aria-labelledby="loan-details-heading">
+            <h2 id="loan-details-heading" class="sr-only" style="display:none;">Enter Loan Details</h2>
+            
+            <div class="inp-box">
+                <label for="fr-amt" class="lbl">Loan Amount</label>
+                <div class="inp-flex">
+                    <span class="inp-unit" aria-hidden="true">₹</span>
+                    <input type="number" id="fr-amt" class="inp-main" placeholder="5,00,000" aria-describedby="amt-desc" oninput="QS_FlatRed.calc()">
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="inp-box">
+                    <label for="fr-rate" class="lbl">Advertised Flat Rate</label>
+                    <div class="inp-flex">
+                        <span class="inp-unit" aria-hidden="true">%</span>
+                        <input type="number" id="fr-rate" class="inp-main" placeholder="7.5" step="0.1" aria-label="Advertised flat rate percentage" oninput="QS_FlatRed.calc()">
+                    </div>
+                </div>
+
+                <div class="inp-box">
+                    <label for="fr-tenure" class="lbl">Loan Tenure</label>
+                    <div class="inp-flex">
+                        <input type="number" id="fr-tenure" class="inp-main" placeholder="5" aria-label="Loan tenure value" oninput="QS_FlatRed.calc()">
+                        <div style="position:relative;">
+                            <select id="fr-tenure-type" class="cust-select" aria-label="Select tenure type" onchange="QS_FlatRed.calc()">
+                                <option value="Y" selected>Years</option>
+                                <option value="M">Months</option>
+                                <option value="W">Weeks</option>
+                            </select>
+                            <i class="fas fa-chevron-down" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); color:#f59e0b; font-size:0.6rem; pointer-events:none;" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="inp-box">
+                    <label for="fr-fee" class="lbl">Processing Fee</label>
+                    <div class="inp-flex">
+                        <input type="number" id="fr-fee" class="inp-main" placeholder="0" aria-label="Processing fee value" oninput="QS_FlatRed.calc()">
+                        <div style="position:relative;">
+                            <select id="fr-fee-type" class="cust-select" aria-label="Select fee type amount or percentage" onchange="QS_FlatRed.calc()">
+                                <option value="A" selected>₹</option>
+                                <option value="P">%</option>
+                            </select>
+                            <i class="fas fa-chevron-down" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); color:#f59e0b; font-size:0.6rem; pointer-events:none;" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inp-box">
+                    <label for="fr-adv" class="lbl">Advance EMIs (Paid Upfront)</label>
+                    <div class="inp-flex">
+                        <span class="inp-unit" aria-hidden="true">#</span>
+                        <input type="number" id="fr-adv" class="inp-main" placeholder="0" aria-label="Number of advance EMIs paid upfront" oninput="QS_FlatRed.calc()">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="truth-card" aria-labelledby="truth-heading" aria-live="polite">
+            <h2 id="truth-heading" class="sr-only" style="display:none;">True Loan Cost Results</h2>
+            
+            <div class="alert-box">
+                <div class="alert-lbl" id="true-rate-label">True Reducing Rate (Actual)</div>
+                <div id="res-true-rate" class="alert-val" aria-labelledby="true-rate-label">-- %</div>
+                <div class="alert-sub">This is the real interest you are paying!</div>
+            </div>
+
+            <div class="impact-grid">
+                <div class="imp-item">
+                    <div class="imp-lbl" id="net-disb-label">Net Disbursement</div>
+                    <div id="res-net-dis" class="imp-val" style="color:#10b981;" aria-labelledby="net-disb-label">₹ --</div>
+                </div>
+                <div class="imp-item">
+                    <div class="imp-lbl" id="emi-label">Installment (EMI)</div>
+                    <div id="res-emi" class="imp-val" style="color:#38bdf8;" aria-labelledby="emi-label">₹ --</div>
+                </div>
+                <div class="imp-item" style="grid-column: span 2;">
+                    <div class="imp-lbl" id="total-cost-label">Total Cost of Loan (Int + Fees)</div>
+                    <div id="res-total-cost" class="imp-val" style="color:#f59e0b;" aria-labelledby="total-cost-label">₹ --</div>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+</main>
+
+<script>
+    /* QUICKSOLVE PLATINUM - REAL RATE ENGINE (Flat vs Reducing) V2
+       Features: Newton-Raphson/Bisection Math for exact IRR (Internal Rate of Return).
+       Handles Upfront Fees and Advance EMIs which shoot up the True Interest Rate.
+    */
+    const QS_FlatRed = {
+        
+        init: function() {
+            console.log("Real Rate Truth Engine Ready 🚀");
+            this.clearResults();
+        },
+
+        calc: function() {
+            try {
+                // Fetch Inputs safely
+                const amt = parseFloat(document.getElementById('fr-amt').value);
+                const flatRate = parseFloat(document.getElementById('fr-rate').value);
+                const tenure = parseFloat(document.getElementById('fr-tenure').value);
+                
+                if(!amt || !flatRate || !tenure || amt <= 0 || flatRate <= 0 || tenure <= 0) {
+                    this.clearResults();
+                    return;
+                }
+
+                const tType = document.getElementById('fr-tenure-type').value;
+                const feeInp = parseFloat(document.getElementById('fr-fee').value) || 0;
+                const fType = document.getElementById('fr-fee-type').value;
+                const advanceEmis = parseInt(document.getElementById('fr-adv').value) || 0;
+
+                // 1. Standardize Tenure to Months & Years
+                let totalMonths = 0;
+                let yearsForMath = 0;
+                
+                if (tType === 'Y') {
+                    totalMonths = Math.round(tenure * 12);
+                    yearsForMath = tenure;
+                } else if (tType === 'M') {
+                    totalMonths = Math.round(tenure);
+                    yearsForMath = tenure / 12;
+                } else if (tType === 'W') {
+                    totalMonths = Math.round(tenure * 4.345); // Approx weeks to months
+                    yearsForMath = tenure / 52;
+                }
+
+                if(totalMonths <= 0) return;
+
+                // 2. FLAT RATE MATH
+                // Flat Interest = Principal * Flat Rate * Time(Years)
+                const totalInterest = amt * (flatRate / 100) * yearsForMath;
+                const totalRepayment = amt + totalInterest;
+                
+                // Base EMI
+                const emi = totalRepayment / totalMonths;
+
+                // 3. Upfront Deductions (The Tricks)
+                let actualFee = (fType === 'P') ? (amt * (feeInp / 100)) : feeInp;
+                let advanceEmiAmt = 0;
+                
+                // Sanity check: can't pay more advance EMIs than total months
+                const safeAdvanceEmis = Math.min(advanceEmis, totalMonths);
+                if (safeAdvanceEmis > 0) {
+                    advanceEmiAmt = emi * safeAdvanceEmis;
+                }
+
+                // Net Disbursement = What user actually gets in hand
+                const netDisbursement = amt - actualFee - advanceEmiAmt;
+
+                if (netDisbursement <= 0) {
+                    this.showError("Fees/Advance exceed loan amount!");
+                    return;
+                }
+
+                // Total Cost
+                const totalCost = totalInterest + actualFee;
+
+                // 4. THE TRUTH ENGINE (Calculate True Reducing Rate / IRR)
+                // We need to find the 'r' (monthly rate) that makes NPV = 0
+                // Cashflow: Day 0 = Net Disbursement (-ve). Months 1 to (N-Advance) = EMI (+ve)
+                
+                const remainingMonths = totalMonths - safeAdvanceEmis;
+                let trueMonthlyRate = this.calculateIRR(netDisbursement, emi, remainingMonths);
+                
+                // Convert Monthly IRR to Annual Percentage Rate (APR)
+                // True Annual Rate = Monthly Rate * 12 * 100
+                const trueAnnualRate = trueMonthlyRate * 12 * 100;
+
+                // 5. UPDATE UI
+                const resRate = document.getElementById('res-true-rate');
+                
+                if (trueAnnualRate > 0 && trueAnnualRate < 1000) {
+                    resRate.innerText = trueAnnualRate.toFixed(2) + " %";
+                    resRate.style.color = "#ef4444";
+                } else {
+                    resRate.innerText = "ERR"; // Extreme edge case
+                }
+
+                document.getElementById('res-net-dis').innerText = this.fmt(netDisbursement);
+                document.getElementById('res-emi').innerText = this.fmt(emi) + (safeAdvanceEmis > 0 ? ` (x${remainingMonths})` : '');
+                document.getElementById('res-total-cost').innerText = this.fmt(totalCost);
+
+            } catch (e) {
+                console.error("Flat/Red Engine Error:", e);
+                this.showError("Math Error");
+            }
+        },
+
+        // --- MATH CORE: Bisection Method to find IRR ---
+        calculateIRR: function(presentValue, payment, numPeriods) {
+            if (numPeriods <= 0) return 0;
+            
+            let low = 0.0;
+            let high = 1.0; // 100% monthly rate (absurdly high upper bound)
+            let guess = 0.05; // start with 5% monthly
+            let npv = 0;
+            const tolerance = 0.000001; // High precision
+            
+            // Limit to 100 iterations to prevent infinite loops
+            for (let i = 0; i < 100; i++) {
+                // Formula: PV = PMT * (1 - (1+r)^-n) / r
+                npv = payment * (1 - Math.pow(1 + guess, -numPeriods)) / guess;
+                
+                if (Math.abs(npv - presentValue) < tolerance) {
+                    return guess; // Found it!
+                }
+                
+                // Adjust bounds (Bisection)
+                if (npv > presentValue) {
+                    // Present value is too high, rate is too low
+                    low = guess;
+                } else {
+                    // Present value is too low, rate is too high
+                    high = guess;
+                }
+                guess = (low + high) / 2;
+            }
+            return guess; // Return closest approx if 100 iters hit
+        },
+
+        fmt: function(n) { 
+            if(isNaN(n) || !isFinite(n) || n < 0) return "₹ 0";
+            return "₹ " + Math.round(n).toLocaleString('en-IN'); 
+        },
+
+        clearResults: function() {
+            document.getElementById('res-true-rate').innerText = "-- %";
+            document.getElementById('res-true-rate').style.color = "#ef4444";
+            document.getElementById('res-net-dis').innerText = "₹ --";
+            document.getElementById('res-emi').innerText = "₹ --";
+            document.getElementById('res-total-cost').innerText = "₹ --";
+        },
+
+        showError: function(msg) {
+            this.clearResults();
+            const el = document.getElementById('res-true-rate');
+            el.innerText = msg;
+            el.style.fontSize = "1rem";
+        }
+    };
+
+    // Auto-Start
+    window.onload = function() {
+        QS_FlatRed.init();
+    };
+</script>
+</body>
+</html>

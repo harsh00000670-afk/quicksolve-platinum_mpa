@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Support Hub | QuickSolve Platinum</title>
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="QuickSolve Platinum ⚡ The Ultimate Utility Engine">
+    <meta property="og:description" content="Stop using boring, slow calculators. Experience the lightning-fast SSJ4 engine for GST, EMI, Math, and Programmer tools. Zero ads, 100% offline.">
+    <meta property="og:image" content="https://quicksolve-platinum.netlify.app/logo.png">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="QuickSolve Platinum ⚡ The Ultimate Utility Engine">
+    <meta name="twitter:description" content="Experience the lightning-fast SSJ4 engine for GST, EMI, Math, and Programmer tools.">
+    <meta name="twitter:image" content="https://quicksolve-platinum.netlify.app/logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           CONTACT GOD - SSJ4 HOLOGRAPHIC UI V2
+           Theme: Deep Void / Neon Cyan / Gold
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800;900&family=Inter:wght@400;600;800;900&display=swap');
+
+        #contact-god-overlay {
+            position: fixed !important; top: 0; left: 0; 
+            width: 100vw; height: 100dvh; 
+            background-color: #020617; /* Void */
+            z-index: 2147483647 !important;
+            display: flex; flex-direction: column;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        /* PREMIUM BACKGROUND HOLOGRAPHIC MESH */
+        #contact-god-overlay::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.1), transparent 40%),
+                radial-gradient(circle at 80% 100%, rgba(245, 158, 11, 0.1), transparent 40%),
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+            z-index: -1; pointer-events: none;
+        }
+
+        /* HEADER */
+        .ct-head {
+            display: flex; align-items: center; justify-content: center;
+            padding: 15px; background: rgba(15, 23, 42, 0.8); flex-shrink: 0;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2); position: relative;
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+        }
+        .ct-back { 
+            position: absolute; left: 15px; background: none; border: none; 
+            color: #38bdf8; font-size: 1.4rem; cursor: pointer; transition: 0.3s;
+        }
+        .ct-back:active { transform: scale(0.9) translateX(-5px); }
+        .ct-tit { color: #f59e0b; font-weight: 900; font-size: 1.1rem; letter-spacing: 2px; font-family: 'JetBrains Mono', monospace; text-shadow: 0 0 10px rgba(245, 158, 11, 0.4); text-transform: uppercase; }
+
+        /* BODY */
+        .ct-body {
+            flex: 1; overflow-y: auto; padding: 30px 20px; 
+            display: flex; flex-direction: column; align-items: center; gap: 20px;
+            position: relative; 
+        }
+
+        /* 1. HERO ANIMATION */
+        .hero-box {
+            text-align: center; margin-bottom: 20px;
+            animation: fadeIn 0.5s ease-out;
+            position: relative; width: 100%;
+        }
+        
+        .hero-pulse {
+            position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%);
+            width: 100px; height: 100px; border-radius: 50%;
+            border: 2px solid rgba(56, 189, 248, 0.5);
+            animation: pulseRing 2s infinite cubic-bezier(0.215, 0.610, 0.355, 1);
+            pointer-events: none; z-index: 0;
+        }
+
+        .hero-icon-wrap {
+            width: 90px; height: 90px; margin: 0 auto 20px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 2px solid #38bdf8; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.3), inset 0 0 15px rgba(56, 189, 248, 0.2);
+            animation: float 4s ease-in-out infinite; 
+            position: relative; z-index: 1;
+        }
+        .hero-icon { font-size: 2.5rem; color: #38bdf8; filter: drop-shadow(0 0 5px #38bdf8); }
+        
+        .hero-h { color: #fff; font-size: 1.8rem; font-weight: 900; margin-bottom: 8px; letter-spacing: -0.5px; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .hero-p { color: #94a3b8; font-size: 0.95rem; max-width: 280px; margin: 0 auto; line-height: 1.5; font-weight: 500; }
+
+        /* 2. ACTION CARDS */
+        .action-list { width: 100%; display: flex; flex-direction: column; gap: 15px; max-width: 400px; }
+        
+        .act-card {
+            background: rgba(30, 41, 59, 0.7); padding: 18px 20px; border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; gap: 18px;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;
+            opacity: 0; transform: translateY(20px);
+            animation: slideUp 0.5s ease-out forwards;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        
+        .act-card::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: skewX(-20deg); transition: 0.5s;
+        }
+        
+        .act-card:hover::before { left: 200%; transition: 0.7s ease-in-out; }
+        .act-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+        
+        .card-email:hover { border-color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
+        .card-rate:hover { border-color: #f59e0b; background: rgba(245, 158, 11, 0.05); }
+        .card-share:hover { border-color: #10b981; background: rgba(16, 185, 129, 0.05); }
+
+        .act-card:nth-child(1) { animation-delay: 0.1s; }
+        .act-card:nth-child(2) { animation-delay: 0.2s; }
+        .act-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .act-card:active { transform: scale(0.96) translateY(0); }
+        
+        .ac-icon { 
+            width: 48px; height: 48px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: #fff; transition: 0.3s; box-shadow: inset 0 2px 4px rgba(255,255,255,0.05);
+        }
+        .card-email:hover .ac-icon { background: rgba(56, 189, 248, 0.2); color: #38bdf8; transform: scale(1.1); }
+        .card-rate:hover .ac-icon { background: rgba(245, 158, 11, 0.2); color: #f59e0b; transform: scale(1.1) rotate(15deg); }
+        .card-share:hover .ac-icon { background: rgba(16, 185, 129, 0.2); color: #10b981; transform: scale(1.1); }
+        
+        .ac-txt { flex: 1; display: flex; flex-direction: column; }
+        .ac-t { color: #f8fafc; font-weight: 800; font-size: 1.05rem; letter-spacing: 0.5px; }
+        .ac-d { color: #94a3b8; font-size: 0.8rem; font-weight: 500; margin-top: 4px; }
+        .ac-arr { color: #475569; font-size: 1.1rem; transition: 0.3s; }
+        .act-card:hover .ac-arr { color: #f8fafc; transform: translateX(4px); }
+
+        /* FOOTER */
+        .ct-foot {
+            margin-top: auto; text-align: center; color: #475569; font-size: 0.75rem; padding-top: 30px;
+            animation: fadeIn 1s ease-out; font-family: 'JetBrains Mono', monospace; font-weight: bold; line-height: 1.8;
+        }
+
+        /* =========================
+           🚀 NATIVE ALERT MODAL (RATE FEATURE)
+           ========================= */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 10000; opacity: 0; visibility: hidden;
+            transition: 0.3s; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+
+        .alert-modal {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
+            width: 85%; max-width: 320px; background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 20px;
+            z-index: 10001; opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 25px 20px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+        }
+        .alert-modal.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+
+        .alert-icon {
+            width: 60px; height: 60px; margin: 0 auto 15px; background: rgba(245, 158, 11, 0.1);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2);
+            box-shadow: inset 0 0 10px rgba(245, 158, 11, 0.2);
+        }
+        .alert-title { color: #f8fafc; font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .alert-desc { color: #94a3b8; font-size: 0.85rem; line-height: 1.5; margin-bottom: 20px; font-weight: 500;}
+        .alert-btn {
+            width: 100%; background: linear-gradient(90deg, #f59e0b, #d97706);
+            color: #fff; border: none; padding: 14px; border-radius: 12px;
+            font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer; transition: 0.2s; box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+        }
+        .alert-btn:active { transform: scale(0.96); box-shadow: none; }
+
+        /* ANIMATIONS */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); box-shadow: 0 0 30px rgba(56, 189, 248, 0.2); }
+            50% { transform: translateY(-12px); box-shadow: 0 15px 40px rgba(56, 189, 248, 0.5); }
+        }
+        @keyframes pulseRing {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
+        }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* =========================
+           🐵 TELEPORTING SVG MONKEY ENGINE
+           ========================= */
+        #sneaky-monkey-wrap {
+            position: fixed; z-index: 2147483648; 
+            filter: drop-shadow(-5px 5px 10px rgba(0,0,0,0.6));
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+        }
+        .svg-monkey { width: 90px; height: 90px; pointer-events: auto; cursor: pointer; transition: transform 0.4s; }
+        
+        #sneaky-monkey-wrap[data-pos="right"] { right: -120px; top: 40%; transform: rotate(15deg); }
+        #sneaky-monkey-wrap[data-pos="left"] { left: -120px; top: 60%; transform: rotate(-15deg); }
+        #sneaky-monkey-wrap[data-pos="top"] { top: -120px; left: 50%; margin-left: -45px; transform: rotate(180deg); }
+
+        #sneaky-monkey-wrap.peek[data-pos="right"] { right: -25px; transform: rotate(-5deg); }
+        #sneaky-monkey-wrap.peek[data-pos="left"] { left: -25px; transform: rotate(5deg); }
+        #sneaky-monkey-wrap.peek[data-pos="top"] { top: -15px; transform: rotate(180deg); }
+
+        #sneaky-monkey-wrap[data-pos="left"] .svg-monkey { transform: scaleX(-1); }
+
+        .monkey-speech {
+            position: absolute; width: 180px; background: rgba(15, 23, 42, 0.95);
+            border: 1px solid #38bdf8; border-radius: 12px;
+            padding: 10px 12px; color: #e2e8f0; font-size: 0.75rem;
+            font-weight: bold; line-height: 1.4;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 0 10px rgba(56,189,248,0.1);
+            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+            opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: scale(0.8);
+        }
+
+        #sneaky-monkey-wrap[data-pos="right"] .monkey-speech { right: 110px; top: -20px; transform-origin: bottom right; }
+        #sneaky-monkey-wrap[data-pos="right"] .monkey-speech::after { content: ''; position: absolute; bottom: -1px; right: -10px; border-width: 10px 0 0 10px; border-style: solid; border-color: #38bdf8 transparent transparent transparent; }
+
+        #sneaky-monkey-wrap[data-pos="left"] .monkey-speech { left: 110px; top: -20px; transform-origin: bottom left; }
+        #sneaky-monkey-wrap[data-pos="left"] .monkey-speech::after { content: ''; position: absolute; bottom: -1px; left: -10px; border-width: 10px 10px 0 0; border-style: solid; border-color: #38bdf8 transparent transparent transparent; }
+
+        #sneaky-monkey-wrap[data-pos="top"] .monkey-speech { top: 110px; left: 50%; margin-left: -90px; transform-origin: top center; }
+        #sneaky-monkey-wrap[data-pos="top"] .monkey-speech::after { content: ''; position: absolute; top: -10px; left: 50%; margin-left: -10px; border-width: 0 10px 10px 10px; border-style: solid; border-color: transparent transparent #38bdf8 transparent; }
+
+        .monkey-speech.show { opacity: 1; transform: scale(1); pointer-events: auto; }
+        .m-eye { transform-origin: center; animation: eyeBlink 4s infinite; }
+        .m-wire-spark { stroke-dasharray: 5; animation: sparkFlow 0.5s linear infinite reverse; }
+        
+        @keyframes eyeBlink { 0%, 96%, 100% { transform: scaleY(1); } 98% { transform: scaleY(0.1); } }
+        @keyframes sparkFlow { to { stroke-dashoffset: 10; } }
+
+    </style>
+</head>
+<body>
+    <div id="contact-god-overlay">
+        
+        <header class="ct-head">
+            <button class="ct-back qs-back-btn" onclick="window.history.back();" aria-label="Go Back">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="ct-tit">SUPPORT HUB</div>
+        </header>
+
+        <section class="ct-body">
+            
+            <div class="hero-box">
+                <div class="hero-pulse"></div>
+                <div class="hero-icon-wrap">
+                    <i class="fas fa-headset hero-icon"></i>
+                </div>
+                <h1 class="hero-h">We're Here to Help</h1>
+                <p class="hero-p">Found a bug? Have a suggestion? Or just want to say hi?</p>
+            </div>
+
+            <div class="action-list">
+                <a href="mailto:support@quicksolve.app?subject=Platinum%20App%20Feedback&body=Hi%20QuickSolve%20Team,%0A%0A[Type your message here]%0A%0AApp Version: Platinum v3" class="act-card card-email">
+                    <div class="ac-icon" style="color:#38bdf8;"><i class="fas fa-envelope"></i></div>
+                    <div class="ac-txt">
+                        <span class="ac-t">Email Support</span>
+                        <span class="ac-d">Get a reply within 24 hours</span>
+                    </div>
+                    <div class="ac-arr"><i class="fas fa-chevron-right"></i></div>
+                </a>
+
+                <div class="act-card card-rate" onclick="openRateModal()">
+                    <div class="ac-icon" style="color:#f59e0b;"><i class="fas fa-star"></i></div>
+                    <div class="ac-txt">
+                        <span class="ac-t">Rate QuickSolve</span>
+                        <span class="ac-d">Support solo development</span>
+                    </div>
+                    <div class="ac-arr"><i class="fas fa-chevron-right"></i></div>
+                </div>
+
+                <div class="act-card card-share" onclick="shareAppAdvanced()">
+                    <div class="ac-icon" style="color:#10b981;"><i class="fas fa-share-alt"></i></div>
+                    <div class="ac-txt">
+                        <span class="ac-t">Share with Friends</span>
+                        <span class="ac-d">Help us grow the community</span>
+                    </div>
+                    <div class="ac-arr"><i class="fas fa-chevron-right"></i></div>
+                </div>
+            </div>
+
+            <footer class="ct-foot">
+                <span style="color:#10b981;">●</span> SYSTEM_ONLINE<br>
+                Response ID: SSJ4-CONTACT-V3<br>
+                Lucknow, India 🇮🇳
+            </footer>
+
+        </section>
+
+        <div id="sneaky-monkey-wrap" data-pos="right">
+            <div class="monkey-speech" id="m-speech"></div>
+            <svg class="svg-monkey" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" onclick="pokeMonkey()">
+                <path d="M 60 90 Q 20 120 5 85" fill="none" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>
+                <path d="M 60 90 Q 20 120 5 85" fill="none" stroke="#facc15" stroke-width="2" class="m-wire-spark"/>
+                <path d="M 50 110 C 20 110 30 70 50 60 C 70 70 80 110 50 110" fill="#6B4423"/>
+                <circle cx="25" cy="45" r="12" fill="#5A351A"/>
+                <circle cx="25" cy="45" r="7" fill="#DEB887"/>
+                <circle cx="75" cy="45" r="12" fill="#5A351A"/>
+                <circle cx="75" cy="45" r="7" fill="#DEB887"/>
+                <circle cx="50" cy="45" r="30" fill="#6B4423"/>
+                <path d="M 25 50 Q 50 20 75 50 Q 75 75 50 75 Q 25 75 25 50" fill="#DEB887"/>
+                <g class="m-eye" transform="translate(38, 43)">
+                    <circle cx="0" cy="0" r="5" fill="#000"/>
+                    <circle cx="1" cy="-1.5" r="2" fill="#fff"/>
+                </g>
+                <g class="m-eye" transform="translate(62, 43)">
+                    <circle cx="0" cy="0" r="5" fill="#000"/>
+                    <circle cx="1" cy="-1.5" r="2" fill="#fff"/>
+                </g>
+                <ellipse cx="50" cy="55" rx="4" ry="2" fill="#8B4513"/>
+                <path d="M 42 62 Q 50 68 58 62" fill="none" stroke="#5A351A" stroke-width="2" stroke-linecap="round"/>
+                <path d="M 70 75 Q 85 85 60 90" fill="none" stroke="#6B4423" stroke-width="12" stroke-linecap="round"/>
+                <path d="M 60 90 A 5 5 0 1 1 65 95" fill="#DEB887"/>
+            </svg>
+        </div>
+
+        <div class="modal-overlay" id="rate-overlay" onclick="closeRateModal()"></div>
+        <div class="alert-modal" id="rate-modal">
+            <div class="alert-icon"><i class="fas fa-tools"></i></div>
+            <h3 class="alert-title">Feature Unavailable</h3>
+            <p class="alert-desc">This feature is currently under development and will be available in the next major update. Stay tuned!</p>
+            <button class="alert-btn" onclick="closeRateModal()">Got it</button>
+        </div>
+
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - TELEPORTING MONKEY, SHARE & MODAL ENGINE */
+        
+        // 1. Alert Modal Logic
+        function openRateModal() {
+            if(navigator.vibrate) navigator.vibrate(20);
+            document.getElementById('rate-overlay').classList.add('active');
+            document.getElementById('rate-modal').classList.add('active');
+        }
+
+        function closeRateModal() {
+            document.getElementById('rate-overlay').classList.remove('active');
+            document.getElementById('rate-modal').classList.remove('active');
+        }
+
+        // 2. Advanced Web Share API
+        function shareAppAdvanced() {
+            const shareTitle = 'QuickSolve Platinum ⚡';
+            const shareText = 'Stop using boring, slow calculators. I found this insane ad-free app for GST, EMI, Finance, and Graphing. It runs 100% offline on the SSJ4 Engine! Check it out 🔥';
+            const shareUrl = window.location.origin;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: shareTitle,
+                    text: shareText,
+                    url: shareUrl
+                }).catch((error) => console.log('Error sharing', error));
+            } else {
+                alert("Share link copied to clipboard!\n" + shareUrl);
+                navigator.clipboard.writeText(shareText + "\n" + shareUrl);
+            }
+        }
+
+        // 3. Monkey Teleportation Engine
+        const monkeyWrap = document.getElementById('sneaky-monkey-wrap');
+        const positions = ['right', 'top', 'left'];
+        let posIndex = 0;
+        let isPoked = false;
+
+        function teleportMonkey() {
+            if(isPoked) return;
+            monkeyWrap.classList.remove('peek');
+            setTimeout(() => {
+                if(isPoked) return;
+                posIndex = (posIndex + 1) % positions.length;
+                monkeyWrap.setAttribute('data-pos', positions[posIndex]);
+                monkeyWrap.classList.add('peek');
+            }, 1000);
+        }
+
+        setInterval(teleportMonkey, 5000);
+        setTimeout(() => { monkeyWrap.classList.add('peek'); }, 1000);
+
+        // 4. Poke Interaction Engine
+        let speechTimeout;
+        function pokeMonkey() {
+            isPoked = true; 
+            const speech = document.getElementById('m-speech');
+            
+            speech.innerHTML = "<span style='color:#ef4444;'>Ouch!</span> Don't poke the engineer! 🛠️";
+            speech.classList.add('show');
+            
+            if(window.navigator && window.navigator.vibrate) window.navigator.vibrate(50);
+            
+            clearTimeout(speechTimeout);
+            
+            speechTimeout = setTimeout(() => {
+                speech.innerHTML = "<span style='color:#eab308;'>*Bzzt*</span> Ignore me, just checking the wiring here... ensuring everything is fine! 🔧";
+                
+                setTimeout(() => {
+                    speech.classList.remove('show');
+                    isPoked = false; 
+                }, 3000);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

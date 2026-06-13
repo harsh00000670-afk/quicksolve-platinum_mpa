@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Crypto Gas Estimator Pro | L1 & L2 EVM Fees | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate real-time cryptocurrency gas fees across Ethereum, BNB Chain, Polygon, Arbitrum, Solana, and more. Avoid overpaying for smart contract swaps and NFT minting. 100% Offline.">
+    <meta name="keywords" content="crypto gas estimator, ethereum gas calculator, gwei converter, solana transaction fee, web3 gas tracker, arbitrum fee calculator, smart contract cost, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/currency_suites/gas_fees.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Crypto Gas Estimator Pro - Avoid Hidden Network Fees">
+    <meta property="og:description" content="Estimate exact network gas fees before you transfer or swap on any major blockchain.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           CRYPTO GAS FEE ESTIMATOR (GOD MODE V2)
+           Theme: Web3 Terminal (Purple / Cyan)
+           ========================================= */
+        #mod-gas-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: var(--bg-body, #09090b); z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .gs-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .gs-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .gs-tit { color: #c084fc; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .gs-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Input Cards */
+        .gs-card { 
+            flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 12px; 
+            padding: 15px; display: flex; flex-direction: column; gap: 10px; transition: 0.2s; position: relative;
+        }
+        .gs-card:focus-within { border-color: #c084fc; box-shadow: 0 0 15px rgba(192, 132, 252, 0.15); }
+
+        .gs-lbl { font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; margin-bottom: 5px; }
+        
+        /* Custom Selectors (Replacing Native Select) */
+        .gs-custom-sel { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.6); border: 1px dashed #c084fc; padding: 12px 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .gs-custom-sel:active { border-color: #c084fc; background: rgba(192, 132, 252, 0.1); }
+        .gcs-icon { font-size: 1.2rem; display: flex; justify-content: center; align-items: center; width: 24px; }
+        .gcs-details { flex: 1; display: flex; flex-direction: column; }
+        .gcs-title { font-weight: 900; color: #f8fafc; font-size: 1rem; }
+        .gcs-sub { font-size: 0.7rem; color: #94a3b8; margin-top: 2px; }
+        .gcs-caret { color: #c084fc; font-size: 1rem; }
+
+        .gs-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; }
+        .gs-tag { color: #94a3b8; font-weight: 900; font-size: 0.8rem; font-family: monospace; }
+        .gs-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.2rem; font-weight: 900; outline: none; width: 100%; font-family: monospace; text-align: right; }
+        .gs-inp::placeholder { color: #475569; }
+
+        /* Speed Toggles */
+        .speed-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 5px; }
+        .speed-btn { background: rgba(2, 6, 23, 0.5); border: 1px solid #334155; padding: 10px 5px; border-radius: 8px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 4px; }
+        .speed-btn:active { transform: scale(0.95); }
+        .speed-btn.active { background: rgba(192, 132, 252, 0.15); border-color: #c084fc; box-shadow: inset 0 -3px 0 #c084fc; }
+        
+        .sb-tit { font-size: 0.7rem; font-weight: 900; text-transform: uppercase; color: #94a3b8; }
+        .speed-btn.active .sb-tit { color: #c084fc; }
+        .sb-val { font-size: 0.9rem; color: #f8fafc; font-family: monospace; font-weight: bold; }
+        .sb-gwei { font-size: 0.6rem; color: #64748b; }
+
+        /* Results Dashboard */
+        .res-dash { flex-shrink: 0; background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 15px; margin-top: 5px; }
+        .dash-tit { font-size: 0.8rem; color: #f8fafc; font-weight: 900; text-transform: uppercase; text-align: center; margin-bottom: 15px; letter-spacing: 1px; }
+
+        .fee-box { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: 8px; padding: 15px; text-align: center; margin-bottom: 15px; }
+        .fb-lbl { font-size: 0.8rem; font-weight: 900; text-transform: uppercase; color: #ef4444; }
+        .fb-val { font-size: 2.2rem; font-weight: 900; color: #ef4444; font-family: monospace; margin: 5px 0; }
+        .fb-sub { font-size: 0.85rem; color: #f8fafc; font-weight: bold; font-family: monospace; }
+
+        .breakdown-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #334155; font-size: 0.85rem; font-family: monospace; }
+        .breakdown-row:last-child { border-bottom: none; }
+        .br-lbl { color: #94a3b8; font-weight: bold; }
+        .br-val { color: #f8fafc; font-weight: bold; }
+        .br-hl { color: #c084fc; font-weight: 900; }
+
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #06b6d4; color: #06b6d4; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(6, 182, 212, 0.15); transform: scale(0.98); }
+
+        /* CUSTOM BOTTOM SHEET MODALS */
+        .bs-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .bs-content { background: #1e293b; border-top-left-radius: 20px; border-top-right-radius: 20px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .bs-open .bs-content { transform: translateY(0); }
+        
+        .bs-head { padding: 15px 20px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #f8fafc; font-weight: 800; }
+        .bs-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        
+        .bs-list { flex: 1; overflow-y: auto; padding: 10px 0; }
+        .bs-item { display: flex; align-items: center; padding: 15px 20px; gap: 15px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); cursor: pointer; transition: 0.2s; }
+        .bs-item:active { background: rgba(192, 132, 252, 0.1); }
+        .bsi-icon { font-size: 1.5rem; width: 30px; text-align: center; }
+        .bsi-details { flex: 1; display: flex; flex-direction: column; }
+        .bsi-title { font-weight: 900; color: #f8fafc; font-size: 1rem; }
+        .bsi-sub { color: #94a3b8; font-size: 0.75rem; margin-top: 3px; }
+
+        /* STEPS MODAL (Why) */
+        #gs-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #gs-steps-box { background: #1e293b; border: 1px solid #06b6d4; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(6, 182, 212, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+    </style>
+</head>
+<body>
+    <main id="mod-gas-overlay" role="main" aria-label="Crypto Gas Estimator">
+        <header class="gs-head">
+            <a href="../currency.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+            <div class="gs-tit"><i class="fas fa-gas-pump" aria-hidden="true"></i> GAS ESTIMATOR PRO</div>
+        </header>
+
+        <section class="gs-body">
+            
+            <div class="gs-card">
+                <div class="gs-lbl">Blockchain Network</div>
+                <button class="gs-custom-sel" id="sel-network" onclick="QS_Gas.openModal('network')" aria-label="Select Blockchain Network">
+                    <div class="gcs-icon" id="ui-net-icon" style="color:#627eea;" aria-hidden="true"><i class="fab fa-ethereum"></i></div>
+                    <div class="gcs-details">
+                        <span class="gcs-title" id="ui-net-title" style="color:#627eea;">Ethereum Mainnet</span>
+                        <span class="gcs-sub" id="ui-net-sub">Base Token: ETH</span>
+                    </div>
+                    <i class="fas fa-chevron-down gcs-caret" id="ui-net-caret" style="color:#627eea;" aria-hidden="true"></i>
+                </button>
+
+                <div class="gs-lbl" style="margin-top:15px;">Transaction Type</div>
+                <button class="gs-custom-sel" onclick="QS_Gas.openModal('action')" style="border-color:#475569;" aria-label="Select Transaction Type">
+                    <div class="gcs-icon" style="color:#f8fafc;" aria-hidden="true"><i class="fas fa-exchange-alt" id="ui-act-icon"></i></div>
+                    <div class="gcs-details">
+                        <span class="gcs-title" id="ui-act-title">Native Transfer</span>
+                        <span class="gcs-sub" id="ui-act-sub">Standard wallet to wallet transfer</span>
+                    </div>
+                    <i class="fas fa-chevron-down gcs-caret" style="color:#475569;" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="gs-card">
+                <div class="gs-lbl">
+                    <label for="gs-coin-price">Native Coin Price ($)</label>
+                    <span style="color:#64748b; text-transform:none;">For Fiat conversion</span>
+                </div>
+                <div class="gs-inp-wrap">
+                    <span class="gs-tag" id="coin-tag" aria-hidden="true">1 ETH = $</span>
+                    <input type="number" id="gs-coin-price" class="gs-inp" value="3500" oninput="QS_Gas.calc()" aria-label="Native Coin Price in USD">
+                </div>
+            </div>
+
+            <div class="gs-card">
+                <div class="gs-lbl">Network Congestion (Speed)</div>
+                <div class="speed-grid" role="group" aria-label="Select Transaction Speed">
+                    <button class="speed-btn" id="spd-slow" onclick="QS_Gas.setSpeed('slow')" aria-pressed="false">
+                        <span class="sb-tit">Slow</span>
+                        <span class="sb-val" id="time-slow">~5 mins</span>
+                        <span class="sb-gwei" id="gwei-slow">15 Gwei</span>
+                    </button>
+                    <button class="speed-btn active" id="spd-std" onclick="QS_Gas.setSpeed('std')" aria-pressed="true">
+                        <span class="sb-tit">Standard</span>
+                        <span class="sb-val" id="time-std">~45 secs</span>
+                        <span class="sb-gwei" id="gwei-std">30 Gwei</span>
+                    </button>
+                    <button class="speed-btn" id="spd-fast" onclick="QS_Gas.setSpeed('fast')" aria-pressed="false">
+                        <span class="sb-tit">Fast</span>
+                        <span class="sb-val" id="time-fast">~15 secs</span>
+                        <span class="sb-gwei" id="gwei-fast">50 Gwei</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="res-dash" aria-live="polite">
+                <div class="dash-tit"><i class="fas fa-receipt" aria-hidden="true"></i> Estimated Gas Invoice</div>
+                
+                <div class="fee-box">
+                    <div class="fb-lbl">Total Network Fee</div>
+                    <div class="fb-val" id="res-fiat">$0.00</div>
+                    <div class="fb-sub" id="res-crypto">0.000000 ETH</div>
+                </div>
+
+                <div style="background:rgba(2,6,23,0.5); padding:10px; border-radius:8px;">
+                    <div class="breakdown-row">
+                        <span class="br-lbl">Gas Price Factor</span>
+                        <span class="br-val" id="bd-gwei">30 Gwei</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span class="br-lbl">Computational Limit</span>
+                        <span class="br-val" id="bd-limit">21,000 Units</span>
+                    </div>
+                    <div class="breakdown-row" style="border-top:1px solid #334155; margin-top:5px; padding-top:10px;">
+                        <span class="br-lbl" style="color:#f8fafc;">Active Blockchain</span>
+                        <span class="br-val br-hl" id="bd-chain">Ethereum Mainnet</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-why" onclick="QS_Gas.showSteps()" aria-label="Learn how Gwei works">
+                <i class="fas fa-hammer" aria-hidden="true"></i> How "Gwei" Works
+            </button>
+
+        </section>
+
+        <div id="modal-network" class="bs-modal" role="dialog" aria-label="Select Network">
+            <div class="bs-content">
+                <div class="bs-head">
+                    <span>Select Blockchain</span>
+                    <button class="bs-close" onclick="QS_Gas.closeModal('network')" aria-label="Close Network Selector"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="bs-list" id="list-network">
+                    </div>
+            </div>
+        </div>
+
+        <div id="modal-action" class="bs-modal" role="dialog" aria-label="Select Action">
+            <div class="bs-content">
+                <div class="bs-head">
+                    <span>Transaction Type</span>
+                    <button class="bs-close" onclick="QS_Gas.closeModal('action')" aria-label="Close Action Selector"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="bs-list" id="list-action">
+                    </div>
+            </div>
+        </div>
+
+        <div id="gs-steps-modal" role="dialog" aria-modal="true" aria-labelledby="gwei-title">
+            <div id="gs-steps-box">
+                <div class="steps-head">
+                    <span id="gwei-title"><i class="fas fa-server" aria-hidden="true"></i> BLOCKCHAIN MECHANICS</span>
+                    <button class="steps-close" onclick="QS_Gas.hideSteps()" aria-label="Close Mechanics Details"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="steps-content" id="gs-steps-content">
+                    </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - CRYPTO GAS ESTIMATOR PRO
+           Features: Expanded Network List (L1/L2s), Custom Bottom Sheets, Dynamic EVM Math.
+        */
+
+        (function() {
+            window.QS_Gas = {
+                
+                currentSpeed: 'std',
+                currentNet: 'eth',
+                currentAct: 'transfer',
+                
+                // Massive Expanded Database of Chains
+                networks: {
+                    'eth': { name: 'Ethereum', sym: 'ETH', price: 3500, type: 'evm', gwei: { slow: 15, std: 30, fast: 50 }, color: '#627eea', icon: 'fab fa-ethereum' },
+                    'bsc': { name: 'BNB Smart Chain', sym: 'BNB', price: 600, type: 'evm', gwei: { slow: 1, std: 3, fast: 5 }, color: '#f3ba2f', icon: 'fas fa-coins' },
+                    'matic': { name: 'Polygon PoS', sym: 'MATIC', price: 0.75, type: 'evm', gwei: { slow: 30, std: 60, fast: 100 }, color: '#8247e5', icon: 'fas fa-draw-polygon' },
+                    'arb': { name: 'Arbitrum One', sym: 'ETH', price: 3500, type: 'evm', gwei: { slow: 0.01, std: 0.1, fast: 0.5 }, color: '#28a0f0', icon: 'fas fa-layer-group' },
+                    'op': { name: 'Optimism', sym: 'ETH', price: 3500, type: 'evm', gwei: { slow: 0.001, std: 0.01, fast: 0.1 }, color: '#ff0420', icon: 'fas fa-angle-double-up' },
+                    'base': { name: 'Base Network', sym: 'ETH', price: 3500, type: 'evm', gwei: { slow: 0.001, std: 0.05, fast: 0.1 }, color: '#0052ff', icon: 'fas fa-circle-notch' },
+                    'avax': { name: 'Avalanche C-Chain', sym: 'AVAX', price: 35, type: 'evm', gwei: { slow: 25, std: 30, fast: 50 }, color: '#e84142', icon: 'fas fa-mountain' },
+                    'ftm': { name: 'Fantom Opera', sym: 'FTM', price: 0.8, type: 'evm', gwei: { slow: 50, std: 100, fast: 200 }, color: '#13b5ec', icon: 'fas fa-ghost' },
+                    'cro': { name: 'Cronos', sym: 'CRO', price: 0.15, type: 'evm', gwei: { slow: 5000, std: 6000, fast: 8000 }, color: '#103f68', icon: 'fas fa-link' },
+                    'sol': { name: 'Solana', sym: 'SOL', price: 150, type: 'flat', baseFee: 0.000005, color: '#14f195', icon: 'fas fa-sun' },
+                    'trx': { name: 'TRON Network', sym: 'TRX', price: 0.12, type: 'flat', baseFee: 1.5, color: '#ff060a', icon: 'fas fa-gem' }
+                },
+
+                // Action Types
+                actions: {
+                    'transfer': { title: 'Native Transfer', sub: 'Wallet to wallet (e.g. ETH to ETH)', limit: 21000, icon: 'fas fa-exchange-alt' },
+                    'token': { title: 'Token Transfer', sub: 'ERC20 / SPL (e.g. sending USDT)', limit: 65000, icon: 'fas fa-coins' },
+                    'swap': { title: 'DEX Swap', sub: 'Uniswap / PancakeSwap Routing', limit: 200000, icon: 'fas fa-random' },
+                    'mint': { title: 'NFT Mint / Deploy', sub: 'Complex Smart Contract Execution', limit: 350000, icon: 'fas fa-images' }
+                },
+
+                initListener: function() {
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'currency_suites/gas_fees.js') {
+                            this.populateModals();
+                            this.updateUI();
+                        }
+                    });
+                    
+                    // Standalone Boot
+                    if(document.readyState === 'complete' || document.readyState === 'interactive'){
+                         setTimeout(() => { this.populateModals(); this.updateUI(); }, 100);
+                    } else {
+                         document.addEventListener('DOMContentLoaded', () => { this.populateModals(); this.updateUI(); });
+                    }
+                },
+
+                populateModals: function() {
+                    // Networks
+                    const netList = document.getElementById('list-network');
+                    if(netList) {
+                        netList.innerHTML = '';
+                        for (let key in this.networks) {
+                            let n = this.networks[key];
+                            let div = document.createElement('div');
+                            div.className = 'bs-item';
+                            div.onclick = () => this.selectNetwork(key);
+                            div.innerHTML = `
+                                <div class="bsi-icon" style="color:${n.color};"><i class="${n.icon}"></i></div>
+                                <div class="bsi-details">
+                                    <span class="bsi-title">${n.name}</span>
+                                    <span class="bsi-sub">Gas Asset: ${n.sym}</span>
+                                </div>
+                            `;
+                            netList.appendChild(div);
+                        }
+                    }
+
+                    // Actions
+                    const actList = document.getElementById('list-action');
+                    if(actList) {
+                        actList.innerHTML = '';
+                        for (let key in this.actions) {
+                            let a = this.actions[key];
+                            let div = document.createElement('div');
+                            div.className = 'bs-item';
+                            div.onclick = () => this.selectAction(key);
+                            div.innerHTML = `
+                                <div class="bsi-icon" style="color:#94a3b8;"><i class="${a.icon}"></i></div>
+                                <div class="bsi-details">
+                                    <span class="bsi-title">${a.title}</span>
+                                    <span class="bsi-sub">${a.sub}</span>
+                                </div>
+                            `;
+                            actList.appendChild(div);
+                        }
+                    }
+                },
+
+                openModal: function(type) {
+                    const modal = document.getElementById(`modal-${type}`);
+                    if(modal) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => { modal.classList.add('bs-open'); }, 10);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                closeModal: function(type) {
+                    const modal = document.getElementById(`modal-${type}`);
+                    if(modal) {
+                        modal.classList.remove('bs-open');
+                        setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                selectNetwork: function(key) {
+                    this.currentNet = key;
+                    this.updateUI();
+                    this.closeModal('network');
+                },
+
+                selectAction: function(key) {
+                    this.currentAct = key;
+                    this.updateUI();
+                    this.closeModal('action');
+                },
+
+                setSpeed: function(speed) {
+                    this.currentSpeed = speed;
+                    document.getElementById('spd-slow').classList.remove('active');
+                    document.getElementById('spd-slow').setAttribute('aria-pressed', 'false');
+                    
+                    document.getElementById('spd-std').classList.remove('active');
+                    document.getElementById('spd-std').setAttribute('aria-pressed', 'false');
+                    
+                    document.getElementById('spd-fast').classList.remove('active');
+                    document.getElementById('spd-fast').setAttribute('aria-pressed', 'false');
+                    
+                    const activeBtn = document.getElementById(`spd-${speed}`);
+                    if(activeBtn) {
+                        activeBtn.classList.add('active');
+                        activeBtn.setAttribute('aria-pressed', 'true');
+                    }
+                    this.calc();
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                updateUI: function() {
+                    const netObj = this.networks[this.currentNet];
+                    const actObj = this.actions[this.currentAct];
+                    if(!netObj || !actObj) return;
+                    
+                    // Update Selectors UI
+                    let selNetwork = document.getElementById('sel-network');
+                    let uiNetIcon = document.getElementById('ui-net-icon');
+                    let uiNetTitle = document.getElementById('ui-net-title');
+                    let uiNetSub = document.getElementById('ui-net-sub');
+                    let uiNetCaret = document.getElementById('ui-net-caret');
+                    
+                    if(selNetwork) selNetwork.style.borderColor = netObj.color;
+                    if(uiNetIcon) {
+                        uiNetIcon.style.color = netObj.color;
+                        uiNetIcon.innerHTML = `<i class="${netObj.icon}"></i>`;
+                    }
+                    if(uiNetTitle) {
+                        uiNetTitle.innerText = netObj.name;
+                        uiNetTitle.style.color = netObj.color;
+                    }
+                    if(uiNetSub) uiNetSub.innerText = `Token: ${netObj.sym}`;
+                    if(uiNetCaret) uiNetCaret.style.color = netObj.color;
+
+                    let uiActIcon = document.getElementById('ui-act-icon');
+                    let uiActTitle = document.getElementById('ui-act-title');
+                    let uiActSub = document.getElementById('ui-act-sub');
+                    if(uiActIcon) uiActIcon.className = actObj.icon;
+                    if(uiActTitle) uiActTitle.innerText = actObj.title;
+                    if(uiActSub) uiActSub.innerText = actObj.sub;
+
+                    // Update Input
+                    let coinTag = document.getElementById('coin-tag');
+                    let gsCoinPrice = document.getElementById('gs-coin-price');
+                    let bdChain = document.getElementById('bd-chain');
+                    
+                    if(coinTag) coinTag.innerText = `1 ${netObj.sym} = $`;
+                    if(gsCoinPrice) gsCoinPrice.value = netObj.price;
+                    if(bdChain) {
+                        bdChain.innerText = netObj.name;
+                        bdChain.style.color = netObj.color;
+                    }
+
+                    // Handle Timing/Gwei displays
+                    if (netObj.type === 'flat') {
+                        // Flat fee chains are practically instant
+                        if(document.getElementById('time-slow')) document.getElementById('time-slow').innerText = "~2s";
+                        if(document.getElementById('time-std')) document.getElementById('time-std').innerText = "~1s";
+                        if(document.getElementById('time-fast')) document.getElementById('time-fast').innerText = "<1s";
+                        
+                        if(document.getElementById('gwei-slow')) document.getElementById('gwei-slow').innerText = "Fixed";
+                        if(document.getElementById('gwei-std')) document.getElementById('gwei-std').innerText = "Fixed";
+                        if(document.getElementById('gwei-fast')) document.getElementById('gwei-fast').innerText = "Fixed";
+                    } else {
+                        // EVM Chains
+                        if(document.getElementById('time-slow')) document.getElementById('time-slow').innerText = "~3m";
+                        if(document.getElementById('time-std')) document.getElementById('time-std').innerText = "~45s";
+                        if(document.getElementById('time-fast')) document.getElementById('time-fast').innerText = "~15s";
+                        
+                        if(document.getElementById('gwei-slow')) document.getElementById('gwei-slow').innerText = `${netObj.gwei.slow} Gwei`;
+                        if(document.getElementById('gwei-std')) document.getElementById('gwei-std').innerText = `${netObj.gwei.std} Gwei`;
+                        if(document.getElementById('gwei-fast')) document.getElementById('gwei-fast').innerText = `${netObj.gwei.fast} Gwei`;
+                    }
+
+                    this.calc();
+                },
+
+                calc: function() {
+                    const coinPriceEl = document.getElementById('gs-coin-price');
+                    if(!coinPriceEl) return;
+                    
+                    const coinPrice = parseFloat(coinPriceEl.value) || 0;
+                    const netObj = this.networks[this.currentNet];
+                    const actObj = this.actions[this.currentAct];
+                    if(!netObj || !actObj) return;
+                    
+                    let totalCryptoFee = 0;
+                    let gweiUsed = 0;
+                    let limitUsed = actObj.limit;
+
+                    if (netObj.type === 'flat') {
+                        gweiUsed = "N/A";
+                        limitUsed = "N/A (Fixed)";
+                        
+                        // Base calculation for flat chains
+                        let base = netObj.baseFee;
+                        if (this.currentAct === 'token') base *= 2;
+                        if (this.currentAct === 'swap') base *= 5;
+                        if (this.currentAct === 'mint') base *= 10;
+                        
+                        // Priority
+                        if (this.currentSpeed === 'std') base *= 1.5;
+                        if (this.currentSpeed === 'fast') base *= 3;
+
+                        totalCryptoFee = base;
+                    } else {
+                        // EVM Math: Fee = Gas Limit * Gas Price (in Gwei)
+                        gweiUsed = netObj.gwei[this.currentSpeed];
+                        totalCryptoFee = limitUsed * (gweiUsed * 1e-9);
+                    }
+
+                    const totalFiatFee = totalCryptoFee * coinPrice;
+
+                    // Update DOM
+                    const fmtFiat = (totalFiatFee < 0.01 && totalFiatFee > 0) ? "< $0.01" : `$${totalFiatFee.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                    
+                    // Format crypto to avoid e-notation on very small numbers
+                    let cryptoStr = totalCryptoFee < 0.0000001 ? totalCryptoFee.toFixed(8) : totalCryptoFee.toLocaleString('en-US', {maximumFractionDigits: 8});
+
+                    if(document.getElementById('res-fiat')) document.getElementById('res-fiat').innerText = fmtFiat;
+                    if(document.getElementById('res-crypto')) document.getElementById('res-crypto').innerText = `${cryptoStr} ${netObj.sym}`;
+                    
+                    if(document.getElementById('bd-gwei')) document.getElementById('bd-gwei').innerText = gweiUsed === "N/A" ? "Network Fixed" : `${gweiUsed} Gwei`;
+                    if(document.getElementById('bd-limit')) document.getElementById('bd-limit').innerText = limitUsed.toLocaleString('en-US') || limitUsed;
+                },
+
+                showSteps: function() {
+                    const contentBox = document.getElementById('gs-steps-content');
+                    if(!contentBox) return;
+                    
+                    let html = `
+                        <div style="margin-bottom:15px; border-left:3px solid #06b6d4; padding-left:10px;">
+                            <span style="color:#06b6d4; font-weight:bold;">The "Uber" of Blockchains:</span><br>
+                            Gas fees are like paying an Uber driver. When the network is crowded, you have to pay more "Gwei" to convince validators to process your transaction first!
+                        </div>
+                        
+                        <div style="background:#020617; border:1px solid #334155; border-radius:8px; padding:15px; margin-top:10px;">
+                            <span style="color:#c084fc; font-weight:bold; font-size:0.8rem; text-transform:uppercase;"><i class="fas fa-calculator"></i> The EVM Math Formula</span>
+                            
+                            <div style="margin-top:10px; background:rgba(2,6,23,0.8); padding:10px; border-radius:6px; font-family:monospace; color:#f8fafc; text-align:center; font-size:0.9rem; border:1px dashed #475569;">
+                                Total Fee = Gas Limit × Gas Price
+                            </div>
+
+                            <ul style="margin-top:15px; padding-left:15px; color:#94a3b8; font-size:0.8rem; line-height:1.5;">
+                                <li><span style="color:#f8fafc; font-weight:bold;">Gas Limit:</span> The amount of computational work required. Sending ETH takes exactly <b>21,000</b>. But a complex Smart Contract swap takes <b>200,000+</b>.</li>
+                                <li style="margin-top:5px;"><span style="color:#f59e0b; font-weight:bold;">Gas Price (Gwei):</span> The cost per unit of work. 1 Gwei = 0.000000001 ETH. This changes based on network traffic.</li>
+                            </ul>
+                        </div>
+
+                        <div style="margin-top:15px; font-size:0.75rem; color:#10b981; text-align:center; font-weight:bold; background:rgba(16,185,129,0.1); padding:10px; border-radius:6px;">
+                            <b>Layer 2 Magic:</b> This is why Networks like Arbitrum or Base are popular. They bundle transactions together, dropping the cost to mere cents!
+                        </div>
+                    `;
+                    contentBox.innerHTML = html;
+                    const modal = document.getElementById('gs-steps-modal');
+                    const box = document.getElementById('gs-steps-box');
+                    if(modal && box) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => { modal.style.opacity = '1'; box.style.transform = 'translateY(0)'; }, 10);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                hideSteps: function() {
+                    const modal = document.getElementById('gs-steps-modal');
+                    const box = document.getElementById('gs-steps-box');
+                    if(modal && box) {
+                        modal.style.opacity = '0';
+                        box.style.transform = 'translateY(20px)';
+                        setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                }
+            };
+
+            window.QS_Gas.initListener();
+        })();
+    </script>
+</body>
+</html>

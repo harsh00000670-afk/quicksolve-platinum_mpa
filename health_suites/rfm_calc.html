@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Relative Fat Mass (RFM) Calculator | Beyond BMI | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate your Relative Fat Mass (RFM). The most accurate body fat estimation based on Cedars-Sinai research. Compare RFM vs BMI instantly. 100% Offline.">
+    <meta name="keywords" content="rfm calculator, relative fat mass formula, body fat percentage calculator, rfm vs bmi, accurate fat calculation, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/health_suites/rfm_calc.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#020617">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           RFM CALCULATOR (PLATINUM GOD MODE)
+           Theme: Obsidian / Electric Blue
+           ========================================= */
+        #mod-rfm-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: #020617; z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .rf-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #0f172a; border-bottom: 1px solid #1e293b;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .rf-head .qs-back-btn { background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .rf-tit { color: #0ea5e9; font-weight: 900; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .rf-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 80px; }
+
+        /* Sleek Input Cards */
+        .rf-card { 
+            background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; 
+            padding: 15px; display: flex; flex-direction: column; gap: 10px;
+        }
+        
+        .rf-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .rf-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 12px; border-radius: 8px; border: 1px solid #1e293b; cursor: pointer; transition: 0.2s; }
+        .rf-inp-wrap:focus-within { border-color: #0ea5e9; box-shadow: 0 0 10px rgba(14, 165, 233, 0.1); }
+        .rf-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.1rem; font-weight: 900; outline: none; width: 100%; text-align: center; font-family: monospace; }
+        .rf-unit { color: #475569; font-weight: bold; font-size: 0.75rem; }
+
+        /* Custom Select Trigger */
+        .rf-select-text { flex: 1; color: #fff; font-size: 0.95rem; font-weight: 900; display: flex; align-items: center; gap: 10px; }
+
+        /* Result Panel */
+        .res-panel { background: #020617; border: 1px solid #0ea5e9; border-radius: 12px; padding: 25px 15px; text-align: center; position: relative; box-shadow: inset 0 0 30px rgba(14, 165, 233, 0.05); }
+        .res-panel::before { content: 'RFM ACCURACY'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #0ea5e9; color: #020617; font-size: 0.6rem; font-weight: 900; padding: 2px 10px; border-radius: 4px; letter-spacing: 1px; }
+        
+        .rfm-val { font-size: 3.5rem; font-weight: 900; color: #0ea5e9; font-family: monospace; line-height: 1; }
+        .rfm-cat { font-size: 0.9rem; font-weight: 900; text-transform: uppercase; color: #f8fafc; margin-top: 10px; letter-spacing: 2px; }
+
+        /* Comparison Box */
+        .comp-box { background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 10px; padding: 15px; margin-top: 15px; }
+        .comp-tit { font-size: 0.65rem; color: #94a3b8; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; text-align: center; letter-spacing: 1px; }
+        .comp-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(51, 65, 85, 0.3); }
+        .comp-row:last-child { border-bottom: none; }
+        .comp-name { font-size: 0.8rem; color: #cbd5e1; font-weight: bold; }
+        .comp-val { font-size: 1rem; color: #fff; font-weight: 900; font-family: monospace; }
+
+        /* Modal Styles */
+        .rm-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .rm-content { background: #0f172a; border-top-left-radius: 20px; border-top-right-radius: 20px; display: flex; flex-direction: column; overflow: hidden; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .rm-open .rm-content { transform: translateY(0); }
+        .rm-head { padding: 15px 20px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; }
+        .rm-head span { color: #0ea5e9; font-weight: 900; font-size: 1rem; text-transform: uppercase; }
+        .rm-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .rm-list { padding: 10px 0; }
+        .rl-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); cursor: pointer; }
+        .rl-name { font-weight: 900; color: #f8fafc; font-size: 0.95rem; }
+        .rl-check { color: #0ea5e9; display: none; }
+        .rl-item.active .rl-check { display: block; }
+        .rl-item.active .rl-name { color: #0ea5e9; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <main id="mod-rfm-overlay" role="main" aria-label="Relative Fat Mass Calculator">
+        <header class="rf-head">
+            <a href="../health.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left"></i></a>
+            <div class="rf-tit"><i class="fas fa-chart-line"></i> RFM INDEX</div>
+        </header>
+
+        <section class="rf-body">
+            
+            <div class="rf-card">
+                <div class="rf-lbl">Biological Gender</div>
+                <div class="rf-inp-wrap" onclick="QS_RFM.openModal('gender')" aria-label="Select Gender">
+                    <div id="sel-gender-text" class="rf-select-text">
+                        <i class="fas fa-venus-mars" style="color:#0ea5e9;"></i> Select Gender
+                    </div>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                </div>
+
+                <div class="rf-lbl">Measurement Unit</div>
+                <div class="rf-inp-wrap" onclick="QS_RFM.openModal('unit')">
+                    <div id="sel-unit-text" class="rf-select-text">
+                        <i class="fas fa-tape" style="color:#38bdf8;"></i> cm / inches
+                    </div>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                </div>
+
+                <div class="rf-lbl">Height</div>
+                <div class="rf-inp-wrap" style="cursor: text;">
+                    <input type="number" id="inp-height" class="rf-inp" placeholder="Standing height" oninput="QS_RFM.calculate()">
+                    <span id="lbl-h-unit" class="rf-unit">CM</span>
+                </div>
+
+                <div class="rf-lbl">Waist Circumference</div>
+                <div class="rf-inp-wrap" style="cursor: text;">
+                    <input type="number" id="inp-waist" class="rf-inp" placeholder="At belly button level" oninput="QS_RFM.calculate()">
+                    <span id="lbl-w-unit" class="rf-unit">CM</span>
+                </div>
+                
+                <div class="rf-lbl">Current Weight (Optional for BMI Compare)</div>
+                <div class="rf-inp-wrap" style="cursor: text;">
+                    <input type="number" id="inp-weight" class="rf-inp" placeholder="e.g. 75" oninput="QS_RFM.calculate()">
+                    <span class="rf-unit">KG</span>
+                </div>
+            </div>
+
+            <div id="empty-state" style="text-align:center; padding:30px 20px; color:#475569;">
+                <i class="fas fa-microscope fa-3x" style="opacity:0.3; margin-bottom:15px;"></i>
+                <div style="font-size:0.85rem; font-weight:bold;">Cedars-Sinai Formula: Input measurements for precision fat estimation.</div>
+            </div>
+
+            <div id="res-dashboard" class="hidden" aria-live="polite">
+                
+                <div class="res-panel">
+                    <div class="rfm-val" id="res-rfm">0.0%</div>
+                    <div class="rfm-cat" id="res-cat">--</div>
+                </div>
+
+                <div class="comp-box">
+                    <div class="comp-tit">Analytics Comparison</div>
+                    <div class="comp-row">
+                        <span class="comp-name">RFM Fat %</span>
+                        <span class="comp-val" id="res-rfm-row">0.0%</span>
+                    </div>
+                    <div class="comp-row">
+                        <span class="comp-name">Traditional BMI</span>
+                        <span class="comp-val" id="res-bmi-row">--</span>
+                    </div>
+                    <div class="comp-row">
+                        <span class="comp-name">Height-Waist Ratio</span>
+                        <span class="comp-val" id="res-hwr-row">0.00</span>
+                    </div>
+                </div>
+
+                <div style="background: rgba(14, 165, 233, 0.1); border: 1px solid #0ea5e9; border-radius: 8px; padding: 12px; font-size: 0.7rem; color: #cbd5e1; line-height: 1.4; text-align: center;">
+                    <i class="fas fa-info-circle" style="color:#0ea5e9;"></i> RFM is considered <span style="color:#fff; font-weight:bold;">more accurate</span> than BMI as it accounts for body frame through waist measurement.
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <div id="cm-modal" class="rm-modal">
+        <div class="rm-content">
+            <div class="rm-head"><span id="cm-title">Select</span><button class="rm-close" onclick="QS_RFM.closeModal()"><i class="fas fa-times"></i></button></div>
+            <div class="rm-list" id="cm-list"></div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - RFM ENGINE
+           Features: Cedars-Sinai RFM Formula, BMI Side-by-side comparison.
+        */
+        (function() {
+            window.QS_RFM = {
+                state: { gender: 'male', unit: 'cm' },
+                
+                initListener: function() {
+                    this.updateSelectionText();
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'health_suites/rfm_calc.js') this.calculate();
+                    });
+                    if(document.readyState === 'complete') this.calculate();
+                    else document.addEventListener('DOMContentLoaded', () => this.calculate());
+                },
+
+                openModal: function(type) {
+                    const titleMap = { gender: 'Select Gender', unit: 'Measurement Unit' };
+                    document.getElementById('cm-title').innerText = titleMap[type];
+                    const list = document.getElementById('cm-list');
+                    list.innerHTML = '';
+
+                    let opts = [];
+                    if(type === 'gender') opts = [{v:'male', n:'Male'}, {v:'female', n:'Female'}];
+                    else opts = [{v:'cm', n:'Centimeters (cm)'}, {v:'in', n:'Inches (in)'}];
+
+                    opts.forEach(o => {
+                        const currentVal = (type === 'gender' ? this.state.gender : this.state.unit);
+                        const div = document.createElement('div');
+                        div.className = `rl-item ${currentVal === o.v ? 'active' : ''}`;
+                        div.onclick = () => this.setVal(type, o.v);
+                        div.innerHTML = `<span class="rl-name">${o.n}</span><i class="fas fa-check rl-check"></i>`;
+                        list.appendChild(div);
+                    });
+
+                    const m = document.getElementById('cm-modal');
+                    m.style.display = 'flex';
+                    setTimeout(() => m.classList.add('rm-open'), 10);
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                closeModal: function() {
+                    const m = document.getElementById('cm-modal');
+                    if(m) {
+                        m.classList.remove('rm-open');
+                        setTimeout(() => m.style.display = 'none', 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                setVal: function(type, v) {
+                    if(type === 'gender') this.state.gender = v;
+                    else this.state.unit = v;
+                    
+                    this.updateSelectionText();
+                    this.closeModal();
+                    this.calculate();
+                },
+
+                updateSelectionText: function() {
+                    document.getElementById('sel-gender-text').innerHTML = `<i class="fas ${this.state.gender === 'male' ? 'fa-mars' : 'fa-venus'}" style="color:#0ea5e9;"></i> ${this.state.gender.toUpperCase()}`;
+                    document.getElementById('sel-unit-text').innerHTML = `<i class="fas fa-tape" style="color:#38bdf8;"></i> ${this.state.unit === 'cm' ? 'CENTIMETERS' : 'INCHES'}`;
+                    document.getElementById('lbl-h-unit').innerText = this.state.unit.toUpperCase();
+                    document.getElementById('lbl-w-unit').innerText = this.state.unit.toUpperCase();
+                },
+
+                calculate: function() {
+                    const h = parseFloat(document.getElementById('inp-height').value);
+                    const w = parseFloat(document.getElementById('inp-waist').value);
+                    const weight = parseFloat(document.getElementById('inp-weight').value);
+
+                    if(!h || !w || h <= 0 || w <= 0) return this.hide();
+
+                    document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('res-dashboard').classList.remove('hidden');
+
+                    // RFM Formula:
+                    // Male: 64 - (20 * (height / waist))
+                    // Female: 76 - (20 * (height / waist))
+                    const constant = this.state.gender === 'male' ? 64 : 76;
+                    const rfm = constant - (20 * (h / w));
+                    
+                    const hwr = w / h; // Height-Waist Ratio
+
+                    this.render(rfm, h, weight, hwr);
+                },
+
+                render: function(rfm, h, weight, hwr) {
+                    const displayRfm = Math.max(0, rfm);
+                    document.getElementById('res-rfm').innerText = displayRfm.toFixed(1) + '%';
+                    document.getElementById('res-rfm-row').innerText = displayRfm.toFixed(1) + '%';
+                    document.getElementById('res-hwr-row').innerText = hwr.toFixed(2);
+
+                    let cat = "";
+                    let col = "#0ea5e9";
+                    
+                    // Basic Body Fat Categories
+                    if(this.state.gender === 'male') {
+                        if(rfm < 14) { cat = "Athlete / Low"; col = "#38bdf8"; }
+                        else if(rfm < 25) { cat = "Healthy / Fitness"; col = "#10b981"; }
+                        else { cat = "Obese / High Risk"; col = "#ef4444"; }
+                    } else {
+                        if(rfm < 21) { cat = "Athlete / Low"; col = "#38bdf8"; }
+                        else if(rfm < 32) { cat = "Healthy / Fitness"; col = "#10b981"; }
+                        else { cat = "Obese / High Risk"; col = "#ef4444"; }
+                    }
+
+                    const catEl = document.getElementById('res-cat');
+                    catEl.innerText = cat;
+                    catEl.style.color = col;
+
+                    // BMI Comparison (if weight provided)
+                    if(weight && weight > 0) {
+                        // Height conversion for BMI (always m^2)
+                        const hM = this.state.unit === 'cm' ? h/100 : (h * 0.0254);
+                        const bmi = weight / (hM * hM);
+                        document.getElementById('res-bmi-row').innerText = bmi.toFixed(1);
+                    } else {
+                        document.getElementById('res-bmi-row').innerText = "Enter Weight";
+                    }
+                },
+
+                hide: function() {
+                    document.getElementById('empty-state').classList.remove('hidden');
+                    document.getElementById('res-dashboard').classList.add('hidden');
+                }
+            };
+            window.QS_RFM.initListener();
+        })();
+    </script>
+</body>
+</html>

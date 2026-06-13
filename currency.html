@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+    <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
+
+    <title>Currency & Crypto Suite | Global Forex Dashboard | QuickSolve Platinum</title>
+    <meta name="description" content="Live Universal Fiat Converter, Forex Watchlist, Crypto Core, ROI Calculator, and PPP tools. Your ultimate offline dashboard for global currency and Web3 assets.">
+    <meta name="keywords" content="currency converter, crypto converter, forex dashboard, fiat exchange, cryptocurrency roi, ppp calculator, hidden bank fees, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/currency.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Currency & Crypto Suite - Global Forex Control Room">
+    <meta property="og:description" content="Track live Fiat and Crypto rates, calculate hidden bank fees, and estimate Web3 gas instantly.">
+    <meta property="og:image" content="logo.png">
+    
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - DESIGN PRESERVED */
+        :root {
+            --bg-body: #09090b;
+            --card-bg: #1e293b;
+            --border-subtle: #334155;
+            --text-main: #f4f4f5;
+            --text-sub: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-gold: #f59e0b;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+        }
+
+        body { margin: 0; background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        /* 🚀 STAGGERED FLY-IN ENGINE */
+        .anim-card {
+            opacity: 0; transform: scale(0.95) translateY(20px);
+            animation: flyIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            will-change: transform, opacity;
+        }
+        @keyframes flyIn { to { opacity: 1; transform: scale(1) translateY(0); } }
+
+        .d-1 { animation-delay: 0.05s; } .d-2 { animation-delay: 0.1s; }
+        .d-3 { animation-delay: 0.15s; } .d-4 { animation-delay: 0.2s; }
+        .d-5 { animation-delay: 0.25s; } .d-6 { animation-delay: 0.3s; }
+        .d-7 { animation-delay: 0.35s; } .d-8 { animation-delay: 0.4s; }
+        .d-9 { animation-delay: 0.45s; } .d-10 { animation-delay: 0.5s; }
+        .d-11 { animation-delay: 0.55s; } .d-12 { animation-delay: 0.6s; }
+        .d-13 { animation-delay: 0.65s; } .d-14 { animation-delay: 0.7s; }
+
+        /* PLATINUM HORIZONTAL CARDS */
+        .tools-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 15px; }
+        
+        .tool-card {
+            background: var(--card-bg); border-radius: 16px; padding: 20px;
+            border: 1px solid var(--border-subtle); display: flex; align-items: flex-start; gap: 15px;
+            text-decoration: none; color: inherit; transition: 0.3s; position: relative; overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .tool-card:active { transform: scale(0.96); background: #0f172a; }
+        
+        .tc-icon-wrap {
+            width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; flex-shrink: 0; background: rgba(255,255,255,0.03);
+        }
+        
+        .tc-info { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+        .tc-title { font-size: 1.05rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .tc-desc { font-size: 0.8rem; color: var(--text-sub); line-height: 1.4; font-weight: 500; }
+        
+        .badge {
+            font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 900; letter-spacing: 0.5px;
+            font-family: 'JetBrains Mono', monospace; text-transform: uppercase;
+        }
+        
+        /* Thematic Card Styles */
+        .c-green .tc-icon-wrap { color: var(--accent-green); background: rgba(16, 185, 129, 0.1); }
+        .c-green .badge { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .c-green:active { border-color: var(--accent-green); }
+
+        .c-gold .tc-icon-wrap { color: var(--accent-gold); background: rgba(245, 158, 11, 0.1); }
+        .c-gold .badge { background: rgba(245, 158, 11, 0.2); color: var(--accent-gold); }
+        .c-gold:active { border-color: var(--accent-gold); }
+
+        .c-blue .tc-icon-wrap { color: var(--accent-blue); background: rgba(59, 130, 246, 0.1); }
+        .c-blue .badge { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+        .c-blue:active { border-color: var(--accent-blue); }
+
+        .c-red .tc-icon-wrap { color: var(--accent-red); background: rgba(239, 68, 68, 0.1); }
+        .c-red .badge { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+        .c-red:active { border-color: var(--accent-red); }
+
+        .tc-arrow { color: var(--border-subtle); font-size: 1rem; align-self: center; transition: 0.3s; }
+        .tool-card:active .tc-arrow { color: var(--text-main); transform: translateX(3px); }
+        
+        .section-divider {
+            color: var(--text-sub); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; 
+            letter-spacing: 2px; margin: 30px 0 10px 5px; display: flex; align-items: center; gap: 8px;
+        }
+        .section-divider div { flex: 1; height: 1px; background: var(--border-subtle); opacity: 0.5; }
+    </style>
+</head>
+<body>
+    <main role="main" aria-label="Currency and Crypto Dashboard">
+        <header class="app-header" style="position: sticky; top: 0; z-index: 100; background: rgba(9, 9, 11, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-subtle); padding: 15px 20px; display: flex; align-items: center;" role="banner">
+            <a href="index.html" class="qs-back-btn icon-btn" aria-label="Go Back to Home" style="color: var(--text-main); margin-right: 15px; text-decoration: none; font-size: 1.4rem; transition: 0.2s;">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            </a>
+            <div class="brand" style="margin-right: auto; color: var(--accent-green); font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px;">
+                <i class="fas fa-hand-holding-usd" aria-hidden="true"></i> Global Forex
+            </div>
+        </header>
+
+        <section style="padding: 20px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+            
+            <div class="hero anim-card d-1" style="text-align: center; margin-bottom: 25px;">
+                <h2 style="margin: 0; font-size: 2rem; background: linear-gradient(135deg, var(--accent-green), var(--accent-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;">Currency & Crypto</h2>
+                <p style="color: var(--text-sub); font-size: 0.85rem; margin-top: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">> exchange --live --all_assets</p>
+            </div>
+            
+            <div class="section-divider anim-card d-2">
+                <i class="fas fa-globe-americas" style="color:var(--accent-green);"></i> Forex & Fiat
+                <div></div>
+            </div>
+            
+            <nav class="tools-grid" aria-label="Forex Tools">
+                <a href="currency_suites/fiat_converter.html" class="tool-card c-green anim-card d-3">
+                    <div class="tc-icon-wrap"><i class="fas fa-sync"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Universal Fiat <span class="badge">LIVE</span></div>
+                        <div class="tc-desc">Convert 150+ global fiat currencies with real-time exchange rates.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+                
+                <a href="currency_suites/watchlist.html" class="tool-card c-green anim-card d-4">
+                    <div class="tc-icon-wrap"><i class="fas fa-list-ul"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Forex Watchlist</div>
+                        <div class="tc-desc">Track your favorite currency pairs and monitor live market trends.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+                
+                <a href="currency_suites/hidden_fees.html" class="tool-card c-red anim-card d-5">
+                    <div class="tc-icon-wrap"><i class="fas fa-user-secret"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Hidden Bank Fees <span class="badge">SAVE $</span></div>
+                        <div class="tc-desc">Uncover the real markup banks charge on international transfers.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+                
+                <a href="currency_suites/ppp_calc.html" class="tool-card c-green anim-card d-6">
+                    <div class="tc-icon-wrap"><i class="fas fa-hamburger"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Real Value (PPP)</div>
+                        <div class="tc-desc">Compare true purchasing power across countries (The Big Mac Index).</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+                
+                <a href="currency_suites/volatility.html" class="tool-card c-green anim-card d-7">
+                    <div class="tc-icon-wrap"><i class="fas fa-chart-line"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Rate Volatility</div>
+                        <div class="tc-desc">Analyze historical currency swings and predict market risk.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+            </nav>
+
+            <div class="section-divider anim-card d-8">
+                <i class="fab fa-bitcoin" style="color:var(--accent-gold);"></i> Crypto & Web3
+                <div></div>
+            </div>
+            
+            <nav class="tools-grid" aria-label="Crypto Tools">
+                <a href="currency_suites/crypto_converter.html" class="tool-card c-gold anim-card d-9">
+                    <div class="tc-icon-wrap"><i class="fas fa-coins"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Crypto Core <span class="badge">WEB3</span></div>
+                        <div class="tc-desc">Live tracking and precision conversion for Top cryptocurrencies.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+                
+                <a href="currency_suites/gas_fees.html" class="tool-card c-gold anim-card d-10">
+                    <div class="tc-icon-wrap"><i class="fas fa-gas-pump"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Gas Estimator</div>
+                        <div class="tc-desc">Calculate live transaction fees for Ethereum, Solana, and more.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+                
+                <a href="currency_suites/crypto_profit.html" class="tool-card c-gold anim-card d-11">
+                    <div class="tc-icon-wrap"><i class="fas fa-chart-pie"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Profit & Exit <span class="badge">ROI</span></div>
+                        <div class="tc-desc">Determine exact ROI, profit margins, and calculate safe exit strategies.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+                
+                <a href="currency_suites/arbitrage.html" class="tool-card c-gold anim-card d-12">
+                    <div class="tc-icon-wrap"><i class="fas fa-random"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Chain Arbitrage</div>
+                        <div class="tc-desc">Find price differences across major centralized crypto exchanges.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+            </nav>
+
+            <div class="section-divider anim-card d-13">
+                <i class="fas fa-tools" style="color:var(--accent-blue);"></i> Global Utilities
+                <div></div>
+            </div>
+            
+            <nav class="tools-grid" aria-label="Utility Tools">
+                <a href="currency_suites/inflation.html" class="tool-card c-blue anim-card d-14">
+                    <div class="tc-icon-wrap"><i class="fas fa-hourglass-half"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Time Machine</div>
+                        <div class="tc-desc">Calculate historical inflation and the true value of money over decades.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+                
+                <a href="currency_suites/global_tax.html" class="tool-card c-blue anim-card d-15">
+                    <div class="tc-icon-wrap"><i class="fas fa-receipt"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Global Tax Map</div>
+                        <div class="tc-desc">Compare income and capital gains tax brackets across the globe.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+            </nav>
+
+        </section>
+    </main>
+</body>
+</html>

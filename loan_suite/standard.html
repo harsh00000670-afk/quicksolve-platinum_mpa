@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+
+
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Standard EMI Calculator | Monthly Loan Repayment Tool | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate your monthly EMI instantly with our professional Standard EMI Engine. View complete repayment schedules, interest vs principal breakdown, and beautiful donut charts. 100% Private and Offline.">
+    <meta name="keywords" content="emi calculator, monthly repayment calculator, loan emi schedule, principal vs interest chart, home loan emi, car loan emi, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/loan_suite/standard.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0f172a">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Standard EMI Engine - Plan Your Monthly Budget">
+    <meta property="og:description" content="Get accurate EMI calculations and detailed repayment schedules in one tap.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           STANDARD EMI GOD ENGINE - SSJ4 Independent
+           Theme: Deep Slate / Neon Gold Fusion
+           ========================================= */
+        body { 
+            margin: 0; 
+            background-color: var(--bg-body, #0f172a); 
+            /* Integrated Local JetBrains Mono */
+            font-family: var(--font-main, sans-serif);
+        }
+        
+        #mod-standard-overlay {
+            width: 100vw; height: 100dvh; 
+            background-color: var(--bg-body, #0f172a); 
+            display: flex; flex-direction: column;
+            font-family: var(--font-main, sans-serif);
+            overflow: hidden; animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 1. HEADER */
+        .s-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 15px; background: var(--surface, #1e293b); border-bottom: 1px solid var(--border, #334155);
+            flex-shrink: 0; position: sticky; top: 0; z-index: 10;
+        }
+        .s-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f1f5f9); font-size: 1.2rem; cursor: pointer; padding: 5px; text-decoration: none; }
+        .s-head .s-tit { color: #fbbf24; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* 2. BODY (Scrollable) */
+        .s-body {
+            flex: 1; overflow-y: auto; padding: 15px;
+            padding-bottom: 80px; /* Space for Sticky Bottom Button */
+            display: flex; flex-direction: column; gap: 12px;
+        }
+
+        /* 3. INPUT COMPONENTS */
+        .lbl { color: var(--text-muted, #94a3b8); font-size: 0.7rem; font-weight: 700; margin-bottom: 5px; display: block; text-transform: uppercase; }
+        
+        .inp-box {
+            background: var(--surface, #1e293b); border: 1px solid var(--border, #334155); border-radius: 8px;
+            padding: 10px 12px; transition: border-color 0.2s;
+        }
+        .inp-box:focus-within { border-color: #fbbf24; box-shadow: 0 0 10px rgba(251, 191, 36, 0.1); }
+        
+        .inp-flex { display: flex; align-items: center; gap: 8px; }
+        .inp-unit { color: #fbbf24; font-weight: 800; font-size: 1rem; }
+        .inp-main {
+            flex: 1; background: transparent; border: none; color: var(--text-main, #fff); 
+            font-size: 1.15rem; font-family: var(--font-main); outline: none; width: 100%; min-width: 0;
+        }
+        .inp-main:focus { color: #fbbf24; }
+        .inp-main::placeholder { color: #475569; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        .cust-select {
+            background: rgba(2, 6, 23, 0.5); color: #fbbf24; border: 1px solid var(--border);
+            border-radius: 6px; padding: 6px 24px 6px 10px; font-weight: 700; font-size: 0.8rem;
+            appearance: none; -webkit-appearance: none; cursor: pointer; outline: none;
+            min-width: 80px; text-align: left;
+        }
+
+        /* Custom Radio Toggle (Arrears/Advance) */
+        .tog-row { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+        .tog-item { flex: 1; text-align: center; position: relative; }
+        .tog-item input { position: absolute; opacity: 0; cursor: pointer; }
+        .tog-lbl {
+            display: block; padding: 8px; color: var(--text-muted); font-size: 0.75rem; font-weight: 700;
+            cursor: pointer; transition: 0.2s;
+        }
+        .tog-item input:checked + .tog-lbl { background: rgba(251, 191, 36, 0.1); color: #fbbf24; }
+
+        /* 4. RESULTS CARD */
+        .res-card {
+            background: rgba(15, 23, 42, 0.5); 
+            border: 2px solid; border-image: linear-gradient(45deg, #fbbf24, #38bdf8) 1; 
+            border-radius: 12px; padding: 15px; display: grid; grid-template-columns: 90px 1fr; gap: 15px; align-items: center;
+            margin-top: 5px;
+        }
+        
+        .res-summary { display: flex; flex-direction: column; gap: 8px; }
+        .res-item { text-align: right; }
+        .res-lbl { font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); }
+        .res-val { font-size: 1.1rem; font-weight: 800; color: #fbbf24; }
+        
+        /* EMI Display */
+        .emi-box { grid-column: 1 / -1; background: var(--surface); border: 1px dashed var(--border); border-radius: 8px; padding: 12px; text-align: center; }
+        .emi-val { font-size: 1.6rem; font-weight: 800; color: #10b981; }
+
+        /* Donut Chart */
+        .res-donut {
+            width: 90px; height: 90px; border-radius: 50%;
+            background: conic-gradient(#10b981 var(--p), var(--surface) 0);
+            position: relative; display: flex; align-items: center; justify-content: center;
+        }
+        .res-donut::after {
+            content: ""; position: absolute; width: 60px; height: 60px; 
+            background-color: #0f172a; border-radius: 50%;
+        }
+        .donut-txt { z-index: 1; color: var(--text-muted); font-size: 0.65rem; font-weight: 700; text-align: center; line-height: 1.2; }
+
+        /* 5. STICKY BOTTOM BUTTON */
+        .sticky-bottom {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            background: var(--surface); border-top: 1px solid #38bdf8;
+            padding: 10px 15px; display: flex; gap: 10px; z-index: 20;
+            box-sizing: border-box;
+        }
+        .btn-sch {
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 14px; background: rgba(56, 189, 248, 0.1); color: #38bdf8; 
+            border: none; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 0.95rem;
+        }
+        .btn-sch:active { transform: scale(0.98); background: rgba(56, 189, 248, 0.2); }
+
+        /* Schedule Modal */
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        #sch-body td { padding:12px 5px; border-bottom:1px solid var(--border); color: var(--text-main); }
+        #sch-body tr:nth-child(even) { background: rgba(30, 41, 59, 0.4); }
+    </style>
+</head>
+
+<body>
+
+<div id="mod-standard-overlay">
+    
+    <div class="s-head">
+        <a href="../loan.html" class="qs-back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="s-tit">STANDARD EMI</div>
+        <div style="width:24px;"></div> 
+    </div>
+
+    <div class="s-body">
+
+        <div class="inp-box">
+            <span class="lbl">Loan Amount (P)</span>
+            <div class="inp-flex">
+                <span class="inp-unit">₹</span>
+                <input type="number" id="std-amt" class="inp-main" placeholder="5,00,000" oninput="QS_Standard.calc()">
+            </div>
+        </div>
+
+        <div class="inp-box">
+            <span class="lbl">Interest Rate (R)</span>
+            <div class="inp-flex">
+                <span class="inp-unit">%</span>
+                <input type="number" id="std-rate" class="inp-main" placeholder="8.5" step="0.1" oninput="QS_Standard.calc()">
+                <div style="position:relative;">
+                    <select id="std-rate-type" class="cust-select" onchange="QS_Standard.calc()">
+                        <option value="Y" selected>Yearly</option>
+                        <option value="M">Monthly</option>
+                        <option value="W">Weekly</option>
+                    </select>
+                    <i class="fas fa-chevron-down" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); color:#fbbf24; font-size:0.6rem; pointer-events:none;"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="inp-box">
+                <span class="lbl">Tenure (T)</span>
+                <div class="inp-flex">
+                    <input type="number" id="std-time" class="inp-main" placeholder="5" oninput="QS_Standard.calc()">
+                    <div style="position:relative;">
+                        <select id="std-time-type" class="cust-select" onchange="QS_Standard.calc()">
+                            <option value="Y" selected>Years</option>
+                            <option value="M">Months</option>
+                            <option value="W">Weeks</option>
+                        </select>
+                        <i class="fas fa-chevron-down" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); color:#fbbf24; font-size:0.6rem; pointer-events:none;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inp-box">
+                <span class="lbl">Process Fee (%)</span>
+                <div class="inp-flex">
+                    <span class="inp-unit">%</span>
+                    <input type="number" id="std-fee" class="inp-main" placeholder="1.5" oninput="QS_Standard.calc()">
+                </div>
+            </div>
+        </div>
+
+        <div class="inp-box">
+            <span class="lbl">GST on Fees (%)</span>
+            <div class="inp-flex">
+                <span class="inp-unit">%</span>
+                <input type="number" id="std-gst" class="inp-main" placeholder="18" value="18" oninput="QS_Standard.calc()">
+            </div>
+        </div>
+
+        <div class="lbl" style="margin-top:2px; margin-bottom:0px;">EMI Type</div>
+        <div class="tog-row">
+            <div class="tog-item">
+                <input type="radio" name="emi-mode" id="mod-arr" value="arrears" checked onchange="QS_Standard.calc()">
+                <label for="mod-arr" class="tog-lbl">Arrears (Regular)</label>
+            </div>
+            <div class="tog-item">
+                <input type="radio" name="emi-mode" id="mod-adv" value="advance" onchange="QS_Standard.calc()">
+                <label for="mod-adv" class="tog-lbl">Advance (Upfront)</label>
+            </div>
+        </div>
+
+        <div class="res-card">
+            <div class="emi-box">
+                <div id="emi-label" class="res-lbl" style="color:#10b981; font-weight:800; letter-spacing: 1px;">MONTHLY EMI</div>
+                <div id="res-emi" class="emi-val">₹ --</div>
+            </div>
+
+            <div id="res-donut" class="res-donut" style="--p: 0deg;">
+                <div class="donut-txt">Principle<br>vs<br>Interest</div>
+            </div>
+
+            <div class="res-summary">
+                <div class="res-item">
+                    <div class="res-lbl">Principal Amt</div>
+                    <div id="res-p-amt" class="res-val" style="color:var(--text-main);">₹ --</div>
+                </div>
+                <div class="res-item">
+                    <div class="res-lbl" style="color:#f59e0b;">Total Interest</div>
+                    <div id="res-int-amt" class="res-val" style="color:#f59e0b;">₹ --</div>
+                </div>
+                <div class="res-item">
+                    <div class="res-lbl" style="color:var(--text-main);">Total Payable</div>
+                    <div id="res-tot-amt" class="res-val" style="color:var(--text-main);">₹ --</div>
+                </div>
+            </div>
+        </div>
+
+    </div> 
+    
+    <div class="sticky-bottom">
+        <button class="btn-sch" onclick="QS_Standard.openSchedule()">
+            <i class="fas fa-table"></i> View Repayment Schedule
+        </button>
+    </div>
+    
+    <div id="sch-modal" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:var(--bg-body); z-index:50; flex-direction:column; animation:slideUp 0.3s ease;">
+        <div class="s-head">
+            <button class="qs-back-btn" onclick="QS_Standard.closeSchedule()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="s-tit">REPAYMENT SCHEDULE</div>
+            <div style="width:24px;"></div>
+        </div>
+        <div style="flex:1; overflow-y:auto; padding:15px; padding-bottom:50px;">
+            <table style="width:100%; text-align:right; border-collapse:collapse; font-size:0.85rem; font-family:var(--font-mono, monospace);">
+                <thead style="position:sticky; top:0; background:var(--surface); color:var(--text-muted); box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                    <tr>
+                        <th id="sch-period-lbl" style="padding:12px 5px; text-align:center;">Mo.</th>
+                        <th style="padding:12px 5px;">EMI</th>
+                        <th style="padding:12px 5px; color:#f59e0b;">Int.</th>
+                        <th style="padding:12px 5px; color:#38bdf8;">Prin.</th>
+                        <th style="padding:12px 5px;">Bal.</th>
+                    </tr>
+                </thead>
+                <tbody id="sch-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const QS_Standard = {
+        
+        init: function() {
+            console.log("Standard EMI Engine: Connected & Ready 🚀");
+            const emiBox = document.getElementById('res-emi');
+            if(emiBox) {
+                emiBox.innerText = "READY 🟢";
+                emiBox.style.color = "#10b981";
+                emiBox.style.fontSize = "1.2rem";
+            }
+            // Clear inputs on fresh load
+            this.resetUI();
+        },
+
+        calc: function() {
+            try {
+                // Fetch Values
+                const pRaw = document.getElementById('std-amt').value;
+                const rRaw = document.getElementById('std-rate').value;
+                const tRaw = document.getElementById('std-time').value;
+
+                const P = parseFloat(pRaw);
+                const rInp = parseFloat(rRaw);
+                const tInp = parseFloat(tRaw);
+                
+                const rType = document.getElementById('std-rate-type').value;
+                const tType = document.getElementById('std-time-type').value;
+                const feePerc = parseFloat(document.getElementById('std-fee').value) || 0;
+                const gstPerc = parseFloat(document.getElementById('std-gst').value) || 0;
+                const isAdvance = document.getElementById('mod-adv').checked;
+
+                // VALIDATION
+                if (!P || !tInp || P <= 0 || tInp <= 0 || isNaN(rInp)) {
+                    this.clearResults();
+                    return;
+                }
+
+                // 1. Normalize Rate to Annual Rate
+                let annualRate = 0;
+                if (rType === 'Y') annualRate = rInp;
+                else if (rType === 'M') annualRate = rInp * 12;
+                else if (rType === 'W') annualRate = rInp * 52;
+
+                // 2. Setup Frequency
+                let r = 0; 
+                let n = Math.round(tInp); 
+                let emiLabel = "MONTHLY EMI";
+
+                if (tType === 'Y') {
+                    r = annualRate / 100;
+                    emiLabel = "YEARLY EMI";
+                } else if (tType === 'M') {
+                    r = (annualRate / 12) / 100;
+                    emiLabel = "MONTHLY EMI";
+                } else if (tType === 'W') {
+                    r = (annualRate / 52) / 100;
+                    emiLabel = "WEEKLY EMI";
+                }
+
+                if (n < 1) n = 1;
+
+                const labelEl = document.getElementById('emi-label');
+                if(labelEl) labelEl.innerText = emiLabel;
+
+                // 3. EMI Math
+                let emi = 0;
+                if (r === 0) {
+                    emi = P / n;
+                } else {
+                    const x = Math.pow(1 + r, n);
+                    emi = (P * r * x) / (x - 1);
+                }
+
+                if (isAdvance && n > 1) {
+                    emi = emi / (1 + r);
+                }
+
+                // 4. Fees & GST
+                const feeAmt = P * (feePerc / 100);
+                const gstOnFee = feeAmt * (gstPerc / 100);
+                const totalUpfront = feeAmt + gstOnFee;
+
+                // 5. Totals
+                const totalPaidToBank = emi * n;
+                const totalInterest = Math.max(0, totalPaidToBank - P);
+                const grandTotal = totalPaidToBank + totalUpfront;
+
+                // 6. UI Update
+                const emiRes = document.getElementById('res-emi');
+                emiRes.innerText = this.fmt(emi);
+                emiRes.style.fontSize = "1.6rem"; 
+                
+                document.getElementById('res-p-amt').innerText = this.fmt(P);
+                document.getElementById('res-int-amt').innerText = this.fmt(totalInterest);
+                document.getElementById('res-tot-amt').innerText = this.fmt(grandTotal);
+
+                // Donut Chart
+                const totalForChart = P + totalInterest;
+                const deg = totalForChart > 0 ? (P / totalForChart) * 360 : 0;
+                document.getElementById('res-donut').style.setProperty('--p', `${deg}deg`);
+
+            } catch (e) {
+                document.getElementById('res-emi').innerText = "MATH ERR!";
+                document.getElementById('res-emi').style.color = "#ef4444";
+                console.error("Calc Error:", e);
+            }
+        },
+
+        fmt: function(n) { 
+            if(isNaN(n) || !isFinite(n)) return "₹ 0";
+            return "₹ " + Math.round(n).toLocaleString('en-IN'); 
+        },
+
+        clearResults: function() {
+            document.getElementById('res-emi').innerText = "₹ --";
+            document.getElementById('res-p-amt').innerText = "₹ --";
+            document.getElementById('res-int-amt').innerText = "₹ --";
+            document.getElementById('res-tot-amt').innerText = "₹ --";
+            document.getElementById('res-donut').style.setProperty('--p', '0deg');
+        },
+
+        resetUI: function() {
+            ['std-amt', 'std-rate', 'std-time', 'std-fee'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('std-gst').value = '18';
+            document.getElementById('std-rate-type').value = 'Y';
+            document.getElementById('std-time-type').value = 'Y';
+            const arrToggle = document.getElementById('mod-arr');
+            if(arrToggle) arrToggle.checked = true;
+            this.clearResults();
+        },
+
+        // Haptic Feedback Helper
+        triggerHaptic: function() {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        },
+
+        openSchedule: function() {
+            this.triggerHaptic();
+
+            const P = parseFloat(document.getElementById('std-amt').value);
+            const emiText = document.getElementById('res-emi').innerText.replace(/[₹\s,]/g, '');
+            const emi = parseFloat(emiText);
+
+            if(!P || isNaN(emi) || emi <= 0) {
+                alert("Please calculate the EMI first!");
+                return;
+            }
+
+            const rInp = parseFloat(document.getElementById('std-rate').value);
+            const rType = document.getElementById('std-rate-type').value;
+            const tInp = parseFloat(document.getElementById('std-time').value);
+            const tType = document.getElementById('std-time-type').value;
+            const isAdvance = document.getElementById('mod-adv').checked;
+
+            let annualRate = 0;
+            if (rType === 'Y') annualRate = rInp;
+            else if (rType === 'M') annualRate = rInp * 12;
+            else if (rType === 'W') annualRate = rInp * 52;
+
+            let r = 0;
+            let n = Math.round(tInp);
+            let periodLabel = "Mo.";
+
+            if (tType === 'Y') {
+                r = annualRate / 100;
+                periodLabel = "Yr.";
+            } else if (tType === 'M') {
+                r = (annualRate / 12) / 100;
+                periodLabel = "Mo.";
+            } else if (tType === 'W') {
+                r = (annualRate / 52) / 100;
+                periodLabel = "Wk.";
+            }
+            n = Math.max(1, n);
+
+            const schLbl = document.getElementById('sch-period-lbl');
+            if(schLbl) schLbl.innerText = periodLabel;
+
+            let balance = P;
+            let html = "";
+            let actualEmi = emi;
+            let startMonth = 1;
+
+            if(isAdvance) {
+                balance -= emi;
+                html += `<tr><td style="text-align:center;">1</td><td>${this.fmt(emi).replace('₹ ','')}</td><td style="color:#f59e0b;">0</td><td style="color:#38bdf8;">${this.fmt(emi).replace('₹ ','')}</td><td>${this.fmt(Math.max(0, balance)).replace('₹ ','')}</td></tr>`;
+                startMonth = 2;
+            }
+
+            for(let i = startMonth; i <= n; i++) {
+                let interest = balance * r;
+                let principal = emi - interest;
+
+                if(i === n) {
+                    principal = balance;
+                    actualEmi = principal + interest;
+                    balance = 0;
+                } else {
+                    balance -= principal;
+                }
+
+                html += `<tr>
+                    <td style="text-align:center; color:var(--text-muted);">${i}</td>
+                    <td>${this.fmt(actualEmi).replace('₹ ','')}</td>
+                    <td style="color:#f59e0b;">${this.fmt(interest).replace('₹ ','')}</td>
+                    <td style="color:#38bdf8;">${this.fmt(principal).replace('₹ ','')}</td>
+                    <td>${this.fmt(Math.max(0, balance)).replace('₹ ','')}</td>
+                </tr>`;
+            }
+
+            document.getElementById('sch-body').innerHTML = html;
+            document.getElementById('sch-modal').style.display = 'flex';
+        },
+
+        closeSchedule: function() {
+            this.triggerHaptic();
+            document.getElementById('sch-modal').style.display = 'none';
+        }
+    };
+
+    // Initialize when page loads
+    window.onload = function() {
+        QS_Standard.init();
+    };
+</script>
+</body>
+</html>

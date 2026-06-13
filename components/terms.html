@@ -1,0 +1,355 @@
+<style>
+    /* =========================================
+       TERMS GOD - SSJ4 LEGAL UI
+       Theme: Deep Void / Law Firm Neon
+       ========================================= */
+    #terms-god-overlay {
+        position: fixed !important; top: 0; left: 0; 
+        width: 100vw; height: 100dvh; 
+        background-color: #020617; 
+        z-index: 2147483647 !important;
+        display: flex; flex-direction: column;
+        font-family: 'Inter', sans-serif;
+        overflow: hidden;
+    }
+
+    .tm-head {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 15px 20px; background: #0f172a; border-bottom: 1px solid #1e293b;
+        flex-shrink: 0;
+    }
+    .tm-back { background: none; border: none; color: #94a3b8; font-size: 1.4rem; cursor: pointer; }
+    .tm-tit { color: #f59e0b; font-weight: 800; font-size: 1.1rem; letter-spacing: 1px; font-family: 'JetBrains Mono'; }
+
+    .tm-body {
+        flex: 1; overflow-y: auto; padding: 20px; 
+        display: flex; flex-direction: column; gap: 20px;
+        scroll-behavior: smooth;
+    }
+    .tm-body::-webkit-scrollbar { width: 5px; }
+    .tm-body::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+    .tm-card {
+        background: #1e293b; border-radius: 12px; padding: 18px;
+        border-left: 4px solid #334155; transition: 0.2s;
+    }
+    .tm-card:hover { border-left-color: #f59e0b; background: #253045; }
+
+    .tm-tit-sm { color: #fff; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; }
+    .tm-txt { color: #94a3b8; font-size: 0.8rem; line-height: 1.6; }
+
+    .hi { color: #f59e0b; font-weight: 600; }
+    .warn { color: #ef4444; font-weight: 600; }
+
+    .tm-foot {
+        text-align: center; padding: 20px; color: #64748b; font-size: 0.7rem;
+        border-top: 1px solid #1e293b; background: #0b1121; flex-shrink: 0;
+    }
+</style>
+
+<div id="terms-god-overlay">
+
+    <div class="tm-head">
+        <button class="tm-back qs-back-btn" onclick="window.history.back()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+        </button>
+        <div class="tm-tit">TERMS OF SERVICE</div>
+        <div style="width:24px"></div>
+    </div>
+
+    <div class="tm-body">
+
+        <div style="padding:10px; background:rgba(245,158,11,0.1); border:1px solid #f59e0b; border-radius:8px; color:#f59e0b; font-size:0.75rem; text-align:center;">
+            <b>LEGAL STATUS:</b> Protected by SSJ4 Architecture Logic
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">1. Acceptance of Terms</div>
+            <div class="tm-txt">
+                By accessing or using QuickSolve Platinum, you fully agree to these terms. If you do not agree, <span class="warn">discontinue use immediately</span>.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">2. Local Data Responsibility</div>
+            <div class="tm-txt">
+                All app data is stored locally via <span class="hi">LocalStorage</span>. The developer does not control, recover, or back up your data.
+            </div>
+        </div>
+
+        <div class="tm-card" style="border-left-color:#ef4444;">
+            <div class="tm-tit-sm">3. Non-Professional Disclaimer</div>
+            <div class="tm-txt">
+                Outputs related to Finance, GST, EMI, BMI, or Health are <span class="hi">informational estimates only</span>. This app is not a licensed advisor.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">4. Accuracy & Verification</div>
+            <div class="tm-txt">
+                While the <span class="hi">SSJ4 Engine</span> aims for precision, no guarantee of absolute accuracy is provided. Users must independently verify results.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">5. Educational & Utility Use Only</div>
+            <div class="tm-txt">
+                QuickSolve Platinum is designed for educational, productivity, and reference purposes only.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">6. Intellectual Property</div>
+            <div class="tm-txt">
+                All branding, logic, UI, and the <span class="hi">SSJ4 Architecture</span> are proprietary and protected by applicable laws.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">7. Reverse Engineering Prohibition</div>
+            <div class="tm-txt">
+                Any attempt to copy, scrape, automate, decompile, or replicate the engine or UI is strictly prohibited.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">8. Third-Party Links</div>
+            <div class="tm-txt">
+                External services (ads, tools, PyLab IDE) operate independently. We assume <span class="hi">no responsibility</span> for their content.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">9. Availability Disclaimer</div>
+            <div class="tm-txt">
+                The service may be modified, paused, or discontinued at any time without notice.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">10. No Warranty</div>
+            <div class="tm-txt">
+                The application is provided <span class="hi">"AS IS"</span> without warranties of any kind, express or implied.
+            </div>
+        </div>
+
+        <div class="tm-card" style="border-left-color:#ef4444;">
+            <div class="tm-tit-sm">11. Limitation of Liability</div>
+            <div class="tm-txt">
+                The developer shall not be liable for financial loss, data loss, business interruption, or decision-based outcomes.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">12. User Responsibility</div>
+            <div class="tm-txt">
+                You assume full responsibility for how you use the outputs generated by the application.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">13. Misuse & Abuse</div>
+            <div class="tm-txt">
+                Any misuse, illegal usage, or reliance contrary to local laws is solely the user's responsibility.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">14. Updates & Engine Changes</div>
+            <div class="tm-txt">
+                Features, logic, or engine behavior may change without prior notice.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">15. Age Responsibility</div>
+            <div class="tm-txt">
+                Users are responsible for ensuring legal eligibility under their local jurisdiction.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">16. International Use</div>
+            <div class="tm-txt">
+                Users accessing from outside India are responsible for compliance with their local laws.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">17. No Partnership</div>
+            <div class="tm-txt">
+                Use of this application does not establish any partnership, employment, or agency relationship.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">18. Force Majeure</div>
+            <div class="tm-txt">
+                We are not responsible for failures caused by events beyond reasonable control.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">19. Termination of Access</div>
+            <div class="tm-txt">
+                Access may be restricted or terminated at any time if misuse is detected.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">20. Governing Law</div>
+            <div class="tm-txt">
+                These terms are governed by the laws of <span class="hi">India</span>.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">21. Affiliate & External Transactions</div>
+            <div class="tm-txt">
+                Features like the Discount Suite may contain affiliate links. We are not a party to any transactions made on external platforms and hold <span class="warn">zero liability</span> for third-party pricing changes, failed transactions, or disputes.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">22. API Fair Use Policy</div>
+            <div class="tm-txt">
+                Certain features (like live currency rates) rely on <span class="hi">client-side API calls</span>. Users must not use automated scripts to spam these services or attempt to extract API keys embedded in the application.
+            </div>
+        </div>
+
+        <div class="tm-card" style="border-left-color:#ef4444;">
+            <div class="tm-tit-sm">23. Beta Features & "God Mode"</div>
+            <div class="tm-txt">
+                Suites marked as Beta, Experimental, or <span class="hi">"God Mode"</span> are provided strictly for testing purposes. Algorithms in these sections may be unstable, and the developer assumes <span class="warn">zero liability</span> for calculation errors or resulting decisions.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">24. Device & Browser Dependency</div>
+            <div class="tm-txt">
+                QuickSolve Platinum's offline capabilities and data retention are entirely dependent on your browser's health and storage policies. We are not responsible for app data wiped by OS updates, clearing browser cache, or device failure.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">25. Indemnification</div>
+            <div class="tm-txt">
+                You agree to indemnify and hold the developer harmless from any legal claims, financial damages, or expenses arising out of your misuse of the application or violation of these Terms of Service.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">26. Severability</div>
+            <div class="tm-txt">
+                If any single provision of these Terms is found to be unenforceable or invalid under local law by a court, that specific provision shall be limited or eliminated, and the remaining terms will remain in full legal effect.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">27. Anonymous Usage Model</div>
+            <div class="tm-txt">
+                QuickSolve Platinum operates without user accounts or identity tracking. All usage is <span class="hi">anonymous</span>. The developer cannot associate any activity, calculation, or data with a specific individual.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">28. Local Data Import/Export Responsibility</div>
+            <div class="tm-txt">
+                Users may export and re-import data into LocalStorage at their own risk. The developer is not responsible for corrupted files, incorrect imports, or overwritten data.
+            </div>
+        </div>
+
+        <div class="tm-card" style="border-left-color:#ef4444;">
+            <div class="tm-tit-sm">29. Data Loss Disclaimer</div>
+            <div class="tm-txt">
+                Since all data is stored locally, any loss due to browser reset, device damage, cache clearing, or system updates is <span class="warn">solely the user's responsibility</span>.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">30. Affiliate Revenue Transparency</div>
+            <div class="tm-txt">
+                QuickSolve may earn commissions through affiliate links. However, these affiliations do not influence calculation logic, outputs, or displayed results.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">31. No Transaction Mediation</div>
+            <div class="tm-txt">
+                The developer is not a party to any financial, commercial, or digital transaction conducted through external links. All disputes must be resolved with the respective third-party platform.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">32. AI & Future Feature Integration</div>
+            <div class="tm-txt">
+                Future updates may introduce AI-based tools or database-backed features. Continued use of the application implies acceptance of such changes and their respective behaviors.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">33. Predictive & Visual Tool Disclaimer</div>
+            <div class="tm-txt">
+                Graphs, projections, and visual outputs (including equation visualizer and financial estimations) are based on mathematical models and <span class="hi">do not represent guaranteed real-world outcomes</span>.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">34. Tone & Output Interpretation</div>
+            <div class="tm-txt">
+                Certain calculators or suites may use direct, humorous, or strict language for engagement purposes. These outputs are not intended to offend but to enhance user understanding.
+            </div>
+        </div>
+
+        <div class="tm-card" style="border-left-color:#ef4444;">
+            <div class="tm-tit-sm">35. Health & Financial Sensitivity Disclaimer</div>
+            <div class="tm-txt">
+                Tools related to health metrics (BMI, etc.) and financial planning (loans, investments) are approximate models. They <span class="warn">must not be used as a substitute for professional advice</span>.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">36. Progressive Web App (PWA) Behavior</div>
+            <div class="tm-txt">
+                Installing QuickSolve as a PWA creates a browser-based sandboxed instance. It does not function as a native app and has no access to system-level permissions beyond browser capabilities.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">37. Offline Cache Integrity</div>
+            <div class="tm-txt">
+                Cached assets used for offline functionality may become outdated over time. The developer is not responsible for discrepancies caused by stale cached data.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">38. Device Resource Utilization</div>
+            <div class="tm-txt">
+                Heavy calculations (e.g., graph rendering, BigInt operations) utilize device CPU and memory. Temporary lag or heating may occur depending on device capability.
+            </div>
+        </div>
+
+        <div class="tm-card">
+            <div class="tm-tit-sm">39. No Behavioral Profiling</div>
+            <div class="tm-txt">
+                QuickSolve does not analyze, profile, or track user behavior patterns for personalization or advertising purposes.
+            </div>
+        </div>
+
+        <div class="tm-card" style="border-left-color:#ef4444;">
+            <div class="tm-tit-sm">40. Final Risk Acceptance Clause</div>
+            <div class="tm-txt">
+                By continuing to use QuickSolve Platinum, you acknowledge that you fully understand the limitations of a <span class="hi">client-side, no-account system</span> and <span class="warn">accept all associated risks</span>, including data loss, calculation inaccuracies, and device-dependent performance.
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tm-foot">
+        &copy; 2026 QuickSolve Platinum • Solo Developer Project<br>
+        Built for Speed • Local-First • Risk-Isolated Architecture
+    </div>
+
+</div>

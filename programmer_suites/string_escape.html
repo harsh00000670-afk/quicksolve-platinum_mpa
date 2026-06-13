@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>String Escape & Unescape Suite | HTML, JS, SQL, Regex Safe | QuickSolve Platinum</title>
+    <meta name="description" content="Advanced string escaper and unescaper for developers. Secure your data for HTML, JavaScript, JSON, SQL, Regex, and URLs. Prevent XSS and SQL injection instantly. Fast and 100% offline.">
+    <meta name="keywords" content="string escaper, unescape string, html entities converter, sql escape, javascript escape, regex escaper, url encoder, xss prevention tool, data sanitization, programmer toolkit, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/string_escape.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="String Escape Suite - Secure Your Code">
+    <meta property="og:description" content="Instantly escape or unescape strings for HTML, SQL, JS, and more. Stop XSS attacks in their tracks.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           STRING ESCAPE SUITE (GOD MODE)
+           Theme: Cyberpunk Terminal (Pink / Cyan)
+           ========================================= */
+        body { margin: 0; background-color: var(--bg-body, #09090b); }
+
+        #mod-escape-overlay {
+            width: 100vw; min-height: 100vh;
+            background-color: var(--bg-body, #09090b); 
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: monospace;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .es-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .es-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; }
+        .es-tit { color: #ec4899; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .es-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Input Area */
+        .es-grp { flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 10px; padding: 12px; transition: 0.2s; position: relative; display: flex; flex-direction: column; }
+        .es-grp:focus-within { border-color: #ec4899; box-shadow: 0 0 15px rgba(236, 72, 153, 0.15); }
+        
+        .es-lbl { color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .es-clear { color: #ef4444; font-size: 0.7rem; cursor: pointer; border: 1px solid #ef4444; padding: 2px 6px; border-radius: 4px; }
+        
+        .es-textarea { background: transparent; border: none; color: #fff; font-size: 0.95rem; width: 100%; outline: none; font-family: monospace; resize: vertical; min-height: 100px; line-height: 1.5; }
+        .es-textarea::placeholder { color: #475569; }
+
+        /* Action Controls */
+        .action-row { display: flex; gap: 10px; flex-shrink: 0; }
+        .act-btn { flex: 1; background: rgba(2, 6, 23, 0.6); border: 1px solid #334155; color: #94a3b8; padding: 10px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+        .act-btn.active { background: #ec4899; color: #fff; border-color: #ec4899; box-shadow: 0 0 10px rgba(236, 72, 153, 0.3); }
+
+        /* Results Grid */
+        .res-grid { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
+        .res-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 12px; position: relative; transition: 0.2s; }
+        .res-card:focus-within { border-color: #06b6d4; }
+        
+        .r-head { display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px dashed #1e293b; padding-bottom: 5px; }
+        .r-tit { font-size: 0.75rem; font-weight: 900; color: #06b6d4; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+        .r-copy { color: #94a3b8; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
+        .r-copy:active { color: #06b6d4; transform: scale(0.9); }
+        
+        .r-val { background: transparent; border: none; color: #f8fafc; font-size: 0.85rem; width: 100%; outline: none; font-family: monospace; word-break: break-all; resize: vertical; min-height: 40px; }
+
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #f59e0b; color: #f59e0b; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(245, 158, 11, 0.15); transform: scale(0.98); }
+
+        /* STEPS MODAL */
+        #es-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #es-steps-box { background: #1e293b; border: 1px solid #f59e0b; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(245, 158, 11, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #f59e0b; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+
+        .sec-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: #020617; border-radius: 8px; overflow: hidden; }
+        .sec-table th { background: #0f172a; color: #94a3b8; font-size: 0.65rem; text-transform: uppercase; padding: 10px; text-align: left; border-bottom: 1px solid #334155; }
+        .sec-table td { padding: 10px; border-bottom: 1px dashed #1e293b; font-family: monospace; font-size: 0.85rem; }
+        .st-char { color: #f43f5e; font-weight: bold; font-size: 1.2rem; text-align: center; }
+        .st-esc { color: #22c55e; font-weight: bold; }
+        .st-rsn { color: #a855f7; font-size: 0.75rem; font-family: sans-serif; }
+    </style>
+</head>
+
+<body>
+
+<main id="mod-escape-overlay" role="main">
+    <header class="es-head" role="banner">
+        <a href="../programmer.html" class="qs-back-btn" aria-label="Go back to Programmer Suite">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </a>
+<h1 class="es-tit" style="position: absolute; left: 50%; transform: translateX(-50%); margin: 0; color: #38bdf8; font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);">
+    <i class="fas fa-quote-right" aria-hidden="true"></i> STRING ESCAPER
+</h1>
+
+    </header>
+
+    <div class="es-body">
+        
+        <section class="action-row" role="tablist" aria-label="Select mode">
+            <button class="act-btn active" id="mode-esc" role="tab" aria-selected="true" onclick="QS_Escape.setMode('escape')">Escape</button>
+            <button class="act-btn" id="mode-unesc" role="tab" aria-selected="false" onclick="QS_Escape.setMode('unescape')">Unescape</button>
+        </section>
+
+        <section class="es-grp" aria-labelledby="input-heading">
+            <h2 id="input-heading" class="sr-only" style="display:none;">String Input</h2>
+            <div class="es-lbl">
+                <label for="inp-str" id="main-lbl">Raw String Input</label>
+                <span class="es-clear" role="button" tabindex="0" onclick="QS_Escape.clearInput()" onkeydown="if(event.key==='Enter') QS_Escape.clearInput()">CLEAR</span>
+            </div>
+            <textarea id="inp-str" class="es-textarea" placeholder="Type or paste your string here... (e.g. <script>alert('XSS')</script>)" oninput="QS_Escape.process()"></textarea>
+        </section>
+
+        <section class="res-grid" aria-label="Escaped Results" aria-live="polite">
+            <div class="res-card">
+                <div class="r-head">
+                    <span class="r-tit" id="lbl-html"><i class="fas fa-code" aria-hidden="true"></i> HTML / XML Entities</span>
+                    <i class="fas fa-copy r-copy" aria-label="Copy HTML Entities" role="button" tabindex="0" onclick="QS_Escape.copy('res-html')" onkeydown="if(event.key==='Enter') QS_Escape.copy('res-html')"></i>
+                </div>
+                <textarea id="res-html" class="r-val" readonly aria-labelledby="lbl-html" placeholder="Output here..."></textarea>
+            </div>
+
+            <div class="res-card" style="border-color: #eab308;">
+                <div class="r-head">
+                    <span class="r-tit" style="color: #eab308;" id="lbl-js"><i class="fab fa-js-square" aria-hidden="true"></i> JavaScript / JSON</span>
+                    <i class="fas fa-copy r-copy" aria-label="Copy JavaScript string" role="button" tabindex="0" onclick="QS_Escape.copy('res-js')" onkeydown="if(event.key==='Enter') QS_Escape.copy('res-js')"></i>
+                </div>
+                <textarea id="res-js" class="r-val" style="color: #fef08a;" readonly aria-labelledby="lbl-js" placeholder="Output here..."></textarea>
+            </div>
+
+            <div class="res-card" style="border-color: #3b82f6;">
+                <div class="r-head">
+                    <span class="r-tit" style="color: #3b82f6;" id="lbl-sql"><i class="fas fa-database" aria-hidden="true"></i> SQL Query Safe</span>
+                    <i class="fas fa-copy r-copy" aria-label="Copy SQL safe string" role="button" tabindex="0" onclick="QS_Escape.copy('res-sql')" onkeydown="if(event.key==='Enter') QS_Escape.copy('res-sql')"></i>
+                </div>
+                <textarea id="res-sql" class="r-val" style="color: #bfdbfe;" readonly aria-labelledby="lbl-sql" placeholder="Output here..."></textarea>
+            </div>
+
+            <div class="res-card" style="border-color: #a855f7;">
+                <div class="r-head">
+                    <span class="r-tit" style="color: #a855f7;" id="lbl-regex"><i class="fas fa-asterisk" aria-hidden="true"></i> Regex Literal</span>
+                    <i class="fas fa-copy r-copy" aria-label="Copy Regex safe string" role="button" tabindex="0" onclick="QS_Escape.copy('res-regex')" onkeydown="if(event.key==='Enter') QS_Escape.copy('res-regex')"></i>
+                </div>
+                <textarea id="res-regex" class="r-val" style="color: #e9d5ff;" readonly aria-labelledby="lbl-regex" placeholder="Output here..."></textarea>
+            </div>
+
+            <div class="res-card" style="border-color: #22c55e;">
+                <div class="r-head">
+                    <span class="r-tit" style="color: #22c55e;" id="lbl-url"><i class="fas fa-link" aria-hidden="true"></i> URL Component</span>
+                    <i class="fas fa-copy r-copy" aria-label="Copy URL component" role="button" tabindex="0" onclick="QS_Escape.copy('res-url')" onkeydown="if(event.key==='Enter') QS_Escape.copy('res-url')"></i>
+                </div>
+                <textarea id="res-url" class="r-val" style="color: #bbf7d0;" readonly aria-labelledby="lbl-url" placeholder="Output here..."></textarea>
+            </div>
+        </section>
+
+        <button class="btn-why" aria-haspopup="dialog" aria-expanded="false" aria-label="Show Security Matrix visualizer" onclick="QS_Escape.showSteps()">
+            <i class="fas fa-shield-alt" aria-hidden="true"></i> Security Matrix (Why Escape?)
+        </button>
+
+    </div>
+
+    <div id="es-steps-modal" role="dialog" aria-modal="true" aria-labelledby="modal-sec-title">
+        <div id="es-steps-box">
+            <header class="steps-head">
+                <h2 id="modal-sec-title" style="margin: 0; font-size: 1rem;"><i class="fas fa-bug" aria-hidden="true"></i> INJECTION DEFENSE MATRIX</h2>
+                <button class="steps-close" aria-label="Close Security Matrix" onclick="QS_Escape.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </header>
+            <div class="steps-content" id="es-steps-content" aria-live="polite">
+                </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    /* QUICKSOLVE PLATINUM - STRING ESCAPE SUITE (MPA STANDALONE)
+       Features: Multi-Context Live Escaping (HTML, JS, SQL, Regex, URL), Bidirectional Unescape, Security Map.
+    */
+    const QS_Escape = {
+        
+        currentMode: 'escape', // 'escape' or 'unescape'
+
+        init: function() {
+            console.log("String Escape Engine Ready 🚀");
+            this.resetUI();
+        },
+
+        setMode: function(mode) {
+            this.currentMode = mode;
+            const btnEsc = document.getElementById('mode-esc');
+            const btnUnesc = document.getElementById('mode-unesc');
+            
+            btnEsc.classList.remove('active');
+            btnEsc.setAttribute('aria-selected', 'false');
+            btnUnesc.classList.remove('active');
+            btnUnesc.setAttribute('aria-selected', 'false');
+            
+            const activeBtn = document.getElementById(mode === 'escape' ? 'mode-esc' : 'mode-unesc');
+            activeBtn.classList.add('active');
+            activeBtn.setAttribute('aria-selected', 'true');
+            
+            document.getElementById('main-lbl').innerText = mode === 'escape' ? 'Raw String Input' : 'Escaped String Input';
+            
+            this.process();
+            this.triggerHaptic();
+        },
+
+        clearInput: function() {
+            document.getElementById('inp-str').value = '';
+            this.process();
+            this.triggerHaptic();
+        },
+
+        process: function() {
+            const raw = document.getElementById('inp-str').value;
+            
+            if (!raw) {
+                this.clearOutputs();
+                return;
+            }
+
+            if (this.currentMode === 'escape') {
+                this.doEscape(raw);
+            } else {
+                this.doUnescape(raw);
+            }
+            this.autoResize();
+        },
+
+        // --- PLATINUM FEATURE: God-Mode Escape Engine ---
+        doEscape: function(str) {
+            // 1. HTML / XML (Prevent XSS)
+            const mapHTML = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+            const htmlEsc = str.replace(/[&<>"']/g, function(m) { return mapHTML[m]; });
+            
+            // 2. JS / JSON (Prevent String Breakout)
+            const mapJS = { '\\': '\\\\', '\n': '\\n', '\r': '\\r', '\t': '\\t', '"': '\\"', "'": "\\'" };
+            const jsEsc = str.replace(/[\\'"\n\r\t]/g, function(m) { return mapJS[m]; });
+
+            // 3. SQL (Prevent SQL Injection)
+            const sqlEsc = str.replace(/'/g, "''");
+
+            // 4. Regex (Prevent pattern breaking)
+            const regexEsc = str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+            // 5. URL Component
+            const urlEsc = encodeURIComponent(str);
+
+            this.setOutputs(htmlEsc, jsEsc, sqlEsc, regexEsc, urlEsc);
+        },
+
+        // --- PLATINUM FEATURE: Reverse Engineering (Unescape) ---
+        doUnescape: function(str) {
+            // 1. HTML / XML
+            const mapHtmlUn = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'" };
+            const htmlUn = str.replace(/&amp;|&lt;|&gt;|&quot;|&#39;/g, function(m) { return mapHtmlUn[m]; });
+
+            // 2. JS / JSON
+            let jsUn = str;
+            try { 
+                jsUn = JSON.parse(`"${str.replace(/"/g, '\\"')}"`); 
+            } catch(e) { 
+                jsUn = str.replace(/\\n/g, '\n').replace(/\\r/g, '\r').replace(/\\t/g, '\t').replace(/\\'/g, "'").replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+            }
+
+            // 3. SQL
+            const sqlUn = str.replace(/''/g, "'");
+
+            // 4. Regex
+            const regexUn = str.replace(/\\([.*+?^${}()|[\]\\])/g, '$1');
+
+            // 5. URL
+            let urlUn = str;
+            try { urlUn = decodeURIComponent(str); } catch(e) { urlUn = "Invalid URI encoding"; }
+
+            this.setOutputs(htmlUn, jsUn, sqlUn, regexUn, urlUn);
+        },
+
+        setOutputs: function(h, j, s, r, u) {
+            document.getElementById('res-html').value = h;
+            document.getElementById('res-js').value = j;
+            document.getElementById('res-sql').value = s;
+            document.getElementById('res-regex').value = r;
+            document.getElementById('res-url').value = u;
+        },
+
+        clearOutputs: function() {
+            document.getElementById('res-html').value = '';
+            document.getElementById('res-js').value = '';
+            document.getElementById('res-sql').value = '';
+            document.getElementById('res-regex').value = '';
+            document.getElementById('res-url').value = '';
+        },
+
+        autoResize: function() {
+            const ids = ['res-html', 'res-js', 'res-sql', 'res-regex', 'res-url'];
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                el.style.height = 'auto';
+                el.style.height = (el.scrollHeight) + 'px';
+            });
+        },
+
+        copy: function(id) {
+            const el = document.getElementById(id);
+            if (!el.value) return;
+            el.select();
+            document.execCommand('copy');
+            this.triggerHaptic();
+        },
+
+        triggerHaptic: function() {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        },
+
+        // --- THE "WHY" VISUALIZER: Security Matrix ---
+        showSteps: function() {
+            const contentBox = document.getElementById('es-steps-content');
+            
+            let html = `
+                <div style="margin-bottom:15px; border-left:3px solid #f59e0b; padding-left:10px;">
+                    <span style="color:#f59e0b; font-weight:bold;">Why Do We Escape?</span><br>
+                    Hackers inject malicious code to break your system. Escaping turns dangerous code into harmless text!
+                </div>
+                
+                <table class="sec-table" role="table" aria-label="Security Injection Defense Matrix">
+                    <thead>
+                        <tr>
+                            <th scope="col">Bad Char</th>
+                            <th scope="col">Escaped</th>
+                            <th scope="col">Vulnerability Prevented</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="st-char">&lt; &gt;</td>
+                            <td class="st-esc">&amp;lt; &amp;gt;</td>
+                            <td class="st-rsn"><span style="color:#ef4444; font-weight:bold;">XSS (Cross-Site Scripting)</span>. Stops browsers from running injected JavaScript tags.</td>
+                        </tr>
+                        <tr>
+                            <td class="st-char">' "</td>
+                            <td class="st-esc">\' \"</td>
+                            <td class="st-rsn"><span style="color:#38bdf8; font-weight:bold;">String Breakout</span>. Prevents hackers from ending your JS strings early.</td>
+                        </tr>
+                        <tr>
+                            <td class="st-char">'</td>
+                            <td class="st-esc">''</td>
+                            <td class="st-rsn"><span style="color:#a855f7; font-weight:bold;">SQL Injection (SQLi)</span>. Database engines treat it as text, not as a query end.</td>
+                        </tr>
+                        <tr>
+                            <td class="st-char">Space</td>
+                            <td class="st-esc">%20</td>
+                            <td class="st-rsn"><span style="color:#22c55e; font-weight:bold;">URL Parsing Errors</span>. URLs cannot contain spaces, so they are Hex encoded.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top:15px; font-size:0.75rem; color:var(--text-muted); text-align:center;">
+                    *Never trust user input. Always escape data before rendering!
+                </div>
+            `;
+            
+            contentBox.innerHTML = html;
+
+            const modal = document.getElementById('es-steps-modal');
+            const box = document.getElementById('es-steps-box');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                box.style.transform = 'translateY(0)';
+            }, 10);
+            this.triggerHaptic();
+        },
+
+        hideSteps: function() {
+            const modal = document.getElementById('es-steps-modal');
+            const box = document.getElementById('es-steps-box');
+            modal.style.opacity = '0';
+            box.style.transform = 'translateY(20px)';
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+            this.triggerHaptic();
+        },
+
+        resetUI: function() {
+            this.clearInput();
+            this.setMode('escape');
+        }
+    };
+
+    // Auto-Init on Load
+    window.onload = function() {
+        QS_Escape.init();
+    };
+</script>
+</body>
+</html>

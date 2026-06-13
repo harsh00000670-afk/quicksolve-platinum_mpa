@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+    
+    <title>JSON Formatter, Validator & TypeScript Generator | QuickSolve Platinum</title>
+    <meta name="description" content="Advanced JSON Lab Pro. Beautify, minify, and validate JSON instantly. Features include Deep A-Z sorting, JSONPath query engine, TypeScript interface generator, and interactive object tree. 100% Offline and Secure.">
+    <meta name="keywords" content="json formatter, json validator, json to typescript generator, jsonpath query tester, json beautifier, minify json, deep sort json keys, parse json online, programmer tools offline, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/json_fmt.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="JSON Lab Pro - Format, Query & Generate TypeScript">
+    <meta property="og:description" content="Stop struggling with messy JSON. Validate, query, and generate interfaces directly in your browser.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           JSON FORMATTER & VALIDATOR (GOD MODE V2)
+           Theme: Cyberpunk Terminal (Cyan / Neon Green)
+           ========================================= */
+        body { margin: 0; background-color: var(--bg-body, #09090b); }
+
+        #mod-json-overlay {
+            width: 100vw; min-height: 100vh;
+            background-color: var(--bg-body, #09090b); 
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: monospace;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .js-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .js-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; }
+        .js-tit { color: #06b6d4; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .js-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Input Area */
+        .js-grp { flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 10px; padding: 12px; transition: 0.2s; position: relative; display: flex; flex-direction: column; }
+        .js-grp:focus-within { border-color: #06b6d4; box-shadow: 0 0 15px rgba(6, 182, 212, 0.15); }
+        
+        .js-lbl { color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .js-clear { color: #ef4444; font-size: 0.7rem; cursor: pointer; border: 1px solid #ef4444; padding: 2px 6px; border-radius: 4px; }
+        
+        .js-textarea { background: transparent; border: none; color: #fff; font-size: 0.85rem; width: 100%; outline: none; font-family: monospace; resize: vertical; min-height: 120px; line-height: 1.5; }
+        .js-textarea::placeholder { color: #475569; }
+
+        /* Error Banner */
+        .err-banner { display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: 8px; padding: 10px; margin-top: 10px; color: #ef4444; font-size: 0.75rem; font-weight: bold; align-items: center; gap: 8px; word-break: break-all; }
+
+        /* Query Path Finder (OP Feature) */
+        .path-finder { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; margin-top: 5px; }
+        .path-inp { background: transparent; border: none; color: #06b6d4; font-size: 0.9rem; width: 100%; outline: none; font-family: monospace; font-weight: bold; }
+        .path-inp::placeholder { color: #475569; font-weight: normal; }
+
+        /* Action Buttons */
+        .action-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; flex-shrink: 0; }
+        .act-btn { background: rgba(2, 6, 23, 0.6); border: 1px solid #334155; color: #94a3b8; padding: 10px 5px; border-radius: 6px; font-weight: 800; font-size: 0.75rem; cursor: pointer; transition: 0.2s; text-transform: uppercase; font-family: monospace; }
+        .act-btn:active { background: #06b6d4; color: #000; border-color: #06b6d4; }
+        .btn-fmt { color: #22c55e; border-color: rgba(34, 197, 94, 0.3); }
+        .btn-min { color: #f59e0b; border-color: rgba(245, 158, 11, 0.3); }
+        .btn-pro { color: #a855f7; border-color: rgba(168, 85, 247, 0.3); }
+
+        /* Output Area (Syntax Highlighted) */
+        .out-grp { flex-shrink: 0; background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 12px; margin-top: 5px; display: flex; flex-direction: column; }
+        .out-head { display: flex; justify-content: space-between; margin-bottom: 8px; align-items: center; border-bottom: 1px dashed #334155; padding-bottom: 8px; }
+        .out-lbl { font-size: 0.75rem; color: #06b6d4; font-weight: 800; text-transform: uppercase; }
+        .out-copy { color: #06b6d4; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .out-copy:active { transform: scale(0.9); }
+        
+        .out-pre { margin: 0; font-size: 0.85rem; line-height: 1.5; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; min-height: 150px; color: #f8fafc; }
+        
+        /* Syntax Highlighting Colors */
+        .json-key { color: #38bdf8; font-weight: bold; }
+        .json-str { color: #22c55e; }
+        .json-val { color: #f59e0b; }
+        .json-bool { color: #a855f7; font-weight: bold; }
+        .json-null { color: #ef4444; font-weight: bold; font-style: italic; }
+        .ts-type { color: #f59e0b; font-weight: bold; }
+
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #22c55e; color: #22c55e; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(34, 197, 94, 0.15); transform: scale(0.98); }
+
+        /* STEPS MODAL (Interactive Tree) */
+        #js-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #js-steps-box { background: #1e293b; border: 1px solid #22c55e; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(34, 197, 94, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #22c55e; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+
+        /* Collapsible Tree CSS */
+        .tree-details { margin-left: 15px; }
+        .tree-summary { cursor: pointer; outline: none; font-weight: bold; color: #38bdf8; display: block; }
+        .tree-summary::-webkit-details-marker { display: none; }
+        .tree-summary::before { content: '▶ '; color: #94a3b8; font-size: 0.7rem; display: inline-block; transition: 0.2s; }
+        .tree-details[open] > .tree-summary::before { transform: rotate(90deg); }
+        
+        .tree-item { margin-left: 15px; color: #f8fafc; border-left: 1px dashed #475569; padding-left: 10px; margin-top: 4px; }
+        .tree-key { color: #a855f7; font-weight: bold; }
+        .tree-type { font-size: 0.65rem; color: #64748b; margin-left: 5px; text-transform: uppercase; }
+    </style>
+</head>
+
+<body>
+
+<main id="mod-json-overlay" role="main">
+    <header class="js-head" role="banner">
+        <a href="../programmer.html" class="qs-back-btn" aria-label="Go back to Programmer Suite">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </a>
+<h1 class="js-tit" style="position: absolute; left: 50%; transform: translateX(-50%); margin: 0; color: #38bdf8; font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);">
+    <i class="fas fa-brackets-curly" aria-hidden="true"></i> JSON LAB PRO
+</h1>
+
+    </header>
+
+    <div class="js-body">
+        
+        <section class="js-grp" aria-labelledby="input-heading">
+            <h2 id="input-heading" class="sr-only" style="display:none;">Raw JSON Input</h2>
+            <div class="js-lbl">
+                <label for="inp-json">Raw JSON Input</label>
+                <span class="js-clear" role="button" tabindex="0" onclick="QS_JSON.clearInput()" onkeydown="if(event.key==='Enter') QS_JSON.clearInput()">CLEAR</span>
+            </div>
+            <textarea id="inp-json" class="js-textarea" placeholder='{"status": "success", "data": [1, 2, 3]}' aria-describedby="json-err" oninput="QS_JSON.autoProcess()"></textarea>
+            
+            <div id="json-err" class="err-banner" role="alert" aria-live="assertive">
+                <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                <span id="err-text">Invalid JSON Format</span>
+            </div>
+        </section>
+
+        <section class="path-finder" aria-labelledby="query-heading">
+            <h2 id="query-heading" class="sr-only" style="display:none;">JSONPath Query Finder</h2>
+            <i class="fas fa-search" style="color:#06b6d4;" aria-hidden="true"></i>
+            <input type="text" id="inp-path" class="path-inp" placeholder="Query Path (e.g. data.0.name)" aria-label="Enter JSON query path" oninput="QS_JSON.queryPath()">
+        </section>
+
+        <section class="action-grid" aria-label="Formatter Actions">
+            <button class="act-btn btn-fmt" aria-label="Format with 2 spaces" onclick="QS_JSON.formatJSON(2)">Format (2)</button>
+            <button class="act-btn btn-min" aria-label="Minify JSON" onclick="QS_JSON.minifyJSON()">Minify</button>
+            <button class="act-btn btn-pro" aria-label="Deep Sort keys alphabetically" onclick="QS_JSON.sortKeys()">A-Z Sort</button>
+            <button class="act-btn" style="color:#38bdf8; border-color:rgba(56,189,248,0.3); grid-column: span 3;" aria-label="Generate TypeScript Interface" onclick="QS_JSON.generateTypeScript()">Generate TypeScript Interface</button>
+        </section>
+
+        <section class="out-grp" aria-labelledby="res-lbl">
+            <div class="out-head">
+                <h2 class="out-lbl" id="res-lbl" style="margin:0;">Beautified Output</h2>
+                <div style="display:flex; gap:15px;">
+                    <i class="fas fa-copy out-copy" aria-label="Copy code output" role="button" tabindex="0" onclick="QS_JSON.copyOutput()" onkeydown="if(event.key==='Enter') QS_JSON.copyOutput()" title="Copy Code"></i>
+                </div>
+            </div>
+            <pre class="out-pre" id="out-json" aria-live="polite">Output will appear here...</pre>
+        </section>
+
+        <button class="btn-why" aria-haspopup="dialog" aria-expanded="false" aria-label="Show interactive object tree" onclick="QS_JSON.showSteps()">
+            <i class="fas fa-sitemap" aria-hidden="true"></i> Visualize JSON Object Tree
+        </button>
+
+    </div>
+
+    <div id="js-steps-modal" role="dialog" aria-modal="true" aria-labelledby="modal-tree-title">
+        <div id="js-steps-box">
+            <header class="steps-head">
+                <h2 id="modal-tree-title" style="margin:0; font-size:1rem;"><i class="fas fa-network-wired" aria-hidden="true"></i> INTERACTIVE DATA TREE</h2>
+                <button class="steps-close" aria-label="Close Tree Visualizer" onclick="QS_JSON.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </header>
+            <div class="steps-content" id="js-steps-content" aria-live="polite">
+                </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    /* QUICKSOLVE PLATINUM - JSON FORMATTER & VALIDATOR (MPA STANDALONE)
+       Features: Live Syntax Highlighting, Minify/Beautify, Deep Sorting, JSONPath Engine, TypeScript Generator.
+    */
+    const QS_JSON = {
+        
+        parsedData: null,
+        isValid: false,
+        lastMode: 'format', // format, minify, ts, query
+
+        init: function() {
+            console.log("JSON Lab Engine Ready 🚀");
+            this.resetUI();
+        },
+
+        clearInput: function() {
+            document.getElementById('inp-json').value = '';
+            document.getElementById('inp-path').value = '';
+            this.resetUI();
+            this.triggerHaptic();
+        },
+
+        autoProcess: function() {
+            if (this.lastMode === 'minify') this.minifyJSON();
+            else if (this.lastMode === 'ts') this.generateTypeScript();
+            else this.formatJSON(2); 
+            
+            // Re-trigger query if path exists
+            if (document.getElementById('inp-path').value.trim() !== '') {
+                this.queryPath();
+            }
+        },
+
+        // Parses and checks for errors
+        validateInput: function() {
+            const raw = document.getElementById('inp-json').value.trim();
+            const errBanner = document.getElementById('json-err');
+            const errText = document.getElementById('err-text');
+            const outPre = document.getElementById('out-json');
+            
+            this.isValid = false;
+            this.parsedData = null;
+
+            if (!raw) {
+                errBanner.style.display = 'none';
+                outPre.innerHTML = 'Output will appear here...';
+                return false;
+            }
+
+            try {
+                this.parsedData = JSON.parse(raw);
+                errBanner.style.display = 'none';
+                this.isValid = true;
+                return true;
+            } catch (e) {
+                errText.innerText = e.message;
+                errBanner.style.display = 'flex';
+                outPre.innerHTML = '<span style="color:#ef4444; font-style:italic;">Awaiting valid JSON...</span>';
+                return false;
+            }
+        },
+
+        formatJSON: function(spaces) {
+            this.lastMode = 'format';
+            if (!this.validateInput()) return;
+
+            const strJSON = JSON.stringify(this.parsedData, null, spaces);
+            document.getElementById('res-lbl').innerText = `Formatted (${spaces} Spaces)`;
+            document.getElementById('out-json').innerHTML = this.syntaxHighlight(strJSON);
+            this.triggerHaptic();
+        },
+
+        minifyJSON: function() {
+            this.lastMode = 'minify';
+            if (!this.validateInput()) return;
+
+            const strJSON = JSON.stringify(this.parsedData);
+            document.getElementById('res-lbl').innerText = "Minified Output";
+            document.getElementById('out-json').innerHTML = this.syntaxHighlight(strJSON);
+            this.triggerHaptic();
+        },
+
+        // --- PLATINUM FEATURE: DEEP A-Z SORT ---
+        sortKeys: function() {
+            if (!this.validateInput()) return;
+
+            const deepSort = (obj) => {
+                if (obj === null) return null;
+                if (Array.isArray(obj)) return obj.map(deepSort);
+                if (typeof obj !== 'object') return obj;
+                
+                const sortedObj = {};
+                Object.keys(obj).sort().forEach(key => {
+                    sortedObj[key] = deepSort(obj[key]);
+                });
+                return sortedObj;
+            };
+
+            this.parsedData = deepSort(this.parsedData);
+            document.getElementById('inp-json').value = JSON.stringify(this.parsedData, null, 2);
+            this.formatJSON(2);
+        },
+
+        // --- PLATINUM FEATURE: JSON PATH FINDER ---
+        queryPath: function() {
+            if (!this.validateInput()) return;
+            
+            const path = document.getElementById('inp-path').value.trim();
+            const outPre = document.getElementById('out-json');
+            const lbl = document.getElementById('res-lbl');
+
+            if (!path) {
+                this.autoProcess(); // Revert to normal
+                return;
+            }
+
+            try {
+                let parts = path.split('.');
+                let current = this.parsedData;
+                
+                for (let p of parts) {
+                    if (current[p] !== undefined) {
+                        current = current[p];
+                    } else {
+                        throw "Key not found";
+                    }
+                }
+
+                const resultStr = JSON.stringify(current, null, 2);
+                lbl.innerText = `Query Result: ${path}`;
+                outPre.innerHTML = this.syntaxHighlight(resultStr);
+
+            } catch (e) {
+                lbl.innerText = `Query Error`;
+                outPre.innerHTML = `<span style="color:#ef4444; font-style:italic;">Path '${path}' does not exist in JSON.</span>`;
+            }
+        },
+
+        // --- PLATINUM FEATURE: TYPESCRIPT GENERATOR ---
+        generateTypeScript: function() {
+            this.lastMode = 'ts';
+            if (!this.validateInput()) return;
+
+            const tsCode = `export interface RootObject ${this.buildTSInterface(this.parsedData, "  ")}`;
+            
+            document.getElementById('res-lbl').innerText = "Generated TypeScript Interface";
+            
+            // Custom simple highlighter for TS
+            let highlightedTS = tsCode
+                .replace(/export interface/g, '<span style="color:#a855f7; font-weight:bold;">export interface</span>')
+                .replace(/RootObject/g, '<span style="color:#22c55e; font-weight:bold;">RootObject</span>')
+                .replace(/:\s*(string|number|boolean|any|any\[\])/g, ': <span class="ts-type">$1</span>');
+            
+            document.getElementById('out-json').innerHTML = highlightedTS;
+            this.triggerHaptic();
+        },
+
+        buildTSInterface: function(obj, indent) {
+            if (obj === null) return "any";
+            if (Array.isArray(obj)) {
+                if (obj.length > 0) return this.buildTSInterface(obj[0], indent) + "[]";
+                return "any[]";
+            }
+            if (typeof obj === 'object') {
+                let res = "{\n";
+                for (let key in obj) {
+                    res += indent + key + ": " + this.buildTSInterface(obj[key], indent + "  ") + ";\n";
+                }
+                res += indent.substring(0, indent.length - 2) + "}";
+                return res;
+            }
+            return typeof obj;
+        },
+
+        // Regex Syntax Highlighter
+        syntaxHighlight: function(json) {
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                let cls = 'json-val'; 
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) cls = 'json-key';
+                    else cls = 'json-str'; 
+                } else if (/true|false/.test(match)) {
+                    cls = 'json-bool'; 
+                } else if (/null/.test(match)) {
+                    cls = 'json-null'; 
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        },
+
+        copyOutput: function() {
+            const outPre = document.getElementById('out-json');
+            if (!this.isValid && this.lastMode !== 'ts') return;
+
+            const temp = document.createElement('textarea');
+            temp.value = outPre.innerText; // Cleans HTML tags
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            
+            this.triggerHaptic();
+        },
+
+        triggerHaptic: function() {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        },
+
+        // --- THE "WHY" FEATURE: Interactive Object Tree ---
+        showSteps: function() {
+            const contentBox = document.getElementById('js-steps-content');
+            
+            if (!this.isValid) {
+                contentBox.innerHTML = `<div style="text-align:center; padding:20px; color:#ef4444;"><i class="fas fa-exclamation-triangle fa-2x" aria-hidden="true"></i><br><br>Enter valid JSON to build the tree!</div>`;
+            } else {
+                let html = `
+                    <div style="margin-bottom:15px; border-left:3px solid #22c55e; padding-left:10px;">
+                        <span style="color:#22c55e; font-weight:bold;">Interactive JSON Tree:</span><br>
+                        Click on arrays or objects to expand/collapse them. Makes reading huge API responses incredibly easy!
+                    </div>
+                    <div style="background:#020617; border:1px solid #334155; border-radius:8px; padding:15px; font-family:monospace;">
+                `;
+                html += this.buildTree(this.parsedData, "root");
+                html += `</div>`;
+                contentBox.innerHTML = html;
+            }
+
+            const modal = document.getElementById('js-steps-modal');
+            const box = document.getElementById('js-steps-box');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                box.style.transform = 'translateY(0)';
+            }, 10);
+            this.triggerHaptic();
+        },
+
+        hideSteps: function() {
+            const modal = document.getElementById('js-steps-modal');
+            const box = document.getElementById('js-steps-box');
+            modal.style.opacity = '0';
+            box.style.transform = 'translateY(20px)';
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+            this.triggerHaptic();
+        },
+
+        buildTree: function(data, keyName) {
+            const isArray = Array.isArray(data);
+            const isObject = data !== null && typeof data === 'object';
+            
+            if (!isObject) {
+                let valColor = "#f59e0b";
+                let displayVal = data;
+                if (typeof data === 'string') { displayVal = `"${data}"`; valColor = "#22c55e"; }
+                else if (typeof data === 'boolean') valColor = "#a855f7";
+                else if (data === null) { displayVal = "null"; valColor = "#ef4444"; }
+                
+                return `<div class="tree-item"><span class="tree-key">${keyName}</span>: <span style="color:${valColor};">${displayVal}</span> <span class="tree-type">${typeof data}</span></div>`;
+            }
+
+            let html = `<details class="tree-details" open>`;
+            let itemCount = Object.keys(data).length;
+            let typeLbl = isArray ? `Array[${itemCount}]` : `Object{${itemCount}}`;
+            
+            html += `<summary class="tree-summary"><span class="tree-key">${keyName}</span> <span class="tree-type">${typeLbl}</span></summary>`;
+            
+            for (let key in data) {
+                if (data.hasOwnProperty(key)) {
+                    html += this.buildTree(data[key], key);
+                }
+            }
+            
+            html += `</details>`;
+            return html;
+        },
+
+        resetUI: function() {
+            const outPre = document.getElementById('out-json');
+            if(outPre) outPre.innerHTML = 'Output will appear here...';
+            document.getElementById('res-lbl').innerText = "Beautified Output";
+        }
+    };
+
+    // Auto-Init on Load
+    window.onload = function() {
+        QS_JSON.init();
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,547 @@
+/* =========================================
+   0. LOCAL FONTS SETUP (JetBrains Mono)
+   ========================================= */
+/* Regular */
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('assets/fonts/JetBrainsMono-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Bold */
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('assets/fonts/JetBrainsMono-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Extra Bold */
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('fonts/JetBrainsMono-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* QUICKSOLVE PLATINUM - MAIN STYLESHEET
+   Version: 12.0
+   Design: Modern Dark, Glassmorphism, Theme-Ready
+*/
+
+/* =========================================
+   1. VARIABLES & THEMES
+   ========================================= */
+:root {
+    /* Default Theme (Dark Slate) */
+    --bg-body: #0f172a;
+    --surface: #1e293b;
+    --surface-hover: #334155;
+    --primary: #38bdf8;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --accent: #6366f1;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    /* UPDATED TO LOCAL FONTS */
+    --font-main: 'JetBrains Mono', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+    --bg-body: #f8fafc;
+    --surface: #ffffff;
+    --surface-hover: #f1f5f9;
+    --primary: #0284c7;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Matrix Hacker Theme */
+[data-theme="matrix"] {
+    --bg-body: #000000;
+    --surface: #0a1a0a;
+    --surface-hover: #0f2f0f;
+    --primary: #00ff41;
+    --text-main: #00ff41;
+    --text-muted: #008f11;
+    --border: #003b00;
+    --accent: #00ff41;
+    --success: #00ff41;
+    --danger: #ff0000; /* System error red */
+    --warning: #ffff00;
+}
+
+/* OLED (True Black) */
+[data-theme="oled"] {
+    --bg-body: #000000;
+    --surface: #000000;
+    --surface-hover: #111111;
+    --border: #333333;
+}
+
+/* =========================================
+   2. GLOBAL RESET & TYPOGRAPHY
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    font-family: var(--font-main);
+    font-size: 16px;
+    line-height: 1.5;
+    transition: background 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+    padding-bottom: 80px; /* Space for bottom ads/footer */
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-body);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 10px;
+}
+
+/* =========================================
+   3. HEADER & NAVIGATION
+   ========================================= */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(15, 23, 42, 0.8); /* Fallback */
+    background: var(--bg-body);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+}
+
+.brand {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+}
+
+.icon-btn:hover {
+    color: var(--primary);
+    transform: scale(1.1);
+}
+
+/* =========================================
+   4. DASHBOARD (GRID SYSTEM)
+   ========================================= */
+#main-viewport {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    min-height: 80vh;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px 0;
+}
+
+.hero h2 {
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+    background: linear-gradient(45deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 Column Layout */
+    gap: 15px;
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.card:active {
+    transform: scale(0.96);
+}
+
+.card:hover {
+    background: var(--surface-hover);
+    border-color: var(--primary);
+}
+
+.card i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.card h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+/* Card Badges (PRO, LIVE, NEW) */
+.card-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.card-badge.gold {
+    background: var(--warning);
+    color: #000;
+}
+
+/* =========================================
+   5. SIDEBARS (SETTINGS & HISTORY)
+   ========================================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Hidden by default */
+    width: 300px; /* Wider panel */
+    height: 100vh;
+    background: var(--bg-body);
+    border-left: 1px solid var(--border);
+    z-index: 1000;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+}
+
+.sidebar.open {
+    right: 0; /* Slide in */
+}
+
+.sb-head {
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--surface);
+}
+
+.sb-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+/* Settings Controls */
+.settings-group {
+    margin-bottom: 25px;
+    background: var(--surface);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.group-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--primary);
+    font-weight: 800;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed var(--border);
+}
+
+.setting-row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.set-info {
+    display: flex;
+    flex-direction: column;
+    max-width: 70%;
+}
+
+.set-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.set-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Custom Select Dropdown */
+.set-select {
+    background: var(--bg-body);
+    color: var(--text-main);
+    border: 1px solid var(--border);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-family: var(--font-main);
+    font-size: 0.85rem;
+    outline: none;
+}
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--surface-hover);
+    transition: .4s;
+    border-radius: 24px;
+    border: 1px solid var(--border);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 2px;
+    background-color: var(--text-muted);
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+    background-color: #fff;
+}
+
+/* =========================================
+   6. UTILITIES & ADS
+   ========================================= */
+.view {
+    display: none; /* Controlled by JS */
+    opacity: 0;
+    animation: fadeIn 0.3s forwards;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+.btn-main {
+    width: 100%;
+    padding: 12px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: filter 0.2s;
+}
+
+.btn-main:active {
+    filter: brightness(0.9);
+}
+
+.ad-banner {
+    background: linear-gradient(90deg, #1e293b, #0f172a);
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    font-size: 0.8rem;
+    border: 1px solid var(--border);
+}
+
+.ad-banner.bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 90;
+    border-top: 1px solid var(--border);
+}
+
+.tagline-text {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+footer#app-footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+footer a {
+    color: var(--primary);
+    text-decoration: none;
+    margin: 0 5px;
+    cursor: pointer;
+}
+/* =========================================
+   IMMERSIVE MODE FIX (GST Fullscreen)
+   Add this to the BOTTOM of style.css
+   ========================================= */
+
+/* Jab ye class body par lagegi, Header/Footer gayab ho jayenge */
+body.immersive-mode .app-header, 
+body.immersive-mode .app-footer, 
+body.immersive-mode .ad-banner,
+body.immersive-mode #settings-panel,
+body.immersive-mode #history-panel {
+    display: none !important;
+}
+
+/* Body ko lock kar denge taaki scroll na ho */
+body.immersive-mode {
+    overflow: hidden !important;
+    background-color: #0f172a !important; /* GST Dark Blue */
+}
+
+/* Viewport ko full screen force karenge */
+body.immersive-mode #main-viewport {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    min-height: 100vh !important;
+}
+/* =========================================
+   7. GLOBAL BOTTOM SHEET MODAL (THEMES)
+   ========================================= */
+.theme-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7); z-index: 10000; opacity: 0; visibility: hidden;
+    transition: 0.3s; backdrop-filter: blur(4px);
+}
+.theme-modal-overlay.active { opacity: 1; visibility: visible; }
+
+.theme-modal {
+    position: fixed; bottom: -100%; left: 0; width: 100%;
+    background: var(--surface); border-radius: 24px 24px 0 0;
+    z-index: 10001; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+    border-top: 1px solid var(--border); box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+    display: flex; flex-direction: column; max-height: 80vh;
+}
+.theme-modal.active { bottom: 0; }
+
+.tm-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 20px 15px; border-bottom: 1px solid var(--border);
+}
+.tm-header h3 { margin: 0; color: var(--primary); font-size: 1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+.tm-close-btn {
+    background: var(--bg-body); border: 1px solid var(--border); color: var(--text-muted);
+    width: 30px; height: 30px; border-radius: 50%; font-size: 1rem; cursor: pointer;
+    display: flex; justify-content: center; align-items: center; transition: 0.2s;
+}
+.tm-close-btn:active { transform: scale(0.9); color: var(--danger); border-color: var(--danger); }
+
+.tm-body { overflow-y: auto; padding: 10px 20px 20px; display: flex; flex-direction: column; gap: 5px;}
+.tm-opt {
+    display: flex; justify-content: space-between; align-items: center; padding: 16px 10px;
+    border-bottom: 1px solid var(--border); cursor: pointer; transition: 0.2s; border-radius: 12px;
+}
+.tm-opt:last-child { border-bottom: none; }
+.tm-opt:active { background: var(--bg-body); transform: scale(0.98); }
+
+.tm-text { font-size: 1rem; color: var(--text-main); font-weight: 700; display: flex; flex-direction: column; gap: 4px;}
+.tm-text small { color: var(--text-muted); font-size: 0.75rem; font-weight: 500;}
+
+.tm-radio {
+    width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--text-muted);
+    position: relative; transition: 0.2s; flex-shrink: 0; margin-left: 15px;
+}
+.tm-opt.active .tm-radio { border-color: var(--primary); }
+.tm-opt.active .tm-radio::after {
+    content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 12px; height: 12px; background: var(--primary); border-radius: 50%;
+}

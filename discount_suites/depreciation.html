@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Tech Depreciation & FOMO Buster | Deal Hacker | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           TECH DEPRECIATION ENGINE - PLATINUM (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-red: #ef4444;
+            --accent-red-glow: rgba(239, 68, 68, 0.3);
+            --accent-gold: #fbbd23;
+            --accent-gold-glow: rgba(251, 189, 35, 0.3);
+            --accent-blue: #3b82f6;
+            --accent-blue-glow: rgba(59, 130, 246, 0.3);
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-purple-glow: rgba(168, 85, 247, 0.3);
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.25; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 250px; height: 250px; background: var(--accent-red); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-purple); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-purple); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #ef4444, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--text-sub); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CARDS & INPUTS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(168, 85, 247, 0.15);
+        }
+        .inp-group { margin-bottom: 18px; position: relative; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        
+        .inp-field, select.inp-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box; appearance: none;
+        }
+        .inp-field:focus { border-color: var(--accent-purple); box-shadow: 0 0 10px var(--accent-purple-glow); }
+        .inp-field::placeholder { color: var(--text-dim); font-weight: 500; }
+        
+        /* Select Dropdown arrow fix */
+        select.inp-field { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2394a3b8%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 12px auto; padding-right: 40px; }
+
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        /* CUSTOM TOGGLE FOR NEXT GEN */
+        .toggle-wrap { display: flex; align-items: center; gap: 10px; }
+        .custom-toggle {
+            background: #1a1829; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            display: flex; padding: 4px; position: relative; cursor: pointer; flex-shrink: 0; width: 100%; height: 50px; box-sizing: border-box;
+        }
+        .ts-slider {
+            position: absolute; top: 4px; left: 4px; width: calc(50% - 4px); height: 40px;
+            background: var(--text-dim); border-radius: 8px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+        }
+        .ts-opt {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; font-weight: 900; color: var(--text-sub); z-index: 2; transition: 0.3s; font-family: 'JetBrains Mono', monospace;
+        }
+        .ts-opt.active { color: #fff; }
+        
+        .custom-toggle.state-yes .ts-slider { transform: translateX(100%); background: var(--accent-red); box-shadow: 0 0 10px var(--accent-red-glow);}
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #ef4444, #a855f7);
+            color: #fff; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px var(--accent-purple-glow); display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 10px;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD & GRID OF 6 OUTPUTS */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 20px; 
+            padding: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(168, 85, 247, 0.2); display: none; text-align: center;
+        }
+
+        .output-row { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
+        .res-box { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 18px 15px; text-align: left;}
+        
+        .res-box-lbl { font-size: 0.7rem; color: var(--text-sub); text-transform: uppercase; font-weight: 800; margin-bottom: 8px; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;}
+        .res-box-val { font-size: 1.8rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; line-height: 1.1; margin-bottom: 5px; word-break: break-word;}
+        .res-box-desc { font-size: 0.85rem; color: var(--text-dim); font-weight: 600; line-height: 1.4; }
+
+        .res-box.main-val { border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.05); box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1); }
+        .res-box.main-val .res-box-val { color: var(--accent-green); font-size: 2.2rem; }
+
+        /* SAVAGE QUOTE VERDICT */
+        .savage-quote {
+            background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--accent-red);
+            padding: 18px 15px; margin-top: 20px; border-radius: 0 12px 12px 0;
+            font-size: 0.9rem; color: var(--text-main); font-weight: 600; text-align: left;
+            line-height: 1.6;
+        }
+        .savage-quote b { color: var(--accent-red); font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
+
+        /* CUSTOM TOAST */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px var(--accent-red-glow); display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .toast.show { bottom: 30px; }
+
+        /* ANIMATIONS */
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+                /* CUSTOM BOTTOM SHEET DROPDOWN */
+        .custom-select-trigger {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s;
+        }
+        .custom-select-trigger:active { transform: scale(0.98); border-color: var(--accent-purple); box-shadow: 0 0 10px var(--accent-purple-glow); }
+        
+        .cat-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(4px); }
+        .cat-modal-overlay.active { opacity: 1; visibility: visible; }
+        
+        .cat-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--card-bg); border-radius: 24px 24px 0 0; z-index: 1000; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: env(safe-area-inset-bottom, 20px); border-top: 1px solid var(--border-subtle); box-shadow: 0 -10px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; max-height: 80vh; }
+        .cat-modal.active { bottom: 0; }
+        
+        .cat-modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .cat-modal-header h3 { margin: 0; color: var(--accent-purple); font-size: 1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .cat-close-btn { background: rgba(255,255,255,0.05); border: none; color: var(--text-sub); width: 30px; height: 30px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+        
+        .cat-modal-body { overflow-y: auto; padding: 10px 20px 20px; }
+        .modal-opt { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; }
+        .modal-opt:last-child { border-bottom: none; }
+        .modal-opt:active { transform: scale(0.98); opacity: 0.8; }
+        
+        .opt-text { font-size: 1rem; color: var(--text-main); font-weight: 600; font-family: 'Inter', sans-serif; }
+        .opt-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--text-dim); position: relative; transition: 0.2s; flex-shrink: 0; margin-left: 15px;}
+        .modal-opt.active .opt-radio { border-color: var(--accent-green); }
+        .modal-opt.active .opt-radio::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: var(--accent-green); border-radius: 50%; }
+        .modal-opt.active .opt-text { color: var(--accent-green); font-weight: 800; }
+
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-hourglass-half"></i> FOMO BUSTER</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>Tech Depreciation</h1>
+            <p>> wait_or_buy --expose_fomo</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">1. Current Market Price (₹)</label>
+                    <input type="number" id="inp-price" class="inp-field" placeholder="e.g. 80000" min="0">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">2. Months Since Launch</label>
+                    <input type="number" id="inp-age" class="inp-field" placeholder="e.g. 2" min="0">
+                </div>
+            </div>
+
+            <div class="inp-group">
+                <label class="inp-lbl">3. Product Category</label>
+                <div class="custom-select-trigger" onclick="openCategoryModal()">
+                    <span id="category-display">Apple iPhone (Slow Drop)</span>
+                    <i class="fas fa-chevron-down" style="color: var(--text-sub); font-size: 0.9rem;"></i>
+                </div>
+                <input type="hidden" id="inp-category" value="iphone">
+            </div>
+
+
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">4. Months You Can Wait</label>
+                    <input type="number" id="inp-wait" class="inp-field" placeholder="e.g. 3" min="1">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">5. Next Gen Approaching?</label>
+                    <div class="custom-toggle" id="next-gen-toggle" onclick="DepreciationEngine.toggleNextGen()">
+                        <div class="ts-slider"></div>
+                        <div class="ts-opt active" id="lbl-no">NO</div>
+                        <div class="ts-opt" id="lbl-yes">YES</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="calc-btn" onclick="DepreciationEngine.calculate()">
+                <i class="fas fa-fire-alt"></i> Expose True Future Value
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container">
+            
+            <div class="output-row">
+                <div class="res-box main-val">
+                    <div class="res-box-lbl"><i class="fas fa-tag"></i> 1. Est. Price After Waiting</div>
+                    <div class="res-box-val" id="out-est-price">₹0</div>
+                    <div class="res-box-desc" id="out-cash-saved" style="color:var(--text-main); font-weight:800; font-size:0.95rem;">
+                        </div>
+                </div>
+
+                <div class="res-box" style="border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.05);">
+                    <div class="res-box-lbl" style="color: var(--accent-red);"><i class="fas fa-brain"></i> 3. The FOMO Premium</div>
+                    <div class="res-box-val" id="out-fomo-tax" style="color:var(--text-main); font-size: 1.4rem;">₹0 / month</div>
+                    <div class="res-box-desc">If you buy today to flaunt the "New" tag, you are paying this Impatient Tax every single month.</div>
+                </div>
+
+                <div class="res-box">
+                    <div class="res-box-lbl" style="color: var(--accent-gold);"><i class="fas fa-fire"></i> 4. Depreciation Velocity</div>
+                    <div class="res-box-val" id="out-daily-loss" style="color:var(--accent-gold); font-size: 1.4rem;">₹0 / day</div>
+                    <div class="res-box-desc">During your wait period, this product's value is evaporating into thin air every single day while you sleep.</div>
+                </div>
+
+                <div class="res-box">
+                    <div class="res-box-lbl" style="color: var(--accent-purple);"><i class="fas fa-recycle"></i> 5. Resale Value (1 Yr From Now)</div>
+                    <div class="res-box-val" id="out-resale-1yr" style="color:var(--accent-purple); font-size: 1.4rem;">₹0</div>
+                    <div class="res-box-desc" id="out-resale-drop-pct">X% of your wealth completely wiped out.</div>
+                </div>
+
+                <div class="res-box" style="border-color: rgba(59, 130, 246, 0.4); background: rgba(59, 130, 246, 0.05);">
+                    <div class="res-box-lbl" style="color: var(--accent-blue);"><i class="fas fa-arrow-circle-up"></i> 6. The Upgraded Budget Alternative</div>
+                    <div class="res-box-desc" id="out-upgrade-alt" style="color:var(--text-main); font-weight:700; font-size:0.95rem; line-height: 1.6;">
+                        </div>
+                </div>
+            </div>
+
+            <div class="savage-quote">
+                <b><i class="fas fa-radiation"></i> PLATINUM VERDICT</b>
+                "The Tech industry feeds on your emotions. If your current setup compiles your code or does your daily work without breaking, you do NOT need a new one. Wait, and let the price bleed. Tech depreciation is a fire that burns only the consumer's wallet, never the company's. Buying on launch day is an engineered scam. Buy mid or end-cycle."
+            </div>
+
+        </div>
+                <div class="cat-modal-overlay" id="cat-overlay" onclick="closeCategoryModal()"></div>
+        <div class="cat-modal" id="cat-bottom-sheet">
+            <div class="cat-modal-header">
+                <h3>Select Tech Category</h3>
+                <button class="cat-close-btn" onclick="closeCategoryModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="cat-modal-body">
+                <div class="modal-opt active" onclick="selectCategory('iphone', 'Apple iPhone (Slow Drop)', this)">
+                    <div class="opt-text">Apple iPhone (Slow Drop)</div><div class="opt-radio"></div>
+                </div>
+                <div class="modal-opt" onclick="selectCategory('macbook', 'MacBook / Apple Silicon (Very Slow)', this)">
+                    <div class="opt-text">MacBook / Apple Silicon (Very Slow)</div><div class="opt-radio"></div>
+                </div>
+                <div class="modal-opt" onclick="selectCategory('camera', 'Camera Gear / Lenses (Very Slow)', this)">
+                    <div class="opt-text">Camera Gear / Lenses (Very Slow)</div><div class="opt-radio"></div>
+                </div>
+                <div class="modal-opt" onclick="selectCategory('tablet', 'Tablets / iPads (Moderate Drop)', this)">
+                    <div class="opt-text">Tablets / iPads (Moderate Drop)</div><div class="opt-radio"></div>
+                </div>
+                <div class="modal-opt" onclick="selectCategory('windows', 'Windows Business/ThinkPad', this)">
+                    <div class="opt-text">Windows Business/ThinkPad (Moderate)</div><div class="opt-radio"></div>
+                </div>
+                <div class="modal-opt" onclick="selectCategory('android', 'Android Flagship (Fast Drop)', this)">
+                    <div class="opt-text">Android Flagship (Fast Drop)</div><div class="opt-radio"></div>
+                </div>
+                <div class="modal-opt" onclick="selectCategory('gaming', 'Gaming PC / Laptop (Rapid Drop)', this)">
+                    <div class="opt-text">Gaming PC / Laptop (Rapid Drop)</div><div class="opt-radio"></div>
+                </div>
+                <div class="modal-opt" onclick="selectCategory('android_mid', 'Mid-Range Android (Very Fast Drop)', this)">
+                    <div class="opt-text">Mid-Range Android (Very Fast Drop)</div><div class="opt-radio"></div>
+                </div>
+                <div class="modal-opt" onclick="selectCategory('wearables', 'Smartwatches / Wearables (Extreme)', this)">
+                    <div class="opt-text">Smartwatches / Wearables (Extreme)</div><div class="opt-radio"></div>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - FOMO BUSTER ENGINE */
+        
+        window.DepreciationEngine = {
+            isNextGenApproaching: false,
+
+            haptic: function() { if(navigator.vibrate) navigator.vibrate(20); },
+
+            showToast: function(msg) {
+                const toast = document.getElementById('custom-toast');
+                document.getElementById('toast-msg').innerText = msg;
+                if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            },
+
+            formatCurrency: function(val) {
+                return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val).replace('₹', '₹');
+            },
+
+            toggleNextGen: function() {
+                this.haptic();
+                const toggle = document.getElementById('next-gen-toggle');
+                this.isNextGenApproaching = !this.isNextGenApproaching;
+                
+                if(!this.isNextGenApproaching) {
+                    toggle.classList.remove('state-yes');
+                    document.getElementById('lbl-no').classList.add('active');
+                    document.getElementById('lbl-yes').classList.remove('active');
+                } else {
+                    toggle.classList.add('state-yes');
+                    document.getElementById('lbl-no').classList.remove('active');
+                    document.getElementById('lbl-yes').classList.add('active');
+                }
+            },
+
+            getMonthlyDecayRate: function(category) {
+                // Expanded monthly decay rates
+                const rates = {
+                    'camera': 0.008,      // 0.8%
+                    'macbook': 0.010,     // 1.0%
+                    'iphone': 0.015,      // 1.5%
+                    'tablet': 0.025,      // 2.5%
+                    'windows': 0.030,     // 3.0%
+                    'android': 0.035,     // 3.5%
+                    'gaming': 0.040,      // 4.0%
+                    'android_mid': 0.050, // 5.0%
+                    'wearables': 0.060    // 6.0%
+                };
+                return rates[category] || 0.02;
+            },
+
+            calculate: function() {
+                this.haptic();
+
+                // Get All 5 Inputs
+                const price = parseFloat(document.getElementById('inp-price').value);
+                const ageMonths = parseFloat(document.getElementById('inp-age').value);
+                const category = document.getElementById('inp-category').value;
+                const waitMonths = parseFloat(document.getElementById('inp-wait').value);
+
+                // Validations
+                if(isNaN(price) || price <= 0) { this.showToast("Current Market Price is required."); return; }
+                if(isNaN(ageMonths) || ageMonths < 0) { this.showToast("Months since launch is required."); return; }
+                if(isNaN(waitMonths) || waitMonths <= 0) { this.showToast("Wait time must be at least 1 month."); return; }
+
+                // The Math Setup
+                let r = this.getMonthlyDecayRate(category);
+                
+                // Exponential decay formula: Future Value = Present Value * (1 - r)^t
+                let estimatedPrice = price * Math.pow(1 - r, waitMonths);
+
+                // Apply "Next Gen" Crash Penalty
+                if (this.isNextGenApproaching) {
+                    estimatedPrice = estimatedPrice * 0.85; // Additional 15% drop when next gen launches
+                }
+
+                // Core Metrics
+                let cashSaved = price - estimatedPrice;
+                let fomoPremium = cashSaved / waitMonths;
+                let dailyLoss = cashSaved / (waitMonths * 30); // Approx 30 days a month
+
+                // 1 Year Resale Prediction (from today)
+                let resale1Yr = price * Math.pow(1 - r, 12);
+                if (this.isNextGenApproaching) resale1Yr *= 0.80; // Heavier drop over a year if next gen happens
+                let dropPct1Yr = ((price - resale1Yr) / price) * 100;
+
+                // --- POPULATING THE 6 OUTPUTS ---
+
+                // --- POPULATING THE 6 OUTPUTS ---
+
+                // Output 1: Est Price
+                document.getElementById('out-est-price').innerText = this.formatCurrency(estimatedPrice);
+                
+                // Output 2: Cash Saved
+                document.getElementById('out-cash-saved').innerText = `2. Total Cash Saved: By controlling your FOMO, you keep ${this.formatCurrency(cashSaved)} in your pocket.`;
+
+                // Output 3: FOMO Premium
+                document.getElementById('out-fomo-tax').innerText = `${this.formatCurrency(fomoPremium)} / month`;
+
+                // Output 4: Daily Loss
+                document.getElementById('out-daily-loss').innerText = `${this.formatCurrency(dailyLoss)} / day`;
+
+                // Output 5: Resale Value 1 Yr
+                document.getElementById('out-resale-1yr').innerText = this.formatCurrency(resale1Yr);
+                document.getElementById('out-resale-drop-pct').innerText = `${dropPct1Yr.toFixed(1)}% of your purchase value completely wiped out in 12 months.`;
+
+                // Output 6: Upgrade Alternative
+                const upgradeText = document.getElementById('out-upgrade-alt');
+                if (cashSaved < 2000) {
+                    upgradeText.innerHTML = `You save <b>${this.formatCurrency(cashSaved)}</b>. Use this to buy a premium protective case or a high-quality GaN charger.`;
+                } else if (cashSaved < 8000) {
+                    upgradeText.innerHTML = `Instead of burning money on FOMO, wait ${waitMonths} months and use the <b>${this.formatCurrency(cashSaved)}</b> saved to buy high-end TWS earbuds or a mechanical keyboard within the exact same budget!`;
+                } else {
+                    upgradeText.innerHTML = `By waiting ${waitMonths} months, you save a massive <b>${this.formatCurrency(cashSaved)}</b>. Use this to double your RAM and upgrade your SSD to 1TB, or buy a secondary monitor—all without exceeding your original ₹${price} budget!`;
+                }
+
+                // Reveal UI
+                const resCard = document.getElementById('results-container');
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-up');
+                void resCard.offsetWidth; // trigger reflow
+                resCard.classList.add('anim-up');
+                
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+        };
+                // --- CUSTOM MODAL LOGIC ---
+        function openCategoryModal() {
+            if(window.DepreciationEngine.haptic) window.DepreciationEngine.haptic();
+            document.getElementById('cat-overlay').classList.add('active');
+            document.getElementById('cat-bottom-sheet').classList.add('active');
+        }
+
+        function closeCategoryModal() {
+            document.getElementById('cat-overlay').classList.remove('active');
+            document.getElementById('cat-bottom-sheet').classList.remove('active');
+        }
+
+        function selectCategory(val, text, element) {
+            if(window.DepreciationEngine.haptic) window.DepreciationEngine.haptic();
+            
+            // Set value in hidden input and display text
+            document.getElementById('inp-category').value = val;
+            document.getElementById('category-display').innerText = text;
+
+            // Update UI active state
+            document.querySelectorAll('.modal-opt').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            closeCategoryModal();
+        }
+
+    </script>
+</body>
+</html>

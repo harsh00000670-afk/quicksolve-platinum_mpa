@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Sleep Cycle | Bio-Hacker | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate your perfect REM sleep cycles to wake up refreshed and energized.">
+    <meta name="theme-color" content="#13111C">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - PLATINUM DESIGN PRESERVED */
+        :root {
+            --bg-void: #13111C;
+            --card-bg: #1F2232;
+            --card-border: #31354A;
+            --text-main: #FFFFFF;
+            --text-sub: #A0A5B5;
+            --accent-purple: #8A58D8;
+            --accent-blue: #4FA8FF;
+            --accent-green: #2DD4BF;
+            --accent-yellow: #FBBF24;
+        }
+
+        body { margin: 0; background-color: var(--bg-void); color: var(--text-main); font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        /* 🚀 STAGGERED FLY-IN ENGINE */
+        .anim-card {
+            opacity: 0; transform: scale(0.95) translateY(20px);
+            animation: flyIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            will-change: transform, opacity;
+        }
+        @keyframes flyIn { to { opacity: 1; transform: scale(1) translateY(0); } }
+        .d-1 { animation-delay: 0.05s; } .d-2 { animation-delay: 0.1s; }
+        .d-3 { animation-delay: 0.15s; } .d-4 { animation-delay: 0.2s; }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(19, 17, 28, 0.9); backdrop-filter: blur(10px); 
+            border-bottom: 1px solid var(--card-border); padding: 15px 20px; display: flex; align-items: center;
+        }
+        .qs-back-btn { color: var(--text-main); margin-right: 15px; text-decoration: none; font-size: 1.4rem; transition: 0.2s; cursor: pointer;}
+        .qs-back-btn:active { transform: scale(0.9); }
+        .brand { flex: 1; color: var(--accent-purple); font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; }
+        .hero h1 { margin: 0; font-size: 1.5rem; color: var(--text-main); font-weight: 900; }
+        .hero p { color: var(--text-sub); font-size: 0.8rem; margin-top: 5px; }
+
+        /* TAB CONTROLLER */
+        .tab-container {
+            display: flex; background: var(--card-bg); border-radius: 12px; padding: 4px; margin-bottom: 20px;
+        }
+        .tab-btn {
+            flex: 1; padding: 14px 10px; background: transparent; border: none; color: var(--text-sub);
+            font-size: 0.8rem; font-weight: 800; border-radius: 10px; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .tab-btn.active { background: #624293; color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+        /* CUSTOM TIME PICKER CARD */
+        .picker-card {
+            background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; 
+            padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center;
+        }
+        .picker-title { font-size: 0.8rem; font-weight: 800; color: var(--text-main); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        
+        .drum-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .drum-col { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 70px; }
+        .drum-btn { background: #262A3D; border: none; color: var(--accent-yellow); font-size: 1.2rem; width: 100%; padding: 10px 0; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .drum-btn:active { background: #31354A; transform: scale(0.95); }
+        
+        .drum-val { 
+            background: #262A3D; width: 100%; padding: 15px 0; font-size: 1.8rem; font-weight: 900; 
+            font-family: 'JetBrains Mono', monospace; border-radius: 8px; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: var(--accent-purple);
+        }
+        .drum-val.ampm { color: var(--text-sub); font-size: 1.4rem; }
+        
+        .drum-sep { font-size: 1.8rem; font-weight: 900; color: var(--text-sub); margin-bottom: 30px; }
+        .drum-lbl { font-size: 0.65rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-top: 5px; }
+
+        /* GRADIENT BUTTON */
+        .action-btn {
+            width: 100%; background: linear-gradient(to right, #9d4edd, #3b82f6);
+            color: #fff; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.4); display: flex; justify-content: center; gap: 10px; align-items: center;
+        }
+        .action-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS AREA */
+        .info-note { font-size: 0.75rem; color: var(--text-sub); text-align: center; margin-bottom: 15px; font-style: italic; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        
+        .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .res-card {
+            background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px;
+            padding: 20px 10px 15px 10px; text-align: center; transition: 0.3s; position: relative;
+        }
+        .res-card.optimal { border-color: var(--accent-green); background: rgba(45, 212, 191, 0.05); }
+        .res-card.optimal::before {
+            content: 'OPTIMAL'; position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+            background: var(--accent-green); color: #000; font-size: 0.6rem; font-weight: 900;
+            padding: 3px 10px; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; letter-spacing: 1px;
+        }
+        
+        .res-cycles { font-size: 0.75rem; color: var(--text-main); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .res-time { font-size: 1.8rem; font-weight: 900; color: var(--text-main); font-family: 'JetBrains Mono', monospace; margin: 10px 0;}
+        .res-time small { font-size: 1rem; }
+        .res-card.optimal .res-time { color: var(--accent-green); }
+        .res-hours { font-size: 0.75rem; color: var(--accent-purple); font-weight: 700; }
+        
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <a onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="brand"><i class="fas fa-bed"></i> SLEEP CYCLE</div>
+    </header>
+
+    <main style="padding: 20px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-card d-1">
+            <h1>Bio-Hacker Sleep</h1>
+            <p>Wake up between 90-minute REM cycles.</p>
+        </div>
+
+        <div class="tab-container anim-card d-2">
+            <button class="tab-btn active" data-mode="wake" onclick="SSJ4_Sleep.switchMode('wake')">I want to Wake Up at</button>
+            <button class="tab-btn" data-mode="sleep" onclick="SSJ4_Sleep.switchMode('sleep')">I plan to Sleep at</button>
+        </div>
+
+        <div class="picker-card anim-card d-3">
+            <div class="picker-title">SET YOUR TIME:</div>
+            
+            <div class="drum-container">
+                <div class="drum-col">
+                    <button class="drum-btn" onclick="SSJ4_Sleep.changeTime('h', 1)"><i class="fas fa-chevron-up"></i></button>
+                    <div class="drum-val" id="disp-h">07</div>
+                    <button class="drum-btn" onclick="SSJ4_Sleep.changeTime('h', -1)"><i class="fas fa-chevron-down"></i></button>
+                    <div class="drum-lbl">HOURS</div>
+                </div>
+                
+                <div class="drum-sep">:</div>
+
+                <div class="drum-col">
+                    <button class="drum-btn" onclick="SSJ4_Sleep.changeTime('m', 1)"><i class="fas fa-chevron-up"></i></button>
+                    <div class="drum-val" id="disp-m">00</div>
+                    <button class="drum-btn" onclick="SSJ4_Sleep.changeTime('m', -1)"><i class="fas fa-chevron-down"></i></button>
+                    <div class="drum-lbl">MINUTES</div>
+                </div>
+
+                <div class="drum-col">
+                    <button class="drum-btn" onclick="SSJ4_Sleep.changeTime('a', 1)"><i class="fas fa-chevron-up"></i></button>
+                    <div class="drum-val ampm" id="disp-a">AM</div>
+                    <button class="drum-btn" onclick="SSJ4_Sleep.changeTime('a', -1)"><i class="fas fa-chevron-down"></i></button>
+                    <div class="drum-lbl">AM/PM</div>
+                </div>
+            </div>
+
+            <button class="action-btn" onclick="SSJ4_Sleep.calculate()">
+                <i class="fas fa-magic"></i> CALCULATE TIMES
+            </button>
+        </div>
+
+        <div id="results-container" class="anim-card d-4" style="display: none;">
+            <div class="info-note">
+                <i class="fas fa-info-circle"></i> We factored in 15 minutes to fall asleep.
+            </div>
+            <div class="results-grid" id="results-grid">
+                </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - SLEEP CYCLE ENGINE (CUSTOM DRUM UI) */
+        window.SSJ4_Sleep = {
+            mode: 'wake', 
+            cycleMs: 90 * 60000, 
+            fallAsleepMs: 15 * 60000, 
+            
+            // Current Time State
+            time: { h: 7, m: 0, a: 'AM' },
+
+            init: function() {
+                this.updateUI();
+            },
+
+            triggerHaptic: function() {
+                if(window.navigator && window.navigator.vibrate) {
+                    try { navigator.vibrate(30); } catch(e){}
+                }
+            },
+
+            switchMode: function(newMode) {
+                this.triggerHaptic();
+                this.mode = newMode;
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector(`[data-mode="${newMode}"]`).classList.add('active');
+                document.getElementById('results-container').style.display = 'none';
+            },
+
+            // DRUM LOGIC
+            changeTime: function(type, dir) {
+                this.triggerHaptic();
+                if (type === 'h') {
+                    this.time.h += dir;
+                    if(this.time.h > 12) this.time.h = 1;
+                    if(this.time.h < 1) this.time.h = 12;
+                } else if (type === 'm') {
+                    this.time.m += dir;
+                    if(this.time.m > 59) this.time.m = 0;
+                    if(this.time.m < 0) this.time.m = 59;
+                } else if (type === 'a') {
+                    this.time.a = (this.time.a === 'AM') ? 'PM' : 'AM';
+                }
+                this.updateUI();
+            },
+
+            updateUI: function() {
+                document.getElementById('disp-h').innerText = String(this.time.h).padStart(2, '0');
+                document.getElementById('disp-m').innerText = String(this.time.m).padStart(2, '0');
+                document.getElementById('disp-a').innerText = this.time.a;
+            },
+
+            formatTimeAMPM: function(dateObj) {
+                let hours = dateObj.getHours();
+                let minutes = dateObj.getMinutes();
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12; 
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                return `${hours}:${minutes} <small>${ampm}</small>`;
+            },
+
+            // CALCULATION ENGINE
+            calculate: function() {
+                this.triggerHaptic();
+                
+                // Convert state to 24h Date Object
+                let baseDate = new Date();
+                let h24 = this.time.h;
+                if(this.time.a === 'PM' && h24 !== 12) h24 += 12;
+                if(this.time.a === 'AM' && h24 === 12) h24 = 0;
+                
+                baseDate.setHours(h24, this.time.m, 0, 0);
+
+                let results = [];
+
+                if (this.mode === 'wake') {
+                    // Subtract
+                    let targetMs = baseDate.getTime() - this.fallAsleepMs;
+                    // 6, 5, 4, 3 cycles (Longest sleep first)
+                    for (let i = 6; i >= 3; i--) {
+                        let sleepTime = new Date(targetMs - (i * this.cycleMs));
+                        results.push({ time: sleepTime, cycles: i, hours: (i * 1.5) });
+                    }
+                } else {
+                    // Add
+                    let targetMs = baseDate.getTime() + this.fallAsleepMs;
+                    // 3, 4, 5, 6 cycles (Shortest sleep first)
+                    for (let i = 3; i <= 6; i++) {
+                        let wakeTime = new Date(targetMs + (i * this.cycleMs));
+                        results.push({ time: wakeTime, cycles: i, hours: (i * 1.5) });
+                    }
+                }
+
+                this.renderResults(results);
+            },
+
+            renderResults: function(results) {
+                const grid = document.getElementById('results-grid');
+                grid.innerHTML = '';
+
+                results.forEach((res, index) => {
+                    const isOptimal = (res.cycles === 5 || res.cycles === 6);
+                    const animDelay = (index * 0.1) + 's';
+
+                    const card = document.createElement('div');
+                    card.className = `res-card ${isOptimal ? 'optimal' : ''}`;
+                    card.style.animation = `flyIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards`;
+                    card.style.animationDelay = animDelay;
+                    card.style.opacity = '0'; 
+
+                    card.innerHTML = `
+                        <div class="res-cycles">${res.cycles} CYCLES</div>
+                        <div class="res-time">${this.formatTimeAMPM(res.time)}</div>
+                        <div class="res-hours">${res.hours} Hours of Sleep</div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                document.getElementById('results-container').style.display = 'block';
+                // Scroll down smoothly to show results
+                setTimeout(() => {
+                    document.getElementById('results-container').scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }, 100);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => SSJ4_Sleep.init());
+    </script>
+</body>
+</html>

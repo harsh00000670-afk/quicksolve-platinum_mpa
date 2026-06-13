@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <!-- ==========================================
+         🚀 ADVANCED SEO & BOT OPTIMIZATION SECTION
+         ========================================== -->
+    <title>Advanced Scientific Calculator | Pro Math Engine | QuickSolve Platinum</title>
+    <meta name="description" content="High-performance scientific calculator with complex math support, trigonometry, algebra, and voice recognition. Powered by MathCore engine. 100% Offline and Private.">
+    <meta name="keywords" content="scientific calculator, advanced math calculator, voice calculator, trigonometry calculator, offline calculator, engineering calculator, QuickSolve Platinum, free voice calc">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/scientific_suite/scientific.html">
+
+    <!-- iOS / Mobile App Behaviors -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Sci-Calc V2">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0f172a">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/scientific_suite/scientific.html">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Scientific Core V2 - Pro Math Engine & Voice Control">
+    <meta property="og:description" content="Solve complex equations instantly with your voice! 100% offline, high-speed scientific calculator.">
+    <meta property="og:image" content="../logo.png">
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Voice Scientific Calculator - QuickSolve">
+    <meta name="twitter:description" content="Solve complex math with your voice. Built with MathCore Engine. Offline ready.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <!-- Google/OpenAI Bot Schema (JSON-LD) for SoftwareApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "QuickSolve Advanced Scientific Calculator",
+      "url": "https://quicksolve-platinum.netlify.app/scientific_suite/scientific.html",
+      "description": "High-performance scientific calculator supporting voice commands, trigonometry, logarithms, and combinatorial functions. 100% offline functionality.",
+      "applicationCategory": "EducationalApplication, UtilitiesApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Voice Command Integration",
+        "Trigonometric & Inverse Functions",
+        "Logarithmic Functions",
+        "Combinatorics (nCr, nPr)",
+        "Physics Constants",
+        "Calculation History",
+        "Offline Execution"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* Fullscreen God Tier UI */
+        #sci-god-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100%; height: 100dvh;
+            background-color: #0f172a; z-index: 2147483647 !important;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .sci-header { display: flex; align-items: center; justify-content: center; padding: 12px; background: #0f172a; position: relative; }
+        .sci-back-btn { position: absolute; left: 15px; background: none; border: none; color: #94a3b8; font-size: 1.3rem; cursor: pointer; text-decoration: none; }
+        
+        /* INFO BUTTON STYLES */
+        .sci-help-btn { position: absolute; right: 15px; background: none; border: none; color: #38bdf8; font-size: 1.3rem; cursor: pointer; text-decoration: none; transition: 0.2s; }
+        .sci-help-btn:active { transform: scale(0.9); color: #f59e0b; }
+
+        .sci-title { color: #f59e0b; font-weight: 800; font-size: 1.3rem; font-family: 'JetBrains Mono', monospace; }
+
+        .sci-display {
+            flex: 0 0 28%; background: #1e293b; padding: 15px 20px; position: relative;
+            display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end;
+            border-bottom: 1px solid #334155;
+        }
+        
+        /* 🚀 LEFT SIDE TOOL STACK */
+        .sci-left-stack {
+            position: absolute; left: 15px; bottom: 15px;
+            display: flex; flex-direction: column; gap: 12px; z-index: 10;
+        }
+        .stack-btn {
+            background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #38bdf8; width: 38px; height: 38px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; font-weight: 800; cursor: pointer; transition: 0.2s;
+            backdrop-filter: blur(5px); outline: none; -webkit-tap-highlight-color: transparent;
+        }
+        .stack-btn:active { transform: scale(0.9); background: #38bdf8; color: #0f172a; }
+        
+        /* HIDDEN POPUP MENUS */
+        .sci-pop-menu {
+            position: absolute; left: 60px; bottom: 15px;
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);
+            border: 1px solid #334155; border-radius: 12px;
+            padding: 10px; display: none; flex-direction: column; gap: 8px;
+            max-height: 200px; overflow-y: auto; z-index: 20;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.6); min-width: 220px;
+        }
+        .sci-pop-menu.active { display: flex; }
+        .sci-pop-menu::-webkit-scrollbar { width: 0px; }
+        .pop-item {
+            color: #e2e8f0; font-size: 0.8rem; padding: 10px; background: #1e293b;
+            border-radius: 6px; cursor: pointer; text-align: left; border: none; outline: none;
+            display: flex; flex-direction: column; gap: 4px; font-family: 'Inter', sans-serif;
+            transition: 0.2s;
+        }
+        .pop-item:active { background: #38bdf8; color: #0f172a; }
+        .pop-item span { color: #10b981; font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
+        .sci-mode-row { display: flex; gap: 12px; width: 100%; font-size: 0.7rem; font-weight: 800; color: #38bdf8; margin-bottom: 5px; justify-content: flex-end; }
+        
+        #sci-screen-expr { font-size: 1.1rem; color: #94a3b8; font-family: 'JetBrains Mono'; word-break: break-all; min-height: 1.4rem; text-align: right; width: 100%; padding-left: 50px; box-sizing: border-box; }
+        #sci-screen-result { font-size: 2.6rem; color: #fff; font-weight: 700; font-family: 'JetBrains Mono'; width: 100%; text-align: right; overflow-x: auto; white-space: nowrap; margin-top: 5px; padding-left: 50px; box-sizing: border-box; }
+
+        .sci-grid { flex: 1; display: grid; grid-template-columns: repeat(5, 1fr); background: #0f172a; padding: 4px; gap: 3px; }
+        .s-btn { background: #1e293b; border: none; color: #e2e8f0; border-radius: 4px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; outline: none; -webkit-tap-highlight-color: transparent; }
+        .s-btn:active { background: #334155; transform: scale(0.96); }
+        
+        .op-clr { color: #38bdf8; } .fn-clr { color: #a78bfa; font-size: 0.72rem; } 
+        .num-clr { background: #0f172a; border: 1px solid #1e293b; font-size: 1.15rem; }
+        .mem-clr { color: #10b981; font-size: 0.7rem; }
+        .ac-clr { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .eq-clr { background: #f59e0b; color: #0f172a; font-weight: 900; font-size: 1.3rem; }
+        
+        /* --- VOICE CALCULATOR STYLES --- */
+        .sci-voice-btn {
+            position: absolute; right: 15px; background: #1e293b; border: 1px solid #334155;
+            color: #38bdf8; width: 35px; height: 35px; border-radius: 50%; font-size: 1rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s ease; outline: none; -webkit-tap-highlight-color: transparent;
+        }
+        .sci-voice-btn:active { transform: scale(0.9); }
+        
+        .s-btn.listening {
+            color: #ef4444 !important; background: rgba(239, 68, 68, 0.1) !important;
+            animation: micPulse 1.2s infinite;
+        }
+        @keyframes micPulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+    </style>
+</head>
+<body>
+    <main id="sci-god-overlay" role="main" aria-label="Scientific Calculator Dashboard">
+      
+<header class="sci-header" role="banner">
+    <a href="../index.html" class="sci-back-btn qs-back-btn" aria-label="Go Back to Home">
+        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+    </a>
+    <div class="sci-title" aria-level="1" role="heading">SCIENTIFIC</div>
+    <a href="voice-help.html" class="sci-help-btn" aria-label="Voice Command Guide">
+        <i class="fas fa-circle-info" aria-hidden="true"></i>
+    </a>
+</header>
+
+        <section class="sci-display" aria-live="polite" aria-atomic="true">
+            
+            <!-- 🚀 The Power Stack -->
+            <div class="sci-left-stack">
+                <button class="stack-btn" onclick="toggleSciMenu('sci-history-menu')" aria-label="History"><i class="fas fa-history" aria-hidden="true"></i></button>
+                <button class="stack-btn" id="btn-deg-rad" onclick="sciToggleDR()" aria-label="Toggle Degree/Radian" style="font-size: 0.7rem;">DEG</button>
+                <button class="stack-btn" onclick="toggleSciMenu('sci-const-menu')" aria-label="Constants"><i class="fas fa-atom" aria-hidden="true"></i></button>
+            </div>
+
+            <!-- POPUP: Extended Constants Menu (20 OP Constants) -->
+            <div id="sci-const-menu" class="sci-pop-menu">
+                <button class="pop-item" onclick="insertConst('299792458')">Speed of Light (c)<span>299792458</span></button>
+                <button class="pop-item" onclick="insertConst('6.626×10^(-34)')">Planck Const. (h)<span>6.626 × 10⁻³⁴</span></button>
+                <button class="pop-item" onclick="insertConst('6.022×10^(23)')">Avogadro No. (NA)<span>6.022 × 10²³</span></button>
+                <button class="pop-item" onclick="insertConst('6.674×10^(-11)')">Gravitational (G)<span>6.674 × 10⁻¹¹</span></button>
+                <button class="pop-item" onclick="insertConst('1.602×10^(-19)')">Elementary Charge (e)<span>1.602 × 10⁻¹⁹</span></button>
+                <button class="pop-item" onclick="insertConst('9.109×10^(-31)')">Electron Mass (me)<span>9.109 × 10⁻³¹</span></button>
+                <button class="pop-item" onclick="insertConst('1.672×10^(-27)')">Proton Mass (mp)<span>1.672 × 10⁻²⁷</span></button>
+                <button class="pop-item" onclick="insertConst('1.674×10^(-27)')">Neutron Mass (mn)<span>1.674 × 10⁻²⁷</span></button>
+                <button class="pop-item" onclick="insertConst('96485')">Faraday Const. (F)<span>96485</span></button>
+                <button class="pop-item" onclick="insertConst('8.314')">Gas Const. (R)<span>8.314</span></button>
+                <button class="pop-item" onclick="insertConst('1.380×10^(-23)')">Boltzmann (k)<span>1.380 × 10⁻²³</span></button>
+                <button class="pop-item" onclick="insertConst('5.670×10^(-8)')">Stefan-Boltzmann (σ)<span>5.670 × 10⁻⁸</span></button>
+                <button class="pop-item" onclick="insertConst('1.097×10^(7)')">Rydberg Const. (R∞)<span>1.097 × 10⁷</span></button>
+                <button class="pop-item" onclick="insertConst('8.854×10^(-12)')">Vacuum Permittivity (ε0)<span>8.854 × 10⁻¹²</span></button>
+                <button class="pop-item" onclick="insertConst('1.256×10^(-6)')">Vacuum Permeability (μ0)<span>1.256 × 10⁻⁶</span></button>
+                <button class="pop-item" onclick="insertConst('5.291×10^(-11)')">Bohr Radius (a0)<span>5.291 × 10⁻¹¹</span></button>
+                <button class="pop-item" onclick="insertConst('2.897×10^(-3)')">Wien Displacement (b)<span>2.897 × 10⁻³</span></button>
+                <button class="pop-item" onclick="insertConst('1.660×10^(-27)')">Atomic Mass Unit (amu)<span>1.660 × 10⁻²⁷</span></button>
+                <button class="pop-item" onclick="insertConst('9.80665')">Standard Gravity (g)<span>9.806</span></button>
+                <button class="pop-item" onclick="insertConst('101325')">Atmospheric Press. (atm)<span>101325</span></button>
+            </div>
+
+            <!-- POPUP: History Menu -->
+            <div id="sci-history-menu" class="sci-pop-menu" style="bottom: 60px;">
+                <div style="color:#94a3b8; font-size:0.8rem; padding:5px;">No history yet</div>
+            </div>
+
+            <div id="sci-screen-expr" aria-label="Current Expression"></div>
+            <div id="sci-screen-result" aria-label="Calculation Result">0</div>
+        </section>
+
+        <section class="sci-grid" role="group" aria-label="Calculator Keypad">
+            <button class="s-btn mem-clr" onclick="sciM('MC')" aria-label="Memory Clear">MC</button>
+            <button class="s-btn mem-clr" onclick="sciM('MR')" aria-label="Memory Recall">MR</button>
+            <button class="s-btn mem-clr" onclick="sciM('M+')" aria-label="Memory Add">M+</button>
+            <button class="s-btn mem-clr" onclick="sciM('M-')" aria-label="Memory Subtract">M-</button>
+            <button id="voice-calc-btn" class="s-btn op-clr" aria-label="Voice Calculator" aria-pressed="false" onclick="toggleVoiceCalc()"><i class="fas fa-microphone" aria-hidden="true"></i></button>
+
+            <button class="s-btn fn-clr" onclick="sciIn('sin(')" aria-label="Sine">sin</button>
+            <button class="s-btn fn-clr" onclick="sciIn('cos(')" aria-label="Cosine">cos</button>
+            <button class="s-btn fn-clr" onclick="sciIn('tan(')" aria-label="Tangent">tan</button>
+            <button class="s-btn fn-clr" onclick="sciIn('asin(')" aria-label="Inverse Sine">sin⁻¹</button>
+            <button class="s-btn fn-clr" onclick="sciIn('acos(')" aria-label="Inverse Cosine">cos⁻¹</button>
+
+            <button class="s-btn fn-clr" onclick="sciIn('atan(')" aria-label="Inverse Tangent">tan⁻¹</button>
+            <button class="s-btn fn-clr" onclick="sciIn('log(')" aria-label="Base 10 Logarithm">log</button>
+            <button class="s-btn fn-clr" onclick="sciIn('ln(')" aria-label="Natural Logarithm">ln</button>
+            <button class="s-btn fn-clr" onclick="sciIn('10^(')" aria-label="10 to the Power of X">10ˣ</button>
+            <button class="s-btn fn-clr" onclick="sciIn('e^(')" aria-label="e to the Power of X">eˣ</button>
+
+            <button class="s-btn fn-clr" onclick="sciIn('^2')" aria-label="Square">x²</button>
+            <button class="s-btn fn-clr" onclick="sciIn('^3')" aria-label="Cube">x³</button>
+            <button class="s-btn fn-clr" onclick="sciIn('^')" aria-label="X to the Power of Y">xʸ</button>
+            <button class="s-btn fn-clr" onclick="sciIn('sqrt(')" aria-label="Square Root">√x</button>
+            <button class="s-btn fn-clr" onclick="sciIn('rt(')" aria-label="Y Root of X">ʸ√x</button>
+
+            <button class="s-btn fn-clr" onclick="sciIn('!')" aria-label="Factorial">n!</button>
+            <button class="s-btn fn-clr" onclick="sciIn('nCr')" aria-label="Combinations">nCr</button>
+            <button class="s-btn fn-clr" onclick="sciIn('nPr')" aria-label="Permutations">nPr</button>
+            <button class="s-btn fn-clr" onclick="sciIn('abs(')" aria-label="Absolute Value">|x|</button>
+            <button class="s-btn fn-clr" onclick="sciIn('mod')" aria-label="Modulo">mod</button>
+
+            <button class="s-btn op-clr" onclick="sciIn('(')" aria-label="Open Parenthesis">(</button>
+            <button class="s-btn op-clr" onclick="sciIn(')')" aria-label="Close Parenthesis">)</button>
+            <button class="s-btn fn-clr" onclick="sciIn('floor(')" aria-label="Floor Function">⌊x⌋</button>
+            <button class="s-btn fn-clr" onclick="sciIn('ceil(')" aria-label="Ceiling Function">⌈x⌉</button>
+            <button class="s-btn ac-clr" onclick="sciAC()" aria-label="All Clear">AC</button>
+
+            <button class="s-btn num-clr" onclick="sciIn('7')" aria-label="Seven">7</button>
+            <button class="s-btn num-clr" onclick="sciIn('8')" aria-label="Eight">8</button>
+            <button class="s-btn num-clr" onclick="sciIn('9')" aria-label="Nine">9</button>
+            <button class="s-btn ac-clr" onclick="sciDel()" aria-label="Delete Backspace">⌫</button>
+            <button class="s-btn op-clr" onclick="sciIn('÷')" aria-label="Divide">÷</button>
+
+            <button class="s-btn num-clr" onclick="sciIn('4')" aria-label="Four">4</button>
+            <button class="s-btn num-clr" onclick="sciIn('5')" aria-label="Five">5</button>
+            <button class="s-btn num-clr" onclick="sciIn('6')" aria-label="Six">6</button>
+            <button class="s-btn op-clr" onclick="sciIn('×')" aria-label="Multiply">×</button>
+            <button class="s-btn op-clr" onclick="sciIn('%')" aria-label="Percent">%</button>
+
+            <button class="s-btn num-clr" onclick="sciIn('1')" aria-label="One">1</button>
+            <button class="s-btn num-clr" onclick="sciIn('2')" aria-label="Two">2</button>
+            <button class="s-btn num-clr" onclick="sciIn('3')" aria-label="Three">3</button>
+            <button class="s-btn op-clr" onclick="sciIn('−')" aria-label="Subtract">−</button>
+            <button class="s-btn fn-clr" onclick="sciIn('π')" aria-label="Pi">π</button>
+
+            <button class="s-btn num-clr" onclick="sciIn('0')" aria-label="Zero">0</button>
+            <button class="s-btn num-clr" onclick="sciIn('.')" aria-label="Decimal Point">.</button>
+            <button class="s-btn fn-clr" onclick="sciIn('e')" aria-label="Euler's Number">e</button>
+            <button class="s-btn op-clr" onclick="sciIn('+')" aria-label="Add">+</button>
+            <button class="s-btn eq-clr" onclick="sciSolve()" aria-label="Equals">=</button>
+        </section>
+    </main>
+    <script>
+        /* QUICKSOLVE PLATINUM - UNIVERSAL MATH CORE v18.2 */
+        window.MathCore = {
+            // --- 1. Internal Math Functions ---
+            fact: function(n) {
+                if (n < 0 || n > 170) return NaN;
+                if (n % 1 !== 0) return NaN;
+                if (n === 0 || n === 1) return 1;
+                let r = 1;
+                for (let i = 2; i <= n; i++) r *= i;
+                return r;
+            },
+
+            nCr: function(n, r) {
+                if (r < 0 || r > n) return NaN;
+                return this.fact(n) / (this.fact(r) * this.fact(n - r));
+            },
+
+            nPr: function(n, r) {
+                if (r < 0 || r > n) return NaN;
+                return this.fact(n) / this.fact(n - r);
+            },
+
+            // y√x  →  x^(1/y)
+            rt: function(y, x) {
+                return Math.pow(x, 1 / y);
+            },
+
+            // --- 2. Solver ---
+            solve: function(expr, isDeg) {
+                try {
+                    if (!expr) return "0";
+
+                    // A. Auto-close brackets
+                    let o = (expr.match(/\(/g) || []).length;
+                    let c = (expr.match(/\)/g) || []).length;
+                    while (o > c) { expr += ")"; c++; }
+
+                    // B. Decimal safety
+                    if (expr.startsWith('.')) expr = '0' + expr;
+                    expr = expr.replace(/([+\-*/^(\[,])\./g, '$10.');
+
+                    // C. EARLY bind ceil / floor / round
+                    expr = expr.replace(/ceil\s*\(/g, "Math.ceil(");
+                    expr = expr.replace(/floor\s*\(/g, "Math.floor(");
+                    expr = expr.replace(/round\s*\(/g, "Math.round(");
+
+                    // D. Symbol mapping (SAFE)
+                    let s = expr
+                        .replace(/×/g, "*")
+                        .replace(/÷/g, "/")
+                        .replace(/−/g, "-")
+                        .replace(/π/g, "Math.PI")
+                        .replace(/\be\b/g, "Math.E"); 
+
+                    // E. mod → %
+                    s = s.replace(/mod/g, "%");
+
+                    // F. yrt(x) priority (before implicit multiplication)
+                    s = s.replace(
+                        /(\d+(\.\d+)?|\)|Math\.PI|Math\.E)\s*rt\s*\(/g,
+                        "MathCore.rt($1,"
+                    );
+
+                    // G. Implicit multiplication
+                    s = s.replace(
+                        /(\d|\))(?=sin|cos|tan|asin|acos|atan|log|ln|sqrt|abs|Math\.PI|Math\.E|\()/g,
+                        '$1*'
+                    );
+
+                    // H. Other math
+                    s = s.replace(/(\d+(\.\d+)?|Math\.PI|Math\.E|\([^()]*\))!/g, "MathCore.fact($1)");
+                    s = s.replace(/(\d+(\.\d+)?)nCr(\d+(\.\d+)?)/g, "MathCore.nCr($1,$3)");
+                    s = s.replace(/(\d+(\.\d+)?)nPr(\d+(\.\d+)?)/g, "MathCore.nPr($1,$3)");
+
+                    // I. Power (right-to-left)
+                    while (s.includes('^')) {
+                        s = s.replace(
+                            /([0-9\.]+|Math\.[A-Z]+|MathCore\.[a-zA-Z]+\([^)]*\)|[a-z]+\([^)]*\)|\([^)]*\))\^/g,
+                            "($1)**"
+                        );
+                        if (s.includes('^') && !s.includes(')**')) {
+                            s = s.replace(/\^/g, "**");
+                        }
+                    }
+
+                    // J. Context
+                    const toRad = x => isDeg ? x * Math.PI / 180 : x;
+                    const fromRad = x => isDeg ? x * 180 / Math.PI : x;
+
+                    const context = {
+                        sin: x => Math.sin(toRad(x)),
+                        cos: x => Math.cos(toRad(x)),
+                        tan: x => {
+                            if (isDeg && Math.abs(x % 180) === 90) return Infinity;
+                            return Math.tan(toRad(x));
+                        },
+                        asin: x => fromRad(Math.asin(x)),
+                        acos: x => fromRad(Math.acos(x)),
+                        atan: x => fromRad(Math.atan(x)),
+                        log: x => Math.log10(x),
+                        ln: x => Math.log(x),
+                        sqrt: x => Math.sqrt(x),
+                        abs: x => Math.abs(x),
+                        MathCore: this
+                    };
+
+                    const fn = new Function(...Object.keys(context), `return ${s};`);
+                    let res = fn(...Object.values(context));
+
+                    if (isNaN(res)) return "Error";
+                    if (!isFinite(res)) return "Overflow";
+
+                    return parseFloat(res.toFixed(10));
+
+                } catch (e) {
+                    console.error(e);
+                    return "Syntax Error";
+                }
+            }
+        };
+    </script>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - STATE & UI ENGINE */
+        (function() {
+            let state = {
+                expr: "",
+                ans: 0,
+                memory: 0,
+                isDeg: true,
+                solved: false
+            };
+            window.calcHistory = []; // The Tape
+
+            function setScreen(id, val) {
+                const el = document.getElementById(id);
+                if (el) el.innerText = val;
+            }
+
+            // ✅ LISTENER: Jab dubara open ho, to reset karo
+            window.addEventListener('qs-tool-opened', function(e) {
+                if (e.detail && (e.detail.tool === 'scientific.js' || e.detail.tool === 'scientific_suite/scientific.js')) {
+                    console.log("Scientific Reset");
+                    state.expr = "";
+                    state.solved = false;
+                    setScreen('sci-screen-result', "0");
+                    setScreen('sci-screen-expr', "");
+                }
+            });
+
+            // Standalone Boot (For Direct MPA Load)
+            document.addEventListener('DOMContentLoaded', () => {
+                setScreen('sci-screen-result', "0");
+                setScreen('sci-screen-expr', "");
+            });
+
+            window.sciIn = function(v) {
+                // Null Check (Zaroori hai)
+                if (!document.getElementById('sci-screen-result')) return;
+                
+                if (state.solved && /[\d\.]/.test(v)) state.expr = "";
+                state.solved = false;
+                state.expr += v;
+                render();
+                if(window.doHaptic) window.doHaptic();
+            };
+
+            window.sciAC = function() {
+                state.expr = "";
+                setScreen('sci-screen-result', "0");
+                state.solved = false;
+                render();
+                if(window.doHaptic) window.doHaptic();
+            };
+
+            window.sciDel = function() {
+                state.expr = state.expr.slice(0, -1);
+                render();
+                if(window.doHaptic) window.doHaptic();
+            };
+
+            window.sciSolve = function() {
+                if (!state.expr) return;
+                const result = window.MathCore.solve(state.expr, state.isDeg);
+                setScreen('sci-screen-result', result);
+                
+                // 🚀 HISTORY TAPE LOGIC
+                if (typeof result === 'number' && !isNaN(result)) {
+                    if(window.calcHistory.length === 0 || window.calcHistory[0].expr !== state.expr) {
+                        window.calcHistory.unshift({ expr: state.expr, res: result });
+                        if(window.calcHistory.length > 10) window.calcHistory.pop();
+                        updateHistoryMenu();
+                    }
+                    state.ans = result;
+                }
+                state.solved = true;
+                if(window.doHaptic) window.doHaptic();
+            };
+
+            window.sciM = function(a) {
+                const el = document.getElementById('sci-screen-result');
+                if(!el) return;
+                let c = parseFloat(el.innerText) || 0;
+                if(a==='MC') state.memory=0;
+                if(a==='MR') window.sciIn(state.memory.toString());
+                if(a==='M+') state.memory+=c;
+                if(a==='M-') state.memory-=c;
+                const ind = document.getElementById('sci-mem-ind');
+                if(ind) ind.style.display = state.memory?'inline':'none';
+                if(window.doHaptic) window.doHaptic();
+            };
+
+            window.sciToggleDR = function() {
+                state.isDeg = !state.isDeg;
+                setScreen('sci-screen-deg', state.isDeg?"DEG":"RAD");
+                // Update ARIA label dynamically for screen readers
+                const degBtn = document.getElementById('sci-screen-deg');
+                if(degBtn) degBtn.setAttribute('aria-label', `Current Mode: ${state.isDeg ? 'Degrees' : 'Radians'}. Tap to toggle.`);
+                
+                const b = document.getElementById('btn-deg-rad');
+                if(b) b.innerText = state.isDeg?"DEG":"RAD"; 
+                if(window.doHaptic) window.doHaptic();
+            };
+
+            function render() { setScreen('sci-screen-expr', state.expr); }
+
+            // 🚀 POPUP MENU LOGIC
+            window.toggleSciMenu = function(menuId) {
+                ['sci-const-menu', 'sci-history-menu'].forEach(id => {
+                    if(id !== menuId) document.getElementById(id).classList.remove('active');
+                });
+                document.getElementById(menuId).classList.toggle('active');
+                if(window.doHaptic) window.doHaptic();
+            };
+
+            window.insertConst = function(val) {
+                window.sciIn(val);
+                document.getElementById('sci-const-menu').classList.remove('active');
+            };
+
+            window.loadHistoryItem = function(expr) {
+                window.sciAC();
+                for(let char of expr) { window.sciIn(char); }
+                document.getElementById('sci-history-menu').classList.remove('active');
+            };
+
+            function updateHistoryMenu() {
+                const menu = document.getElementById('sci-history-menu');
+                menu.innerHTML = window.calcHistory.map(item =>
+                    `<button class="pop-item" onclick="loadHistoryItem('${item.expr.replace(/'/g, "\\'")}')">
+                        ${item.expr} <br><span>= ${item.res}</span>
+                    </button>`
+                ).join('');
+            }
+        })();
+    </script>
+    
+<script>
+    /* QUICKSOLVE PLATINUM - ADVANCED VOICE ENGINE (WITH LIVE TYPING & CONSTANTS) */
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let voiceRecog;
+    let isMicActive = false;
+    let lastResultStr = "0"; 
+
+    if (SpeechRecognition) {
+        voiceRecog = new SpeechRecognition();
+        voiceRecog.continuous = false; 
+        voiceRecog.interimResults = true; // 🚀 LIVE TYPING ACTIVATED
+        voiceRecog.lang = 'en-IN'; 
+
+        voiceRecog.onstart = function() {
+            isMicActive = true;
+            let micBtn = document.getElementById('voice-calc-btn');
+            micBtn.classList.add('listening');
+            micBtn.setAttribute('aria-pressed', 'true'); 
+            
+            lastResultStr = document.getElementById('sci-screen-result').innerText;
+            document.getElementById('sci-screen-result').style.color = "#94a3b8";
+            setScreen('sci-screen-result', "Listening... ✍️");
+            if(window.doHaptic) window.doHaptic();
+        };
+
+        voiceRecog.onresult = function(event) {
+            let interimTranscript = '';
+            let finalTranscript = '';
+
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript.toLowerCase();
+                } else {
+                    interimTranscript += event.results[i][0].transcript.toLowerCase();
+                }
+            }
+
+            // Show LIVE typing
+            if (interimTranscript) {
+                document.getElementById('sci-screen-result').innerText = interimTranscript + " ✍️";
+            }
+
+            // Process Final
+            if (finalTranscript) {
+                document.getElementById('sci-screen-result').style.color = "#fff";
+                console.log("User said:", finalTranscript);
+                processVoiceCommand(finalTranscript);
+            }
+        };
+
+        voiceRecog.onerror = function(event) {
+            document.getElementById('sci-screen-result').style.color = "#fff";
+            setScreen('sci-screen-result', "Mic Error");
+            stopVoiceCalc();
+        };
+
+        voiceRecog.onend = function() {
+            stopVoiceCalc();
+        };
+    } else {
+        console.warn("Speech Recognition browser mein support nahi karta bro.");
+    }
+
+    function toggleVoiceCalc() {
+        if (!SpeechRecognition) return;
+        if (isMicActive) voiceRecog.stop(); else voiceRecog.start();
+    }
+
+    function stopVoiceCalc() {
+        isMicActive = false;
+        let micBtn = document.getElementById('voice-calc-btn');
+        micBtn.classList.remove('listening');
+        micBtn.setAttribute('aria-pressed', 'false'); 
+        
+        const resScreen = document.getElementById('sci-screen-result');
+        if(resScreen.innerText.includes("Listening...")) {
+            resScreen.style.color = "#fff";
+            resScreen.innerText = lastResultStr;
+        }
+    }
+    
+    function processVoiceCommand(text) {
+        let processedText = text.toLowerCase();
+
+        const numberDict = {
+            '0': ['zero', 'shunya', 'shunye'], '1': ['one', 'ek'], '2': ['two', 'do', 'tu'],
+            '3': ['three', 'teen'], '4': ['four', 'chaar', 'char'], '5': ['five', 'paanch', 'panch'],
+            '6': ['six', 'che', 'chah'], '7': ['seven', 'saat', 'sat'], '8': ['eight', 'aath', 'ath'],
+            '9': ['nine', 'nau', 'no'], '10': ['ten', 'das']
+        };
+
+        for (let [digit, words] of Object.entries(numberDict)) {
+            words.forEach(word => {
+                let regex = new RegExp('\\b' + word + '\\b', 'gi');
+                processedText = processedText.replace(regex, digit);
+            });
+        }
+
+        const mathDict = {
+            // 🚀 NEW: 20 OP PHYSICS & CHEMISTRY CONSTANTS
+            '299792458': ['speed of light', 'light speed', 'c value'],
+            '6.626×10^(-34)': ['planck constant', 'planck', 'h value', 'plancks constant'],
+            '6.022×10^(23)': ['avogadro number', 'avogadro', 'avogadros number', 'avogadro constant'],
+            '6.674×10^(-11)': ['gravitational constant', 'gravity constant', 'capital g'],
+            '1.602×10^(-19)': ['elementary charge', 'charge of electron', 'e value physics', 'electron charge'],
+            '9.109×10^(-31)': ['electron mass', 'mass of electron', 'm e'],
+            '1.672×10^(-27)': ['proton mass', 'mass of proton', 'm p'],
+            '1.674×10^(-27)': ['neutron mass', 'mass of neutron', 'm n'],
+            '96485': ['faraday constant', 'faraday', 'f value'],
+            '8.314': ['gas constant', 'universal gas constant', 'r value', 'capital r'],
+            '1.380×10^(-23)': ['boltzmann constant', 'boltzmann', 'k value'],
+            '5.670×10^(-8)': ['stefan boltzmann constant', 'stefan constant', 'sigma value'],
+            '1.097×10^(7)': ['rydberg constant', 'rydberg', 'r infinity'],
+            '8.854×10^(-12)': ['vacuum permittivity', 'permittivity of free space', 'epsilon not'],
+            '1.256×10^(-6)': ['vacuum permeability', 'permeability of free space', 'mu not'],
+            '5.291×10^(-11)': ['bohr radius', 'bohr', 'a not'],
+            '2.897×10^(-3)': ['wien displacement constant', 'wien constant', 'b value wien'],
+            '1.660×10^(-27)': ['atomic mass unit', 'a m u', 'amu'],
+            '9.80665': ['standard gravity', 'small g', 'acceleration due to gravity'],
+            '101325': ['atmospheric pressure', 'one a t m', 'standard pressure', 'atm pressure'],
+
+            // Normal Operators & Functions
+            'asin(': ['sin inverse', 'inverse sine', 'arc sine', 'a sin'],
+            'acos(': ['cos inverse', 'inverse cos', 'arc cos', 'a cos'],
+            'atan(': ['tan inverse', 'inverse tan', 'arc tan', 'a tan'],
+            'sin(': ['sine', 'sign', 'sin', 'seen'],
+            'cos(': ['cos', 'cosine', 'cause'],
+            'tan(': ['tan', 'tangent', 'ten'],
+            'log(': ['log', 'logarithm', 'base ten log'],
+            'ln(': ['natural log', 'l n', 'el en'],
+            '10^(': ['ten to the power', 'ten power', 'ten raise to'],
+            'e^(': ['e to the power', 'e power', 'exponential of'],
+            '^2': ['square', 'squared', 'ka square'],
+            '^3': ['cube', 'cubed', 'ka cube'],
+            '^': ['raise to the power', 'to the power', 'power', 'raise to', 'ki power'],
+            'sqrt(': ['square root', 'root', 'under root'],
+            'rt(': ['y root', 'any root', 'nth root'],
+            '!': ['factorial'],
+            'nCr': ['combination', 'ncr', 'n c r'],
+            'nPr': ['permutation', 'npr', 'n p r'],
+            'abs(': ['absolute', 'magnitude', 'modulus of'], 
+            'mod': ['modulo', 'remainder', 'mod'],
+            'floor(': ['floor', 'round down', 'lowest integer'],
+            'ceil(': ['ceil', 'ceiling', 'round up'],
+            '(': ['open bracket', 'bracket open', 'start bracket'],
+            ')': ['close bracket', 'bracket close', 'end bracket'],
+            'AC': ['clear', 'all clear', 'reset', 'delete all'],
+            'DEL': ['delete', 'backspace', 'remove', 'piche'],
+            '%': ['percent', 'percentage'],
+            'π': ['pi', 'pie', 'pai'],
+            'e': ['eular', 'euler', 'constant e','exponential'],
+            '.': ['point', 'dot', 'decimal'],
+            '+': ['plus', 'add', 'and', 'jod', 'plus'],
+            '−': ['minus', 'subtract', 'sub', 'ghata'],
+            '×': ['multiply', 'into', 'times', 'x', 'guna', 'gunna', 'multiplied by'],
+            '÷': ['divide', 'by', 'over', 'upon', 'bhag', 'bhaag', 'divided by'],
+            '=': ['equal', 'equals', 'solve', 'result', 'answer', 'is', 'gives', 'batao']
+        };
+
+        for (let [symbol, words] of Object.entries(mathDict)) {
+            words.forEach(word => {
+                let regex = new RegExp('\\b' + word + '\\b', 'gi');
+                processedText = processedText.replace(regex, ' ' + symbol + ' '); 
+            });
+        }
+
+        processedText = processedText.replace(/\s+/g, '');
+
+        let validationString = processedText
+            .replace(/[0-9\+\-\×\÷\^\.\(\)\=\!\%]/g, '') 
+            .replace(/asin|acos|atan|sin|cos|tan|log|ln|sqrt|rt|abs|mod|floor|ceil|nCr|nPr|π|e|AC|DEL/g, '');
+
+        if (validationString.length > 0) {
+            const resScreen = document.getElementById('sci-screen-result');
+            resScreen.innerText = "Invalid Input";
+            resScreen.style.color = "#ef4444"; 
+            setTimeout(() => { resScreen.style.color = "#fff"; }, 1500); 
+            stopVoiceCalc();
+            return;
+        }
+
+        processedText = processedText.replace(/(asin\(|acos\(|atan\(|sin\(|cos\(|tan\(|log\(|ln\(|sqrt\(|abs\(|floor\(|ceil\()(\d+(\.\d+)?)([\+\-\×\÷\^\%])/g, '$1$2)$4');
+
+        let i = 0;
+        const funcsToType = [
+            'asin(', 'acos(', 'atan(', 'sin(', 'cos(', 'tan(', 
+            '10^(', 'e^(', 'log(', 'ln(', 'sqrt(', 'rt(', 
+            'abs(', 'floor(', 'ceil(', 'nCr', 'nPr', 'mod', 'AC', 'DEL'
+        ];
+
+        while (i < processedText.length) {
+            let matchedMultiChar = false;
+            
+            for (let f of funcsToType) {
+                if (processedText.substring(i).startsWith(f)) {
+                    if (f === 'AC') window.sciAC();
+                    else if (f === 'DEL') window.sciDel();
+                    else window.sciIn(f); 
+                    
+                    i += f.length; matchedMultiChar = true; break;
+                }
+            }
+
+            if (!matchedMultiChar) {
+                let char = processedText[i];
+                if (char === '=') { window.sciSolve(); } 
+                else if (char === '^') {
+                    if (processedText[i+1] === '2') { window.sciIn('^2'); i+=2; continue; }
+                    else if (processedText[i+1] === '3') { window.sciIn('^3'); i+=2; continue; }
+                    else { window.sciIn('^'); }
+                } else { window.sciIn(char); }
+                i++;
+            }
+        }
+        
+        if (!processedText.includes('=')) {
+            setTimeout(() => { window.sciSolve(); }, 300);
+        }
+    }
+</script>
+</body>
+</html>

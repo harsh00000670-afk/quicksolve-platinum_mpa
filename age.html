@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+    <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
+
+    <title>Chronos Age Suite | Life Pulse & Milestones | QuickSolve Platinum</title>
+    <meta name="description" content="Advanced age calculators, real-time life pulse, cosmic planet age, biological pet years, and retirement countdowns. Master your time with QuickSolve Platinum.">
+    <meta name="keywords" content="age calculator, life pulse, 1 billion seconds old, exact age calculator, planet age calculator, retirement countdown, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/age.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Chronos Age Suite - Decode Your Timeline">
+    <meta property="og:description" content="Track your exact life progress, cosmic age, and ultimate milestones in real-time.">
+    <meta property="og:image" content="logo.png">
+    
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - DESIGN PRESERVED */
+        :root {
+            --bg-body: #09090b;
+            --card-bg: #1e293b;
+            --border-subtle: #334155;
+            --text-main: #f4f4f5;
+            --text-sub: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-gold: #f59e0b;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-orange: #f97316;
+        }
+
+        body { margin: 0; background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        /* 🚀 STAGGERED FLY-IN ENGINE */
+        .anim-card {
+            opacity: 0; transform: scale(0.95) translateY(20px);
+            animation: flyIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            will-change: transform, opacity;
+        }
+        @keyframes flyIn { to { opacity: 1; transform: scale(1) translateY(0); } }
+
+        .d-1 { animation-delay: 0.05s; } .d-2 { animation-delay: 0.1s; }
+        .d-3 { animation-delay: 0.15s; } .d-4 { animation-delay: 0.2s; }
+        .d-5 { animation-delay: 0.25s; } .d-6 { animation-delay: 0.3s; }
+        .d-7 { animation-delay: 0.35s; }
+
+        /* PLATINUM HORIZONTAL CARDS */
+        .tools-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 15px; }
+        
+        .tool-card {
+            background: var(--card-bg); border-radius: 16px; padding: 20px;
+            border: 1px solid var(--border-subtle); display: flex; align-items: flex-start; gap: 15px;
+            text-decoration: none; color: inherit; transition: 0.3s; position: relative; overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .tool-card:active { transform: scale(0.96); background: #0f172a; }
+        
+        .tc-icon-wrap {
+            width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; flex-shrink: 0; background: rgba(255,255,255,0.03);
+        }
+        
+        .tc-info { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+        .tc-title { font-size: 1.05rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .tc-desc { font-size: 0.8rem; color: var(--text-sub); line-height: 1.4; font-weight: 500; }
+        
+        .badge {
+            font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 900; letter-spacing: 0.5px;
+            font-family: 'JetBrains Mono', monospace; text-transform: uppercase;
+        }
+        
+        /* Thematic Card Styles */
+        .c-pink .tc-icon-wrap { color: var(--accent-pink); background: rgba(236, 72, 153, 0.1); }
+        .c-pink .badge { background: rgba(236, 72, 153, 0.2); color: var(--accent-pink); }
+        .c-pink:active { border-color: var(--accent-pink); }
+
+        .c-purple .tc-icon-wrap { color: var(--accent-purple); background: rgba(139, 92, 246, 0.1); }
+        .c-purple .badge { background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); }
+        .c-purple:active { border-color: var(--accent-purple); }
+
+        .c-blue .tc-icon-wrap { color: var(--accent-blue); background: rgba(56, 189, 248, 0.1); }
+        .c-blue .badge { background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); }
+        .c-blue:active { border-color: var(--accent-blue); }
+
+        .c-green .tc-icon-wrap { color: var(--accent-green); background: rgba(16, 185, 129, 0.1); }
+        .c-green .badge { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .c-green:active { border-color: var(--accent-green); }
+
+        .c-gold .tc-icon-wrap { color: var(--accent-gold); background: rgba(245, 158, 11, 0.1); }
+        .c-gold .badge { background: rgba(245, 158, 11, 0.2); color: var(--accent-gold); }
+        .c-gold:active { border-color: var(--accent-gold); }
+
+        .c-orange .tc-icon-wrap { color: var(--accent-orange); background: rgba(249, 115, 22, 0.1); }
+        .c-orange .badge { background: rgba(249, 115, 22, 0.2); color: var(--accent-orange); }
+        .c-orange:active { border-color: var(--accent-orange); }
+
+        .tc-arrow { color: var(--border-subtle); font-size: 1rem; align-self: center; transition: 0.3s; }
+        .tool-card:active .tc-arrow { color: var(--text-main); transform: translateX(3px); }
+        
+        .section-divider {
+            color: var(--text-sub); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; 
+            letter-spacing: 2px; margin: 30px 0 10px 5px; display: flex; align-items: center; gap: 8px;
+        }
+        .section-divider div { flex: 1; height: 1px; background: var(--border-subtle); opacity: 0.5; }
+    </style>
+</head>
+<body>
+    <main role="main" aria-label="Chronos Age Suite Dashboard">
+        <header class="app-header" style="position: sticky; top: 0; z-index: 100; background: rgba(9, 9, 11, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-subtle); padding: 15px 20px; display: flex; align-items: center;" role="banner">
+            <a href="index.html" class="qs-back-btn icon-btn" aria-label="Go Back to Home" style="color: var(--text-main); margin-right: 15px; text-decoration: none; font-size: 1.4rem; transition: 0.2s;">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            </a>
+            <div class="brand" style="margin-right: auto; color: var(--accent-purple); font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px;">
+                <i class="fas fa-hourglass-half" aria-hidden="true"></i> Age Suite
+            </div>
+        </header>
+
+        <section style="padding: 20px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+            
+            <div class="hero anim-card d-1" style="text-align: center; margin-bottom: 25px;">
+                <h2 style="margin: 0; font-size: 2rem; background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;">Age & Timeline</h2>
+                <p style="color: var(--text-sub); font-size: 0.85rem; margin-top: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">> decode --life_pulse --realtime</p>
+            </div>
+            
+            <div class="section-divider anim-card d-2">
+                <i class="fas fa-heartbeat" style="color:var(--accent-pink);"></i> Core Timeline
+                <div></div>
+            </div>
+            
+            <nav class="tools-grid" aria-label="Core Timeline Tools">
+                <a href="age_suites/life_pulse.html" class="tool-card c-pink anim-card d-3">
+                    <div class="tc-icon-wrap"><i class="fas fa-fingerprint"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">The Life Pulse <span class="badge">LIVE</span></div>
+                        <div class="tc-desc">Track your exact age in years, breaths, and heartbeats in real-time.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+                
+                <a href="age_suites/milestones.html" class="tool-card c-purple anim-card d-4">
+                    <div class="tc-icon-wrap"><i class="fas fa-trophy"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Milestone Tracker <span class="badge">GOAL</span></div>
+                        <div class="tc-desc">Countdowns to your 10,000th day, 1 billion seconds, and epic milestones.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+                
+                <a href="age_suites/cosmic_age.html" class="tool-card c-blue anim-card d-5">
+                    <div class="tc-icon-wrap"><i class="fas fa-meteor"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Cosmic Planet Age <span class="badge">SPACE</span></div>
+                        <div class="tc-desc">Find out your exact age and next birthday on Mars, Jupiter, and beyond.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+            </nav>
+
+            <div class="section-divider anim-card d-6">
+                <i class="fas fa-dna" style="color:var(--accent-green);"></i> Biology & Trivia
+                <div></div>
+            </div>
+            
+            <nav class="tools-grid" aria-label="Biology and Trivia Tools">
+                <a href="age_suites/bio_pet.html" class="tool-card c-green anim-card d-7">
+                    <div class="tc-icon-wrap"><i class="fas fa-paw"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Pet & Heart Age <span class="badge">BIO</span></div>
+                        <div class="tc-desc">Convert your age to dog/cat years and calculate biological aging.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+                
+                <a href="age_suites/zodiac_trivia.html" class="tool-card c-gold anim-card d-8">
+                    <div class="tc-icon-wrap"><i class="fas fa-star-and-crescent"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Zodiac & Trivia <span class="badge">FUN</span></div>
+                        <div class="tc-desc">Discover your generation, birthstone, Chinese zodiac, and birth phase.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+            </nav>
+
+            <div class="section-divider anim-card d-9">
+                <i class="fas fa-briefcase" style="color:var(--accent-orange);"></i> Life Planner
+                <div></div>
+            </div>
+            
+            <nav class="tools-grid" aria-label="Life Planning Tools">
+                <a href="age_suites/pro_legal.html" class="tool-card c-orange anim-card d-10">
+                    <div class="tc-icon-wrap"><i class="fas fa-user-tie"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Pro / Legal Limits <span class="badge">PRO</span></div>
+                        <div class="tc-desc">Check worldwide legal ages for driving, voting, and retirement countdown.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+            </nav>
+
+        </section>
+    </main>
+</body>
+</html>

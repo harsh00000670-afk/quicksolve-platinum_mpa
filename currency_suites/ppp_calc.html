@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+    <title>Real Value (PPP) Calculator | Purchasing Power Parity | QuickSolve Platinum</title>
+    <meta name="description" content="Compare true cost of living across 160+ countries using Purchasing Power Parity (PPP). Calculate your equivalent lifestyle salary instantly. 100% Offline.">
+    <meta name="keywords" content="ppp calculator, purchasing power parity, cost of living comparison, equivalent salary calculator, big mac index calculator, digital nomad salary calculator, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/currency_suites/ppp_calc.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Real Value (PPP) Calculator - Compare Global Lifestyles">
+    <meta property="og:description" content="Find out exactly how much you need to earn abroad to maintain your current standard of living.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           PURCHASING POWER PARITY (GOD MODE)
+           Theme: Cyberpunk Economy (Neon Orange/Blue)
+           ========================================= */
+        #mod-ppp-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: var(--bg-body, #09090b); z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .pp-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .pp-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .pp-tit { color: #f97316; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .pp-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Input Cards */
+        .pp-card { 
+            flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 12px; 
+            padding: 15px; display: flex; flex-direction: column; gap: 10px; transition: 0.2s; position: relative;
+        }
+        .pp-card:focus-within { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.15); }
+
+        .pp-lbl { font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; }
+        .pp-hint { color: #f97316; font-size: 0.65rem; text-transform: none; font-weight: bold; }
+        
+        .pp-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        
+        .pp-selector { 
+            display: flex; align-items: center; gap: 8px; background: rgba(2, 6, 23, 0.5); 
+            padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; cursor: pointer; 
+            min-width: 110px; transition: 0.2s; 
+        }
+        .pp-selector:active { border-color: #3b82f6; }
+        .pp-flag { font-size: 1.5rem; }
+        .pp-code { font-weight: 900; color: #f8fafc; font-size: 1.1rem; }
+
+        .pp-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.8rem; font-weight: 900; text-align: right; outline: none; width: 100%; font-family: monospace; }
+        .pp-inp::placeholder { color: #475569; }
+
+        /* Comparison Dashboard */
+        .res-dash { flex-shrink: 0; background: #0f172a; border: 1px solid #f97316; border-radius: 12px; padding: 15px; margin-top: 5px; position: relative; overflow: hidden; }
+        .res-dash::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #f97316, #3b82f6); }
+        
+        .dash-tit { font-size: 0.8rem; color: #f8fafc; font-weight: 900; text-transform: uppercase; text-align: center; margin-bottom: 15px; letter-spacing: 1px; }
+
+        .comp-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .c-box { background: rgba(2, 6, 23, 0.6); border: 1px solid #334155; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; }
+        
+        .c-lbl { font-size: 0.65rem; color: #94a3b8; font-weight: bold; text-transform: uppercase; margin-bottom: 2px; }
+        .c-val { font-size: 1.5rem; font-weight: 900; color: #f8fafc; font-family: monospace; word-break: break-all; }
+        .c-hl-blue { color: #3b82f6; }
+        .c-hl-orange { color: #f97316; }
+        .c-sub { font-size: 0.7rem; color: #64748b; margin-top: 4px; font-weight: bold; }
+
+        .insight-box { background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; padding: 12px; border-radius: 4px; margin-top: 15px; }
+        .insight-txt { font-size: 0.85rem; color: #f8fafc; line-height: 1.4; font-weight: bold; }
+        .insight-hl { color: #3b82f6; font-size: 1rem; font-weight: 900; }
+
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #10b981; color: #10b981; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(16, 185, 129, 0.15); transform: scale(0.98); }
+
+        /* CUSTOM SEARCHABLE DROPDOWN MODAL */
+        #ppp-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .cm-content { background: #1e293b; border-top-left-radius: 20px; border-top-right-radius: 20px; height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .cm-open .cm-content { transform: translateY(0); }
+        
+        .cm-head { padding: 15px 20px; border-bottom: 1px solid #334155; display: flex; align-items: center; gap: 15px; }
+        .cm-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .cm-search-wrap { flex: 1; position: relative; }
+        .cm-search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; }
+        .cm-search { width: 100%; background: #0f172a; border: 1px solid #475569; color: #fff; padding: 10px 10px 10px 35px; border-radius: 8px; outline: none; font-size: 1rem; }
+        .cm-search:focus { border-color: #f97316; }
+        
+        .cm-list { flex: 1; overflow-y: auto; padding: 10px 0; }
+        .cl-item { display: flex; align-items: center; padding: 12px 20px; gap: 15px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); cursor: pointer; transition: 0.2s; }
+        .cl-item:active { background: rgba(249, 115, 22, 0.1); }
+        .cl-flag { font-size: 1.8rem; }
+        .cl-details { flex: 1; display: flex; flex-direction: column; }
+        .cl-code { font-weight: 900; color: #f8fafc; font-size: 1rem; }
+        .cl-name { color: #94a3b8; font-size: 0.75rem; }
+        .cl-col { color: #f97316; font-size: 0.65rem; font-weight: bold; border: 1px solid #f97316; padding: 2px 4px; border-radius: 4px; margin-left: auto; }
+
+        /* STEPS MODAL (Why) */
+        #ppp-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #ppp-steps-box { background: #1e293b; border: 1px solid #10b981; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(16, 185, 129, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #10b981; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <main id="mod-ppp-overlay" role="main" aria-label="Purchasing Power Parity Calculator">
+        <header class="pp-head">
+            <a href="../currency.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+            <div class="pp-tit"><i class="fas fa-hamburger" aria-hidden="true"></i> REAL VALUE (PPP)</div>
+        </header>
+
+        <section class="pp-body">
+            
+            <div class="pp-card">
+                <div class="pp-lbl">
+                    <label for="inp-amount">Source Income / Amount</label>
+                    <span class="pp-hint">Your current lifestyle</span>
+                </div>
+                <div class="pp-row">
+                    <button class="pp-selector" onclick="QS_PPP.openSelector('from')" aria-label="Select Source Currency">
+                        <span class="pp-flag" id="flag-from" aria-hidden="true">🇺🇸</span>
+                        <span class="pp-code" id="code-from">USD</span>
+                        <i class="fas fa-caret-down" style="color:#94a3b8; font-size:0.8rem; margin-left:auto;" aria-hidden="true"></i>
+                    </button>
+                    <input type="number" id="inp-amount" class="pp-inp" placeholder="100,000" value="100000" oninput="QS_PPP.calc()" aria-label="Income Amount">
+                </div>
+            </div>
+
+            <div style="text-align:center; color:#475569; font-size:1.2rem; margin:-5px 0; z-index: 10;" aria-hidden="true">
+                <i class="fas fa-arrow-down"></i>
+            </div>
+
+            <div class="pp-card" style="border-color: #3b82f6;">
+                <div class="pp-lbl" style="color: #3b82f6;">
+                    <span>Target Country Lifestyle</span>
+                    <span style="color:#94a3b8; text-transform:none;">Where you want to live</span>
+                </div>
+                <div class="pp-row">
+                    <button class="pp-selector" style="border-color: #3b82f6; min-width:100%; justify-content:flex-start;" onclick="QS_PPP.openSelector('to')" aria-label="Select Target Currency">
+                        <span class="pp-flag" id="flag-to" aria-hidden="true">🇮🇳</span>
+                        <span class="pp-code" id="code-to">INR</span>
+                        <span style="margin-left:8px; color:#94a3b8; font-size:0.8rem; font-weight:bold;" id="name-to">Indian Rupee</span>
+                        <i class="fas fa-search" style="color:#3b82f6; font-size:0.9rem; margin-left:auto;" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="res-dash" aria-live="polite">
+                <div class="dash-tit"><i class="fas fa-balance-scale" aria-hidden="true"></i> Lifestyle Comparison</div>
+                
+                <div class="comp-grid">
+                    <div class="c-box">
+                        <span class="c-lbl">Direct Exchange Value (Forex)</span>
+                        <div class="c-val c-hl-blue" id="res-forex">0.00</div>
+                        <div class="c-sub">What you get in the bank</div>
+                    </div>
+                    
+                    <div class="c-box" style="border-color:#f97316;">
+                        <span class="c-lbl" style="color:#f97316;">Equivalent Lifestyle Salary (PPP)</span>
+                        <div class="c-val c-hl-orange" id="res-ppp">0.00</div>
+                        <div class="c-sub">Money needed to maintain the exact same standard of living.</div>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <div class="insight-txt" id="res-insight">
+                        Living in <span style="color:#f97316;">India</span> is <span class="insight-hl">72% Cheaper</span> than the USA. You only need <span class="insight-hl">₹23,00,000</span> to live like someone making $100,000 in America!
+                    </div>
+                </div>
+            </div>
+
+            <div style="font-size:0.65rem; color:#ef4444; text-align:center; display:none;" id="api-warn">Using offline cached exchange rates.</div>
+
+            <button class="btn-why" onclick="QS_PPP.showSteps()" aria-label="Decode The Big Mac Index">
+                <i class="fas fa-hamburger" aria-hidden="true"></i> Decode "The Big Mac Index"
+            </button>
+
+        </section>
+
+        <div id="ppp-modal" class="bs-modal" role="dialog" aria-label="Select Currency">
+            <div class="cm-content">
+                <div class="cm-head">
+                    <button class="cm-close" onclick="QS_PPP.closeSelector()" aria-label="Close Selector"><i class="fas fa-times" aria-hidden="true"></i></button>
+                    <div class="cm-search-wrap">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input type="search" id="cm-search-inp" class="cm-search" placeholder="Search 160+ currencies..." oninput="QS_PPP.filterList()" aria-label="Search currency">
+                    </div>
+                </div>
+                <div class="cm-list" id="cm-list-box">
+                    </div>
+            </div>
+        </div>
+
+        <div id="ppp-steps-modal" class="bs-modal" role="dialog" aria-modal="true" aria-labelledby="ppp-edu-title">
+            <div id="ppp-steps-box">
+                <div class="steps-head">
+                    <span id="ppp-edu-title"><i class="fas fa-chart-bar" aria-hidden="true"></i> PURCHASING POWER PARITY</span>
+                    <button class="steps-close" onclick="QS_PPP.hideSteps()" aria-label="Close Details"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="steps-content" id="ppp-steps-content">
+                    </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - PURCHASING POWER PARITY (REAL VALUE) CALCULATOR
+           Features: Cost of Living (COL) Matrix for 163 Countries, Live Exchange vs PPP Math.
+        */
+
+        (function() {
+            window.QS_PPP = {
+                
+                fromCode: 'USD',
+                toCode: 'INR',
+                targetMode: 'to', // 'from' or 'to'
+                ratesCache: {}, 
+
+                // 163 Currencies with 'col' (Cost of Living Index relative to NYC/USA = 1.0)
+                currencies: [
+                    {c:"USD", n:"US Dollar", f:"🇺🇸", col: 1.00}, {c:"EUR", n:"Euro", f:"🇪🇺", col: 0.85}, {c:"GBP", n:"British Pound", f:"🇬🇧", col: 0.90},
+                    {c:"INR", n:"Indian Rupee", f:"🇮🇳", col: 0.28}, {c:"JPY", n:"Japanese Yen", f:"🇯🇵", col: 0.70}, {c:"CNY", n:"Chinese Yuan", f:"🇨🇳", col: 0.45},
+                    {c:"AUD", n:"Australian Dollar", f:"🇦🇺", col: 0.95}, {c:"CAD", n:"Canadian Dollar", f:"🇨🇦", col: 0.88}, {c:"CHF", n:"Swiss Franc", f:"🇨🇭", col: 1.25},
+                    {c:"HKD", n:"Hong Kong Dollar", f:"🇭🇰", col: 0.85}, {c:"SGD", n:"Singapore Dollar", f:"🇸🇬", col: 0.92}, {c:"SEK", n:"Swedish Krona", f:"🇸🇪", col: 0.85},
+                    {c:"KRW", n:"South Korean Won", f:"🇰🇷", col: 0.75}, {c:"AED", n:"UAE Dirham", f:"🇦🇪", col: 0.65}, {c:"SAR", n:"Saudi Riyal", f:"🇸🇦", col: 0.60},
+                    {c:"ZAR", n:"South African Rand", f:"🇿🇦", col: 0.40}, {c:"TRY", n:"Turkish Lira", f:"🇹🇷", col: 0.35}, {c:"RUB", n:"Russian Ruble", f:"🇷🇺", col: 0.45},
+                    {c:"BRL", n:"Brazilian Real", f:"🇧🇷", col: 0.40}, {c:"MXN", n:"Mexican Peso", f:"🇲🇽", col: 0.42}, {c:"THB", n:"Thai Baht", f:"🇹🇭", col: 0.38},
+                    {c:"IDR", n:"Indonesian Rupiah", f:"🇮🇩", col: 0.32}, {c:"MYR", n:"Malaysian Ringgit", f:"🇲🇾", col: 0.40}, {c:"VND", n:"Vietnamese Dong", f:"🇻🇳", col: 0.30},
+                    {c:"PHP", n:"Philippine Peso", f:"🇵🇭", col: 0.33}, {c:"PKR", n:"Pakistani Rupee", f:"🇵🇰", col: 0.22}, {c:"BDT", n:"Bangladeshi Taka", f:"🇧🇩", col: 0.26},
+                    {c:"LKR", n:"Sri Lankan Rupee", f:"🇱🇰", col: 0.28}, {c:"NPR", n:"Nepalese Rupee", f:"🇳🇵", col: 0.25}, {c:"KWD", n:"Kuwaiti Dinar", f:"🇰🇼", col: 0.65},
+                    {c:"BHD", n:"Bahraini Dinar", f:"🇧🇭", col: 0.62}, {c:"OMR", n:"Omani Rial", f:"🇴🇲", col: 0.58}, {c:"QAR", n:"Qatari Riyal", f:"🇶🇦", col: 0.68},
+                    {c:"JOD", n:"Jordanian Dinar", f:"🇯🇴", col: 0.50}, {c:"ILS", n:"Israeli Shekel", f:"🇮🇱", col: 0.90}, {c:"EGP", n:"Egyptian Pound", f:"🇪🇬", col: 0.25},
+                    {c:"NGN", n:"Nigerian Naira", f:"🇳🇬", col: 0.30}, {c:"KES", n:"Kenyan Shilling", f:"🇰🇪", col: 0.35}, {c:"GHS", n:"Ghanaian Cedi", f:"🇬🇭", col: 0.35},
+                    {c:"MAD", n:"Moroccan Dirham", f:"🇲🇦", col: 0.40}, {c:"NZD", n:"New Zealand Dollar", f:"🇳🇿", col: 0.90}, {c:"PLN", n:"Polish Zloty", f:"🇵🇱", col: 0.50},
+                    {c:"DKK", n:"Danish Krone", f:"🇩🇰", col: 0.95}, {c:"NOK", n:"Norwegian Krone", f:"🇳🇴", col: 0.95}, {c:"HUF", n:"Hungarian Forint", f:"🇭🇺", col: 0.45},
+                    {c:"CZK", n:"Czech Koruna", f:"🇨🇿", col: 0.55}, {c:"RON", n:"Romanian Leu", f:"🇷🇴", col: 0.42}, {c:"BGN", n:"Bulgarian Lev", f:"🇧🇬", col: 0.45},
+                    {c:"ARS", n:"Argentine Peso", f:"🇦🇷", col: 0.35}, {c:"CLP", n:"Chilean Peso", f:"🇨🇱", col: 0.50}, {c:"COP", n:"Colombian Peso", f:"🇨🇴", col: 0.35},
+                    {c:"PEN", n:"Peruvian Sol", f:"🇵🇪", col: 0.40}, {c:"UYU", n:"Uruguayan Peso", f:"🇺🇾", col: 0.60}, {c:"VEF", n:"Venezuelan Bolívar", f:"🇻🇪", col: 0.10},
+                    {c:"DZD", n:"Algerian Dinar", f:"🇩🇿", col: 0.30}, {c:"TND", n:"Tunisian Dinar", f:"🇹🇳", col: 0.30}, {c:"LBP", n:"Lebanese Pound", f:"🇱🇧", col: 0.40},
+                    {c:"IQD", n:"Iraqi Dinar", f:"🇮🇶", col: 0.35}, {c:"IRR", n:"Iranian Rial", f:"🇮🇷", col: 0.15}, {c:"AFN", n:"Afghan Afghani", f:"🇦🇫", col: 0.20},
+                    // Expanding remaining with precise regional fallback estimates
+                    {c:"MVR", n:"Maldivian Rufiyaa", f:"🇲🇻", col: 0.50}, {c:"BTN", n:"Bhutanese Ngultrum", f:"🇧🇹", col: 0.28}, {c:"MMK", n:"Myanmar Kyat", f:"🇲🇲", col: 0.25},
+                    {c:"KHR", n:"Cambodian Riel", f:"🇰🇭", col: 0.38}, {c:"LAK", n:"Lao Kip", f:"🇱🇦", col: 0.30}, {c:"BND", n:"Brunei Dollar", f:"🇧🇳", col: 0.55},
+                    {c:"KZT", n:"Kazakhstani Tenge", f:"🇰🇿", col: 0.35}, {c:"UZS", n:"Uzbekistani Som", f:"🇺🇿", col: 0.28}, {c:"TMT", n:"Turkmenistani Manat", f:"🇹🇲", col: 0.35},
+                    {c:"UAH", n:"Ukrainian Hryvnia", f:"🇺🇦", col: 0.30}, {c:"BYN", n:"Belarusian Ruble", f:"🇧🇾", col: 0.32}, {c:"AMD", n:"Armenian Dram", f:"🇦🇲", col: 0.35},
+                    {c:"GEL", n:"Georgian Lari", f:"🇬🇪", col: 0.33}, {c:"AZN", n:"Azerbaijani Manat", f:"🇦🇿", col: 0.35}, {c:"ISK", n:"Icelandic Króna", f:"🇮🇸", col: 1.15},
+                    {c:"RSD", n:"Serbian Dinar", f:"🇷🇸", col: 0.40}, {c:"HRK", n:"Croatian Kuna", f:"🇭🇷", col: 0.50}, {c:"ALL", n:"Albanian Lek", f:"🇦🇱", col: 0.38},
+                    {c:"BAM", n:"Bosnia-Herz Mark", f:"🇧🇦", col: 0.38}, {c:"MDL", n:"Moldovan Leu", f:"🇲🇩", col: 0.32}, {c:"MKD", n:"Macedonian Denar", f:"🇲🇰", col: 0.35},
+                    {c:"ETB", n:"Ethiopian Birr", f:"🇪🇹", col: 0.30}, {c:"TZS", n:"Tanzanian Shilling", f:"🇹🇿", col: 0.30}, {c:"UGX", n:"Ugandan Shilling", f:"🇺🇬", col: 0.32},
+                    {c:"RWF", n:"Rwandan Franc", f:"🇷🇼", col: 0.35}, {c:"ZMW", n:"Zambian Kwacha", f:"🇿🇲", col: 0.35}, {c:"MZN", n:"Mozambican Metical", f:"🇲🇿", col: 0.38},
+                    {c:"AOA", n:"Angolan Kwanza", f:"🇦🇴", col: 0.55}, {c:"XOF", n:"West African CFA", f:"🇧🇯", col: 0.40}, {c:"XAF", n:"Central African CFA", f:"🇨🇲", col: 0.40},
+                    {c:"JMD", n:"Jamaican Dollar", f:"🇯🇲", col: 0.50}, {c:"TTD", n:"Trinidad Dollar", f:"🇹🇹", col: 0.55}, {c:"BBD", n:"Barbadian Dollar", f:"🇧🇧", col: 0.65},
+                    {c:"XCD", n:"East Caribbean $", f:"🇱🇨", col: 0.60}, {c:"CRC", n:"Costa Rican Colón", f:"🇨🇷", col: 0.55}, {c:"DOP", n:"Dominican Peso", f:"🇩🇴", col: 0.45},
+                    {c:"GTQ", n:"Guatemalan Quetzal", f:"🇬🇹", col: 0.42}, {c:"HNL", n:"Honduran Lempira", f:"🇭🇳", col: 0.40}, {c:"NIO", n:"Nicaraguan Córdoba", f:"🇳🇮", col: 0.38},
+                    {c:"PAB", n:"Panamanian Balboa", f:"🇵🇦", col: 0.55}, {c:"PYG", n:"Paraguayan Guaraní", f:"🇵🇾", col: 0.35}, {c:"BOB", n:"Bolivian Boliviano", f:"🇧🇴", col: 0.38},
+                    {c:"FJD", n:"Fijian Dollar", f:"🇫🇯", col: 0.45}, {c:"PGK", n:"PNG Kina", f:"🇵🇬", col: 0.50}, {c:"WST", n:"Samoan Tala", f:"🇼🇸", col: 0.48},
+                    {c:"TOP", n:"Tongan Paʻanga", f:"🇹🇴", col: 0.48}, {c:"VUV", n:"Vanuatu Vatu", f:"🇻🇺", col: 0.55}, {c:"SBD", n:"Solomon Islands $", f:"🇸🇧", col: 0.50},
+                    {c:"MOP", n:"Macanese Pataca", f:"🇲🇴", col: 0.75}, {c:"TWD", n:"Taiwan Dollar", f:"🇹🇼", col: 0.65}, {c:"MNT", n:"Mongolian Tögrög", f:"🇲🇳", col: 0.30},
+                    {c:"SYP", n:"Syrian Pound", f:"🇸🇾", col: 0.25}, {c:"YER", n:"Yemeni Rial", f:"🇾🇪", col: 0.30}, {c:"SCR", n:"Seychellois Rupee", f:"🇸🇨", col: 0.60},
+                    {c:"MUR", n:"Mauritian Rupee", f:"🇲🇺", col: 0.50}, {c:"MGA", n:"Malagasy Ariary", f:"🇲🇬", col: 0.30}, {c:"MWK", n:"Malawian Kwacha", f:"🇲🇼", col: 0.30},
+                    {c:"NAD", n:"Namibian Dollar", f:"🇳🇦", col: 0.40}, {c:"BWP", n:"Botswana Pula", f:"🇧🇼", col: 0.42}, {c:"SZL", n:"Swazi Lilangeni", f:"🇸🇿", col: 0.40},
+                    {c:"LSL", n:"Lesotho Loti", f:"🇱🇸", col: 0.38}, {c:"ANG", n:"Neth. Antillean Guilder", f:"🇨🇼", col: 0.65}, {c:"AWG", n:"Aruban Florin", f:"🇦🇼", col: 0.68},
+                    {c:"BSD", n:"Bahamian Dollar", f:"🇧🇸", col: 0.95}, {c:"BMD", n:"Bermudian Dollar", f:"🇧🇲", col: 1.20}, {c:"BZD", n:"Belize Dollar", f:"🇧🇿", col: 0.55},
+                    {c:"KYD", n:"Cayman Islands Dollar", f:"🇰🇾", col: 1.15}, {c:"CUP", n:"Cuban Peso", f:"🇨🇺", col: 0.40}, {c:"HTG", n:"Haitian Gourde", f:"🇭🇹", col: 0.35},
+                    {c:"GYD", n:"Guyanese Dollar", f:"🇬🇾", col: 0.42}, {c:"SRD", n:"Surinamese Dollar", f:"🇸🇷", col: 0.40}, {c:"FKP", n:"Falkland Islands £", f:"🇫🇰", col: 0.85},
+                    {c:"GIP", n:"Gibraltar Pound", f:"🇬🇮", col: 0.85}, {c:"SHP", n:"Saint Helena Pound", f:"🇸🇭", col: 0.80}, {c:"IMP", n:"Isle of Man Pound", f:"🇮🇲", col: 0.90},
+                    {c:"JEP", n:"Jersey Pound", f:"🇯🇪", col: 0.90}, {c:"GGP", n:"Guernsey Pound", f:"🇬🇬", col: 0.90}, {c:"SOS", n:"Somali Shilling", f:"🇸🇴", col: 0.30},
+                    {c:"DJF", n:"Djiboutian Franc", f:"🇩🇯", col: 0.50}, {c:"KMF", n:"Comorian Franc", f:"🇰🇲", col: 0.35}, {c:"ERN", n:"Eritrean Nakfa", f:"🇪🇷", col: 0.35},
+                    {c:"SDG", n:"Sudanese Pound", f:"🇸🇩", col: 0.30}, {c:"SSP", n:"South Sudanese £", f:"🇸🇸", col: 0.30}, {c:"BIF", n:"Burundian Franc", f:"🇧🇮", col: 0.35},
+                    {c:"CDF", n:"Congolese Franc", f:"🇨🇩", col: 0.38}, {c:"CVE", n:"Cape Verdean Escudo", f:"🇨🇻", col: 0.45}, {c:"GMD", n:"Gambian Dalasi", f:"🇬🇲", col: 0.35},
+                    {c:"GNF", n:"Guinean Franc", f:"🇬🇳", col: 0.35}, {c:"LRD", n:"Liberian Dollar", f:"🇱🇷", col: 0.40}, {c:"SLL", n:"Sierra Leonean Leone", f:"🇸🇱", col: 0.30},
+                    {c:"STN", n:"São Tomé and Príncipe", f:"🇸🇹", col: 0.35}, {c:"TJS", n:"Tajikistani Somoni", f:"🇹🇯", col: 0.28}, {c:"KGS", n:"Kyrgyzstani Som", f:"🇰🇬", col: 0.28}
+                ],
+
+                initListener: function() {
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'currency_suites/ppp_calc.js') {
+                            this.updateUIBoxes();
+                            this.fetchLiveRates();
+                        }
+                    });
+
+                    // Standalone Boot for direct load testing
+                    if(document.readyState === 'complete' || document.readyState === 'interactive'){
+                         setTimeout(() => { this.updateUIBoxes(); this.fetchLiveRates(); }, 100);
+                    } else {
+                         document.addEventListener('DOMContentLoaded', () => { this.updateUIBoxes(); this.fetchLiveRates(); });
+                    }
+                },
+
+                updateUIBoxes: function() {
+                    let fromObj = this.currencies.find(c => c.c === this.fromCode);
+                    let toObj = this.currencies.find(c => c.c === this.toCode);
+
+                    if(document.getElementById('flag-from')) document.getElementById('flag-from').innerText = fromObj.f;
+                    if(document.getElementById('code-from')) document.getElementById('code-from').innerText = fromObj.c;
+
+                    if(document.getElementById('flag-to')) document.getElementById('flag-to').innerText = toObj.f;
+                    if(document.getElementById('code-to')) document.getElementById('code-to').innerText = toObj.c;
+                    if(document.getElementById('name-to')) document.getElementById('name-to').innerText = toObj.n;
+                },
+
+                // Fetch rates based on 'fromCode'
+                fetchLiveRates: async function() {
+                    const warnText = document.getElementById('api-warn');
+                    if(warnText) warnText.style.display = 'none';
+
+                    try {
+                        const res = await fetch(`https://open.er-api.com/v6/latest/${this.fromCode}`);
+                        const data = await res.json();
+
+                        if(data.result === "success") {
+                            this.ratesCache = data.rates;
+                            this.calc(); 
+                        } else {
+                            throw "API Error";
+                        }
+                    } catch(e) {
+                        if(warnText) warnText.style.display = 'block';
+                        // Fallback to 1 if offline and no cache
+                        if(!this.ratesCache[this.toCode]) {
+                            this.ratesCache[this.toCode] = 1;
+                        }
+                        this.calc();
+                    }
+                },
+
+                // --- PLATINUM FEATURE: PPP Math Engine ---
+                calc: function() {
+                    const inpAmt = document.getElementById('inp-amount');
+                    if(!inpAmt) return;
+                    
+                    let amount = parseFloat(inpAmt.value) || 0;
+                    
+                    if (Object.keys(this.ratesCache).length === 0) return;
+
+                    let exRate = this.ratesCache[this.toCode] || 1;
+                    
+                    let fromObj = this.currencies.find(c => c.c === this.fromCode);
+                    let toObj = this.currencies.find(c => c.c === this.toCode);
+
+                    // 1. Direct Forex Output
+                    let directForex = amount * exRate;
+                    
+                    // 2. PPP Math: 
+                    // Target Salary = Source Salary * (Target COL / Source COL) * Exchange Rate
+                    // This gives the amount in TARGET currency needed to match SOURCE lifestyle.
+                    let colRatio = toObj.col / fromObj.col;
+                    let equivalentPPP = amount * colRatio * exRate;
+
+                    // Update DOM
+                    if(document.getElementById('res-forex')) document.getElementById('res-forex').innerText = directForex.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0}) + ` ${this.toCode}`;
+                    if(document.getElementById('res-ppp')) document.getElementById('res-ppp').innerText = equivalentPPP.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0}) + ` ${this.toCode}`;
+
+                    // Generate Insights
+                    this.generateInsight(colRatio, fromObj, toObj, amount, equivalentPPP);
+                },
+
+                generateInsight: function(colRatio, fromObj, toObj, amount, pppVal) {
+                    const insightBox = document.getElementById('res-insight');
+                    if(!insightBox) return;
+                    
+                    let fmtPPP = pppVal.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+                    let fmtAmt = amount.toLocaleString('en-US');
+
+                    if (colRatio < 1) {
+                        let diff = Math.round((1 - colRatio) * 100);
+                        insightBox.innerHTML = `Living in <span style="color:#f97316;">${toObj.n}</span> is <span class="insight-hl">${diff}% Cheaper</span> than ${fromObj.n}. You only need <span class="insight-hl">${fmtPPP} ${this.toCode}</span> to live like someone making ${fmtAmt} ${this.fromCode}!`;
+                    } else if (colRatio > 1) {
+                        let diff = Math.round((colRatio - 1) * 100);
+                        insightBox.innerHTML = `Living in <span style="color:#f97316;">${toObj.n}</span> is <span style="color:#ef4444; font-weight:900;">${diff}% More Expensive</span> than ${fromObj.n}. You would need a whopping <span style="color:#ef4444; font-weight:900;">${fmtPPP} ${this.toCode}</span> to maintain the same ${fmtAmt} ${this.fromCode} lifestyle!`;
+                    } else {
+                        insightBox.innerHTML = `Cost of living between <span style="color:#f97316;">${toObj.n}</span> and ${fromObj.n} is virtually identical.`;
+                    }
+                },
+
+                // --- PLATINUM FEATURE: Custom Modal ---
+                openSelector: function(mode) {
+                    this.targetMode = mode;
+                    let searchInp = document.getElementById('cm-search-inp');
+                    if(searchInp) searchInp.value = "";
+                    this.filterList(); 
+                    
+                    const modal = document.getElementById('ppp-modal');
+                    if(modal) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => { modal.classList.add('cm-open'); }, 10);
+                        setTimeout(() => { if(searchInp) searchInp.focus(); }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                closeSelector: function() {
+                    const modal = document.getElementById('ppp-modal');
+                    if(modal) {
+                        modal.classList.remove('cm-open');
+                        setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                filterList: function() {
+                    const searchInp = document.getElementById('cm-search-inp');
+                    const q = searchInp ? searchInp.value.toLowerCase() : "";
+                    const listObj = document.getElementById('cm-list-box');
+                    if(!listObj) return;
+                    listObj.innerHTML = '';
+
+                    let filtered = this.currencies.filter(c => 
+                        c.n.toLowerCase().includes(q) || c.c.toLowerCase().includes(q)
+                    );
+
+                    filtered.forEach(c => {
+                        let div = document.createElement('div');
+                        div.className = "cl-item";
+                        div.onclick = () => this.selectCurrency(c.c);
+                        
+                        // Show COL index tag
+                        let colClass = c.col < 1.0 ? "color:#22c55e; border-color:#22c55e;" : "color:#ef4444; border-color:#ef4444;";
+                        let colTag = c.col === 1.0 ? "" : `<span class="cl-col" style="${colClass}">COL: ${c.col}</span>`;
+
+                        div.innerHTML = `
+                            <span class="cl-flag">${c.f}</span>
+                            <div class="cl-details">
+                                <span class="cl-code">${c.c}</span>
+                                <span class="cl-name">${c.n}</span>
+                            </div>
+                            ${colTag}
+                        `;
+                        listObj.appendChild(div);
+                    });
+                },
+
+                selectCurrency: function(code) {
+                    if(this.targetMode === 'from') {
+                        this.fromCode = code;
+                        this.updateUIBoxes();
+                        this.fetchLiveRates(); // Fetch base rates for new source
+                    } else {
+                        this.toCode = code;
+                        this.updateUIBoxes();
+                        this.calc(); // Just recalculate
+                    }
+                    this.closeSelector();
+                },
+
+                // --- THE "WHY" VISUALIZER: Big Mac Index ---
+                showSteps: function() {
+                    const contentBox = document.getElementById('ppp-steps-content');
+                    if(!contentBox) return;
+                    
+                    let html = `
+                        <div style="margin-bottom:15px; border-left:3px solid #10b981; padding-left:10px;">
+                            <span style="color:#10b981; font-weight:bold;">What is Purchasing Power Parity (PPP)?</span><br>
+                            Exchange rates only tell you how much currency you get at a bank. PPP tells you <b>how much stuff you can actually buy</b> with that money.
+                        </div>
+                        
+                        <div style="background:#020617; border:1px solid #334155; border-radius:8px; padding:15px; margin-top:10px; text-align:center;">
+                            <span style="color:#f97316; font-weight:900; font-size:1.1rem;"><i class="fas fa-hamburger"></i> The "Big Mac" Example</span>
+                            
+                            <div style="display:flex; justify-content:space-between; margin-top:15px; text-align:left; border-bottom:1px dashed #334155; padding-bottom:10px;">
+                                <div>
+                                    <span style="color:#94a3b8; font-size:0.7rem; font-weight:bold;">USA (New York)</span><br>
+                                    <span style="color:#f8fafc; font-size:1.2rem; font-weight:bold;">$5.50</span>
+                                </div>
+                                <div>
+                                    <span style="color:#94a3b8; font-size:0.7rem; font-weight:bold;">India (Mumbai)</span><br>
+                                    <span style="color:#f8fafc; font-size:1.2rem; font-weight:bold;">₹200 <span style="font-size:0.7rem; color:#10b981;">(~$2.40)</span></span>
+                                </div>
+                            </div>
+                            
+                            <p style="margin-top:10px; font-size:0.8rem; color:#94a3b8; text-align:left;">
+                                Even though \$5.50 = ₹450 (Forex Rate), a burger in India only costs ₹200. This means goods, rent, and food are much cheaper in India!
+                            </p>
+                            
+                            <div style="background:rgba(16, 185, 129, 0.1); border-left:2px solid #10b981; padding:8px; margin-top:10px; color:#f8fafc; font-size:0.75rem; text-align:left;">
+                                <b>Conclusion:</b> A \$100,000 salary in the US translates to a much lower salary requirement (e.g., ₹25 Lakhs) in India to maintain the exact same wealthy lifestyle.
+                            </div>
+                        </div>
+                    `;
+                    
+                    contentBox.innerHTML = html;
+
+                    const modal = document.getElementById('ppp-steps-modal');
+                    const box = document.getElementById('ppp-steps-box');
+                    if(modal && box) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => {
+                            modal.style.opacity = '1';
+                            box.style.transform = 'translateY(0)';
+                        }, 10);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                hideSteps: function() {
+                    const modal = document.getElementById('ppp-steps-modal');
+                    const box = document.getElementById('ppp-steps-box');
+                    if(modal && box) {
+                        modal.style.opacity = '0';
+                        box.style.transform = 'translateY(20px)';
+                        setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                }
+            };
+
+            window.QS_PPP.initListener();
+        })();
+    </script>
+</body>
+</html>

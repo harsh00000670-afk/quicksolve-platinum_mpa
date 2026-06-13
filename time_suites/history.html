@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Time Traveler | Historical Facts | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           TIME TRAVELER - PLATINUM HISTORY (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #020617;
+            --card-bg: #0F172A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent-purple: #a855f7;
+            --accent-purple-glow: rgba(168, 85, 247, 0.3);
+            --accent-gold: #fbbd23;
+            --accent-gold-glow: rgba(251, 189, 35, 0.3);
+            --accent-blue: #38bdf8;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Ambient Glowing Background Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.3; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 200px; height: 200px; background: var(--accent-purple); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-gold); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f2937; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); }
+        .brand { color: var(--accent-purple); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 25px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #a855f7, #fbbd23); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--accent-purple); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* INPUT CONFIG */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px var(--accent-purple-glow);
+        }
+        .sec-lbl { font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
+        
+        .faux-date {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 16px 15px; border-radius: 12px; font-size: 1.1rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; box-sizing: border-box; margin-bottom: 20px;
+        }
+        .faux-date:active { border-color: var(--accent-purple); background: rgba(168, 85, 247, 0.05); transform: scale(0.98);}
+        .faux-date i { color: var(--accent-purple); }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #a855f7, #fbbd23);
+            color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 0.95rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px var(--accent-purple-glow); display: flex; justify-content: center; gap: 8px; align-items: center;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS AREA */
+        #results-container { display: none; }
+        
+        .res-main-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(251, 189, 35, 0.3); border-radius: 20px; 
+            padding: 25px 20px; margin-bottom: 20px; box-shadow: 0 10px 40px var(--accent-gold-glow); text-align: center;
+        }
+        .res-day { font-size: 3.5rem; font-weight: 900; color: var(--accent-gold); margin: 10px 0; text-transform: uppercase; letter-spacing: -2px; }
+        .res-date-full { font-family: 'JetBrains Mono', monospace; color: var(--text-main); font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;}
+        
+        .timeline-box {
+            background: rgba(0,0,0,0.3); border: 1px dashed var(--accent-purple); border-radius: 12px;
+            padding: 15px; margin: 20px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--text-sub);
+            line-height: 1.5;
+        }
+        .timeline-box b { color: var(--accent-blue); font-size: 1rem;}
+
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .stat-box {
+            background: rgba(26, 24, 41, 0.8); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px 10px;
+            display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;
+        }
+        .stat-icon { width: 35px; height: 35px; border-radius: 50%; background: rgba(168, 85, 247, 0.1); color: var(--accent-purple); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .stat-lbl { font-size: 0.65rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;}
+        .stat-val { font-size: 1rem; color: var(--text-main); font-weight: 800; font-family: 'JetBrains Mono', monospace;}
+
+        /* Specific Colors for Icons */
+        .c-moon .stat-icon { color: var(--accent-gold); background: rgba(251, 189, 35, 0.1); }
+        .c-gen .stat-icon { color: var(--accent-green); background: rgba(16, 185, 129, 0.1); }
+        .c-day .stat-icon { color: var(--accent-blue); background: rgba(56, 189, 248, 0.1); }
+        .c-leap .stat-icon { color: var(--accent-red); background: rgba(239, 68, 68, 0.1); }
+
+        /* BOTTOM SHEET DRUM PICKER */
+        .drum-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(8px); }
+        .drum-sheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: #0F172A; border-top: 1px solid var(--accent-purple); border-radius: 24px 24px 0 0; z-index: 1001; padding: 25px 20px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 -10px 50px var(--accent-purple-glow); display: flex; flex-direction: column; gap: 15px; box-sizing: border-box;}
+        .drum-overlay.show { display: block; opacity: 1; }
+        .drum-sheet.show { bottom: 0; }
+
+        .drum-wrapper { display: flex; justify-content: space-around; align-items: center; position: relative; padding: 10px 0;}
+        .drum-col { display: flex; flex-direction: column; align-items: center; width: 30%; position: relative; z-index: 2; }
+        .drum-btn { background: transparent; border: none; color: var(--accent-purple); font-size: 1.3rem; padding: 5px 0; cursor: pointer; transition: 0.2s;}
+        .d-list { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; margin: 5px 0; }
+        .d-item { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 600; color: #475569; transition: 0.3s; }
+        .d-item.active { font-size: 1.4rem; font-weight: 800; color: var(--text-main); }
+        .drum-highlight { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 95%; height: 48px; border: 2px solid var(--accent-purple); border-radius: 12px; background: rgba(168, 85, 247, 0.1); z-index: 1; pointer-events: none;}
+
+        .ds-actions { display: flex; gap: 15px; margin-top: 15px; }
+        .ds-btn { flex: 1; padding: 15px; border-radius: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; border: none; transition: 0.2s;}
+        .ds-set { background: var(--accent-purple); color: #fff; box-shadow: 0 0 15px var(--accent-purple-glow); }
+        .ds-set:active { transform: scale(0.95); }
+
+        /* ANIMATIONS */
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-landmark"></i> TIME TRAVELER</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>Date Decoder</h1>
+            <p>> travel_to --any_timeline</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            <span class="sec-lbl">Select Target Date</span>
+            <div class="faux-date" onclick="SSJ4_HistoryPicker.open()">
+                <span id="date-val-display">January 01, 2000</span>
+                <i class="fas fa-history"></i>
+            </div>
+            <button class="calc-btn" onclick="SSJ4_History.calculate()">
+                <i class="fas fa-shuttle-van"></i> Decrypt Timeline
+            </button>
+        </div>
+
+        <div id="results-container">
+            <div class="res-main-card anim-up">
+                <div class="stat-lbl" style="color:var(--accent-gold); letter-spacing: 2px;">The Day Was</div>
+                <div class="res-day" id="res-day-name">SATURDAY</div>
+                <div class="res-date-full" id="res-date-full">January 1st, 2000</div>
+                
+                <div class="timeline-box" id="res-timeline">
+                    </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box c-moon">
+                        <div class="stat-icon"><i class="fas fa-moon"></i></div>
+                        <span class="stat-lbl">Moon Phase</span>
+                        <span class="stat-val" id="res-moon">New Moon</span>
+                    </div>
+                    <div class="stat-box c-gen">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <span class="stat-lbl">Generation</span>
+                        <span class="stat-val" id="res-gen">Millennials</span>
+                    </div>
+                    <div class="stat-box c-day">
+                        <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                        <span class="stat-lbl">Day of Year</span>
+                        <span class="stat-val" id="res-doy">Day 1 of 366</span>
+                    </div>
+                    <div class="stat-box c-leap">
+                        <div class="stat-icon"><i class="fas fa-redo"></i></div>
+                        <span class="stat-lbl">Leap Year</span>
+                        <span class="stat-val" id="res-leap">YES</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="drum-overlay" id="p-overlay" onclick="SSJ4_HistoryPicker.close()"></div>
+    <div class="drum-sheet" id="p-sheet">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="font-weight:800; color:var(--text-main); text-transform:uppercase; font-size:0.9rem;">Set Timeline Target</span>
+            <i class="fas fa-times" style="color:var(--text-sub); cursor:pointer;" onclick="SSJ4_HistoryPicker.close()"></i>
+        </div>
+        <div class="drum-wrapper">
+            <div class="drum-highlight"></div>
+            <div class="drum-col">
+                <button class="drum-btn" onclick="SSJ4_HistoryPicker.move('m', -1)"><i class="fas fa-chevron-up"></i></button>
+                <div id="p-months" class="d-list"></div>
+                <button class="drum-btn" onclick="SSJ4_HistoryPicker.move('m', 1)"><i class="fas fa-chevron-down"></i></button>
+            </div>
+            <div class="drum-col">
+                <button class="drum-btn" onclick="SSJ4_HistoryPicker.move('d', -1)"><i class="fas fa-chevron-up"></i></button>
+                <div id="p-days" class="d-list"></div>
+                <button class="drum-btn" onclick="SSJ4_HistoryPicker.move('d', 1)"><i class="fas fa-chevron-down"></i></button>
+            </div>
+            <div class="drum-col">
+                <button class="drum-btn" onclick="SSJ4_HistoryPicker.move('y', -1)"><i class="fas fa-chevron-up"></i></button>
+                <div id="p-years" class="d-list"></div>
+                <button class="drum-btn" onclick="SSJ4_HistoryPicker.move('y', 1)"><i class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+        <div class="ds-actions">
+            <button class="ds-btn ds-set" onclick="SSJ4_HistoryPicker.set()">CONFIRM DATE</button>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - TIME TRAVELER ENGINE */
+
+        let selectedDate = new Date(2000, 0, 1);
+
+        // --- CUSTOM DRUM PICKER ---
+        window.SSJ4_HistoryPicker = {
+            months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            years: Array.from({length: 201}, (_, i) => String(1900 + i)),
+            days: Array.from({length: 31}, (_, i) => String(i + 1).padStart(2, '0')),
+            c_m: 0, c_d: 0, c_y: 100,
+
+            haptic: function(v=15) { if(navigator.vibrate) navigator.vibrate(v); },
+
+            open: function() {
+                this.haptic();
+                this.render();
+                document.getElementById('p-overlay').classList.add('show');
+                setTimeout(() => document.getElementById('p-sheet').classList.add('show'), 10);
+            },
+            close: function() {
+                this.haptic();
+                document.getElementById('p-sheet').classList.remove('show');
+                setTimeout(() => document.getElementById('p-overlay').classList.remove('show'), 300);
+            },
+            move: function(type, dir) {
+                this.haptic();
+                if(type==='m') this.c_m = (this.c_m + dir + 12) % 12;
+                if(type==='d') this.c_d = (this.c_d + dir + 31) % 31;
+                if(type==='y') this.c_y = (this.c_y + dir + 201) % 201;
+                this.render();
+            },
+            renderCol: function(arr, center, elId) {
+                let html = '';
+                for(let i=-1; i<=1; i++) {
+                    let idx = (center + i + arr.length) % arr.length;
+                    html += `<div class="d-item ${i===0?'active':''}">${arr[idx]}</div>`;
+                }
+                document.getElementById(elId).innerHTML = html;
+            },
+            render: function() {
+                this.renderCol(this.months, this.c_m, 'p-months');
+                this.renderCol(this.days, this.c_d, 'p-days');
+                this.renderCol(this.years, this.c_y, 'p-years');
+            },
+            set: function() {
+                this.haptic(30);
+                selectedDate = new Date(this.years[this.c_y], this.c_m, parseInt(this.days[this.c_d]));
+                document.getElementById('date-val-display').innerText = selectedDate.toLocaleDateString('en-US', {month:'long', day:'2-digit', year:'numeric'});
+                this.close();
+            }
+        };
+
+        // --- MATH & TRIVIA ENGINE ---
+        window.SSJ4_History = {
+            
+            getMoonPhase: function(date) {
+                let year = date.getFullYear();
+                let month = date.getMonth() + 1;
+                let day = date.getDate();
+                if (month < 3) { year--; month += 12; }
+                month++;
+                let c = 365.25 * year;
+                let e = 30.6 * month;
+                let jd = c + e + day - 694039.09; 
+                jd /= 29.5305882; 
+                let b = parseInt(jd); 
+                jd -= b; 
+                b = Math.round(jd * 8); 
+                if (b >= 8) b = 0; 
+                const phases = ["New Moon", "Waxing Crescent", "First Quarter", "Waxing Gibbous", "Full Moon", "Waning Gibbous", "Last Quarter", "Waning Crescent"];
+                return phases[b];
+            },
+
+            getGeneration: function(year) {
+                if(year < 1928) return "Greatest Gen";
+                if(year <= 1945) return "Silent Gen";
+                if(year <= 1964) return "Boomers";
+                if(year <= 1980) return "Gen X";
+                if(year <= 1996) return "Millennials";
+                if(year <= 2012) return "Gen Z";
+                if(year <= 2024) return "Gen Alpha";
+                return "Gen Beta";
+            },
+
+            getDayOfYear: function(date) {
+                const start = new Date(date.getFullYear(), 0, 0);
+                const diff = date - start;
+                const oneDay = 1000 * 60 * 60 * 24;
+                return Math.floor(diff / oneDay);
+            },
+
+            calculate: function() {
+                if(navigator.vibrate) navigator.vibrate([20, 50, 20]);
+                
+                const now = new Date();
+                const diffMs = now - selectedDate;
+                const past = diffMs > 0;
+                const absDiff = Math.abs(diffMs);
+
+                // Basic Stats
+                const totalDays = Math.floor(absDiff / (1000*60*60*24));
+                const totalHours = Math.floor(absDiff / (1000*60*60));
+                const totalMins = Math.floor(absDiff / (1000*60));
+                const years = Math.floor(totalDays / 365.25);
+                
+                const dayName = selectedDate.toLocaleDateString('en-US', {weekday: 'long'});
+                const y = selectedDate.getFullYear();
+                const leap = (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0);
+                const daysInYear = leap ? 366 : 365;
+
+                // Advanced Stats Processing
+                document.getElementById('res-day-name').innerText = dayName;
+                document.getElementById('res-date-full').innerText = selectedDate.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+                
+                document.getElementById('res-moon').innerText = this.getMoonPhase(selectedDate);
+                document.getElementById('res-gen').innerText = this.getGeneration(y);
+                document.getElementById('res-doy').innerText = `Day ${this.getDayOfYear(selectedDate)} of ${daysInYear}`;
+                document.getElementById('res-leap').innerText = leap ? "YES" : "NO";
+
+                // Timeline String Generator
+                let timeStr = past 
+                    ? `Occurred <b>${years}</b> years, or exactly <b>${totalDays.toLocaleString()}</b> days ago.` 
+                    : `Will occur in exactly <b>${totalDays.toLocaleString()}</b> days.`;
+                
+                timeStr += `<br><br>That's roughly <b>${totalHours.toLocaleString()}</b> hours or <b>${totalMins.toLocaleString()}</b> minutes ${past ? 'passed' : 'remaining'}.`;
+                
+                document.getElementById('res-timeline').innerHTML = timeStr;
+
+                // Show Card Animation
+                document.getElementById('results-container').style.display = 'block';
+                const card = document.querySelector('.res-main-card');
+                card.classList.remove('anim-up'); void card.offsetWidth; card.classList.add('anim-up');
+                
+                setTimeout(() => { card.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => SSJ4_HistoryPicker.render());
+    </script>
+</body>
+</html>

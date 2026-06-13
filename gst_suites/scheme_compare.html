@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>GST Scheme Optimizer | Composition vs Regular Comparison | QuickSolve Platinum</title>
+    <meta name="description" content="Advanced GST Scheme Comparison tool. Compare Regular vs Composition schemes based on turnover, ITC, and business type. Save thousands in taxes. 100% Offline.">
+    <meta name="keywords" content="gst composition vs regular calculator, gst scheme optimizer, composition scheme benefits, gst tax savings, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/gst_suites/scheme_compare.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#020617">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           SCHEME OPTIMIZER (PLATINUM GOD MODE)
+           Theme: Obsidian / Gold / Royal Blue
+           ========================================= */
+        #mod-scheme-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: #020617; z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .sc-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #0f172a; border-bottom: 1px solid #1e293b;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .sc-head .qs-back-btn { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .sc-tit { color: #eab308; font-weight: 900; font-size: 0.9rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .sc-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 80px; }
+
+        /* Sleek Cards */
+        .sc-card { 
+            background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; 
+            padding: 15px; display: flex; flex-direction: column; gap: 10px;
+        }
+        
+        .sc-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; }
+        .sc-lbl span { color: #eab308; }
+
+        .sc-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 10px 12px; border-radius: 8px; border: 1px solid #1e293b; transition: 0.2s; }
+        .sc-inp-wrap:focus-within { border-color: #eab308; box-shadow: 0 0 10px rgba(234, 179, 8, 0.1); }
+        .sc-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1rem; font-weight: 900; outline: none; width: 100%; text-align: right; font-family: monospace; }
+        .sc-pre { color: #475569; font-weight: 900; font-size: 0.8rem; }
+
+        /* Custom Dropdown Trigger */
+        .sc-select-trigger { flex: 1; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: #fff; font-weight: 900; font-size: 0.9rem; }
+
+        /* Comparison Display (ISRO STYLE) */
+        .res-hero { background: #020617; border: 1px solid #eab308; border-radius: 12px; padding: 20px 15px; position: relative; overflow: visible; text-align: center; margin-top: 10px;}
+        .res-hero::before { content: 'OPTIMIZATION VERDICT'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #eab308; color: #020617; font-size: 0.6rem; font-weight: 900; padding: 2px 10px; border-radius: 4px; letter-spacing: 1px; }
+        
+        .verdict-box { margin-bottom: 15px; }
+        .v-badge { background: #1e293b; color: #eab308; border: 1px solid #eab308; font-size: 0.8rem; font-weight: 900; padding: 5px 15px; border-radius: 20px; display: inline-block; margin-bottom: 10px; text-transform: uppercase; }
+        .v-amt { font-size: 2.2rem; font-weight: 900; color: #fff; font-family: monospace; line-height: 1; }
+        .v-sub { font-size: 0.7rem; color: #94a3b8; font-weight: 800; margin-top: 5px; text-transform: uppercase; }
+
+        /* Side-by-side Table */
+        .comp-table { width: 100%; border-collapse: collapse; margin-top: 15px; border-top: 1px solid #1e293b; }
+        .comp-table th { font-size: 0.6rem; color: #64748b; padding: 10px 5px; text-align: left; text-transform: uppercase; }
+        .comp-table td { padding: 12px 5px; font-size: 0.8rem; font-weight: 900; color: #f8fafc; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .comp-table td:last-child { text-align: right; }
+        .t-gold { color: #eab308; }
+        .t-blue { color: #38bdf8; }
+
+        /* Detailed Breakdown */
+        .breakdown-sec { background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 10px; padding: 15px; margin-top: 15px; }
+        .b-tit { font-size: 0.65rem; color: #94a3b8; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .b-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.75rem; font-weight: bold; color: #cbd5e1; }
+        .b-val { color: #fff; font-family: monospace; }
+
+        /* Modals */
+        .sc-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .sc-content { background: #0f172a; border-top-left-radius: 20px; border-top-right-radius: 20px; display: flex; flex-direction: column; overflow: hidden; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .sc-open .sc-content { transform: translateY(0); }
+        .sc-modal-head { padding: 15px 20px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; }
+        .sc-modal-head span { color: #eab308; font-weight: 900; font-size: 1rem; text-transform: uppercase; }
+        .sc-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .sc-list { padding: 10px 0; max-height: 50vh; overflow-y: auto; }
+        .sl-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); cursor: pointer; }
+        .sl-name { font-weight: 900; color: #f8fafc; font-size: 0.95rem; }
+        .sl-sub { display: block; font-size: 0.65rem; color: #64748b; margin-top: 2px; }
+        .sl-check { color: #eab308; display: none; }
+        .sl-item.active .sl-check { display: block; }
+        .sl-item.active .sl-name { color: #eab308; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <main id="mod-scheme-overlay" role="main" aria-label="GST Scheme Optimizer">
+        <header class="sc-head">
+            <a href="../gst.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left"></i></a>
+            <div class="sc-tit"><i class="fas fa-balance-scale"></i> SCHEME OPTIMIZER</div>
+        </header>
+
+        <section class="sc-body">
+            
+            <div class="sc-card">
+                <div class="sc-lbl">Business Category <span>RULES APPLIED</span></div>
+                <div class="sc-inp-wrap" onclick="QS_Scheme.openModal('category')">
+                    <div class="sc-select-trigger">
+                        <span id="lbl-category">Trader / Manufacturer (1%)</span> <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i>
+                    </div>
+                </div>
+
+                <div class="sc-lbl">Annual Turnover <span>ESTIMATED</span></div>
+                <div class="sc-inp-wrap">
+                    <span class="sc-pre">₹</span>
+                    <input type="number" id="inp-turnover" class="sc-inp" placeholder="e.g. 50,00,000" oninput="QS_Scheme.calculate()">
+                </div>
+            </div>
+
+            <div class="sc-card">
+                <div class="sc-lbl">Stock Purchase (Excl. GST) <span>COST PRICE</span></div>
+                <div class="sc-inp-wrap">
+                    <span class="sc-pre">₹</span>
+                    <input type="number" id="inp-purchase" class="sc-inp" placeholder="e.g. 30,00,000" oninput="QS_Scheme.calculate()">
+                </div>
+
+                <div class="sc-lbl">GST Paid on Purchase <span>ITC POTENTIAL</span></div>
+                <div class="sc-inp-wrap" onclick="QS_Scheme.openModal('in-rate')">
+                    <div class="sc-select-trigger">
+                        <span id="lbl-in-rate">18% GST</span> <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i>
+                    </div>
+                </div>
+
+                <div class="sc-lbl">GST Rate on Sales <span>REGULAR RATE</span></div>
+                <div class="sc-inp-wrap" onclick="QS_Scheme.openModal('out-rate')">
+                    <div class="sc-select-trigger">
+                        <span id="lbl-out-rate">18% GST</span> <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div id="empty-state" style="text-align:center; padding: 20px; color:#475569;">
+                <i class="fas fa-microchip fa-3x" style="margin-bottom:12px; opacity:0.3;"></i>
+                <div style="font-size:0.85rem; font-weight:bold;">Initialize analytics: Enter turnover and purchase data.</div>
+            </div>
+
+            <div id="res-dashboard" class="hidden" aria-live="polite">
+                
+                <div class="res-hero">
+                    <div class="verdict-box">
+                        <div class="v-badge" id="res-winner">REGULAR SCHEME</div>
+                        <div class="v-amt" id="res-savings">₹0</div>
+                        <div class="v-sub">Estimated Annual Tax Savings</div>
+                    </div>
+
+                    <table class="comp-table">
+                        <thead>
+                            <tr><th>Metric</th><th>Composition</th><th>Regular</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>GST Payable</td><td id="res-comp-tax" class="t-gold">₹0</td><td id="res-reg-tax" class="t-blue">₹0</td></tr>
+                            <tr><td>Net Profit</td><td id="res-comp-profit">₹0</td><td id="res-reg-profit">₹0</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="breakdown-sec">
+                    <div class="b-tit"><i class="fas fa-info-circle"></i> DETAILED SIMULATION (ANNUAL)</div>
+                    <div class="b-row"><span>Composition Rate</span><span class="b-val" id="res-comp-rate">1%</span></div>
+                    <div class="b-row"><span>GST Paid on Purchases</span><span class="b-val" id="res-purchase-tax">₹0</span></div>
+                    <div class="b-row"><span>Input Tax Credit (ITC)</span><span class="b-val" id="res-itc-val" style="color:#10b981;">₹0</span></div>
+                    <div style="font-size:0.6rem; color:#64748b; border-top:1px solid #1e293b; padding-top:8px; line-height:1.4;">
+                        *Note: In Composition Scheme, GST paid on purchase is added to your cost (Loss of ITC). 
+                        In Regular Scheme, you only pay Net GST (Output - Input).
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <div id="sc-modal" class="sc-modal">
+        <div class="sc-content">
+            <div class="sc-modal-head"><span id="sc-title">Select</span><button class="sc-close" onclick="QS_Scheme.closeModal()"><i class="fas fa-times"></i></button></div>
+            <div class="sc-list" id="sc-list"></div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - SCHEME OPTIMIZER ENGINE
+           Features: Category Mapping, ITC Blocking Simulation, Comparative Profit Analytics.
+        */
+        (function() {
+            window.QS_Scheme = {
+                state: {
+                    category: 'trader', // trader, resto, service
+                    inRate: 18,
+                    outRate: 18
+                },
+
+                categories: {
+                    'trader': { n: 'Trader / Manufacturer', sub: 'Flat 1% on Turnover', r: 1 },
+                    'resto': { n: 'Restaurant (No AC/Liquor)', sub: 'Flat 5% on Turnover', r: 5 },
+                    'service': { n: 'Service Provider (Sec 10-2A)', sub: 'Flat 6% on Turnover', r: 6 }
+                },
+
+                init: function() {
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'gst_suites/scheme_compare.js') this.calculate();
+                    });
+                    if(document.readyState === 'complete') this.calculate();
+                    else document.addEventListener('DOMContentLoaded', () => this.calculate());
+                },
+
+                openModal: function(target) {
+                    const title = target === 'category' ? 'Business Category' : (target === 'in-rate' ? 'Purchase GST' : 'Sales GST');
+                    document.getElementById('sc-title').innerText = title;
+                    const list = document.getElementById('sc-list');
+                    list.innerHTML = '';
+
+                    if(target === 'category') {
+                        Object.keys(this.categories).forEach(key => {
+                            const cat = this.categories[key];
+                            const active = this.state.category === key;
+                            const div = document.createElement('div');
+                            div.className = `sl-item ${active?'active':''}`;
+                            div.onclick = () => {
+                                this.state.category = key;
+                                document.getElementById('lbl-category').innerText = cat.n + ' (' + cat.r + '%)';
+                                this.closeModal();
+                                this.calculate();
+                            };
+                            div.innerHTML = `<div><span class="sl-name">${cat.n}</span><span class="sl-sub">${cat.sub}</span></div><i class="fas fa-check sl-check"></i>`;
+                            list.appendChild(div);
+                        });
+                    } else {
+                        [0, 0.1, 0.25, 3, 5, 12, 18, 28].map(v => {
+                            const key = target === 'in-rate' ? 'inRate' : 'outRate';
+                            const active = this.state[key] == v;
+                            const div = document.createElement('div');
+                            div.className = `sl-item ${active?'active':''}`;
+                            div.onclick = () => {
+                                this.state[key] = v;
+                                document.getElementById(`lbl-${target}`).innerText = v + '% GST';
+                                this.closeModal();
+                                this.calculate();
+                            };
+                            div.innerHTML = `<span class="sl-name">${v}%</span><i class="fas fa-check sl-check"></i>`;
+                            list.appendChild(div);
+                        });
+                    }
+
+                    const m = document.getElementById('sc-modal');
+                    m.style.display = 'flex';
+                    setTimeout(() => m.classList.add('sc-open'), 10);
+                },
+
+                closeModal: function() {
+                    const m = document.getElementById('sc-modal');
+                    m.classList.remove('sc-open');
+                    setTimeout(() => m.style.display = 'none', 300);
+                },
+
+                calculate: function() {
+                    const turnover = parseFloat(document.getElementById('inp-turnover').value);
+                    const purchase = parseFloat(document.getElementById('inp-purchase').value) || 0;
+
+                    if(!turnover || turnover <= 0) {
+                        document.getElementById('empty-state').classList.remove('hidden');
+                        document.getElementById('res-dashboard').classList.add('hidden');
+                        return;
+                    }
+
+                    document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('res-dashboard').classList.remove('hidden');
+
+                    // --- SIMULATION 1: COMPOSITION SCHEME ---
+                    const compRate = this.categories[this.state.category].r;
+                    const compTaxPayable = turnover * (compRate / 100);
+                    const purchaseTax = purchase * (this.state.inRate / 100);
+                    // In Composition, purchase GST is NOT refundable (Added to cost)
+                    const compTotalCost = purchase + purchaseTax;
+                    const compProfit = turnover - compTotalCost - compTaxPayable;
+
+                    // --- SIMULATION 2: REGULAR SCHEME ---
+                    const regOutputTax = turnover * (this.state.outRate / 100);
+                    const regInputTaxCredit = purchase * (this.state.inRate / 100);
+                    // Net GST = Max of 0 or Output - ITC
+                    const regNetGST = Math.max(0, regOutputTax - regInputTaxCredit);
+                    // In Regular, purchase GST is refunded/adjusted (Not a cost)
+                    const regProfit = turnover - purchase - regNetGST;
+
+                    this.render(compTaxPayable, compProfit, regNetGST, regProfit, purchaseTax, regInputTaxCredit, compRate);
+                },
+
+                render: function(cTax, cProf, rTax, rProf, pTax, itc, cRate) {
+                    const fmt = (v) => '₹' + v.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+                    
+                    const savings = Math.abs(rProf - cProf);
+                    const isRegularBetter = rProf > cProf;
+
+                    document.getElementById('res-winner').innerText = isRegularBetter ? "REGULAR SCHEME BETTER" : "COMPOSITION BETTER";
+                    document.getElementById('res-winner').style.color = isRegularBetter ? "#38bdf8" : "#eab308";
+                    document.getElementById('res-winner').style.borderColor = isRegularBetter ? "#38bdf8" : "#eab308";
+                    
+                    document.getElementById('res-savings').innerText = fmt(savings);
+                    
+                    document.getElementById('res-comp-tax').innerText = fmt(cTax);
+                    document.getElementById('res-reg-tax').innerText = fmt(rTax);
+                    
+                    document.getElementById('res-comp-profit').innerText = fmt(cProf);
+                    document.getElementById('res-reg-profit').innerText = fmt(rProf);
+
+                    document.getElementById('res-comp-rate').innerText = cRate + '%';
+                    document.getElementById('res-purchase-tax').innerText = fmt(pTax);
+                    document.getElementById('res-itc-val').innerText = fmt(itc);
+                }
+            };
+
+            QS_Scheme.init();
+        })();
+    </script>
+</body>
+</html>

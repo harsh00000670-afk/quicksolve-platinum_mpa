@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Equation Visualizer | Chart Master | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjs@11/lib/browser/math.js"></script>
+
+    <style>
+        /* =========================================
+           EQUATION VISUALIZER - PLATINUM (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800;900&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-red: #ef4444;
+            --accent-gold: #fbbd23;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-pink: #ec4899;
+            --accent-pink-glow: rgba(236, 72, 153, 0.3);
+            --accent-cyan: #06b6d4;
+            --accent-cyan-glow: rgba(6, 182, 212, 0.3);
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.25; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 250px; height: 250px; background: var(--accent-pink); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-cyan); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-pink); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #ec4899, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--text-sub); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CARDS & INPUTS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(236, 72, 153, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(236, 72, 153, 0.15);
+        }
+        .inp-group { margin-bottom: 18px; position: relative; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: flex; justify-content: space-between;}
+        
+        .inp-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.1rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .inp-field:focus { border-color: var(--accent-pink); box-shadow: 0 0 10px var(--accent-pink-glow); }
+        .inp-field::placeholder { color: var(--text-dim); font-weight: 500; font-family: 'Inter', sans-serif;}
+
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        /* PRESET CHIPS */
+        .preset-wrap { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; }
+        .preset-wrap::-webkit-scrollbar { height: 0px; }
+        .preset-chip {
+            background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap; cursor: pointer; transition: 0.2s;
+        }
+        .preset-chip:active { transform: scale(0.95); background: var(--accent-cyan); color: #000; }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #ec4899, #06b6d4);
+            color: #fff; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px var(--accent-pink-glow); display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 10px;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS / GRAPH CARD */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(6, 182, 212, 0.4); border-radius: 20px; 
+            padding: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(6, 182, 212, 0.15); display: none;
+        }
+
+        .res-header { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;}
+        .res-title { color: var(--accent-cyan); font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;}
+        .res-eq-disp { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--accent-pink); background: rgba(236, 72, 153, 0.1); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(236, 72, 153, 0.2); overflow-x: auto; white-space: nowrap;}
+        .res-eq-disp2 { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(6, 182, 212, 0.2); overflow-x: auto; white-space: nowrap; display: none;}
+
+        /* CANVAS CONTAINER */
+        .graph-container {
+            width: 100%; height: 350px; background: #0d0a15; border-radius: 12px; padding: 10px; box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,0.05); position: relative;
+        }
+
+        /* ALERTS */
+        .info-alert {
+            background: rgba(251, 189, 35, 0.1); border: 1px solid var(--accent-gold); border-radius: 12px;
+            padding: 15px; text-align: left; display: flex; align-items: flex-start; gap: 12px; margin-top: 20px;
+        }
+        .info-icon { font-size: 1.2rem; color: var(--accent-gold); margin-top: 2px;}
+        .info-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.5; font-weight: 600;}
+        .info-text code { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; color: var(--accent-gold); font-family: 'JetBrains Mono', monospace;}
+
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px var(--accent-red-glow); display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .toast.show { bottom: 30px; }
+
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-chart-line"></i> EQUATION VISUALIZER</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>Advanced Plotter V3</h1>
+            <p>> render --anti_alias --asymptote_slice</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            
+            <div class="inp-group">
+                <label class="inp-lbl">
+                    <span style="color:var(--accent-pink);">1. Primary Function f(x)</span>
+                </label>
+                <input type="text" id="inp-eq" class="inp-field" placeholder="e.g. x^2 + 2*x" value="1 / (x * sin(x))">
+            </div>
+
+            <div class="inp-group">
+                <label class="inp-lbl">
+                    <span style="color:var(--accent-cyan);">2. Secondary Function g(x) <span style="color:var(--text-dim); text-transform:none;">(Optional)</span></span>
+                </label>
+                <input type="text" id="inp-eq2" class="inp-field" placeholder="e.g. cos(x)" style="border-color: rgba(6, 182, 212, 0.3);">
+            </div>
+
+            <div class="preset-wrap">
+                <div class="preset-chip" onclick="GraphEngine.setPreset('1 / (x * sin(x))', '')">1/(x*sin(x))</div>
+                <div class="preset-chip" onclick="GraphEngine.setPreset('sin(x^2) * cos(3*x)', '')">Wave Alias</div>
+                <div class="preset-chip" onclick="GraphEngine.setPreset('tan(x)', '')">Tan (Sliced)</div>
+                <div class="preset-chip" onclick="GraphEngine.setPreset('x^(1/3)', '')">Cube Root</div>
+            </div>
+
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">X-Axis Min</label>
+                    <input type="number" id="inp-xmin" class="inp-field" value="-10">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">X-Axis Max</label>
+                    <input type="number" id="inp-xmax" class="inp-field" value="10">
+                </div>
+            </div>
+
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">Y-Axis Min (Zoom)</label>
+                    <input type="number" id="inp-ymin" class="inp-field" value="-10" placeholder="Auto">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">Y-Axis Max (Zoom)</label>
+                    <input type="number" id="inp-ymax" class="inp-field" value="10" placeholder="Auto">
+                </div>
+            </div>
+
+            <button class="calc-btn" onclick="GraphEngine.plot()">
+                <i class="fas fa-project-diagram"></i> Render Graph
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container">
+            
+            <div class="res-header">
+                <div class="res-title"><i class="fas fa-satellite-dish"></i> Mathematical Projection</div>
+                <div class="res-eq-disp" id="disp-eq">f(x) = ...</div>
+                <div class="res-eq-disp2" id="disp-eq2">g(x) = ...</div>
+            </div>
+
+            <div class="graph-container">
+                <canvas id="graphCanvas"></canvas>
+            </div>
+
+            <div class="info-alert">
+                <div class="info-icon"><i class="fas fa-code"></i></div>
+                <div class="info-text">
+                    <b>V3 ENGINE PROTOCOLS ACTIVE</b><br>
+                    <i class="fas fa-bolt" style="color:var(--accent-cyan);"></i> <b>Anti-Aliasing:</b> Dynamic 4000-point renderer activated for high-frequency ranges.<br>
+                    <i class="fas fa-cut" style="color:var(--accent-red);"></i> <b>Asymptote Slicer:</b> Vertical infinity-glitches are automatically severed.<br>
+                    <i class="fas fa-check" style="color:var(--accent-green);"></i> Use explicit operators: <code>2*x</code> (Not 2x).
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+<script>        /* QUICKSOLVE PLATINUM - FUNCTION GRAPH ENGINE V3.5 */
+        
+        window.GraphEngine = {
+            chartInstance: null,
+
+            haptic: function() { if(navigator.vibrate) navigator.vibrate(20); },
+
+            showToast: function(msg) {
+                const toast = document.getElementById('custom-toast');
+                if(!toast) return; // Fallback if UI element missing
+                document.getElementById('toast-msg').innerText = msg;
+                if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            },
+
+            setPreset: function(expr1, expr2) {
+                this.haptic();
+                document.getElementById('inp-eq').value = expr1;
+                
+                const eq2Input = document.getElementById('inp-eq2');
+                if(eq2Input) eq2Input.value = expr2;
+                
+                // Clear Y-bounds to let Peak Normalization do its magic
+                if(document.getElementById('inp-ymin')) document.getElementById('inp-ymin').value = '';
+                if(document.getElementById('inp-ymax')) document.getElementById('inp-ymax').value = '';
+                
+                this.plot(); 
+            },
+
+            // Safe Evaluation Helper (Handles Complex numbers & Infinity)
+            safeEvaluate: function(compiledExpr, xVal) {
+                try {
+                    let result = compiledExpr.evaluate({ x: xVal });
+                    
+                    if (typeof result === 'object' && result.isComplex) {
+                        // Extract real part if imaginary is negligible
+                        if (Math.abs(result.im) < 1e-10) return result.re;
+                        return null; 
+                    }
+                    
+                    if (typeof result === 'number' && !isNaN(result)) {
+                        if (Math.abs(result) > 1e6) return null; // Cap extreme infinities
+                        return result;
+                    }
+                    return null;
+                } catch (e) {
+                    return null;
+                }
+            },
+
+            plot: function() {
+                this.haptic();
+
+                // 1. Get Inputs
+                const expr1 = document.getElementById("inp-eq").value;
+                const eq2El = document.getElementById("inp-eq2");
+                const expr2 = eq2El ? eq2El.value : "";
+                
+                const xmin = parseFloat(document.getElementById("inp-xmin").value);
+                const xmax = parseFloat(document.getElementById("inp-xmax").value);
+                
+                const yminEl = document.getElementById("inp-ymin");
+                const ymaxEl = document.getElementById("inp-ymax");
+                const yminRaw = yminEl ? yminEl.value : "";
+                const ymaxRaw = ymaxEl ? ymaxEl.value : "";
+
+                // Validations
+                if (!expr1.trim()) { this.showToast("Primary Equation f(x) cannot be empty."); return; }
+                if (isNaN(xmin) || isNaN(xmax) || xmin >= xmax) { this.showToast("Invalid X-Axis range parameters."); return; }
+
+                // 2. V3.5 FEATURE: Dynamic Resolution Scaling
+                const range = xmax - xmin;
+                let dataPoints = 4000;
+                if (range <= 10) dataPoints = 5000; // Deep micro-rendering
+                else if (range > 100) dataPoints = 2000; // Macro-optimization
+                const step = range / dataPoints;
+
+                let xVals = [];
+                let yVals1 = [];
+                let yVals2 = [];
+                let validY1 = []; // Stored for auto-zooming
+                
+                let comp1, comp2;
+
+                try { comp1 = math.compile(expr1); } 
+                catch (err) { this.showToast("Syntax Error in f(x). Check explicit operators (e.g., 2*x)."); return; }
+
+                if (expr2.trim()) {
+                    try { comp2 = math.compile(expr2); } 
+                    catch (err) { this.showToast("Syntax Error in g(x)."); return; }
+                }
+
+                // V3.5 FEATURE: Dynamic Asymptote Slicer Threshold
+                const threshold = range * 10; 
+                let prevY1 = null, prevY2 = null;
+
+                // 3. Generate Coordinates
+                for (let x = xmin; x <= xmax; x += step) {
+                    xVals.push(x.toFixed(2));
+                    
+                    // Function 1
+                    let y1 = this.safeEvaluate(comp1, x);
+                    if (y1 !== null && prevY1 !== null && Math.abs(y1 - prevY1) > threshold) {
+                        yVals1.push(null); // Sever the infinity glitch
+                    } else {
+                        yVals1.push(y1);
+                        if(y1 !== null) validY1.push(y1);
+                    }
+                    prevY1 = y1 !== null ? y1 : prevY1;
+
+                    // Function 2
+                    if (comp2) {
+                        let y2 = this.safeEvaluate(comp2, x);
+                        if (y2 !== null && prevY2 !== null && Math.abs(y2 - prevY2) > threshold) {
+                            yVals2.push(null); 
+                        } else {
+                            yVals2.push(y2);
+                        }
+                        prevY2 = y2 !== null ? y2 : prevY2;
+                    }
+                }
+
+                // 4. V3.5 FEATURE: Peak Normalization (Auto Y-Scaling)
+                let finalYMin = parseFloat(yminRaw);
+                let finalYMax = parseFloat(ymaxRaw);
+                let useYBounds = !isNaN(finalYMin) && !isNaN(finalYMax) && finalYMin < finalYMax;
+
+                if (!useYBounds && validY1.length > 0) {
+                    validY1.sort((a, b) => a - b);
+                    // Extract 5th and 95th percentiles to ignore infinite asymptotes
+                    let p5 = validY1[Math.floor(validY1.length * 0.05)];
+                    let p95 = validY1[Math.floor(validY1.length * 0.95)];
+                    
+                    if (Math.abs(p95 - p5) > 0.1) {
+                        let buffer = (p95 - p5) * 0.2;
+                        finalYMin = p5 - buffer;
+                        finalYMax = p95 + buffer;
+                        
+                        // Failsafe caps
+                        if (finalYMax > 1000) finalYMax = 100;
+                        if (finalYMin < -1000) finalYMin = -100;
+                        useYBounds = true;
+                    }
+                }
+
+                // Update UI Texts
+                const dispEq1 = document.getElementById('disp-eq');
+                const dispEq2 = document.getElementById('disp-eq2');
+                if(dispEq1) dispEq1.innerText = `f(x) = ${expr1}`;
+                if (expr2.trim() && dispEq2) {
+                    dispEq2.innerText = `g(x) = ${expr2}`;
+                    dispEq2.style.display = 'block';
+                } else if (dispEq2) {
+                    dispEq2.style.display = 'none';
+                }
+
+                // Destroy old chart
+                if (this.chartInstance) {
+                    this.chartInstance.destroy();
+                }
+
+                const ctx = document.getElementById("graphCanvas").getContext("2d");
+                
+                let datasets = [{
+                    label: "f(x)",
+                    data: yVals1,
+                    borderColor: "#ec4899", // Platinum Pink
+                    borderWidth: 2,
+                    tension: 0.1, // Sharp corners
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
+                    fill: false, 
+                    spanGaps: false // Essential for breaking asymptotes
+                }];
+
+                if (comp2) {
+                    datasets.push({
+                        label: "g(x)",
+                        data: yVals2,
+                        borderColor: "#06b6d4", // Platinum Cyan
+                        borderWidth: 2,
+                        tension: 0.1,
+                        pointRadius: 0,
+                        pointHoverRadius: 6,
+                        fill: false,
+                        spanGaps: false
+                    });
+                }
+
+                // 5. V3.5 FEATURE: Legend Sync
+                let legendFontSize = (expr1.length > 20 || expr2.length > 20) ? 10 : 12;
+
+                let chartOptions = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { intersect: false, mode: 'index' },
+                    plugins: {
+                        legend: { 
+                            display: comp2 ? true : false,
+                            labels: { color: '#94a3b8', font: { family: "'JetBrains Mono', monospace", size: legendFontSize } }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(13, 10, 21, 0.95)',
+                            titleColor: '#f8fafc',
+                            bodyFont: { family: "'JetBrains Mono', monospace", size: 13 },
+                            borderColor: 'rgba(255,255,255,0.1)',
+                            borderWidth: 1,
+                            callbacks: {
+                                title: function(context) { return 'x = ' + context[0].label; },
+                                label: function(context) { 
+                                    let val = context.parsed.y;
+                                    let name = context.dataset.label;
+                                    return name + ' = ' + (val !== null ? val.toFixed(4) : 'Undefined'); 
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false }, ticks: { color: '#475569', maxTicksLimit: 8 } },
+                        y: { grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false }, ticks: { color: '#475569' } }
+                    },
+                    animation: { duration: 400 } // Snappy rendering
+                };
+
+                if (useYBounds) {
+                    chartOptions.scales.y.min = finalYMin;
+                    chartOptions.scales.y.max = finalYMax;
+                }
+
+                this.chartInstance = new Chart(ctx, {
+                    type: "line",
+                    data: { labels: xVals, datasets: datasets },
+                    options: chartOptions
+                });
+
+                // Reveal UI elements
+                const resCard = document.getElementById('results-container');
+                const graphBox = document.getElementById('graph-box');
+                const protocolAlert = document.querySelector('.protocol-alert');
+                
+                if(resCard) {
+                    resCard.style.display = 'block';
+                    resCard.classList.remove('anim-up');
+                    void resCard.offsetWidth; // trigger reflow
+                    resCard.classList.add('anim-up');
+                    setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+                } else if (graphBox) {
+                    // Fallback for V3 specific HTML
+                    graphBox.style.display = 'block';
+                    if(protocolAlert) protocolAlert.style.display = 'block';
+                    setTimeout(() => { graphBox.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
+                }
+            }
+        };
+
+        // Listeners for Enter Key
+        const eqInput1 = document.getElementById("inp-eq");
+        const eqInput2 = document.getElementById("inp-eq2");
+        
+        if(eqInput1) {
+            eqInput1.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") { event.preventDefault(); window.GraphEngine.plot(); }
+            });
+        }
+        if(eqInput2) {
+            eqInput2.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") { event.preventDefault(); window.GraphEngine.plot(); }
+            });
+        }
+</script>
+</body>
+</html>
+                

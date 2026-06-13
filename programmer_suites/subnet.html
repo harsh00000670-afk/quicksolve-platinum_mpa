@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>IPv4 Subnet Calculator | CIDR & Binary Visualizer | QuickSolve Platinum</title>
+    <meta name="description" content="Advanced IPv4 Subnet Calculator for network engineers. Calculate network address, broadcast address, wildcard masks, and usable host ranges instantly. Visualize the binary split between network and host bits. 100% Offline.">
+    <meta name="keywords" content="subnet calculator, ipv4 calculator, CIDR calculator, binary subnet visualizer, network address calculator, broadcast address calculator, ip class identifier, private ip checker, wildcard mask generator, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/subnet.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="IPv4 Subnet Engine - Master Your Networks">
+    <meta property="og:description" content="Calculate CIDR, network ranges, and visualize binary IP masks flawlessly.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           IPv4 SUBNET CALCULATOR (GOD MODE)
+           Theme: Cyberpunk Terminal (Crimson/Red)
+           ========================================= */
+        body { margin: 0; background-color: var(--bg-body, #09090b); }
+
+        #mod-subnet-overlay {
+            width: 100vw; min-height: 100vh;
+            background-color: var(--bg-body, #09090b); 
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: monospace;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .su-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .su-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; }
+        .su-tit { color: #ef4444; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .su-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Input Group */
+        .su-grp { 
+            flex-shrink: 0; background: #1e293b; border: 1px solid #475569; 
+            border-radius: 10px; padding: 15px; transition: 0.2s; position: relative; 
+        }
+        .su-grp:focus-within { border-color: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.15); }
+        .su-grp.error { border-color: #f59e0b !important; box-shadow: 0 0 15px rgba(245, 158, 11, 0.1) !important; }
+        
+        .su-lbl { color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+        
+        .su-inp-wrap { display: flex; align-items: center; gap: 8px; background: rgba(2, 6, 23, 0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid #334155;}
+        .su-inp { background: transparent; border: none; color: #fff; font-size: 1.3rem; font-weight: 800; width: 100%; outline: none; font-family: monospace; }
+        .su-inp::placeholder { color: #475569; font-size: 1rem; }
+        
+        .su-slash { color: #ef4444; font-size: 1.5rem; font-weight: 900; }
+        .su-cidr-sel { background: transparent; border: none; color: #ef4444; font-size: 1.3rem; font-weight: 800; outline: none; cursor: pointer; font-family: monospace; appearance: none; -webkit-appearance: none; }
+
+        /* Tags / Badges */
+        .ip-tags { display: flex; gap: 10px; margin-top: 10px; }
+        .tag { padding: 4px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; border: 1px solid transparent; }
+        .tag-class { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-color: #3b82f6; }
+        .tag-type { background: rgba(34, 197, 94, 0.1); color: #22c55e; border-color: #22c55e; }
+
+        /* Results Grid */
+        .su-res-card { flex-shrink: 0; background: #0f172a; border: 1px solid #334155; border-radius: 10px; overflow: hidden; }
+        
+        .res-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid #1e293b; }
+        .res-row:last-child { border-bottom: none; }
+        .res-row:nth-child(even) { background: rgba(30, 41, 59, 0.3); }
+        
+        .r-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; }
+        .r-val { font-size: 1rem; color: #f8fafc; font-weight: bold; }
+        .r-val.hl-red { color: #ef4444; }
+        
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #ef4444; color: #ef4444; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(239, 68, 68, 0.15); transform: scale(0.98); }
+
+        /* STEPS MODAL */
+        #su-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #su-steps-box { background: #1e293b; border: 1px solid #ef4444; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(239, 68, 68, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #ef4444; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+
+        .bin-grid { display: flex; flex-direction: column; gap: 10px; background: #020617; border: 1px solid #334155; border-radius: 8px; padding: 15px; margin-top: 10px; overflow-x: auto; }
+        .bin-row { display: flex; flex-direction: column; gap: 4px; border-bottom: 1px dashed #1e293b; padding-bottom: 10px; }
+        .bin-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .bin-lbl { color: #94a3b8; font-size: 0.65rem; text-transform: uppercase; font-weight: bold; }
+        .bin-val { font-family: monospace; font-size: 1.1rem; letter-spacing: 2px; white-space: nowrap; }
+        
+        .b-net { color: #ef4444; font-weight: bold; }
+        .b-host { color: #3b82f6; font-weight: bold; }
+        .b-sep { color: #475569; margin: 0 4px; }
+    </style>
+</head>
+
+<body>
+
+<main id="mod-subnet-overlay" role="main">
+    <header class="su-head" role="banner">
+        <a href="../programmer.html" class="qs-back-btn" aria-label="Go back to Programmer Suite">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </a>
+<h1 class="su-tit" style="position: absolute; left: 50%; transform: translateX(-50%); margin: 0; color: #38bdf8; font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);">
+    <i class="fas fa-network-wired" aria-hidden="true"></i> SUBNET ENGINE
+</h1>
+
+    </header>
+
+    <div class="su-body">
+        
+        <section class="su-grp" id="grp-val" aria-labelledby="input-heading">
+            <h2 id="input-heading" class="sr-only" style="display:none;">Enter IP and Routing Prefix</h2>
+            <label for="su-inp-ip" class="su-lbl">IP Address & CIDR Routing Prefix</label>
+            <div class="su-inp-wrap">
+                <input type="text" id="su-inp-ip" class="su-inp" placeholder="192.168.1.10" aria-describedby="su-err" oninput="QS_Subnet.calc()" autocomplete="off">
+                <span class="su-slash" aria-hidden="true">/</span>
+                <select id="su-inp-cidr" class="su-cidr-sel" aria-label="Select CIDR routing prefix" onchange="QS_Subnet.calc()">
+                    </select>
+            </div>
+            <div style="font-size:0.65rem; color:#f59e0b; margin-top:5px; display:none;" id="su-err" role="alert" aria-live="assertive">Invalid IPv4 Address Format</div>
+            
+            <div class="ip-tags" id="ip-tags" style="display: none;" aria-live="polite">
+                <span class="tag tag-class" id="tag-class">CLASS C</span>
+                <span class="tag tag-type" id="tag-type">PRIVATE IP</span>
+            </div>
+        </section>
+
+        <button class="btn-why" aria-haspopup="dialog" aria-expanded="false" aria-label="Show binary subnetting visualizer" onclick="QS_Subnet.showSteps()">
+            <i class="fas fa-microchip" aria-hidden="true"></i> Visualize Binary Subnetting
+        </button>
+
+        <section class="su-res-card" aria-label="Subnet Calculation Results" aria-live="polite">
+            <div class="res-row">
+                <span class="r-lbl" id="lbl-net">Network Address</span>
+                <span class="r-val" id="res-net" aria-labelledby="lbl-net">--</span>
+            </div>
+            <div class="res-row">
+                <span class="r-lbl" id="lbl-broad">Broadcast Address</span>
+                <span class="r-val" id="res-broad" aria-labelledby="lbl-broad">--</span>
+            </div>
+            <div class="res-row">
+                <span class="r-lbl" id="lbl-range">Usable Host Range</span>
+                <span class="r-val" id="res-range" style="font-size:0.8rem; color:#3b82f6;" aria-labelledby="lbl-range">--</span>
+            </div>
+            <div class="res-row">
+                <span class="r-lbl" id="lbl-hosts">Total Usable Hosts</span>
+                <span class="r-val hl-red" id="res-hosts" aria-labelledby="lbl-hosts">0</span>
+            </div>
+            <div class="res-row">
+                <span class="r-lbl" id="lbl-mask">Subnet Mask</span>
+                <span class="r-val" id="res-mask" aria-labelledby="lbl-mask">--</span>
+            </div>
+            <div class="res-row">
+                <span class="r-lbl" id="lbl-wild">Wildcard Mask</span>
+                <span class="r-val" id="res-wild" aria-labelledby="lbl-wild">--</span>
+            </div>
+        </section>
+
+    </div>
+
+    <div id="su-steps-modal" role="dialog" aria-modal="true" aria-labelledby="modal-map-title">
+        <div id="su-steps-box">
+            <header class="steps-head">
+                <h2 id="modal-map-title" style="margin: 0; font-size: 1rem;"><i class="fas fa-server" aria-hidden="true"></i> BINARY SUBNET MAP</h2>
+                <button class="steps-close" aria-label="Close Map Visualizer" onclick="QS_Subnet.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </header>
+            <div class="steps-content" id="su-steps-content" aria-live="polite">
+                </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    /* QUICKSOLVE PLATINUM - IPv4 SUBNET CALCULATOR (MPA STANDALONE)
+       Features: CIDR parsing, Binary Subnetting Visualization, Network/Broadcast/Wildcard Math
+    */
+    const QS_Subnet = {
+        
+        isValid: false,
+        lastIP: "",
+        lastCIDR: 24,
+        
+        // Cache for visualizer
+        binIP: "",
+        binMask: "",
+        binNet: "",
+        binBroad: "",
+
+        init: function() {
+            console.log("Subnet Engine Ready 🚀");
+            this.populateCIDR();
+            this.resetUI();
+        },
+
+        populateCIDR: function() {
+            const sel = document.getElementById('su-inp-cidr');
+            if(!sel) return;
+            sel.innerHTML = '';
+            // CIDR /0 to /32
+            for (let i = 32; i >= 0; i--) {
+                let opt = document.createElement('option');
+                opt.value = i;
+                opt.text = i;
+                if (i === 24) opt.selected = true;
+                sel.appendChild(opt);
+            }
+        },
+
+        // Helper: Convert "192.168.1.1" to 32-bit Integer
+        ipToInt: function(ip) {
+            return ip.split('.').reduce((int, octet) => (int << 8) + parseInt(octet, 10), 0) >>> 0;
+        },
+
+        // Helper: Convert 32-bit Integer to "192.168.1.1"
+        intToIp: function(int) {
+            return [
+                (int >>> 24) & 255,
+                (int >>> 16) & 255,
+                (int >>> 8) & 255,
+                int & 255
+            ].join('.');
+        },
+
+        // Helper: Format 32-bit int to 4-block binary string
+        intToBinStr: function(int) {
+            let bin = (int >>> 0).toString(2).padStart(32, '0');
+            return bin.match(/.{1,8}/g).join('.');
+        },
+
+        calc: function() {
+            const rawIp = document.getElementById('su-inp-ip').value.trim();
+            const cidr = parseInt(document.getElementById('su-inp-cidr').value);
+            
+            const grpVal = document.getElementById('grp-val');
+            const errLbl = document.getElementById('su-err');
+            const tagsBox = document.getElementById('ip-tags');
+            
+            grpVal.classList.remove('error');
+            errLbl.style.display = 'none';
+            tagsBox.style.display = 'none';
+            this.isValid = false;
+
+            if (!rawIp) {
+                this.clearResults();
+                return;
+            }
+
+            // Regex for valid IPv4
+            const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+            
+            if (!ipRegex.test(rawIp)) {
+                grpVal.classList.add('error');
+                errLbl.style.display = 'block';
+                this.clearResults();
+                return;
+            }
+
+            this.isValid = true;
+            this.lastIP = rawIp;
+            this.lastCIDR = cidr;
+
+            // 1. Core IP Math
+            const ipInt = this.ipToInt(rawIp);
+            
+            // Mask math: Shift 1s to the left. /24 = 24 1s, 8 0s.
+            const maskInt = cidr === 0 ? 0 : (~0 << (32 - cidr)) >>> 0; 
+            const wildcardInt = ~maskInt >>> 0;
+            
+            const networkInt = (ipInt & maskInt) >>> 0;
+            const broadcastInt = (networkInt | wildcardInt) >>> 0;
+
+            // 2. Usable Hosts
+            let firstHostInt = networkInt + 1;
+            let lastHostInt = broadcastInt - 1;
+            let totalHosts = 0;
+
+            // Edge cases for /32 (1 host, no broadcast) and /31 (P2P link, 2 hosts, no broadcast)
+            if (cidr === 32) {
+                firstHostInt = networkInt;
+                lastHostInt = networkInt;
+                totalHosts = 1;
+            } else if (cidr === 31) {
+                firstHostInt = networkInt;
+                lastHostInt = broadcastInt;
+                totalHosts = 2;
+            } else {
+                totalHosts = (broadcastInt - networkInt - 1);
+                if (totalHosts < 0) totalHosts = 0;
+            }
+
+            // 3. String formatting
+            const netStr = this.intToIp(networkInt);
+            const broadStr = this.intToIp(broadcastInt);
+            const maskStr = this.intToIp(maskInt);
+            const wildStr = this.intToIp(wildcardInt);
+            let rangeStr = `${this.intToIp(firstHostInt)} - ${this.intToIp(lastHostInt)}`;
+            if (cidr === 32) rangeStr = "N/A (Single Host)";
+
+            // 4. Update UI Results
+            document.getElementById('res-net').innerText = netStr;
+            document.getElementById('res-broad').innerText = broadStr;
+            document.getElementById('res-mask').innerText = maskStr;
+            document.getElementById('res-wild').innerText = wildStr;
+            document.getElementById('res-range').innerText = rangeStr;
+            document.getElementById('res-hosts').innerText = totalHosts.toLocaleString('en-IN');
+
+            // 5. IP Class & Type Identification
+            const octets = rawIp.split('.');
+            const octet1 = parseInt(octets[0]);
+            const octet2 = parseInt(octets[1]);
+            
+            let ipClass = "CLASS E";
+            if (octet1 <= 127) ipClass = "CLASS A";
+            else if (octet1 <= 191) ipClass = "CLASS B";
+            else if (octet1 <= 223) ipClass = "CLASS C";
+            else if (octet1 <= 239) ipClass = "CLASS D (Multicast)";
+
+            let ipType = "PUBLIC IP";
+            if (octet1 === 10) ipType = "PRIVATE IP"; // 10.x.x.x
+            else if (octet1 === 172 && octet2 >= 16 && octet2 <= 31) ipType = "PRIVATE IP"; // 172.16-31.x.x
+            else if (octet1 === 192 && octet2 === 168) ipType = "PRIVATE IP"; // 192.168.x.x
+            else if (octet1 === 127) ipType = "LOOPBACK"; // 127.x.x.x
+            else if (octet1 === 169 && octet2 === 254) ipType = "APIPA / LINK-LOCAL"; // 169.254.x.x
+
+            document.getElementById('tag-class').innerText = ipClass;
+            document.getElementById('tag-type').innerText = ipType;
+            tagsBox.style.display = 'flex';
+
+            // Cache for Visualizer
+            this.binIP = this.intToBinStr(ipInt);
+            this.binMask = this.intToBinStr(maskInt);
+            this.binNet = this.intToBinStr(networkInt);
+            this.binBroad = this.intToBinStr(broadcastInt);
+        },
+
+        triggerHaptic: function() {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        },
+
+        // --- PLATINUM FEATURE: BINARY VISUALIZER ---
+        showSteps: function() {
+            const contentBox = document.getElementById('su-steps-content');
+            
+            if (!this.isValid) {
+                contentBox.innerHTML = `<div style="text-align:center; padding:20px; color:#ef4444;"><i class="fas fa-exclamation-triangle fa-2x" aria-hidden="true"></i><br><br>Enter a valid IP to map the subnet!</div>`;
+            } else {
+                contentBox.innerHTML = this.generateBinMap();
+            }
+
+            const modal = document.getElementById('su-steps-modal');
+            const box = document.getElementById('su-steps-box');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                box.style.transform = 'translateY(0)';
+            }, 10);
+            this.triggerHaptic();
+        },
+
+        hideSteps: function() {
+            const modal = document.getElementById('su-steps-modal');
+            const box = document.getElementById('su-steps-box');
+            modal.style.opacity = '0';
+            box.style.transform = 'translateY(20px)';
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+            this.triggerHaptic();
+        },
+
+        generateBinMap: function() {
+            const colorize = (binStr, cidr) => {
+                let clean = binStr.replace(/\./g, '');
+                let resultHTML = "";
+                
+                for(let i=0; i<32; i++) {
+                    if (i > 0 && i % 8 === 0) resultHTML += `<span class="b-sep">.</span>`;
+                    
+                    if (i < cidr) resultHTML += `<span class="b-net">${clean[i]}</span>`;
+                    else resultHTML += `<span class="b-host">${clean[i]}</span>`;
+                }
+                return resultHTML;
+            };
+
+            let html = `
+                <div style="margin-bottom:15px; border-left:3px solid #ef4444; padding-left:10px;">
+                    <span style="color:#ef4444; font-weight:bold;">Subnetting Magic /${this.lastCIDR}</span><br>
+                    The Mask splits the 32-bit IP into a <span class="b-net">Network Portion (Red)</span> and a <span class="b-host">Host Portion (Blue)</span>.
+                </div>
+                
+                <div class="bin-grid" role="region" aria-label="Binary breakdown table">
+                    <div class="bin-row">
+                        <span class="bin-lbl">Subnet Mask (Defines the split)</span>
+                        <span class="bin-val">${colorize(this.binMask, this.lastCIDR)}</span>
+                    </div>
+                    <div class="bin-row">
+                        <span class="bin-lbl">Provided IP Address</span>
+                        <span class="bin-val">${colorize(this.binIP, this.lastCIDR)}</span>
+                    </div>
+                    <div class="bin-row">
+                        <span class="bin-lbl">Network Address (All Host Bits = 0)</span>
+                        <span class="bin-val">${colorize(this.binNet, this.lastCIDR)}</span>
+                    </div>
+                    <div class="bin-row" style="border-bottom:none; padding-bottom:0;">
+                        <span class="bin-lbl">Broadcast Address (All Host Bits = 1)</span>
+                        <span class="bin-val">${colorize(this.binBroad, this.lastCIDR)}</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top:15px; font-size:0.75rem; color:var(--text-muted); text-align:center;">
+                    *Only the <span class="b-host">Blue bits</span> can be changed to assign IPs to computers!
+                </div>
+            `;
+            return html;
+        },
+
+        clearResults: function() {
+            document.getElementById('res-net').innerText = "--";
+            document.getElementById('res-broad').innerText = "--";
+            document.getElementById('res-mask').innerText = "--";
+            document.getElementById('res-wild').innerText = "--";
+            document.getElementById('res-range').innerText = "--";
+            document.getElementById('res-hosts').innerText = "0";
+            this.isValid = false;
+        },
+
+        resetUI: function() {
+            document.getElementById('su-inp-ip').value = '';
+            document.getElementById('su-inp-cidr').value = 24;
+            document.getElementById('grp-val').classList.remove('error');
+            document.getElementById('su-err').style.display = 'none';
+            document.getElementById('ip-tags').style.display = 'none';
+            this.clearResults();
+        }
+    };
+
+    // Auto-Init on Load
+    window.onload = function() {
+        QS_Subnet.init();
+    };
+</script>
+</body>
+</html>

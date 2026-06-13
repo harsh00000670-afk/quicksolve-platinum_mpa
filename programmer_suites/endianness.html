@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Endianness Swapper & Memory Visualizer | Big/Little Endian | QuickSolve Platinum</title>
+    <meta name="description" content="Advanced Endianness Swapper. Convert 16-bit, 32-bit, and 64-bit Integers, Floats, or Text data between Big-Endian and Little-Endian formats. Includes a real-time RAM layout visualizer.">
+    <meta name="keywords" content="endianness converter, byte swapper, big endian to little endian, little endian to big endian, float endianness, memory layout visualizer, network byte order converter, programmer calculator, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/endianness.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Endianness Swapper - Visualize RAM Memory Layout">
+    <meta property="og:description" content="Convert Ints, Floats, and Text between Big and Little Endian instantly. A must-have for C/C++ developers.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           ENDIANNESS SWAPPER (GOD MODE V2)
+           Theme: Cyberpunk Terminal (Teal/Violet)
+           ========================================= */
+        body { margin: 0; background-color: var(--bg-body, #09090b); }
+
+        #mod-endian-overlay {
+            width: 100vw; min-height: 100vh;
+            background-color: var(--bg-body, #09090b); 
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: monospace;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .en-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .en-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; }
+        .en-tit { color: #14b8a6; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .en-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Selectors */
+        .ctrl-row { display: flex; gap: 10px; flex-shrink: 0; }
+        
+        .custom-selector { 
+            display: flex; flex: 1; flex-shrink: 0; min-height: 40px;
+            background: #1e293b; border: 1px solid #475569; border-radius: 8px; overflow: hidden; 
+        }
+        .sel-opt { flex: 1; display: flex; justify-content: center; align-items: center; color: #94a3b8; font-weight: 700; font-size: 0.75rem; cursor: pointer; transition: 0.2s; border-right: 1px solid #475569; }
+        .sel-opt:last-child { border-right: none; }
+        
+        .sel-opt.active-bit { background: rgba(20, 184, 166, 0.15); color: #14b8a6; font-weight: 900; box-shadow: inset 0 -3px 0 #14b8a6; }
+        .sel-opt.active-type { background: rgba(139, 92, 246, 0.15); color: #a78bfa; font-weight: 900; box-shadow: inset 0 -3px 0 #a78bfa; }
+
+        /* Input Group */
+        .en-grp { 
+            flex-shrink: 0; background: #1e293b; border: 1px solid #475569; 
+            border-radius: 10px; padding: 15px; transition: 0.2s; position: relative; 
+        }
+        .en-grp:focus-within { border-color: #14b8a6; box-shadow: 0 0 15px rgba(20, 184, 166, 0.15); }
+        .en-grp.error { border-color: #ef4444 !important; box-shadow: 0 0 15px rgba(239, 68, 68, 0.1) !important; }
+        
+        .en-lbl { color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+        .en-tip { font-size: 0.65rem; color: #a78bfa; text-transform: none; float: right; font-weight: bold; }
+        
+        .en-inp-wrap { display: flex; align-items: center; gap: 8px; }
+        .en-inp { background: transparent; border: none; color: #fff; font-size: 1.2rem; font-weight: 800; width: 100%; outline: none; font-family: monospace; }
+        .en-inp::placeholder { color: #475569; font-size: 0.95rem; }
+
+        /* Byte Blocks Visualizer */
+        .byte-arena { 
+            flex-shrink: 0; background: #0f172a; border: 1px dashed #475569; 
+            border-radius: 10px; padding: 15px; text-align: center; display: flex; flex-direction: column; gap: 15px;
+        }
+        .byte-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+        .byte-box { 
+            background: #1e293b; border: 1px solid #334155; border-radius: 6px; 
+            padding: 8px 12px; font-size: 1.1rem; font-weight: bold; color: #f8fafc;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative;
+        }
+        .byte-idx { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); background: #0f172a; font-size: 0.5rem; color: #94a3b8; padding: 0 4px; border-radius: 2px;}
+        
+        .swap-icon { color: #8b5cf6; font-size: 1.5rem; margin: 5px 0; }
+        .byte-box.swapped { border-color: #14b8a6; color: #14b8a6; background: rgba(20, 184, 166, 0.05); }
+
+        /* Super Results Grid */
+        .res-box { flex-shrink: 0; background: rgba(139, 92, 246, 0.05); border: 1px solid #8b5cf6; border-radius: 10px; padding: 15px; }
+        .res-title { font-size: 0.75rem; color: #a78bfa; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px dashed #8b5cf6; padding-bottom: 5px; }
+        
+        .multi-res-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+        .m-res-row { display: flex; justify-content: space-between; align-items: center; background: rgba(2, 6, 23, 0.5); padding: 8px 10px; border-radius: 6px; border: 1px solid #334155; }
+        .m-res-lbl { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; font-weight: bold; }
+        .m-res-val { font-size: 0.95rem; color: #f8fafc; font-weight: bold; word-break: break-all; text-align: right; max-width: 65%; }
+
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #8b5cf6; color: #a78bfa; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(139, 92, 246, 0.15); transform: scale(0.98); }
+
+        /* STEPS MODAL */
+        #en-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #en-steps-box { background: #1e293b; border: 1px solid #8b5cf6; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(139, 92, 246, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #a78bfa; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+
+        .mem-grid { display: grid; grid-template-columns: auto 1fr 1fr; gap: 2px; background: #334155; border: 1px solid #475569; border-radius: 8px; overflow: hidden; margin-top: 15px; }
+        .mem-cell { padding: 8px; text-align: center; font-family: monospace; font-size: 0.9rem; }
+        .mem-head { background: #0f172a; color: #94a3b8; font-weight: bold; font-size: 0.75rem; text-transform: uppercase; }
+        .mem-addr { background: #1e293b; color: #f59e0b; border-right: 1px solid #334155; }
+        .mem-val-big { background: rgba(20, 184, 166, 0.1); color: #14b8a6; font-weight: bold; border-right: 1px solid #334155;}
+        .mem-val-lit { background: rgba(139, 92, 246, 0.1); color: #a78bfa; font-weight: bold; }
+    </style>
+</head>
+
+<body>
+
+<main id="mod-endian-overlay" role="main">
+    <header class="en-head" role="banner">
+        <a href="../programmer.html" class="qs-back-btn" aria-label="Go back to Programmer Suite">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </a>
+<h1 class="en-tit" style="position: absolute; left: 50%; transform: translateX(-50%); margin: 0; color: #38bdf8; font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);">
+    <i class="fas fa-random" aria-hidden="true"></i> MEMORY SWAPPER
+</h1>
+
+    </header>
+
+    <div class="en-body">
+        
+        <section class="ctrl-row" aria-label="Configuration Options">
+            <div class="custom-selector" id="en-type-selector" role="radiogroup" aria-label="Select Data Type">
+                <div class="sel-opt active-type" data-type="int" role="radio" aria-checked="true" tabindex="0" onclick="QS_Endian.setType('int')">Int/Hex</div>
+                <div class="sel-opt" data-type="float" role="radio" aria-checked="false" tabindex="0" onclick="QS_Endian.setType('float')">Float</div>
+                <div class="sel-opt" data-type="text" role="radio" aria-checked="false" tabindex="0" onclick="QS_Endian.setType('text')">Text</div>
+            </div>
+            
+            <div class="custom-selector" id="en-bit-selector" role="radiogroup" aria-label="Select Bit Size">
+                <div class="sel-opt active-bit" data-bits="16" role="radio" aria-checked="true" tabindex="0" onclick="QS_Endian.setBits(16)">16b</div>
+                <div class="sel-opt" data-bits="32" role="radio" aria-checked="false" tabindex="0" onclick="QS_Endian.setBits(32)">32b</div>
+                <div class="sel-opt" data-bits="64" role="radio" aria-checked="false" tabindex="0" onclick="QS_Endian.setBits(64)">64b</div>
+            </div>
+        </section>
+
+        <section class="en-grp" id="grp-val" aria-labelledby="input-heading">
+            <h2 id="input-heading" class="sr-only" style="display:none;">Input Data</h2>
+            <label for="en-inp-val" class="en-lbl">
+                Target Data
+                <span class="en-tip" id="en-tip-text">Accepts Dec or 0x Hex</span>
+            </label>
+            <div class="en-inp-wrap">
+                <input type="text" id="en-inp-val" class="en-inp" placeholder="e.g. 0xAABBCCDD or 255" aria-describedby="en-err" oninput="QS_Endian.calc()" autocomplete="off">
+            </div>
+            <div style="font-size:0.65rem; color:#ef4444; margin-top:5px; display:none;" id="en-err" role="alert" aria-live="assertive">Invalid Input or Overflow</div>
+        </section>
+
+        <section class="byte-arena" id="byte-arena" style="display:none;" aria-label="Memory Layout Visualizer" aria-live="polite">
+            <div style="font-size:0.65rem; color:#94a3b8; text-transform:uppercase; font-weight:bold;">Memory Layout (Big-Endian)</div>
+            <div class="byte-row" id="row-orig">
+                </div>
+            
+            <i class="fas fa-exchange-alt swap-icon" aria-hidden="true"></i>
+            
+            <div class="byte-row" id="row-swap">
+                </div>
+            <div style="font-size:0.65rem; color:#14b8a6; text-transform:uppercase; font-weight:bold;">Memory Layout (Little-Endian)</div>
+        </section>
+
+        <section class="res-box" aria-labelledby="results-heading" aria-live="polite">
+            <h2 id="results-heading" class="res-title">Swapped Data Interpretations</h2>
+            <div class="multi-res-grid">
+                <div class="m-res-row">
+                    <span class="m-res-lbl" id="lbl-res-hex">Raw Hex</span>
+                    <span class="m-res-val" id="res-hex" aria-labelledby="lbl-res-hex">0x00</span>
+                </div>
+                <div class="m-res-row">
+                    <span class="m-res-lbl" id="lbl-res-int">As Integer</span>
+                    <span class="m-res-val" id="res-int" aria-labelledby="lbl-res-int">0</span>
+                </div>
+                <div class="m-res-row">
+                    <span class="m-res-lbl" id="lbl-res-float">As Float</span>
+                    <span class="m-res-val" id="res-float" style="color:#f59e0b;" aria-labelledby="lbl-res-float">0.0</span>
+                </div>
+                <div class="m-res-row">
+                    <span class="m-res-lbl" id="lbl-res-text">As ASCII Text</span>
+                    <span class="m-res-val" id="res-text" style="color:#22c55e;" aria-labelledby="lbl-res-text">--</span>
+                </div>
+            </div>
+        </section>
+
+        <button class="btn-why" aria-haspopup="dialog" aria-expanded="false" aria-label="Open RAM Storage Visualizer" onclick="QS_Endian.showSteps()">
+            <i class="fas fa-server" aria-hidden="true"></i> View RAM Storage Map
+        </button>
+
+    </div>
+
+    <div id="en-steps-modal" role="dialog" aria-modal="true" aria-labelledby="modal-ram-title">
+        <div id="en-steps-box">
+            <header class="steps-head">
+                <h2 id="modal-ram-title" style="margin: 0; font-size: 1rem;"><i class="fas fa-microchip" aria-hidden="true"></i> RAM STORAGE VISUALIZER</h2>
+                <button class="steps-close" aria-label="Close Visualizer" onclick="QS_Endian.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </header>
+            <div class="steps-content" id="en-steps-content" aria-live="polite">
+                </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    /* QUICKSOLVE PLATINUM - ENDIANNESS SWAPPER (MPA STANDALONE)
+       Features: Multi-Type Input (Int/Hex, Float, ASCII Text), Live RAM Visualizer, Multi-interpretation Output.
+    */
+    const QS_Endian = {
+        
+        currentBits: 16,
+        currentType: 'int', // int, float, text
+        isValid: false,
+        
+        origBytes: [],
+        swappedBytes: [],
+
+        init: function() {
+            console.log("Endianness Swapper Engine Ready 🚀");
+            this.resetUI();
+        },
+
+        setBits: function(bits) {
+            this.currentBits = bits;
+            
+            // Update ARIA and Active States
+            const opts = document.querySelectorAll('#en-bit-selector .sel-opt');
+            opts.forEach(opt => {
+                opt.classList.remove('active-bit');
+                opt.setAttribute('aria-checked', 'false');
+            });
+            const activeOpt = document.querySelector(`#en-bit-selector .sel-opt[data-bits="${bits}"]`);
+            if(activeOpt) {
+                activeOpt.classList.add('active-bit');
+                activeOpt.setAttribute('aria-checked', 'true');
+            }
+            
+            // Re-validate based on limits
+            this.calc();
+            this.triggerHaptic();
+        },
+
+        setType: function(type) {
+            this.currentType = type;
+            
+            // Update ARIA and Active States
+            const opts = document.querySelectorAll('#en-type-selector .sel-opt');
+            opts.forEach(opt => {
+                opt.classList.remove('active-type');
+                opt.setAttribute('aria-checked', 'false');
+            });
+            const activeOpt = document.querySelector(`#en-type-selector .sel-opt[data-type="${type}"]`);
+            if(activeOpt) {
+                activeOpt.classList.add('active-type');
+                activeOpt.setAttribute('aria-checked', 'true');
+            }
+            
+            // Update UI Hints
+            const tip = document.getElementById('en-tip-text');
+            const inp = document.getElementById('en-inp-val');
+            
+            if (type === 'int') {
+                tip.innerText = "Accepts Dec or 0x Hex";
+                inp.placeholder = "e.g. 0xAABBCCDD or 255";
+            } else if (type === 'float') {
+                tip.innerText = "Accepts Decimals";
+                inp.placeholder = "e.g. 3.14159";
+                // Float requires at least 32-bit (Single precision)
+                if (this.currentBits === 16) this.setBits(32); 
+            } else if (type === 'text') {
+                tip.innerText = `Max ${this.currentBits / 8} chars`;
+                inp.placeholder = "e.g. ABCD";
+            }
+
+            document.getElementById('en-inp-val').value = '';
+            this.clearResults();
+            this.triggerHaptic();
+        },
+
+        // Parses input and ALWAYS returns a properly padded Hex String based on currentBits
+        getBytesFromInput: function(rawVal) {
+            const byteCount = this.currentBits / 8;
+
+            if (this.currentType === 'int') {
+                let val = rawVal.trim().toLowerCase();
+                let bigNum;
+                if (val.startsWith('0x') || val.startsWith('0b')) {
+                    bigNum = BigInt(val);
+                } else if (/^-?\d+$/.test(val)) {
+                    bigNum = BigInt(val);
+                } else {
+                    return null;
+                }
+                // Bounds check
+                if (bigNum < 0n || bigNum > ((1n << BigInt(this.currentBits)) - 1n)) return null;
+                return bigNum.toString(16).toUpperCase().padStart(byteCount * 2, '0');
+            } 
+            else if (this.currentType === 'float') {
+                let val = parseFloat(rawVal);
+                if (isNaN(val)) return null;
+                
+                if (this.currentBits === 32) {
+                    const buf = new ArrayBuffer(4);
+                    new DataView(buf).setFloat32(0, val, false);
+                    return new DataView(buf).getUint32(0, false).toString(16).toUpperCase().padStart(8, '0');
+                } else if (this.currentBits === 64) {
+                    const buf = new ArrayBuffer(8);
+                    new DataView(buf).setFloat64(0, val, false);
+                    const high = new DataView(buf).getUint32(0, false).toString(16).toUpperCase().padStart(8, '0');
+                    const low = new DataView(buf).getUint32(4, false).toString(16).toUpperCase().padStart(8, '0');
+                    return high + low;
+                } else {
+                    return null; // 16-bit float not standard in JS, skip
+                }
+            }
+            else if (this.currentType === 'text') {
+                // String to Hex
+                if (rawVal.length > byteCount) return null; // Overflow
+                // Pad string with null chars (0x00) if it's shorter than required bytes
+                let paddedStr = rawVal.padEnd(byteCount, '\0'); 
+                let hexStr = "";
+                for(let i=0; i<paddedStr.length; i++) {
+                    hexStr += paddedStr.charCodeAt(i).toString(16).toUpperCase().padStart(2, '0');
+                }
+                return hexStr;
+            }
+            return null;
+        },
+
+        calc: function() {
+            const rawVal = document.getElementById('en-inp-val').value;
+            const grpVal = document.getElementById('grp-val');
+            const errLbl = document.getElementById('en-err');
+            
+            grpVal.classList.remove('error');
+            errLbl.style.display = 'none';
+            this.isValid = false;
+
+            if (!rawVal) {
+                this.clearResults();
+                return;
+            }
+
+            // 1. Get standardized Hex string
+            let hexStr = this.getBytesFromInput(rawVal);
+            
+            if (hexStr === null) {
+                this.showError(grpVal, errLbl);
+                return;
+            }
+
+            this.isValid = true;
+
+            // 2. Split into bytes
+            this.origBytes = hexStr.match(/.{1,2}/g);
+            
+            // 3. Swap Endianness
+            this.swappedBytes = [...this.origBytes].reverse();
+            let swappedHexStr = this.swappedBytes.join('');
+
+            // 4. INTERPRET THE SWAPPED DATA (The God Mode feature)
+            
+            // As Integer
+            let swappedInt = BigInt("0x" + swappedHexStr).toString(10);
+            
+            // As Float
+            let swappedFloat = "N/A (Needs 32/64b)";
+            if (this.currentBits === 32) {
+                const buf = new ArrayBuffer(4);
+                new DataView(buf).setUint32(0, parseInt(swappedHexStr, 16), false);
+                swappedFloat = new DataView(buf).getFloat32(0, false).toPrecision(7);
+            } else if (this.currentBits === 64) {
+                const buf = new ArrayBuffer(8);
+                // BigInt needed for 64-bit hex parsing
+                const bigH = BigInt("0x" + swappedHexStr);
+                const high = Number(bigH >> 32n);
+                const low = Number(bigH & 0xFFFFFFFFn);
+                new DataView(buf).setUint32(0, high, false);
+                new DataView(buf).setUint32(4, low, false);
+                swappedFloat = new DataView(buf).getFloat64(0, false).toPrecision(15);
+            }
+
+            // As Text (ASCII)
+            let swappedText = "";
+            for(let i=0; i<this.swappedBytes.length; i++) {
+                let charCode = parseInt(this.swappedBytes[i], 16);
+                // Only show printable ASCII characters, else show a dot (.)
+                if (charCode >= 32 && charCode <= 126) {
+                    swappedText += String.fromCharCode(charCode);
+                } else {
+                    swappedText += "."; 
+                }
+            }
+
+            // 5. Update UI
+            document.getElementById('res-hex').innerText = "0x" + swappedHexStr;
+            document.getElementById('res-int').innerText = swappedInt;
+            document.getElementById('res-float').innerText = swappedFloat;
+            document.getElementById('res-text').innerText = swappedText;
+
+            this.renderByteBlocks();
+        },
+
+        showError: function(grp, err) {
+            grp.classList.add('error');
+            err.style.display = 'block';
+            this.clearResults();
+        },
+
+        renderByteBlocks: function() {
+            const arena = document.getElementById('byte-arena');
+            const rowOrig = document.getElementById('row-orig');
+            const rowSwap = document.getElementById('row-swap');
+            
+            arena.style.display = 'flex';
+            rowOrig.innerHTML = '';
+            rowSwap.innerHTML = '';
+
+            // Map characters for text mode display hint
+            const textCharsOrig = [];
+            const textCharsSwap = [];
+            if (this.currentType === 'text') {
+                const rawVal = document.getElementById('en-inp-val').value;
+                const paddedStr = rawVal.padEnd(this.currentBits / 8, '\0');
+                for(let i=0; i<paddedStr.length; i++) textCharsOrig.push(paddedStr[i]);
+                for(let i=paddedStr.length-1; i>=0; i--) textCharsSwap.push(paddedStr[i]);
+            }
+
+            this.origBytes.forEach((byte, idx) => {
+                let extra = this.currentType === 'text' ? ` <span style="color:#f59e0b; font-size:0.6rem;" aria-hidden="true">('${textCharsOrig[idx]}')</span>` : "";
+                rowOrig.innerHTML += `<div class="byte-box"><span class="byte-idx">B${idx}</span>${byte}${extra}</div>`;
+            });
+
+            this.swappedBytes.forEach((byte, idx) => {
+                let extra = this.currentType === 'text' ? ` <span style="color:#f59e0b; font-size:0.6rem;" aria-hidden="true">('${textCharsSwap[idx]}')</span>` : "";
+                rowSwap.innerHTML += `<div class="byte-box swapped"><span class="byte-idx">B${this.origBytes.length - 1 - idx}</span>${byte}${extra}</div>`;
+            });
+        },
+
+        triggerHaptic: function() {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        },
+
+        showSteps: function() {
+            const contentBox = document.getElementById('en-steps-content');
+            if (!this.isValid) {
+                contentBox.innerHTML = `<div style="text-align:center; padding:20px; color:#ef4444;"><i class="fas fa-exclamation-triangle fa-2x" aria-hidden="true"></i><br><br>Enter valid data to view RAM layout!</div>`;
+            } else {
+                contentBox.innerHTML = this.generateRAMTable();
+            }
+
+            const modal = document.getElementById('en-steps-modal');
+            const box = document.getElementById('en-steps-box');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                box.style.transform = 'translateY(0)';
+            }, 10);
+            this.triggerHaptic();
+        },
+
+        hideSteps: function() {
+            const modal = document.getElementById('en-steps-modal');
+            const box = document.getElementById('en-steps-box');
+            modal.style.opacity = '0';
+            box.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+            this.triggerHaptic();
+        },
+
+        generateRAMTable: function() {
+            let html = `
+                <div style="margin-bottom:15px; border-left:3px solid #8b5cf6; padding-left:10px;">
+                    <span style="color:#a78bfa; font-weight:bold;">Endianness Architecture:</span><br>
+                    How your data is stored across sequential memory addresses in RAM.
+                </div>
+                
+                <div class="mem-grid" role="table" aria-label="Memory Address Table">
+                    <div class="mem-cell mem-head" role="columnheader">Address</div>
+                    <div class="mem-cell mem-head" role="columnheader">Big-Endian</div>
+                    <div class="mem-cell mem-head" role="columnheader">Little-Endian</div>
+            `;
+
+            for (let i = 0; i < this.origBytes.length; i++) {
+                let hexAddr = "0x" + (0x1000 + i).toString(16).toUpperCase(); 
+                html += `
+                    <div class="mem-cell mem-addr" role="cell">${hexAddr}</div>
+                    <div class="mem-cell mem-val-big" role="cell">${this.origBytes[i]}</div>
+                    <div class="mem-cell mem-val-lit" role="cell">${this.swappedBytes[i]}</div>
+                `;
+            }
+
+            html += `</div>
+                <div style="margin-top:15px; font-size:0.75rem; color:var(--text-muted); text-align:center;">
+                    *Intel CPUs use Little-Endian. Internet Protocols use Big-Endian!
+                </div>
+            `;
+            return html;
+        },
+
+        clearResults: function() {
+            document.getElementById('byte-arena').style.display = 'none';
+            document.getElementById('res-hex').innerText = "0x00";
+            document.getElementById('res-int').innerText = "0";
+            document.getElementById('res-float').innerText = "0.0";
+            document.getElementById('res-text').innerText = "--";
+            this.isValid = false;
+        },
+
+        resetUI: function() {
+            document.getElementById('en-inp-val').value = '';
+            document.getElementById('grp-val').classList.remove('error');
+            document.getElementById('en-err').style.display = 'none';
+            this.setBits(32);
+            this.setType('text'); // start with text because it's the coolest feature
+            this.clearResults();
+        }
+    };
+
+    // Auto-Init on Load
+    window.onload = function() {
+        QS_Endian.init();
+    };
+</script>
+</body>
+</html>

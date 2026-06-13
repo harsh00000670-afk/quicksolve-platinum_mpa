@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Crypto Hash Factory | SHA-256, HMAC & File Checksum | QuickSolve Platinum</title>
+    <meta name="description" content="Generate secure SHA-1, SHA-256, SHA-512 hashes and HMAC signatures instantly. Verify file checksums locally in your browser. Visualize the cryptographic avalanche effect. Fast, secure, and 100% offline.">
+    <meta name="keywords" content="hash calculator, sha256 generator, file checksum verifier, HMAC generator, sha512 online, cryptographic hash factory, avalanche effect visualizer, md5 hash tool, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/hash.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Crypto Hash Factory - Ultimate Checksum & HMAC Tool">
+    <meta property="og:description" content="Calculate and verify secure hashes instantly. Keep your data integrity intact.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           CRYPTO HASH FACTORY (GOD MODE)
+           Theme: Hacker / Cyber Security (Neon Green / Red)
+           ========================================= */
+        body { margin: 0; background-color: var(--bg-body, #09090b); }
+
+        #mod-hash-overlay {
+            width: 100vw; min-height: 100vh;
+            background-color: var(--bg-body, #09090b); 
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: monospace;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .hs-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .hs-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; }
+        .hs-tit { color: #22c55e; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .hs-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Input Modes */
+        .mode-switch { display: flex; flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 8px; overflow: hidden; }
+        .mode-btn { flex: 1; padding: 12px 0; text-align: center; color: #94a3b8; font-weight: 800; font-size: 0.75rem; cursor: pointer; transition: 0.2s; border-right: 1px solid #475569; text-transform: uppercase; }
+        .mode-btn:last-child { border-right: none; }
+        .mode-btn.active { background: rgba(34, 197, 94, 0.15); color: #22c55e; box-shadow: inset 0 -3px 0 #22c55e; }
+
+        /* Input Area */
+        .hs-grp { flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 10px; padding: 12px; transition: 0.2s; position: relative; }
+        .hs-grp:focus-within { border-color: #22c55e; box-shadow: 0 0 15px rgba(34, 197, 94, 0.15); }
+        
+        .hs-lbl { color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+        
+        .hs-textarea { background: transparent; border: none; color: #fff; font-size: 1rem; width: 100%; outline: none; font-family: monospace; resize: vertical; min-height: 80px; }
+        .hs-textarea::placeholder { color: #475569; }
+        
+        .hmac-key-inp { background: rgba(2, 6, 23, 0.5); border: 1px dashed #eab308; color: #eab308; padding: 10px; border-radius: 6px; width: 100%; outline: none; font-family: monospace; font-weight: bold; margin-bottom: 10px; display: none; }
+        .hmac-key-inp::placeholder { color: rgba(234, 179, 8, 0.5); }
+
+        .file-drop { display: none; border: 2px dashed #475569; border-radius: 8px; padding: 30px 15px; text-align: center; cursor: pointer; transition: 0.2s; background: rgba(2, 6, 23, 0.5); }
+        .file-drop:active { background: rgba(34, 197, 94, 0.1); border-color: #22c55e; }
+        .file-drop i { font-size: 2.5rem; color: #22c55e; margin-bottom: 10px; }
+        .file-name { color: #38bdf8; font-weight: bold; margin-top: 10px; font-size: 0.8rem; word-break: break-all; }
+
+        /* Matcher Area */
+        .matcher-grp { flex-shrink: 0; background: rgba(2, 6, 23, 0.6); border: 1px dashed #3b82f6; border-radius: 10px; padding: 12px; margin-top: 5px; }
+        .matcher-inp { background: transparent; border: none; color: #3b82f6; font-size: 0.85rem; width: 100%; outline: none; font-family: monospace; }
+        .matcher-inp::placeholder { color: #475569; font-style: italic; }
+        .match-res { font-weight: 900; font-size: 0.9rem; text-transform: uppercase; margin-top: 8px; text-align: center; display: none; padding: 5px; border-radius: 4px; }
+        .m-success { background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid #22c55e; }
+        .m-fail { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
+
+        /* Results Grid */
+        .hs-res-card { flex-shrink: 0; background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 12px; position: relative; margin-bottom: 8px; }
+        .hs-res-card:focus-within { border-color: #22c55e; }
+        
+        .r-head { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .r-tit { font-size: 0.75rem; font-weight: 800; color: #22c55e; text-transform: uppercase; }
+        .r-copy { color: #94a3b8; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
+        .r-copy:active { color: #22c55e; transform: scale(0.9); }
+        
+        .r-val { background: transparent; border: none; color: #f8fafc; font-size: 0.85rem; width: 100%; outline: none; font-family: monospace; word-break: break-all; resize: none; overflow: hidden; }
+
+        /* Output Format Toggle */
+        .fmt-toggle { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 5px; }
+        .fmt-lbl { font-size: 0.65rem; color: #94a3b8; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .fmt-lbl.active { color: #38bdf8; text-decoration: underline; }
+
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #ef4444; color: #ef4444; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(239, 68, 68, 0.15); transform: scale(0.98); }
+
+        /* STEPS MODAL */
+        #hs-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #hs-steps-box { background: #1e293b; border: 1px solid #ef4444; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(239, 68, 68, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #ef4444; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+        
+        .ava-box { background: #020617; border: 1px solid #334155; border-radius: 8px; padding: 10px; margin-top: 10px; }
+        .ava-lbl { color: #94a3b8; font-size: 0.65rem; text-transform: uppercase; font-weight: bold; }
+        .ava-inp { color: #22c55e; font-size: 1rem; font-weight: bold; margin: 4px 0 8px 0; }
+        .ava-hash { color: #f8fafc; font-size: 0.75rem; word-break: break-all; font-family: monospace; }
+        .hl-diff { color: #ef4444; font-weight: bold; background: rgba(239, 68, 68, 0.2); }
+    </style>
+</head>
+
+<body>
+
+<main id="mod-hash-overlay" role="main">
+    <header class="hs-head" role="banner">
+        <a href="../programmer.html" class="qs-back-btn" aria-label="Go back to Programmer Suite">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </a>
+<h1 class="hs-tit" style="position: absolute; left: 50%; transform: translateX(-50%); margin: 0; color: #38bdf8; font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);">
+    <i class="fas fa-fingerprint" aria-hidden="true"></i> HASH FACTORY
+</h1>
+
+    </header>
+
+    <div class="hs-body">
+        
+        <section class="mode-switch" role="tablist" aria-label="Input Mode Selection">
+            <div class="mode-btn active" id="btn-hm-text" role="tab" aria-selected="true" tabindex="0" onclick="QS_Hash.setMode('text')">String</div>
+            <div class="mode-btn" id="btn-hm-hmac" role="tab" aria-selected="false" tabindex="0" onclick="QS_Hash.setMode('hmac')">HMAC (Key)</div>
+            <div class="mode-btn" id="btn-hm-file" role="tab" aria-selected="false" tabindex="0" onclick="QS_Hash.setMode('file')">File Checksum</div>
+        </section>
+
+        <section class="hs-grp" aria-labelledby="input-section-heading">
+            <h2 id="input-section-heading" class="sr-only" style="display:none;">Input Data Selection</h2>
+            <span class="hs-lbl" id="hs-main-lbl">Data to Hash</span>
+            
+            <label for="inp-hmac-key" class="sr-only">Secret HMAC Key</label>
+            <input type="text" id="inp-hmac-key" class="hmac-key-inp" placeholder="Secret Key (Optional)" oninput="QS_Hash.calc()">
+            
+            <textarea id="inp-data" class="hs-textarea" placeholder="Paste your string here..." aria-label="Input string for hashing" oninput="QS_Hash.calc()"></textarea>
+            
+            <div id="drop-zone" class="file-drop" role="button" aria-label="Select file for checksum verification" tabindex="0" onclick="document.getElementById('file-upload').click()">
+                <i class="fas fa-file-shield" aria-hidden="true"></i>
+                <div style="color:#94a3b8; font-size:0.8rem;">Tap to select File / Image / ISO</div>
+                <div id="file-info" class="file-name" aria-live="polite"></div>
+            </div>
+            <input type="file" id="file-upload" style="display:none;" aria-hidden="true" onchange="QS_Hash.handleFile(event)">
+            
+            <div id="loader-msg" style="display:none; color:#f59e0b; font-size:0.75rem; text-align:center; margin-top:10px;" aria-live="polite">
+                <i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i> Processing Buffer...
+            </div>
+        </section>
+
+        <section class="matcher-grp" aria-labelledby="verify-heading">
+            <h2 id="verify-heading" class="hs-lbl" style="color:#3b82f6;">Verify Checksum (Optional)</h2>
+            <input type="text" id="inp-matcher" class="matcher-inp" placeholder="Paste expected hash to compare..." aria-label="Expected hash for verification" oninput="QS_Hash.verifyMatch()">
+            <div id="match-result" class="match-res" role="alert" aria-live="polite"></div>
+        </section>
+
+        <section aria-label="Output Format Toggles">
+            <div class="fmt-toggle">
+                <span class="fmt-lbl active" id="fmt-hex" role="button" tabindex="0" onclick="QS_Hash.setFormat('hex')">HEX</span>
+                <span class="fmt-lbl" id="fmt-b64" role="button" tabindex="0" onclick="QS_Hash.setFormat('base64')">BASE64</span>
+            </div>
+        </section>
+
+        <section id="hash-results-container" aria-label="Generated Hashing Results" aria-live="polite">
+            <div class="hs-res-card">
+                <div class="r-head">
+                    <span class="r-tit">SHA-1</span>
+                    <i class="fas fa-copy r-copy" aria-label="Copy SHA-1 Hash" role="button" tabindex="0" onclick="QS_Hash.copy('res-sha1')"></i>
+                </div>
+                <textarea id="res-sha1" class="r-val" readonly rows="2" aria-label="SHA-1 Output">--</textarea>
+            </div>
+            
+            <div class="hs-res-card" style="border-color: #22c55e;">
+                <div class="r-head">
+                    <span class="r-tit" style="color:#22c55e;">SHA-256 <span style="font-size:0.6rem; color:#94a3b8;" aria-hidden="true">(Industry Standard)</span></span>
+                    <i class="fas fa-copy r-copy" aria-label="Copy SHA-256 Hash" role="button" tabindex="0" onclick="QS_Hash.copy('res-sha256')"></i>
+                </div>
+                <textarea id="res-sha256" class="r-val" style="color:#22c55e;" readonly rows="2" aria-label="SHA-256 Output">--</textarea>
+            </div>
+
+            <div class="hs-res-card">
+                <div class="r-head">
+                    <span class="r-tit">SHA-384</span>
+                    <i class="fas fa-copy r-copy" aria-label="Copy SHA-384 Hash" role="button" tabindex="0" onclick="QS_Hash.copy('res-sha384')"></i>
+                </div>
+                <textarea id="res-sha384" class="r-val" readonly rows="3" aria-label="SHA-384 Output">--</textarea>
+            </div>
+
+            <div class="hs-res-card">
+                <div class="r-head">
+                    <span class="r-tit">SHA-512 <span style="font-size:0.6rem; color:#94a3b8;" aria-hidden="true">(Ultra Secure)</span></span>
+                    <i class="fas fa-copy r-copy" aria-label="Copy SHA-512 Hash" role="button" tabindex="0" onclick="QS_Hash.copy('res-sha512')"></i>
+                </div>
+                <textarea id="res-sha512" class="r-val" readonly rows="3" aria-label="SHA-512 Output">--</textarea>
+            </div>
+        </section>
+
+        <button class="btn-why" aria-haspopup="dialog" aria-expanded="false" aria-label="Show Cryptographic Avalanche Effect Visualizer" onclick="QS_Hash.showSteps()">
+            <i class="fas fa-bomb" aria-hidden="true"></i> Visualize Avalanche Effect
+        </button>
+
+    </div>
+
+    <div id="hs-steps-modal" role="dialog" aria-modal="true" aria-labelledby="modal-ava-title">
+        <div id="hs-steps-box">
+            <header class="steps-head">
+                <h2 id="modal-ava-title" style="margin:0; font-size:1rem;"><i class="fas fa-radiation" aria-hidden="true"></i> AVALANCHE EFFECT</h2>
+                <button class="steps-close" aria-label="Close Visualizer" onclick="QS_Hash.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </header>
+            <div class="steps-content" id="hs-steps-content" aria-live="polite">
+                </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    /* QUICKSOLVE PLATINUM - CRYPTO HASH FACTORY (MPA STANDALONE)
+       Features: Native WebCrypto API, Large File Checksums, HMAC (Secret Key), Checksum Verifier.
+    */
+    const QS_Hash = {
+        
+        currentMode: 'text',
+        outputFormat: 'hex', // hex or base64
+        
+        currentHashes: {
+            'SHA-1': '',
+            'SHA-256': '',
+            'SHA-384': '',
+            'SHA-512': ''
+        },
+        fileBuffer: null,
+
+        init: function() {
+            console.log("Hash Factory Engine Ready 🚀");
+            this.resetUI();
+        },
+
+        setMode: function(mode) {
+            this.currentMode = mode;
+            ['text', 'hmac', 'file'].forEach(m => {
+                const el = document.getElementById(`btn-hm-${m}`);
+                el.classList.remove('active');
+                el.setAttribute('aria-selected', 'false');
+            });
+            const activeBtn = document.getElementById(`btn-hm-${mode}`);
+            activeBtn.classList.add('active');
+            activeBtn.setAttribute('aria-selected', 'true');
+
+            const txtArea = document.getElementById('inp-data');
+            const hmacKey = document.getElementById('inp-hmac-key');
+            const dropZone = document.getElementById('drop-zone');
+            const mainLbl = document.getElementById('hs-main-lbl');
+
+            if (mode === 'text') {
+                txtArea.style.display = 'block';
+                hmacKey.style.display = 'none';
+                dropZone.style.display = 'none';
+                mainLbl.innerText = "String to Hash";
+            } else if (mode === 'hmac') {
+                txtArea.style.display = 'block';
+                hmacKey.style.display = 'block';
+                dropZone.style.display = 'none';
+                mainLbl.innerText = "Payload String";
+            } else {
+                txtArea.style.display = 'none';
+                hmacKey.style.display = 'none';
+                dropZone.style.display = 'block';
+                mainLbl.innerText = "File to Verify";
+            }
+            
+            this.clearResults();
+            this.triggerHaptic();
+        },
+
+        setFormat: function(fmt) {
+            this.outputFormat = fmt;
+            document.getElementById('fmt-hex').classList.remove('active');
+            document.getElementById('fmt-b64').classList.remove('active');
+            
+            if(fmt === 'hex') document.getElementById('fmt-hex').classList.add('active');
+            else document.getElementById('fmt-b64').classList.add('active');
+            
+            this.renderHashes();
+            this.triggerHaptic();
+        },
+
+        handleFile: function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            document.getElementById('file-info').innerText = `Loaded: ${file.name} (${(file.size/1024/1024).toFixed(2)} MB)`;
+            const loader = document.getElementById('loader-msg');
+            loader.style.display = 'block';
+            
+            const reader = new FileReader();
+            reader.onload = async (evt) => {
+                this.fileBuffer = evt.target.result;
+                await this.calcHashesFromBuffer(this.fileBuffer);
+                loader.style.display = 'none';
+            };
+            reader.onerror = () => {
+                document.getElementById('file-info').innerText = "Error reading file!";
+                loader.style.display = 'none';
+            };
+            reader.readAsArrayBuffer(file);
+        },
+
+        calc: async function() {
+            if (this.currentMode === 'file') return;
+            
+            const rawData = document.getElementById('inp-data').value;
+            if (!rawData) {
+                this.clearResults();
+                return;
+            }
+
+            const encoder = new TextEncoder();
+            const dataBuffer = encoder.encode(rawData);
+
+            if (this.currentMode === 'hmac') {
+                const keyStr = document.getElementById('inp-hmac-key').value;
+                const keyBuffer = encoder.encode(keyStr);
+                await this.calcHMAC(keyBuffer, dataBuffer);
+            } else {
+                await this.calcHashesFromBuffer(dataBuffer);
+            }
+        },
+
+        calcHashesFromBuffer: async function(buffer) {
+            try {
+                const algos = ['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'];
+                for (let algo of algos) {
+                    const hashBuffer = await crypto.subtle.digest(algo, buffer);
+                    this.currentHashes[algo] = hashBuffer;
+                }
+                this.renderHashes();
+            } catch (e) {
+                console.error("Crypto API Error:", e);
+            }
+        },
+
+        calcHMAC: async function(keyBuffer, dataBuffer) {
+            try {
+                const algos = ['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'];
+                for (let algo of algos) {
+                    const cryptoKey = await crypto.subtle.importKey(
+                        "raw", keyBuffer, { name: "HMAC", hash: algo }, false, ["sign"]
+                    );
+                    const signature = await crypto.subtle.sign("HMAC", cryptoKey, dataBuffer);
+                    this.currentHashes[algo] = signature;
+                }
+                this.renderHashes();
+            } catch (e) {
+                console.error("HMAC Error:", e);
+            }
+        },
+
+        bufferToHex: function(buffer) {
+            const hashArray = Array.from(new Uint8Array(buffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        },
+
+        bufferToBase64: function(buffer) {
+            let binary = '';
+            const bytes = new Uint8Array(buffer);
+            for (let i = 0; i < bytes.byteLength; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        },
+
+        renderHashes: function() {
+            const algos = ['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'];
+            for (let algo of algos) {
+                let id = 'res-' + algo.toLowerCase().replace('-', '');
+                let buffer = this.currentHashes[algo];
+                if (buffer) {
+                    let outStr = this.outputFormat === 'hex' ? this.bufferToHex(buffer) : this.bufferToBase64(buffer);
+                    document.getElementById(id).value = outStr;
+                } else {
+                    document.getElementById(id).value = '--';
+                }
+            }
+            this.verifyMatch();
+        },
+
+        verifyMatch: function() {
+            const expected = document.getElementById('inp-matcher').value.trim().toLowerCase();
+            const resBox = document.getElementById('match-result');
+            if (!expected) {
+                resBox.style.display = 'none';
+                return;
+            }
+            let currentHexes = [];
+            const algos = ['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'];
+            for (let algo of algos) {
+                if (this.currentHashes[algo]) {
+                    currentHexes.push(this.bufferToHex(this.currentHashes[algo]).toLowerCase());
+                }
+            }
+            if (currentHexes.length === 0) return;
+            if (currentHexes.includes(expected)) {
+                resBox.innerText = "✅ EXACT MATCH FOUND! (FILE IS SAFE)";
+                resBox.className = "match-res m-success";
+                resBox.style.display = 'block';
+            } else {
+                resBox.innerText = "❌ HASH MISMATCH! (DATA CORRUPTED/MODIFIED)";
+                resBox.className = "match-res m-fail";
+                resBox.style.display = 'block';
+            }
+        },
+
+        copy: function(id) {
+            const el = document.getElementById(id);
+            if(el.value === '--') return;
+            el.select();
+            document.execCommand('copy');
+            this.triggerHaptic();
+        },
+
+        triggerHaptic: function() {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        },
+
+        showSteps: async function() {
+            const contentBox = document.getElementById('hs-steps-content');
+            let text = this.currentMode === 'text' ? document.getElementById('inp-data').value : "Hello";
+            if (!text) text = "Hello";
+            let mutatedText = text + ".";
+
+            contentBox.innerHTML = `<div style="text-align:center; padding:20px; color:#f59e0b;"><i class="fas fa-spinner fa-spin fa-2x" aria-hidden="true"></i><br><br>Simulating Crypto Avalanche...</div>`;
+
+            const modal = document.getElementById('hs-steps-modal');
+            const box = document.getElementById('hs-steps-box');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                box.style.transform = 'translateY(0)';
+            }, 10);
+            this.triggerHaptic();
+
+            const enc = new TextEncoder();
+            const hash1Buf = await crypto.subtle.digest('SHA-256', enc.encode(text));
+            const hash2Buf = await crypto.subtle.digest('SHA-256', enc.encode(mutatedText));
+            const hash1Hex = this.bufferToHex(hash1Buf);
+            const hash2Hex = this.bufferToHex(hash2Buf);
+
+            let visualHash2 = "";
+            let changes = 0;
+            for(let i=0; i<hash2Hex.length; i++) {
+                if(hash2Hex[i] !== hash1Hex[i]) {
+                    visualHash2 += `<span class="hl-diff">${hash2Hex[i]}</span>`;
+                    changes++;
+                } else {
+                    visualHash2 += hash2Hex[i];
+                }
+            }
+            let changePercent = Math.round((changes / 64) * 100);
+
+            let html = `
+                <div style="margin-bottom:15px; border-left:3px solid #ef4444; padding-left:10px;">
+                    <span style="color:#ef4444; font-weight:bold;">The Avalanche Effect:</span><br>
+                    In strong cryptography, changing just ONE bit of the input should completely scramble the output. This proves the hash cannot be reversed or predicted!
+                </div>
+                <div class="ava-box">
+                    <div class="ava-lbl">Original Input (SHA-256)</div>
+                    <div class="ava-inp">"${text}"</div>
+                    <div class="ava-hash" style="color:#22c55e;">${hash1Hex}</div>
+                </div>
+                <div style="text-align:center; margin:10px 0; color:#ef4444; font-size:1.5rem;" aria-hidden="true">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="ava-box" style="border-color:#ef4444;">
+                    <div class="ava-lbl">Mutated Input (Added ONE dot)</div>
+                    <div class="ava-inp">"${mutatedText}"</div>
+                    <div class="ava-hash">${visualHash2}</div>
+                </div>
+                <div style="margin-top:15px; font-size:0.8rem; color:var(--text-muted); text-align:center;">
+                    *Adding just ONE dot changed <span style="color:#ef4444; font-weight:bold;">${changePercent}%</span> of the resulting Hash characters!
+                </div>
+            `;
+            contentBox.innerHTML = html;
+        },
+
+        hideSteps: function() {
+            const modal = document.getElementById('hs-steps-modal');
+            const box = document.getElementById('hs-steps-box');
+            modal.style.opacity = '0';
+            box.style.transform = 'translateY(20px)';
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+            this.triggerHaptic();
+        },
+
+        clearResults: function() {
+            this.currentHashes = { 'SHA-1': '', 'SHA-256': '', 'SHA-384': '', 'SHA-512': '' };
+            this.fileBuffer = null;
+            ['sha1', 'sha256', 'sha384', 'sha512'].forEach(a => {
+                const el = document.getElementById('res-' + a);
+                if(el) el.value = "--";
+            });
+            document.getElementById('inp-matcher').value = "";
+            document.getElementById('match-result').style.display = "none";
+            document.getElementById('file-info').innerText = "";
+        },
+
+        resetUI: function() {
+            this.setMode('text');
+            document.getElementById('inp-data').value = '';
+            document.getElementById('inp-hmac-key').value = '';
+            this.setFormat('hex');
+            this.clearResults();
+        }
+    };
+
+    window.onload = function() {
+        QS_Hash.init();
+    };
+</script>
+</body>
+</html>

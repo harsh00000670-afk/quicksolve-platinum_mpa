@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+    
+    <title>ASCII, UTF-8, Hex, Binary & Base64 Converter | QuickSolve Platinum</title>
+    <meta name="description" content="Real-time programmer text lab. Convert strings to Hexadecimal, Binary, Decimal (ASCII), and Base64 instantly. Detect hidden zero-width characters and debug strings. 100% Offline.">
+    <meta name="keywords" content="ascii converter, hex to text, binary to text, base64 encoder, zero width character detector, string debugger, utf8 converter, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/ascii.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Text Lab">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="ASCII & Encoding Lab - Debug Strings Instantly">
+    <meta property="og:description" content="Convert text to Hex, Binary, and Base64. Detect hidden zero-width anomalies in real-time.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/programmer_suites/ascii.html">
+    <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Text Lab Logo">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ASCII & Encoding Lab - QuickSolve Platinum">
+    <meta name="twitter:description" content="Convert text to Hex, Binary, and Base64. Detect hidden zero-width anomalies in real-time.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "ASCII & UTF-8 Text Lab",
+      "url": "https://quicksolve-platinum.netlify.app/programmer_suites/ascii.html",
+      "description": "Real-time programmer text lab. Convert strings to Hexadecimal, Binary, Decimal (ASCII), and Base64 instantly while detecting hidden zero-width anomalies.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - DESIGN RETAINED EXACTLY */
+        /* =========================================
+           ASCII / UTF-8 TEXT LAB (GOD MODE)
+           Theme: Cyberpunk Terminal (Green/Gold Focus)
+           ========================================= */
+        body { margin: 0; background-color: var(--bg-body, #09090b); }
+
+        #mod-ascii-overlay {
+            width: 100vw; min-height: 100vh;
+            background-color: var(--bg-body, #09090b); 
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: monospace;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .as-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .as-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; }
+        .as-tit { color: #22c55e; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .as-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Main Text Area */
+        .as-grp-main { 
+            flex-shrink: 0; background: #1e293b; border: 1px solid #22c55e; 
+            border-radius: 10px; padding: 15px; transition: 0.2s;
+        }
+        .as-lbl { color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+        
+        .as-main-inp { 
+            background: transparent; border: none; color: #fff; font-size: 1.1rem; 
+            width: 100%; outline: none; font-family: monospace; resize: none; min-height: 80px;
+        }
+        .as-main-inp::placeholder { color: #475569; }
+
+        /* Representation Cards Grid */
+        .as-res-grid { display: flex; flex-direction: column; gap: 10px; }
+        .as-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 12px; position: relative; }
+        .as-card:focus-within { border-color: #22c55e; }
+        
+        .card-head { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .card-lbl { font-size: 0.65rem; color: #22c55e; font-weight: 800; text-transform: uppercase; }
+        .card-copy { color: #94a3b8; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
+        .card-copy:hover, .card-copy:focus-visible { color: #22c55e; }
+
+        .as-sub-inp { background: transparent; border: none; color: #f8fafc; font-size: 0.95rem; width: 100%; outline: none; font-family: monospace; word-break: break-all; }
+
+        /* Hidden Char Alert */
+        #hidden-alert { display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: 8px; padding: 10px; color: #ef4444; font-size: 0.75rem; align-items: center; gap: 8px; }
+
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #f59e0b; color: #f59e0b; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(245, 158, 11, 0.15); transform: scale(0.98); }
+
+        /* STEPS MODAL */
+        #as-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #as-steps-box { background: #1e293b; border: 1px solid #f59e0b; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(245, 158, 11, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #f59e0b; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; }
+
+        .char-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .char-table th { text-align: left; color: #94a3b8; font-size: 0.65rem; text-transform: uppercase; padding: 8px; border-bottom: 1px solid #334155; }
+        .char-table td { padding: 10px 8px; border-bottom: 1px dashed #27272a; font-family: monospace; font-size: 0.85rem; }
+        .hl-char { color: #22c55e; font-weight: bold; font-size: 1.1rem; }
+        .hl-hex { color: #f59e0b; }
+        .hl-dec { color: #38bdf8; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules */
+        *:focus-visible { outline: 2px solid #22c55e; outline-offset: 2px; border-radius: 4px; }
+        .as-main-inp:focus-visible, .as-sub-inp:focus-visible { outline: none; /* Handled by container focus-within */ }
+        .qs-back-btn:focus-visible { border-radius: 8px; }
+        .btn-why:focus-visible { outline-offset: 4px; }
+    </style>
+</head>
+
+<body>
+
+<main id="mod-ascii-overlay" role="main">
+    <header class="as-head" role="banner">
+        <a href="../programmer.html" class="qs-back-btn" aria-label="Go back to Programmer Suite">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </a>
+<h1 class="as-tit" style="position: absolute; left: 50%; transform: translateX(-50%); margin: 0; color: var(--text-main); font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;">
+    <i class="fas fa-font" aria-hidden="true"></i> TEXT LAB
+</h1>
+
+    </header>
+
+    <div class="as-body">
+        
+        <section class="as-grp-main" aria-labelledby="source-text-heading">
+            <span class="as-lbl" id="source-text-heading">Source Text (Plain String)</span>
+            <textarea id="as-inp-text" class="as-main-inp" placeholder="Type something here..." aria-labelledby="source-text-heading" oninput="QS_Ascii.sync('text')"></textarea>
+        </section>
+
+        <div id="hidden-alert" role="alert" aria-live="assertive">
+            <i class="fas fa-ghost" aria-hidden="true"></i> <span>Hidden characters (Zero-width) detected in text!</span>
+        </div>
+
+        <section class="as-res-grid" aria-label="Encoding Conversions">
+            <div class="as-card">
+                <div class="card-head">
+                    <span class="card-lbl" id="lbl-hex">Hexadecimal</span>
+                    <i class="far fa-copy card-copy" aria-label="Copy Hexadecimal" role="button" tabindex="0" onclick="QS_Ascii.copy('as-inp-hex')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Ascii.copy('as-inp-hex')"></i>
+                </div>
+                <input type="text" id="as-inp-hex" class="as-sub-inp" placeholder="48 65 6C 6C 6F" aria-labelledby="lbl-hex" oninput="QS_Ascii.sync('hex')">
+            </div>
+
+            <div class="as-card">
+                <div class="card-head">
+                    <span class="card-lbl" id="lbl-bin">Binary</span>
+                    <i class="far fa-copy card-copy" aria-label="Copy Binary" role="button" tabindex="0" onclick="QS_Ascii.copy('as-inp-bin')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Ascii.copy('as-inp-bin')"></i>
+                </div>
+                <textarea id="as-inp-bin" class="as-sub-inp" placeholder="01001000 01100101..." aria-labelledby="lbl-bin" oninput="QS_Ascii.sync('bin')" rows="2"></textarea>
+            </div>
+
+            <div class="as-card">
+                <div class="card-head">
+                    <span class="card-lbl" id="lbl-dec">Decimal (ASCII)</span>
+                    <i class="far fa-copy card-copy" aria-label="Copy Decimal" role="button" tabindex="0" onclick="QS_Ascii.copy('as-inp-dec')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Ascii.copy('as-inp-dec')"></i>
+                </div>
+                <input type="text" id="as-inp-dec" class="as-sub-inp" placeholder="72 101 108 108 111" aria-labelledby="lbl-dec" oninput="QS_Ascii.sync('dec')">
+            </div>
+
+            <div class="as-card">
+                <div class="card-head">
+                    <span class="card-lbl" id="lbl-b64">Base64 Encoding</span>
+                    <i class="far fa-copy card-copy" aria-label="Copy Base64" role="button" tabindex="0" onclick="QS_Ascii.copy('as-inp-b64')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Ascii.copy('as-inp-b64')"></i>
+                </div>
+                <input type="text" id="as-inp-b64" class="as-sub-inp" placeholder="SGVsbG8=" aria-labelledby="lbl-b64" oninput="QS_Ascii.sync('b64')">
+            </div>
+        </section>
+
+
+    </div>
+
+    <div id="as-steps-modal" role="dialog" aria-modal="true" aria-labelledby="modal-enc-title">
+        <div id="as-steps-box">
+            <header class="steps-head">
+                <h2 id="modal-enc-title" style="margin: 0; font-size: 1rem;"><i class="fas fa-table" aria-hidden="true"></i> ENCODING BREAKDOWN</h2>
+                <button class="steps-close" aria-label="Close Breakdown" onclick="QS_Ascii.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </header>
+            <div class="steps-content" id="as-steps-content" aria-live="polite">
+                </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    /* QUICKSOLVE PLATINUM - ASCII / UTF-8 TEXT LAB (MPA STANDALONE)
+       Features: Real-time Multi-sync, Hidden Char Detection, Base64 support, Full Encoding Map.
+    */
+    const QS_Ascii = {
+        
+        lastText: "",
+
+        init: function() {
+            console.log("Text Lab Engine Ready 🚀");
+            this.resetUI();
+        },
+
+        sync: function(source) {
+            const elText = document.getElementById('as-inp-text');
+            const elHex = document.getElementById('as-inp-hex');
+            const elBin = document.getElementById('as-inp-bin');
+            const elDec = document.getElementById('as-inp-dec');
+            const elB64 = document.getElementById('as-inp-b64');
+            const alertBox = document.getElementById('hidden-alert');
+
+            let currentText = "";
+
+            try {
+                if (source === 'text') {
+                    currentText = elText.value;
+                } 
+                else if (source === 'hex') {
+                    let hex = elHex.value.replace(/[^0-9a-fA-F]/g, '');
+                    for (let i = 0; i < hex.length; i += 2) {
+                        currentText += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+                    }
+                }
+                else if (source === 'dec') {
+                    let decs = elDec.value.split(/\s+/);
+                    decs.forEach(d => { if(d) currentText += String.fromCharCode(parseInt(d, 10)); });
+                }
+                else if (source === 'bin') {
+                    let bins = elBin.value.replace(/[^01]/g, '').match(/.{1,8}/g);
+                    if(bins) bins.forEach(b => currentText += String.fromCharCode(parseInt(b, 2)));
+                }
+                else if (source === 'b64') {
+                    // FIX: Modified to support UTF-8 decoding safely
+                    currentText = decodeURIComponent(escape(atob(elB64.value)));
+                }
+
+                this.lastText = currentText;
+
+                // --- DETECT HIDDEN CHARS ---
+                const hiddenRegex = /[\u200B-\u200D\uFEFF]/;
+                alertBox.style.display = hiddenRegex.test(currentText) ? 'flex' : 'none';
+
+                // --- UPDATE ALL OTHER FIELDS ---
+                if (source !== 'text') elText.value = currentText;
+                
+                let hexArr = [], binArr = [], decArr = [];
+                for (let i = 0; i < currentText.length; i++) {
+                    let code = currentText.charCodeAt(i);
+                    hexArr.push(code.toString(16).toUpperCase().padStart(2, '0'));
+                    binArr.push(code.toString(2).padStart(8, '0'));
+                    decArr.push(code.toString(10));
+                }
+
+                if (source !== 'hex') elHex.value = hexArr.join(' ');
+                if (source !== 'bin') elBin.value = binArr.join(' ');
+                if (source !== 'dec') elDec.value = decArr.join(' ');
+                if (source !== 'b64') {
+                    // FIX: Modified to support UTF-8 encoding safely (Emojis, Hindi text, etc.)
+                    try { elB64.value = btoa(unescape(encodeURIComponent(currentText))); } catch(e) { elB64.value = "Error (Unicode)"; }
+                }
+
+            } catch (e) {
+                console.warn("Sync Error:", e);
+            }
+        },
+
+        showSteps: function() {
+            const contentBox = document.getElementById('as-steps-content');
+            if (!this.lastText) {
+                contentBox.innerHTML = `<div style="text-align:center; padding:20px; color:#ef4444;">Please enter some text first!</div>`;
+            } else {
+                contentBox.innerHTML = this.generateCharMap();
+            }
+
+            const modal = document.getElementById('as-steps-modal');
+            const box = document.getElementById('as-steps-box');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                box.style.transform = 'translateY(0)';
+            }, 10);
+            
+            // Standalone Haptic Fallback
+            if(window.doHaptic) window.doHaptic();
+            else if(navigator.vibrate) navigator.vibrate(5);
+        },
+
+        hideSteps: function() {
+            const modal = document.getElementById('as-steps-modal');
+            const box = document.getElementById('as-steps-box');
+            modal.style.opacity = '0';
+            box.style.transform = 'translateY(20px)';
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+            
+            if(window.doHaptic) window.doHaptic();
+            else if(navigator.vibrate) navigator.vibrate(5);
+        },
+
+        copy: async function(id) {
+            const el = document.getElementById(id);
+            // FIX: Modern Clipboard API fallback added, preserving existing logic
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(el.value);
+                } else {
+                    el.select();
+                    document.execCommand('copy');
+                }
+            } catch (err) {
+                el.select();
+                document.execCommand('copy');
+            }
+            
+            if(window.doHaptic) window.doHaptic();
+            else if(navigator.vibrate) navigator.vibrate(5);
+        },
+
+        resetUI: function() {
+            ['text', 'hex', 'bin', 'dec', 'b64'].forEach(id => {
+                const el = document.getElementById(`as-inp-${id}`);
+                if(el) el.value = '';
+            });
+            document.getElementById('hidden-alert').style.display = 'none';
+            this.lastText = "";
+        }
+    };
+
+    // Initialize Engine
+    window.onload = function() {
+        QS_Ascii.init();
+    };
+</script>
+</body>
+</html>

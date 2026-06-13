@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Successive Change Glitch | Reality Check Suite | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           SUCCESSIVE GLITCH ENGINE - PLATINUM (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800;900&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-red: #ef4444;
+            --accent-red-glow: rgba(239, 68, 68, 0.3);
+            --accent-gold: #fbbd23;
+            --accent-gold-glow: rgba(251, 189, 35, 0.3);
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-cyan: #06b6d4;
+            --accent-cyan-glow: rgba(6, 182, 212, 0.3);
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.25; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 250px; height: 250px; background: var(--accent-cyan); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-purple); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-cyan); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #06b6d4, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--text-sub); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CARDS & INPUTS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(6, 182, 212, 0.15);
+        }
+        .inp-group { margin-bottom: 18px; position: relative; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        
+        .inp-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .inp-field:focus { border-color: var(--accent-cyan); box-shadow: 0 0 10px var(--accent-cyan-glow); }
+        .inp-field::placeholder { color: var(--text-dim); font-weight: 500; }
+
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        /* CUSTOM BOTTOM SHEET TRIGGER */
+        .custom-select-trigger {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; font-family: 'Inter', sans-serif;
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s;
+        }
+        .custom-select-trigger:active { transform: scale(0.98); border-color: var(--accent-cyan); box-shadow: 0 0 10px var(--accent-cyan-glow); }
+        
+        /* BOTTOM SHEET MODAL STYLES */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(4px); }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        
+        .custom-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--card-bg); border-radius: 24px 24px 0 0; z-index: 1000; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: env(safe-area-inset-bottom, 20px); border-top: 1px solid var(--border-subtle); box-shadow: 0 -10px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; max-height: 80vh; }
+        .custom-modal.active { bottom: 0; }
+        
+        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .modal-header h3 { margin: 0; color: var(--accent-cyan); font-size: 1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .close-btn { background: rgba(255,255,255,0.05); border: none; color: var(--text-sub); width: 30px; height: 30px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+        
+        .modal-body { overflow-y: auto; padding: 10px 20px 20px; }
+        .modal-opt { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; }
+        .modal-opt:last-child { border-bottom: none; }
+        .modal-opt:active { transform: scale(0.98); opacity: 0.8; }
+        
+        .opt-text { font-size: 1rem; color: var(--text-main); font-weight: 600; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; gap: 4px;}
+        .opt-text small { color: var(--text-sub); font-size: 0.75rem; font-family: 'JetBrains Mono', monospace;}
+        
+        .opt-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--text-dim); position: relative; transition: 0.2s; flex-shrink: 0; margin-left: 15px;}
+        .modal-opt.active .opt-radio { border-color: var(--accent-cyan); }
+        .modal-opt.active .opt-radio::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: var(--accent-cyan); border-radius: 50%; }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #06b6d4, #a855f7);
+            color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px var(--accent-cyan-glow); display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 10px;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD & GRID */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(6, 182, 212, 0.4); border-radius: 20px; 
+            padding: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(6, 182, 212, 0.15); display: none; text-align: center;
+        }
+
+        .output-row { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
+        .res-box { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 18px 15px; text-align: left;}
+        
+        .res-box-lbl { font-size: 0.7rem; color: var(--text-sub); text-transform: uppercase; font-weight: 800; margin-bottom: 8px; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;}
+        .res-box-val { font-size: 1.6rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; line-height: 1.1; margin-bottom: 8px; word-break: break-word;}
+        .res-box-desc { font-size: 0.85rem; color: var(--text-dim); font-weight: 600; line-height: 1.5; }
+
+        .res-box.main-val { border-color: rgba(6, 182, 212, 0.4); background: rgba(6, 182, 212, 0.05); box-shadow: inset 0 0 20px rgba(6, 182, 212, 0.1); }
+        .res-box.main-val .res-box-val { color: var(--accent-cyan); font-size: 2.2rem; }
+
+        .res-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .res-grid-2 .res-box-val { font-size: 1.4rem; }
+
+        /* THEMATIC COLORS */
+        .color-green { color: var(--accent-green) !important; }
+        .color-gold { color: var(--accent-gold) !important; }
+        .color-red { color: var(--accent-red) !important; }
+        .color-cyan { color: var(--accent-cyan) !important; }
+        .color-purple { color: var(--accent-purple) !important; }
+
+        /* STEP BY STEP TIMELINE */
+        .timeline { margin-top: 10px; padding-left: 10px; border-left: 2px solid rgba(255,255,255,0.1); }
+        .tl-item { position: relative; padding-left: 15px; margin-bottom: 12px; }
+        .tl-item:last-child { margin-bottom: 0; }
+        .tl-item::before { content: ''; position: absolute; left: -15px; top: 5px; width: 10px; height: 10px; background: var(--accent-cyan); border-radius: 50%; border: 3px solid var(--card-bg); transform: translateX(-50%); }
+        .tl-lbl { font-size: 0.7rem; color: var(--text-sub); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
+        .tl-val { font-size: 1.1rem; color: var(--text-main); font-weight: 800; font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+        .tl-change { font-size: 0.8rem; font-weight: 700; margin-left: 8px; }
+
+        /* ALERTS */
+        .trap-alert {
+            background: rgba(239, 68, 68, 0.1); border: 1px solid var(--accent-red); border-radius: 12px;
+            padding: 15px; text-align: left; display: none; align-items: flex-start; gap: 12px; margin-top: 15px;
+        }
+        .trap-icon { font-size: 1.5rem; color: var(--accent-red); margin-top: 2px;}
+        .trap-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.5; font-weight: 600;}
+        .trap-text b { color: var(--accent-red); font-weight: 900; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;}
+
+        .info-alert {
+            background: rgba(251, 189, 35, 0.1); border: 1px solid var(--accent-gold); border-radius: 12px;
+            padding: 15px; text-align: left; display: none; align-items: flex-start; gap: 12px; margin-top: 15px;
+        }
+        .info-icon { font-size: 1.5rem; color: var(--accent-gold); margin-top: 2px;}
+        .info-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.5; font-weight: 600;}
+
+        /* LIST STYLES */
+        .psy-list { list-style: none; padding: 0; margin: 0; }
+        .psy-list li { font-size: 0.85rem; color: var(--text-main); font-weight: 600; margin-bottom: 8px; display: flex; gap: 8px; align-items: flex-start;}
+        .psy-list li i { color: var(--accent-cyan); margin-top: 3px; font-size: 0.75rem;}
+
+        /* SAVAGE QUOTE VERDICT */
+        .savage-quote {
+            background: rgba(6, 182, 212, 0.1); border-left: 4px solid var(--accent-cyan);
+            padding: 18px 15px; margin-top: 20px; border-radius: 0 12px 12px 0;
+            font-size: 0.9rem; color: var(--text-main); font-weight: 600; text-align: left;
+            line-height: 1.6;
+        }
+        .savage-quote b { color: var(--accent-cyan); font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
+
+        /* CUSTOM TOAST */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px var(--accent-red-glow); display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .toast.show { bottom: 30px; }
+
+        /* ANIMATIONS */
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-sync-alt"></i> SUCCESSIVE GLITCH</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>The Compounding Reality</h1>
+            <p>> math --expose_yoy --volatility_drag</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            
+            <div class="inp-group">
+                <label class="inp-lbl">1. Starting Value / Baseline</label>
+                <input type="number" id="inp-start" class="inp-field" placeholder="e.g. 1000 or 100000" min="0">
+            </div>
+
+            <div class="inp-group">
+                <label class="inp-lbl">2. Calculation Mode</label>
+                <div class="custom-select-trigger" onclick="openModeModal()">
+                    <span id="mode-display">Simple 2-Step Reversal (+20, -20)</span>
+                    <i class="fas fa-chevron-down" style="color: var(--text-sub); font-size: 0.9rem;"></i>
+                </div>
+                <input type="hidden" id="inp-mode" value="simple">
+            </div>
+
+            <div class="inp-grid" id="simple-inputs">
+                <div class="inp-group">
+                    <label class="inp-lbl">3. Change 1 (%)</label>
+                    <input type="number" id="inp-c1" class="inp-field" placeholder="e.g. 20">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">4. Change 2 (%)</label>
+                    <input type="number" id="inp-c2" class="inp-field" placeholder="e.g. -20">
+                </div>
+            </div>
+
+            <div class="inp-group" id="multi-inputs" style="display: none;">
+                <label class="inp-lbl">3. Multiple Changes (%)</label>
+                <input type="text" id="inp-multi" class="inp-field" placeholder="Comma separated (e.g. 15, -10, 25, -30)">
+            </div>
+
+            <div class="inp-group">
+                <label class="inp-lbl">Time / Metric Label <span style="text-transform:none; color:var(--text-dim);">(Opt)</span></label>
+                <input type="text" id="inp-label" class="inp-field" placeholder="e.g. Year, Quarter, Month" value="Period">
+            </div>
+
+            <button class="calc-btn" onclick="GlitchEngine.calculate()">
+                <i class="fas fa-microchip"></i> Analyze Compounding Reality
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container">
+            
+            <div class="output-row">
+                
+                <div class="res-box main-val">
+                    <div class="res-box-lbl"><i class="fas fa-flag-checkered"></i> 2. Final Absolute Value</div>
+                    <div class="res-box-val" id="out-final-val">0</div>
+                    <hr style="border-color: rgba(6, 182, 212, 0.2); margin: 15px 0;">
+                    <div class="res-box-lbl" style="color: var(--accent-gold);"><i class="fas fa-percentage"></i> 3. Net Compounded Change</div>
+                    <div class="res-box-val" id="out-net-pct" style="font-size: 1.8rem; color:var(--accent-gold);">0%</div>
+                    <div class="res-box-desc" id="out-net-desc" style="color:var(--text-main); font-weight:700;">
+                        You are not at zero. You are operating at a net loss due to mathematical compounding.
+                    </div>
+                </div>
+
+                <div class="res-box">
+                    <div class="res-box-lbl" style="color: var(--accent-cyan);"><i class="fas fa-list-ol"></i> 1. Step-by-Step Progression</div>
+                    <div class="timeline" id="out-timeline">
+                        </div>
+                </div>
+
+                <div class="res-grid-2">
+                    <div class="res-box">
+                        <div class="res-box-lbl" style="color:var(--accent-red);">4. Asymmetry Reality</div>
+                        <div class="res-box-desc" style="font-size: 0.75rem; color:var(--text-main); font-weight:600;">
+                            A gain adds to the base, but a subsequent loss subtracts from the <b style="color:var(--accent-red);">newly inflated base</b>. Percentages mathematically cannot cancel each other out.
+                        </div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-box-lbl" style="color:var(--accent-purple);">5. Recovery Requirement</div>
+                        <div class="res-box-val color-purple" id="out-recovery">0%</div>
+                        <div class="res-box-desc" style="font-size: 0.75rem;" id="out-recovery-desc">
+                            To restore your original baseline, you require this specific positive gain immediately.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-alert" id="multi-step-info" style="display: flex;">
+                    <div class="info-icon"><i class="fas fa-calculator"></i></div>
+                    <div class="info-text">
+                        <b style="color:var(--accent-gold);">6. THE MULTI-STEP REALITY</b><br>
+                        Simple arithmetic suggests your net change should be <b id="out-simple-sum" style="color:var(--text-main);">0%</b>. However, compounding reality dictates your actual net yield is <b id="out-actual-yield" style="color:var(--text-main);">0%</b>. The divergence is the direct result of compounding mechanics.
+                    </div>
+                </div>
+
+                <div class="trap-alert" id="volatility-trap" style="display: flex; background: rgba(168, 85, 247, 0.1); border-color: var(--accent-purple);">
+                    <div class="trap-icon" style="color:var(--accent-purple);"><i class="fas fa-chart-line"></i></div>
+                    <div class="trap-text">
+                        <b style="color:var(--accent-purple);">7. VOLATILITY DAMAGE (DRAG)</b><br>
+                        High magnitude fluctuations systematically erode long-term compounding. Even if the average arithmetic growth appears stable or positive, extreme drawdowns continually cannibalize the net absolute yield.
+                    </div>
+                </div>
+
+                <div class="res-box">
+                    <div class="res-box-lbl" style="color: var(--accent-green);"><i class="fas fa-briefcase"></i> 8. Strategic Business Insights</div>
+                    <ul class="psy-list">
+                        <li><i class="fas fa-chevron-right"></i> Wild revenue fluctuations are indicators of instability, not growth.</li>
+                        <li><i class="fas fa-chevron-right"></i> Consistent marginal gains mathematically outperform aggressive, volatile spikes.</li>
+                        <li><i class="fas fa-chevron-right"></i> High standard deviation in metrics always obscures hidden operational risk.</li>
+                    </ul>
+                    <hr style="border-color: rgba(255,255,255,0.05); margin: 12px 0;">
+                    <div class="res-box-lbl" style="color: var(--accent-gold);"><i class="fas fa-chart-pie"></i> 9. Investor Market Reality</div>
+                    <div class="res-box-desc" style="color:var(--text-main); font-weight:600;">
+                        In financial markets, volatility dilutes compounded annual growth rates (CAGR). A portfolio swinging wildly requires exponentially higher upward momentum simply to maintain its baseline value. Steady compounding is the only supreme strategy.
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="savage-quote">
+                <b><i class="fas fa-radiation"></i> 10. THE FINAL REALITY CHECK</b>
+                "Percentage changes never cancel each other out—they compound. Because downward percentages apply to an expanded asset base, the nominal damage is always magnified. A smart operator completely disregards simple averages and optimizes exclusively for absolute compounding mechanics."
+            </div>
+
+        </div>
+
+    </main>
+
+    <div class="modal-overlay" id="mode-overlay" onclick="closeModeModal()"></div>
+    <div class="custom-modal" id="mode-bottom-sheet">
+        <div class="modal-header">
+            <h3>Select Calculation Mode</h3>
+            <button class="close-btn" onclick="closeModeModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-opt active" onclick="selectMode('simple', 'Simple 2-Step Reversal (+20, -20)', this)">
+                <div class="opt-text">Simple 2-Step Reversal <small>Ideal for standard YoY comparisons</small></div><div class="opt-radio"></div>
+            </div>
+            <div class="modal-opt" onclick="selectMode('multi', 'Multi-Stage Volatility (+15, -10, +25)', this)">
+                <div class="opt-text">Multi-Stage Volatility <small>Advanced tracking for multiple periods</small></div><div class="opt-radio"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - SUCCESSIVE GLITCH ENGINE */
+        
+        // --- CUSTOM MODAL LOGIC ---
+        function openModeModal() {
+            if(window.GlitchEngine.haptic) window.GlitchEngine.haptic();
+            document.getElementById('mode-overlay').classList.add('active');
+            document.getElementById('mode-bottom-sheet').classList.add('active');
+        }
+
+        function closeModeModal() {
+            document.getElementById('mode-overlay').classList.remove('active');
+            document.getElementById('mode-bottom-sheet').classList.remove('active');
+        }
+
+        function selectMode(val, text, element) {
+            if(window.GlitchEngine.haptic) window.GlitchEngine.haptic();
+            
+            document.getElementById('inp-mode').value = val;
+            document.getElementById('mode-display').innerText = text;
+
+            document.querySelectorAll('.modal-opt').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            if(val === 'multi') {
+                document.getElementById('simple-inputs').style.display = 'none';
+                document.getElementById('multi-inputs').style.display = 'block';
+            } else {
+                document.getElementById('simple-inputs').style.display = 'grid';
+                document.getElementById('multi-inputs').style.display = 'none';
+            }
+
+            closeModeModal();
+        }
+
+        // --- MATH ENGINE ---
+        window.GlitchEngine = {
+            haptic: function() { if(navigator.vibrate) navigator.vibrate(20); },
+
+            showToast: function(msg) {
+                const toast = document.getElementById('custom-toast');
+                document.getElementById('toast-msg').innerText = msg;
+                if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            },
+
+            formatNumber: function(val) {
+                return new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(val);
+            },
+
+            calculate: function() {
+                this.haptic();
+
+                // 1. Get Inputs
+                const initialVal = parseFloat(document.getElementById('inp-start').value);
+                const mode = document.getElementById('inp-mode').value;
+                const timeLabel = document.getElementById('inp-label').value || "Period";
+                
+                if(isNaN(initialVal) || initialVal <= 0) { this.showToast("Invalid Input: Starting Value is required."); return; }
+
+                let changes = [];
+                
+                if (mode === 'simple') {
+                    let c1 = parseFloat(document.getElementById('inp-c1').value);
+                    let c2 = parseFloat(document.getElementById('inp-c2').value);
+                    if(isNaN(c1) || isNaN(c2)) { this.showToast("Invalid Input: Both percentage changes are required for 2-Step Mode."); return; }
+                    changes = [c1, c2];
+                } else {
+                    let multiStr = document.getElementById('inp-multi').value;
+                    if(!multiStr.trim()) { this.showToast("Invalid Input: Percentage changes missing."); return; }
+                    let parts = multiStr.split(',');
+                    for(let part of parts) {
+                        let p = parseFloat(part.trim());
+                        if(!isNaN(p)) changes.push(p);
+                    }
+                    if(changes.length === 0) { this.showToast("Invalid Input: Format as comma-separated numbers."); return; }
+                }
+
+                // 2. Core Math Engine (Outputs 1, 2, 3)
+                let currentVal = initialVal;
+                let simpleSum = 0;
+                let timelineHTML = `<div class="tl-item">
+                                        <div class="tl-lbl">Baseline Initiation</div>
+                                        <div class="tl-val">${this.formatNumber(initialVal)}</div>
+                                    </div>`;
+
+                for(let i=0; i<changes.length; i++) {
+                    let c = changes[i];
+                    simpleSum += c;
+                    
+                    let modifier = 1 + (c / 100);
+                    currentVal = currentVal * modifier;
+                    
+                    let sign = c > 0 ? '+' : '';
+                    let colorClass = c > 0 ? 'color-green' : 'color-red';
+
+                    timelineHTML += `<div class="tl-item">
+                                        <div class="tl-lbl">${timeLabel} ${i+1}</div>
+                                        <div class="tl-val">${this.formatNumber(currentVal)} <span class="tl-change ${colorClass}">(${sign}${c}%)</span></div>
+                                     </div>`;
+                }
+
+                let netPctChange = ((currentVal / initialVal) - 1) * 100;
+                let netSign = netPctChange > 0 ? '+' : '';
+
+                // Output 1: Timeline
+                document.getElementById('out-timeline').innerHTML = timelineHTML;
+
+                // Output 2: Final Value
+                document.getElementById('out-final-val').innerText = this.formatNumber(currentVal);
+
+                // Output 3: Net Change
+                let netEl = document.getElementById('out-net-pct');
+                netEl.innerText = `${netSign}${netPctChange.toFixed(2)}%`;
+                
+                let descEl = document.getElementById('out-net-desc');
+                if (netPctChange < 0) {
+                    netEl.className = "res-box-val color-red";
+                    descEl.innerText = "You are operating at a net loss due to mathematical compounding degradation.";
+                } else if (netPctChange > 0) {
+                    netEl.className = "res-box-val color-green";
+                    descEl.innerText = "You have achieved a net compounded gain across the tracked periods.";
+                } else {
+                    netEl.className = "res-box-val color-gold";
+                    descEl.innerText = "You have mathematically broken even across the tracked periods.";
+                }
+
+                // Output 5: Recovery Requirement
+                const recoveryEl = document.getElementById('out-recovery');
+                const recoveryDesc = document.getElementById('out-recovery-desc');
+                if (currentVal < initialVal) {
+                    let reqPct = ((initialVal / currentVal) - 1) * 100;
+                    recoveryEl.innerText = `+${reqPct.toFixed(2)}%`;
+                    recoveryEl.className = "res-box-val color-purple";
+                    recoveryDesc.innerText = `To restore your original baseline of ${this.formatNumber(initialVal)}, you require this specific positive gain immediately.`;
+                } else if (currentVal > initialVal) {
+                    let bufferPct = (1 - (initialVal / currentVal)) * 100;
+                    recoveryEl.innerText = `-${bufferPct.toFixed(2)}%`;
+                    recoveryEl.className = "res-box-val color-green";
+                    recoveryDesc.innerText = `You have a compounding buffer. A drop of this magnitude will return you to your exact initial baseline.`;
+                } else {
+                    recoveryEl.innerText = "0%";
+                    recoveryEl.className = "res-box-val color-gold";
+                    recoveryDesc.innerText = "You are currently at baseline equivalence.";
+                }
+
+                // Output 6: Multi-Step Reality (Arithmetic vs Geometric comparison)
+                document.getElementById('out-simple-sum').innerText = `${simpleSum > 0 ? '+' : ''}${simpleSum.toFixed(2)}%`;
+                document.getElementById('out-actual-yield').innerText = `${netSign}${netPctChange.toFixed(2)}%`;
+
+                // Reveal UI
+                const resCard = document.getElementById('results-container');
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-up');
+                void resCard.offsetWidth; // trigger reflow
+                resCard.classList.add('anim-up');
+                
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+        };
+    </script>
+</body>
+</html>

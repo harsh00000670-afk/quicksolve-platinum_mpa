@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Crypto Profit & Exit Strategy Calculator | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate your true crypto ROI. Instantly deduct exchange fees, maker/taker costs, and flat government crypto taxes (like the 30% India tax). Plan your exit strategy safely. 100% Offline.">
+    <meta name="keywords" content="crypto profit calculator, ROI calculator, crypto tax calculator, 30 percent crypto tax india, exchange fee calculator, bitcoin exit strategy, web3 profit tracker, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/currency_suites/crypto_profit.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Crypto Profit Calculator - Decode Hidden Taxes">
+    <meta property="og:description" content="Stop losing money to hidden taxes and fees. Calculate your true net profit and plan a safe exit.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           CRYPTO PROFIT & EXIT STRATEGY
+           Theme: Cyberpunk Trading (Neon Green / Red)
+           ========================================= */
+        #mod-profit-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: var(--bg-body, #09090b); z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .cp-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .cp-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .cp-tit { color: #22c55e; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .cp-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Input Cards */
+        .cp-card { 
+            flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 12px; 
+            padding: 15px; display: flex; flex-direction: column; gap: 10px; transition: 0.2s; position: relative;
+        }
+        .cp-card:focus-within { border-color: #22c55e; box-shadow: 0 0 15px rgba(34, 197, 94, 0.15); }
+
+        .cp-lbl { font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; }
+        
+        .cp-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; }
+        .cp-curr-tag { color: #f8fafc; font-weight: 900; font-size: 1rem; font-family: monospace; }
+        
+        .cp-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.5rem; font-weight: 900; outline: none; width: 100%; font-family: monospace; }
+        .cp-inp::placeholder { color: #475569; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        /* Sliders & Toggles */
+        .slider-wrap { display: flex; flex-direction: column; gap: 8px; margin-top: 5px; }
+        .cp-slider { width: 100%; accent-color: #22c55e; }
+        .slider-lbl { font-size: 0.7rem; color: #f8fafc; font-weight: bold; display: flex; justify-content: space-between; }
+
+        /* Results Dashboard */
+        .res-dash { flex-shrink: 0; background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 15px; margin-top: 5px; }
+        .dash-tit { font-size: 0.8rem; color: #f8fafc; font-weight: 900; text-transform: uppercase; text-align: center; margin-bottom: 15px; letter-spacing: 1px; }
+
+        .profit-box { background: rgba(34, 197, 94, 0.1); border: 1px solid #22c55e; border-radius: 8px; padding: 15px; text-align: center; margin-bottom: 15px; transition: 0.3s; }
+        .profit-box.loss { background: rgba(239, 68, 68, 0.1); border-color: #ef4444; }
+        
+        .pb-lbl { font-size: 0.8rem; font-weight: 900; text-transform: uppercase; color: #22c55e; }
+        .profit-box.loss .pb-lbl { color: #ef4444; }
+        
+        .pb-val { font-size: 2.2rem; font-weight: 900; color: #22c55e; font-family: monospace; margin: 5px 0; }
+        .profit-box.loss .pb-val { color: #ef4444; }
+        
+        .pb-sub { font-size: 0.85rem; color: #10b981; font-weight: bold; }
+        .profit-box.loss .pb-sub { color: #ef4444; }
+
+        .breakdown-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #334155; font-size: 0.85rem; font-family: monospace; }
+        .breakdown-row:last-child { border-bottom: none; }
+        .br-lbl { color: #94a3b8; font-weight: bold; }
+        .br-val { color: #f8fafc; font-weight: bold; }
+        .br-neg { color: #ef4444; }
+
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #3b82f6; color: #3b82f6; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(59, 130, 246, 0.15); transform: scale(0.98); }
+
+        /* STEPS MODAL (Why) */
+        #cp-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #cp-steps-box { background: #1e293b; border: 1px solid #3b82f6; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #3b82f6; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <main id="mod-profit-overlay" role="main" aria-label="Crypto Profit and Exit Strategy Calculator">
+        <header class="cp-head">
+            <a href="../currency.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+            <div class="cp-tit"><i class="fas fa-chart-pie" aria-hidden="true"></i> PROFIT & EXIT</div>
+        </header>
+
+        <section class="cp-body">
+            
+            <div class="cp-card">
+                <div class="cp-lbl">
+                    <label for="cp-invest">Total Investment</label>
+                    <span style="color:#64748b; text-transform:none;">Fiat (USD, INR, etc)</span>
+                </div>
+                <div class="cp-inp-wrap">
+                    <span class="cp-curr-tag" aria-hidden="true">$</span>
+                    <input type="number" id="cp-invest" class="cp-inp" placeholder="e.g. 1000" value="1000" oninput="QS_Profit.calc()" aria-label="Investment Amount">
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="cp-card" style="padding: 12px;">
+                    <label for="cp-buy" class="cp-lbl" style="font-size:0.65rem;">Buy Price</label>
+                    <div class="cp-inp-wrap" style="padding: 5px 8px;">
+                        <span class="cp-curr-tag" style="font-size:0.8rem;" aria-hidden="true">$</span>
+                        <input type="number" id="cp-buy" class="cp-inp" placeholder="50000" value="50000" style="font-size: 1.2rem;" oninput="QS_Profit.calc()" aria-label="Buy Price">
+                    </div>
+                </div>
+                <div class="cp-card" style="padding: 12px;">
+                    <label for="cp-sell" class="cp-lbl" style="font-size:0.65rem;">Sell Price (Exit)</label>
+                    <div class="cp-inp-wrap" style="padding: 5px 8px;">
+                        <span class="cp-curr-tag" style="font-size:0.8rem; color:#22c55e;" aria-hidden="true">$</span>
+                        <input type="number" id="cp-sell" class="cp-inp" placeholder="65000" value="65000" style="font-size: 1.2rem; color:#22c55e;" oninput="QS_Profit.calc()" aria-label="Sell Price">
+                    </div>
+                </div>
+            </div>
+
+            <div class="cp-card">
+                <div class="cp-lbl" style="color: #ef4444;">
+                    <span>Exchange Fees & Taxes</span>
+                </div>
+                
+                <div class="slider-wrap">
+                    <div class="slider-lbl">
+                        <label for="cp-fee-slider">Exchange Fee (Buy + Sell)</label>
+                        <span id="fee-val" aria-live="polite">0.2%</span>
+                    </div>
+                    <input type="range" id="cp-fee-slider" class="cp-slider" min="0" max="5" step="0.1" value="0.2" oninput="QS_Profit.syncSlider('fee')" aria-label="Adjust Exchange Fee">
+                </div>
+
+                <div class="slider-wrap" style="margin-top:10px;">
+                    <div class="slider-lbl">
+                        <label for="cp-tax-slider">Govt Tax on Profit (e.g. India 30%)</label>
+                        <span id="tax-val" style="color:#ef4444;" aria-live="polite">30%</span>
+                    </div>
+                    <input type="range" id="cp-tax-slider" class="cp-slider" style="accent-color:#ef4444;" min="0" max="50" step="1" value="30" oninput="QS_Profit.syncSlider('tax')" aria-label="Adjust Tax Rate">
+                </div>
+            </div>
+
+            <div class="res-dash" aria-live="polite">
+                <div class="dash-tit"><i class="fas fa-wallet" aria-hidden="true"></i> Net Return Matrix</div>
+                
+                <div class="profit-box" id="res-box">
+                    <div class="pb-lbl" id="res-status">Net Profit</div>
+                    <div class="pb-val" id="res-net">+$0.00</div>
+                    <div class="pb-sub" id="res-roi">ROI: 0.00%</div>
+                </div>
+
+                <div style="background:rgba(2,6,23,0.5); padding:10px; border-radius:8px;">
+                    <div class="breakdown-row">
+                        <span class="br-lbl">Total Coin Value at Exit</span>
+                        <span class="br-val" id="bd-exit">$0.00</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span class="br-lbl">Total Exchange Fees</span>
+                        <span class="br-val br-neg" id="bd-fees">-$0.00</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span class="br-lbl">Govt Tax Deduction</span>
+                        <span class="br-val br-neg" id="bd-tax">-$0.00</span>
+                    </div>
+                    <div class="breakdown-row" style="border-top:1px solid #334155; margin-top:5px; padding-top:10px;">
+                        <span class="br-lbl" style="color:#f8fafc;">Total Payout in Bank</span>
+                        <span class="br-val" style="color:#38bdf8; font-size:1.1rem;" id="bd-payout">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-why" onclick="QS_Profit.showSteps()" aria-label="Show Crypto Tax Details">
+                <i class="fas fa-gavel" aria-hidden="true"></i> How Crypto Tax Works
+            </button>
+
+        </section>
+
+        <div id="cp-steps-modal" role="dialog" aria-modal="true" aria-labelledby="tax-title">
+            <div id="cp-steps-box">
+                <div class="steps-head">
+                    <span id="tax-title"><i class="fas fa-file-invoice-dollar" aria-hidden="true"></i> CRYPTO TAX DECODED</span>
+                    <button class="steps-close" onclick="QS_Profit.hideSteps()" aria-label="Close Modal"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="steps-content" id="cp-steps-content">
+                    </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - CRYPTO PROFIT & EXIT STRATEGY
+           Features: ROI Math, Maker/Taker Fee deduction, Govt Profit Tax handling, Breakdown Invoice.
+        */
+
+        (function() {
+            window.QS_Profit = {
+                
+                initListener: function() {
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'currency_suites/crypto_profit.js') {
+                            this.calc();
+                        }
+                    });
+                    
+                    // Standalone Boot
+                    if(document.readyState === 'complete' || document.readyState === 'interactive'){
+                         this.calc();
+                    } else {
+                         document.addEventListener('DOMContentLoaded', () => this.calc());
+                    }
+                },
+
+                syncSlider: function(type) {
+                    const val = document.getElementById(`cp-${type}-slider`).value;
+                    const valEl = document.getElementById(`${type}-val`);
+                    if(valEl) valEl.innerText = val + "%";
+                    this.calc();
+                },
+
+                calc: function() {
+                    // Inputs
+                    const invest = parseFloat(document.getElementById('cp-invest').value) || 0;
+                    const buyPrice = parseFloat(document.getElementById('cp-buy').value) || 0;
+                    const sellPrice = parseFloat(document.getElementById('cp-sell').value) || 0;
+                    
+                    const feePct = parseFloat(document.getElementById('cp-fee-slider').value) || 0;
+                    const taxPct = parseFloat(document.getElementById('cp-tax-slider').value) || 0;
+
+                    if (buyPrice === 0 || invest === 0) {
+                        this.clearResults();
+                        return;
+                    }
+
+                    // --- The Math ---
+                    // 1. Calculate coins bought (after deducting Buy fee)
+                    const buyFeeAmt = invest * (feePct / 100);
+                    const actualInvested = invest - buyFeeAmt;
+                    const coinsBought = actualInvested / buyPrice;
+
+                    // 2. Calculate Gross Exit Value
+                    const grossExitValue = coinsBought * sellPrice;
+
+                    // 3. Deduct Sell Fee
+                    const sellFeeAmt = grossExitValue * (feePct / 100);
+                    const netExitValue = grossExitValue - sellFeeAmt;
+
+                    const totalFees = buyFeeAmt + sellFeeAmt;
+
+                    // 4. Calculate Gross Profit (For Tax Purposes)
+                    // Most tax laws (like India) calculate profit as (Sell Value - Buy Value) excluding fees in some strict interpretations, 
+                    // but standard accounting takes Net Exit - Initial Investment. We'll use the realistic approach.
+                    const grossProfit = netExitValue - invest;
+
+                    let taxAmt = 0;
+                    let finalNetProfit = grossProfit;
+
+                    // 5. Apply Tax (Only if in profit)
+                    if (grossProfit > 0) {
+                        taxAmt = grossProfit * (taxPct / 100);
+                        finalNetProfit = grossProfit - taxAmt;
+                    }
+
+                    const totalPayout = invest + finalNetProfit;
+                    const roiPct = (finalNetProfit / invest) * 100;
+
+                    this.updateUI(grossExitValue, totalFees, taxAmt, totalPayout, finalNetProfit, roiPct);
+                },
+
+                updateUI: function(grossExit, fees, tax, payout, netProfit, roi) {
+                    const fmt = (num) => num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                    
+                    const resBox = document.getElementById('res-box');
+                    const resStatus = document.getElementById('res-status');
+                    const resNet = document.getElementById('res-net');
+                    const resRoi = document.getElementById('res-roi');
+
+                    // Breakdown
+                    document.getElementById('bd-exit').innerText = `$${fmt(grossExit)}`;
+                    document.getElementById('bd-fees').innerText = `-$${fmt(fees)}`;
+                    document.getElementById('bd-tax').innerText = `-$${fmt(tax)}`;
+                    document.getElementById('bd-payout').innerText = `$${fmt(payout)}`;
+
+                    // Main Status Box
+                    if (netProfit >= 0) {
+                        resBox.className = "profit-box";
+                        resStatus.innerText = "Net Profit";
+                        resNet.innerText = `+$${fmt(netProfit)}`;
+                        resRoi.innerText = `ROI: +${fmt(roi)}%`;
+                    } else {
+                        resBox.className = "profit-box loss";
+                        resStatus.innerText = "Net Loss";
+                        resNet.innerText = `-$${fmt(Math.abs(netProfit))}`;
+                        resRoi.innerText = `ROI: ${fmt(roi)}%`;
+                    }
+                },
+
+                clearResults: function() {
+                    document.getElementById('res-box').className = "profit-box";
+                    document.getElementById('res-net').innerText = "$0.00";
+                    document.getElementById('res-roi').innerText = "ROI: 0.00%";
+                    document.getElementById('bd-exit').innerText = "$0.00";
+                    document.getElementById('bd-fees').innerText = "-$0.00";
+                    document.getElementById('bd-tax').innerText = "-$0.00";
+                    document.getElementById('bd-payout').innerText = "$0.00";
+                },
+
+                // --- THE "WHY" VISUALIZER ---
+                showSteps: function() {
+                    const contentBox = document.getElementById('cp-steps-content');
+                    if(!contentBox) return;
+                    
+                    let html = `
+                        <div style="margin-bottom:15px; border-left:3px solid #3b82f6; padding-left:10px;">
+                            <span style="color:#3b82f6; font-weight:bold;">The Crypto Tax Trap:</span><br>
+                            Governments (like in India) impose a strict <b>30% Flat Tax</b> on all crypto profits, PLUS you pay fees to the exchange (Binance/WazirX) twice!
+                        </div>
+                        
+                        <div style="background:#020617; border:1px solid #334155; border-radius:8px; padding:15px; margin-top:10px;">
+                            <span style="color:#ef4444; font-weight:bold; font-size:0.8rem; text-transform:uppercase;"><i class="fas fa-exclamation-triangle"></i> The "No Set-Off" Rule</span>
+                            
+                            <p style="margin-top:8px; font-size:0.8rem; color:#f8fafc;">
+                                If you make a $1,000 profit on Bitcoin, and a $1,000 loss on Ethereum, your net profit is Zero, right?
+                            </p>
+                            
+                            <p style="margin-top:8px; font-size:0.85rem; color:#ef4444; font-weight:bold;">
+                                WRONG!
+                            </p>
+
+                            <p style="margin-top:8px; font-size:0.8rem; color:#94a3b8;">
+                                Under many strict tax laws, losses cannot be set off against profits. You will still have to pay $300 tax (30%) on your Bitcoin profit, leaving you in a massive net loss overall!
+                            </p>
+                        </div>
+
+                        <div style="margin-top:15px; font-size:0.75rem; color:#10b981; text-align:center; font-weight:bold; background:rgba(16,185,129,0.1); padding:10px; border-radius:6px;">
+                            *Always use this calculator to set your "Exit Price" taking the 30% tax slice into account before you trade!
+                        </div>
+                    `;
+                    
+                    contentBox.innerHTML = html;
+
+                    const modal = document.getElementById('cp-steps-modal');
+                    const box = document.getElementById('cp-steps-box');
+                    if(modal && box) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => {
+                            modal.style.opacity = '1';
+                            box.style.transform = 'translateY(0)';
+                        }, 10);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                hideSteps: function() {
+                    const modal = document.getElementById('cp-steps-modal');
+                    const box = document.getElementById('cp-steps-box');
+                    if(modal && box) {
+                        modal.style.opacity = '0';
+                        box.style.transform = 'translateY(20px)';
+                        setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                }
+            };
+
+            window.QS_Profit.initListener();
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+   
+   <!-- CORE GATEWAY -->
+   <url>
+      <loc>https://quicksolve-platinum.netlify.app/</loc>
+      <lastmod>2026-06-11</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+   </url>
+
+   <!-- TIER 1: FLAGSHIP CALCULATORS (High Priority) -->
+   <url>
+      <loc>https://quicksolve-platinum.netlify.app/scientific_suite/scientific.html</loc>
+      <changefreq>weekly</changefreq>
+      <priority>0.90</priority>
+   </url>
+   <url>
+      <loc>https://quicksolve-platinum.netlify.app/programmer.html</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.90</priority>
+   </url>
+   <url>
+      <loc>https://quicksolve-platinum.netlify.app/loan.html</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.90</priority>
+   </url>
+   <url>
+      <loc>https://quicksolve-platinum.netlify.app/gst.html</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.90</priority>
+   </url>
+
+   <!-- TIER 2: STANDARD SUITES -->
+   <url>
+      <loc>https://quicksolve-platinum.netlify.app/currency.html</loc>
+      <!-- Currency changes daily, so tell bots to check often -->
+      <changefreq>daily</changefreq>
+      <priority>0.85</priority>
+   </url>
+   <url>
+      <loc>https://quicksolve-platinum.netlify.app/graph.html</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.80</priority>
+   </url>
+   <url>
+      <loc>https://quicksolve-platinum.netlify.app/health.html</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.80</priority>
+   </url>
+   <url>
+      <loc>https://quicksolve-platinum.netlify.app/age.html</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.80</priority>
+   </url>
+   <url>
+      <loc>https://quicksolve-platinum.netlify.app/unit.html</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.80</priority>
+   </url>
+   <url>
+      <loc>https://quicksolve-platinum.netlify.app/time.html</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.80</priority>
+   </url>
+   <url>
+      <loc>https://quicksolve-platinum.netlify.app/percentage.html</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.80</priority>
+   </url>
+   <url>
+      <loc>https://quicksolve-platinum.netlify.app/discount.html</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.80</priority>
+   </url>
+
+</urlset>

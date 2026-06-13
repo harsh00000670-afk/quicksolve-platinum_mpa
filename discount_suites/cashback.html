@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Cashback vs Instant Discount | Deal Hacker | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           CASHBACK ENGINE - PLATINUM (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-red: #ef4444;
+            --accent-red-glow: rgba(239, 68, 68, 0.3);
+            --accent-gold: #fbbd23;
+            --accent-gold-glow: rgba(251, 189, 35, 0.3);
+            --accent-blue: #3b82f6;
+            --accent-blue-glow: rgba(59, 130, 246, 0.3);
+            --accent-green: #10b981;
+            --accent-green-glow: rgba(16, 185, 129, 0.3);
+            --accent-purple: #a855f7;
+            --accent-purple-glow: rgba(168, 85, 247, 0.3);
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.25; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 250px; height: 250px; background: var(--accent-green); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-gold); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-green); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #10b981, #fbbd23); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--text-sub); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CARDS & INPUTS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(16, 185, 129, 0.15);
+        }
+        .inp-group { margin-bottom: 18px; position: relative; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        
+        .inp-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .inp-field:focus { border-color: var(--accent-green); box-shadow: 0 0 10px var(--accent-green-glow); }
+        .inp-field::placeholder { color: var(--text-dim); font-weight: 500; }
+
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        /* CUSTOM NATIVE-LIKE BOTTOM SHEET TRIGGER */
+        .custom-select-trigger {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; font-family: 'Inter', sans-serif;
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s;
+        }
+        .custom-select-trigger:active { transform: scale(0.98); border-color: var(--accent-green); box-shadow: 0 0 10px var(--accent-green-glow); }
+        
+        /* BOTTOM SHEET MODAL STYLES */
+        .dest-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(4px); }
+        .dest-modal-overlay.active { opacity: 1; visibility: visible; }
+        
+        .dest-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--card-bg); border-radius: 24px 24px 0 0; z-index: 1000; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: env(safe-area-inset-bottom, 20px); border-top: 1px solid var(--border-subtle); box-shadow: 0 -10px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; max-height: 80vh; }
+        .dest-modal.active { bottom: 0; }
+        
+        .dest-modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .dest-modal-header h3 { margin: 0; color: var(--accent-green); font-size: 1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .dest-close-btn { background: rgba(255,255,255,0.05); border: none; color: var(--text-sub); width: 30px; height: 30px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+        
+        .dest-modal-body { overflow-y: auto; padding: 10px 20px 20px; }
+        .modal-opt { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; }
+        .modal-opt:last-child { border-bottom: none; }
+        .modal-opt:active { transform: scale(0.98); opacity: 0.8; }
+        
+        .opt-text { font-size: 1rem; color: var(--text-main); font-weight: 600; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; gap: 4px;}
+        .opt-text small { color: var(--text-sub); font-size: 0.75rem; font-family: 'JetBrains Mono', monospace;}
+        
+        .opt-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--text-dim); position: relative; transition: 0.2s; flex-shrink: 0; margin-left: 15px;}
+        .modal-opt.active .opt-radio { border-color: var(--accent-green); }
+        .modal-opt.active .opt-radio::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: var(--accent-green); border-radius: 50%; }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #10b981, #fbbd23);
+            color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3); display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 10px;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD & GRID OF OUTPUTS */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 20px; 
+            padding: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(16, 185, 129, 0.2); display: none; text-align: center;
+        }
+
+        .output-row { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
+        .res-box { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 18px 15px; text-align: left;}
+        
+        .res-box-lbl { font-size: 0.7rem; color: var(--text-sub); text-transform: uppercase; font-weight: 800; margin-bottom: 8px; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;}
+        .res-box-val { font-size: 1.6rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; line-height: 1.1; margin-bottom: 5px; word-break: break-word;}
+        .res-box-desc { font-size: 0.85rem; color: var(--text-dim); font-weight: 600; line-height: 1.5; }
+
+        .res-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .res-grid-2 .res-box-val { font-size: 1.4rem; }
+
+        /* THE WINNER BANNER */
+        .winner-banner {
+            background: linear-gradient(45deg, #10b981, #047857); border-radius: 12px; padding: 20px;
+            color: #fff; text-align: left; position: relative; overflow: hidden; margin-bottom: 12px;
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
+        }
+        .winner-banner::after { content: '\f091'; font-family: 'Font Awesome 5 Free'; font-weight: 900; position: absolute; right: -10px; bottom: -20px; font-size: 6rem; opacity: 0.1; }
+        .winner-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 900; margin-bottom: 5px; opacity: 0.9;}
+        .winner-val { font-size: 1.6rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; margin-bottom: 8px;}
+        .winner-desc { font-size: 0.85rem; font-weight: 600; line-height: 1.4; opacity: 0.9;}
+
+        /* SAVAGE QUOTE VERDICT */
+        .savage-quote {
+            background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--accent-red);
+            padding: 18px 15px; margin-top: 20px; border-radius: 0 12px 12px 0;
+            font-size: 0.85rem; color: var(--text-main); font-weight: 600; text-align: left;
+            line-height: 1.6;
+        }
+        .savage-quote b { color: var(--accent-red); font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
+
+        /* CUSTOM TOAST */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px var(--accent-red-glow); display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .toast.show { bottom: 30px; }
+
+        /* ANIMATIONS */
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-wallet"></i> WALLET TRAP BUSTER</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>Cashback vs Instant</h1>
+            <p>> time_value --expose_wallet</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            
+            <div class="inp-group">
+                <label class="inp-lbl">1. Cart Value / Price (₹)</label>
+                <input type="number" id="inp-price" class="inp-field" placeholder="e.g. 10000" min="0">
+            </div>
+
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">2. Instant Discount</label>
+                    <input type="number" id="inp-instant" class="inp-field" placeholder="e.g. 700" min="0">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">3. Cashback Offer</label>
+                    <input type="number" id="inp-cashback" class="inp-field" placeholder="e.g. 1000" min="0">
+                </div>
+            </div>
+
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">4. Cashback Delay</label>
+                    <input type="number" id="inp-delay" class="inp-field" placeholder="Days (e.g. 90)" min="0">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">5. Your Invest Rate (%) <span style="text-transform:none; color:var(--text-dim);">(Opt)</span></label>
+                    <input type="number" id="inp-rate" class="inp-field" value="10" placeholder="e.g. 10" min="0">
+                </div>
+            </div>
+
+            <div class="inp-group">
+                <label class="inp-lbl">6. Cashback Destination</label>
+                <div class="custom-select-trigger" onclick="openDestModal()">
+                    <span id="dest-display">Real Bank Account (100% Value)</span>
+                    <i class="fas fa-chevron-down" style="color: var(--text-sub); font-size: 0.9rem;"></i>
+                </div>
+                <input type="hidden" id="inp-dest" value="bank">
+            </div>
+
+            <button class="calc-btn" onclick="CashbackEngine.calculate()">
+                <i class="fas fa-balance-scale"></i> Run Reality Check
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container">
+            
+            <div class="output-row">
+                
+                <div class="winner-banner" id="out-winner-banner">
+                    <div class="winner-lbl"><i class="fas fa-crown"></i> The Mathematical Winner</div>
+                    <div class="winner-val" id="out-winner-title">INSTANT DISCOUNT</div>
+                    <div class="winner-desc" id="out-winner-desc">Tera paisa, tere haath mein, bina kisi shart ke!</div>
+                </div>
+
+                <div class="res-grid-2">
+                    <div class="res-box">
+                        <div class="res-box-lbl" style="color:var(--accent-blue);">Instant Cost</div>
+                        <div class="res-box-val" id="out-instant-cost">₹0</div>
+                        <div class="res-box-desc" style="font-size: 0.75rem;">Jeb se aaj exactly itne jayenge. Kahani khatam.</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-box-lbl" style="color:var(--accent-red);">Cashback Cost</div>
+                        <div class="res-box-val" id="out-cashback-cost">₹0</div>
+                        <div class="res-box-desc" style="font-size: 0.75rem;">Aaj teri jeb se pura amount jayega. Paisa fas gaya.</div>
+                    </div>
+                </div>
+
+                <div class="res-box">
+                    <div class="res-box-lbl" style="color: var(--accent-gold);"><i class="fas fa-hourglass-half"></i> Time Value Reality (Present Value)</div>
+                    <div class="res-box-val" id="out-pv-cashback" style="color:var(--accent-gold);">₹0</div>
+                    <div class="res-box-desc" id="out-pv-desc">Jo ₹0 tujhe 0 din baad milega, inflation aur interest loss hata kar, aaj uski asali mathematical aukaat sirf itni hai.</div>
+                </div>
+
+                <div class="res-box" id="wallet-trap-box" style="display: none; border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.05);">
+                    <div class="res-box-lbl" style="color: var(--accent-red);"><i class="fas fa-lock"></i> The Wallet Trap Penalty (-20%)</div>
+                    <div class="res-box-val" id="out-wallet-val" style="color:var(--text-main);">₹0</div>
+                    <div class="res-box-desc">Kyunki tera cashback bank mein nahi, 'Store Wallet' mein aayega, uski value automatically 20% gir gayi. Asali cash value sirf ₹0 reh gayi. Tujhe na chahte hue bhi inhi ki site se dobara kharidna padega.</div>
+                </div>
+
+                <div class="res-box">
+                    <div class="res-box-lbl" style="color: var(--accent-purple);"><i class="fas fa-chart-line"></i> The Lost Opportunity Cost</div>
+                    <div class="res-box-desc" id="out-opp-cost" style="color:var(--text-main); font-weight:600;">
+                        Jo ₹0 tune aaj nahi bachaye, agar tu unhe invest karta, toh wo badh ke ₹0 ban jate. Company tere paise pe interest kama rahi hai, aur tu wait karega!
+                    </div>
+                </div>
+            </div>
+
+            <div class="savage-quote">
+                <b><i class="fas fa-radiation"></i> PLATINUM VERDICT</b>
+                "Ek asali founder aur smart consumer ka rule: 'Cash in hand is king.' Cashback ek trap hai jo teri 'Buying Cycle' ko lock karta hai. Ye tujhe wapas aane par majboor karne ka unka tareeka hai. Agar cashback seedha bank account mein nahi aa raha hai, toh use aadhi (50%) value ka man kar chal. Aaj ka instant discount, kal ke fake wallet money se 100 guna behtar hai. Apna paisa apni jeb mein rakh, unke server pe nahi!"
+            </div>
+
+        </div>
+
+    </main>
+
+    <div class="dest-modal-overlay" id="dest-overlay" onclick="closeDestModal()"></div>
+    <div class="dest-modal" id="dest-bottom-sheet">
+        <div class="dest-modal-header">
+            <h3>Select Destination</h3>
+            <button class="dest-close-btn" onclick="closeDestModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="dest-modal-body">
+            <div class="modal-opt active" onclick="selectDest('bank', 'Real Bank Account (100% Value)', this)">
+                <div class="opt-text">Real Bank Account <small>Actual liquid cash</small></div><div class="opt-radio"></div>
+            </div>
+            <div class="modal-opt" onclick="selectDest('wallet', 'Closed Wallet / Store Credit (-20%)', this)">
+                <div class="opt-text" style="color:var(--accent-red);">Closed Wallet / Store Credit <small style="color:var(--text-dim);">-20% forced re-spend penalty</small></div><div class="opt-radio"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - WALLET TRAP BUSTER ENGINE */
+        
+        // --- CUSTOM MODAL LOGIC ---
+        function openDestModal() {
+            if(window.CashbackEngine.haptic) window.CashbackEngine.haptic();
+            document.getElementById('dest-overlay').classList.add('active');
+            document.getElementById('dest-bottom-sheet').classList.add('active');
+        }
+
+        function closeDestModal() {
+            document.getElementById('dest-overlay').classList.remove('active');
+            document.getElementById('dest-bottom-sheet').classList.remove('active');
+        }
+
+        function selectDest(val, text, element) {
+            if(window.CashbackEngine.haptic) window.CashbackEngine.haptic();
+            
+            document.getElementById('inp-dest').value = val;
+            document.getElementById('dest-display').innerText = text;
+
+            document.querySelectorAll('.modal-opt').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            closeDestModal();
+        }
+
+        // --- MATH ENGINE ---
+        window.CashbackEngine = {
+            haptic: function() { if(navigator.vibrate) navigator.vibrate(20); },
+
+            showToast: function(msg) {
+                const toast = document.getElementById('custom-toast');
+                document.getElementById('toast-msg').innerText = msg;
+                if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            },
+
+            formatCurrency: function(val) {
+                return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val).replace('₹', '₹');
+            },
+
+            calculate: function() {
+                this.haptic();
+
+                // 1. Get Inputs
+                const cartValue = parseFloat(document.getElementById('inp-price').value);
+                const instantDisc = parseFloat(document.getElementById('inp-instant').value);
+                const cashbackOffer = parseFloat(document.getElementById('inp-cashback').value);
+                const delayDays = parseFloat(document.getElementById('inp-delay').value);
+                const dest = document.getElementById('inp-dest').value; // 'bank' or 'wallet'
+                let investRate = parseFloat(document.getElementById('inp-rate').value);
+
+                // Validations
+                if(isNaN(cartValue) || cartValue <= 0) { this.showToast("Bhai, Cart Value required hai."); return; }
+                if(isNaN(instantDisc) || instantDisc < 0) { this.showToast("Instant Discount bata."); return; }
+                if(isNaN(cashbackOffer) || cashbackOffer < 0) { this.showToast("Cashback Offer daal."); return; }
+                if(isNaN(delayDays) || delayDays < 0) { this.showToast("Cashback aane me kitne din lagenge?"); return; }
+                if(isNaN(investRate) || investRate < 0) investRate = 10; // Default fallback
+
+                // 2. Base Math
+                let instantCost = cartValue - instantDisc;
+                let cashbackInitialCost = cartValue; // Have to pay full upfront
+
+                // 3. Time Value of Money (PV of Cashback)
+                // PV = FV / (1 + r*t)
+                let timeInYears = delayDays / 365;
+                let rateDecimal = investRate / 100;
+                let presentValueOfCashback = cashbackOffer / (1 + (rateDecimal * timeInYears));
+
+                // 4. Wallet Penalty
+                let trueCashbackValue = presentValueOfCashback;
+                let isWallet = (dest === 'wallet');
+                if (isWallet) {
+                    trueCashbackValue = presentValueOfCashback * 0.8; // 20% penalty for forced re-spend
+                }
+
+                // 5. Lost Opportunity
+                // Interest earned on the instant discount amount over the delay period
+                let opportunityValue = instantDisc * (1 + (rateDecimal * timeInYears));
+
+                // --- UI INJECTION ---
+                
+                // Outputs 1 & 2
+                document.getElementById('out-instant-cost').innerText = this.formatCurrency(instantCost);
+                document.getElementById('out-cashback-cost').innerText = this.formatCurrency(cashbackInitialCost);
+
+                // Output 3
+                document.getElementById('out-pv-cashback').innerText = this.formatCurrency(presentValueOfCashback);
+                document.getElementById('out-pv-desc').innerText = `Jo ${this.formatCurrency(cashbackOffer)} tujhe ${delayDays} din baad milega, inflation aur interest loss hata kar, aaj uski asali mathematical aukaat sirf ${this.formatCurrency(presentValueOfCashback)} hai.`;
+
+                // Output 4 (Wallet Trap Conditional)
+                const walletBox = document.getElementById('wallet-trap-box');
+                if (isWallet) {
+                    document.getElementById('out-wallet-val').innerText = this.formatCurrency(trueCashbackValue);
+                    walletBox.querySelector('.res-box-desc').innerHTML = `Kyunki tera cashback bank mein nahi, 'Store Wallet' mein aayega, uski value automatically 20% gir gayi. Asali cash value sirf <b>${this.formatCurrency(trueCashbackValue)}</b> reh gayi. Tujhe na chahte hue bhi inhi ki site se dobara kharidna padega.`;
+                    walletBox.style.display = 'block';
+                } else {
+                    walletBox.style.display = 'none';
+                }
+
+                // Output 6: Opportunity Cost
+                document.getElementById('out-opp-cost').innerHTML = `Jo <b style="color:var(--accent-purple);">${this.formatCurrency(instantDisc)}</b> tune aaj nahi bachaye, agar tu unhe invest karta, toh ${delayDays} din mein wo <b style="color:var(--accent-purple);">${this.formatCurrency(opportunityValue)}</b> ban jate. Company tere paise pe interest kama rahi hai, aur tu ${delayDays} din tak unke cashback ka wait karega!`;
+
+                // Output 5: The Winner Determination
+                const winnerBanner = document.getElementById('out-winner-banner');
+                const winnerTitle = document.getElementById('out-winner-title');
+                const winnerDesc = document.getElementById('out-winner-desc');
+
+                // We compare the TRUE BENEFIT. 
+                // Benefit of Instant = instantDisc
+                // Benefit of Cashback = trueCashbackValue
+                
+                if (instantDisc >= trueCashbackValue) {
+                    winnerBanner.style.background = 'linear-gradient(45deg, #10b981, #047857)'; // Green
+                    winnerBanner.style.boxShadow = '0 5px 20px rgba(16, 185, 129, 0.3)';
+                    winnerTitle.innerText = `INSTANT DISCOUNT (${this.formatCurrency(instantDisc)})`;
+                    winnerDesc.innerText = `Bhai, mathematics ke hisaab se INSTANT DISCOUNT better deal hai. Tera paisa, tere haath mein, bina kisi shart ke!`;
+                } else {
+                    winnerBanner.style.background = 'linear-gradient(45deg, #3b82f6, #1d4ed8)'; // Blue
+                    winnerBanner.style.boxShadow = '0 5px 20px rgba(59, 130, 246, 0.3)';
+                    winnerTitle.innerText = `CASHBACK OFFER (${this.formatCurrency(cashbackOffer)})`;
+                    winnerDesc.innerText = `Shocking! Lekin true mathematical value ke hisaab se ye Cashback actually Instant Discount se behtar hai, bhale hi delay ya wallet penalty ho.`;
+                }
+
+                // Reveal UI
+                const resCard = document.getElementById('results-container');
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-up');
+                void resCard.offsetWidth; // trigger reflow
+                resCard.classList.add('anim-up');
+                
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+        };
+    </script>
+</body>
+</html>

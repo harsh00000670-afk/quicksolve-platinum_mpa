@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Unit God | QuickSolve Platinum</title>
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           UNIT GOD - SSJ4 PLATINUM UI (V3 FULL)
+           Theme: Obsidian Void / Gold / Neon Blue
+           ========================================= */
+        
+        :root {
+            --void: #020617;
+            --panel-bg: #0f172a;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent-gold: #f59e0b;
+            --accent-blue: #38bdf8;
+            --accent-green: #10b981;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+        }
+
+        body, html { margin: 0; padding: 0; background-color: var(--void); }
+
+        #unit-god-overlay {
+            position: fixed !important; top: 0; left: 0; 
+            width: 100vw; height: 100dvh; 
+            background-color: var(--void);
+            z-index: 2147483647 !important;
+            display: flex; flex-direction: column;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-image: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.05), transparent 50%);
+        }
+
+        /* 1. HEADER */
+        .u-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 15px 20px; background: rgba(15, 23, 42, 0.9); border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            position: relative; z-index: 10;
+        }
+        .u-back {
+            background: none; border: none; color: var(--accent-blue); font-size: 1.4rem;
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center;
+        }
+        .u-back:active { transform: scale(0.9) translateX(-5px); }
+        .u-tit { 
+            color: var(--accent-gold); font-weight: 900; font-size: 1.1rem; 
+            font-family: 'JetBrains Mono', monospace; letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.2); text-transform: uppercase;
+        }
+        
+        .u-dim-tog {
+            font-size: 0.75rem; background: var(--card-bg); color: var(--text-sub);
+            padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border-color);
+            cursor: pointer; font-family: 'JetBrains Mono', monospace; font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .u-dim-tog:active { transform: scale(0.95); }
+        .u-dim-tog.active { background: rgba(56, 189, 248, 0.1); color: var(--accent-blue); border-color: var(--accent-blue); box-shadow: inset 0 0 10px rgba(56, 189, 248, 0.1); }
+
+        /* 2. CATEGORY SCROLL */
+        .cat-scroll {
+            display: flex; gap: 12px; padding: 12px 20px; overflow-x: auto;
+            background: var(--panel-bg); border-bottom: 1px solid var(--border-color); flex-shrink: 0;
+            scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth;
+        }
+        .cat-scroll::-webkit-scrollbar { display: none; }
+        
+        .cat-btn {
+            background: var(--card-bg); color: var(--text-sub); border: 1px solid var(--border-color);
+            padding: 10px 18px; border-radius: 20px; font-weight: 700; font-size: 0.85rem;
+            white-space: nowrap; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+        }
+        .cat-btn:active { transform: scale(0.95); }
+        .cat-btn.active { 
+            background: var(--accent-gold); color: #000; border-color: var(--accent-gold); 
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3); font-weight: 900; transform: translateY(-2px);
+        }
+        .cat-btn i { font-size: 0.9rem; opacity: 0.8; }
+        .cat-btn.active i { opacity: 1; }
+
+        /* 3. MAIN INPUT AREA */
+        .main-in-box {
+            padding: 20px; background: var(--panel-bg); 
+            border-bottom: 1px solid var(--border-color); flex-shrink: 0;
+            display: flex; flex-direction: column; gap: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 5;
+        }
+        
+        .dim-badge {
+            font-size: 0.75rem; color: var(--accent-blue); font-family: 'JetBrains Mono', monospace; font-weight: 900;
+            text-align: center; display: none; padding: 4px; border-radius: 4px;
+            background: rgba(56, 189, 248, 0.05); border: 1px dashed rgba(56, 189, 248, 0.3);
+            letter-spacing: 2px;
+        }
+        .dim-badge.show { display: block; animation: fadeIn 0.3s ease-out; }
+        
+        .in-row { display: flex; gap: 15px; align-items: stretch; }
+        
+        .in-val-wrap { flex: 1.5; position: relative; }
+        .in-val {
+            width: 100%; background: var(--void); border: 2px solid var(--border-color); color: var(--text-main);
+            padding: 15px; border-radius: 12px; font-size: 1.8rem; font-weight: 900;
+            font-family: 'JetBrains Mono', monospace; outline: none; transition: 0.3s; box-sizing: border-box;
+            box-shadow: inset 0 5px 10px rgba(0,0,0,0.5);
+        }
+        .in-val:focus { border-color: var(--accent-gold); box-shadow: inset 0 5px 10px rgba(0,0,0,0.5), 0 0 15px rgba(245, 158, 11, 0.1); }
+        .in-val::placeholder { color: #475569; font-weight: 500; }
+        
+        /* CUSTOM SELECT TRIGGER */
+        .custom-sel-trigger {
+            flex: 1; height: 100%; background: var(--card-bg); border: 2px solid var(--border-color); 
+            color: var(--accent-blue); padding: 15px; border-radius: 12px; font-size: 0.95rem; font-weight: 800;
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .custom-sel-trigger:active { transform: scale(0.95); border-color: var(--accent-blue); }
+        .custom-sel-trigger span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        /* 4. RESULTS LIST */
+        .res-list {
+            flex: 1; overflow-y: auto; padding: 20px; 
+            display: flex; flex-direction: column; gap: 12px;
+            scroll-behavior: smooth;
+        }
+        .res-list::-webkit-scrollbar { width: 0px; }
+        
+        .r-card {
+            background: var(--glass-bg); padding: 18px 20px; border-radius: 12px;
+            border: 1px solid var(--glass-border); display: flex; flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+        .r-card:active { transform: scale(0.98); }
+        .r-card.highlight { border-color: var(--accent-green); background: rgba(16, 185, 129, 0.05); }
+        
+        .r-content-wrapper { display: flex; flex-direction: column; gap: 4px; padding-right: 60px; }
+        .r-val { font-size: 1.35rem; color: var(--text-main); font-weight: 800; font-family: 'JetBrains Mono', monospace; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.2; }
+        .r-unit { font-size: 0.8rem; color: var(--accent-blue); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .r-card.highlight .r-val { color: var(--accent-green); }
+
+        .r-expl { 
+            background: #0b1121; border-radius: 8px; border: 1px solid var(--border-color);
+            padding: 12px; font-size: 0.75rem; color: var(--text-sub); 
+            margin-top: 12px; display: none; font-style: normal; line-height: 1.5;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .r-expl.show { display: block; animation: slideDown 0.3s ease-out; }
+        .expl-highlight { color: var(--accent-gold); font-weight: 800; }
+
+        .explain-btn {
+            position: absolute; right: 15px; top: 20px; 
+            background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-sub);
+            padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+            cursor: pointer; transition: 0.3s;
+        }
+        .explain-btn:hover { background: var(--card-bg); color: var(--text-main); border-color: var(--text-main); }
+        .explain-btn.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
+
+        .copy-icon { position: absolute; top: 10px; right: 50%; font-size: 1.2rem; color: var(--accent-green); opacity: 0; transform: translateY(10px); transition: 0.3s; }
+        .r-card.copied .copy-icon { opacity: 1; transform: translateY(0); animation: floatUp 1s ease-out forwards; }
+
+        /* 5. BOTTOM SHEET MODAL */
+        .unit-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 9999; display: flex; flex-direction: column; justify-content: flex-end;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .unit-modal-overlay.show { opacity: 1; pointer-events: auto; }
+        
+        .unit-modal-content {
+            background: var(--panel-bg); border-top-left-radius: 24px; border-top-right-radius: 24px;
+            width: 100%; max-height: 60vh; display: flex; flex-direction: column;
+            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+        }
+        .unit-modal-overlay.show .unit-modal-content { transform: translateY(0); }
+
+        .um-head {
+            display: flex; justify-content: space-between; align-items: center; padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .um-tit { color: var(--accent-gold); font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .um-close { background: var(--card-bg); border: none; color: var(--text-sub); width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+
+        .um-list { overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 5px; margin-bottom: 20px; }
+        .um-list::-webkit-scrollbar { width: 0px; }
+        
+        .um-item {
+            display: flex; align-items: center; gap: 15px; padding: 15px; border-radius: 12px;
+            background: transparent; border: 1px solid transparent; color: var(--text-main);
+            font-weight: 700; cursor: pointer; transition: 0.2s;
+        }
+        .um-item:active { transform: scale(0.98); background: var(--card-bg); }
+        .um-item.active { background: rgba(56, 189, 248, 0.1); border-color: var(--accent-blue); color: var(--accent-blue); }
+        .um-icon { font-size: 1.2rem; color: var(--text-sub); width: 25px; text-align: center; }
+        .um-item.active .um-icon { color: var(--accent-blue); }
+
+        /* TOAST */
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+            background: var(--accent-green); color: #020617; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.9rem; font-weight: 900; opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none; z-index: 9999; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+            display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-30px); } }
+    </style>
+</head>
+<body>
+
+<div id="unit-god-overlay">
+    
+    <header class="u-head">
+        <button class="u-back qs-back-btn" onclick="window.history.back();" aria-label="Go Back">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="u-tit">UNIT GOD</div>
+        <button id="btn-dim" class="u-dim-tog" onclick="QS_Unit.toggleDim()">DIMENSION</button>
+    </header>
+    
+    <nav class="cat-scroll" id="cat-list"></nav>
+
+    <section class="main-in-box">
+        <div id="dim-disp" class="dim-badge">[L]</div>
+        <div class="in-row">
+            <div class="in-val-wrap">
+                <input type="number" id="u-in" class="in-val" placeholder="0" oninput="QS_Unit.calc()">
+            </div>
+            
+            <div class="custom-sel-trigger" onclick="QS_Unit.openUnitModal()">
+                <span id="selected-unit-text">Select Unit</span>
+                <i class="fas fa-chevron-down" style="font-size: 0.7rem; color: var(--text-sub);"></i>
+            </div>
+        </div>
+    </section>
+
+    <main class="res-list" id="res-cont"></main>
+
+    <div class="unit-modal-overlay" id="unit-modal">
+        <div class="unit-modal-content">
+            <div class="um-head">
+                <div class="um-tit">Select Input Unit</div>
+                <button class="um-close" onclick="QS_Unit.closeUnitModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="um-list" id="modal-unit-list"></div>
+        </div>
+    </div>
+
+    <div id="u-toast" class="toast"><i class="fas fa-copy"></i> VALUE COPIED</div>
+</div>
+
+<script>
+window.QS_Unit = {
+    // 🧠 STATE MANAGEMENT
+    state: {
+        cat: 'length',
+        fromKey: 'm',
+        sciMode: false,
+        showDim: false
+    },
+
+    // 🌍 THE GOD-TIER 30 CATEGORY DATABASE
+    DB: {
+        'length': { name: 'Length', dim: '[L]', base: 'm', icon: 'fa-ruler', units: { 'm': { val: 1, name: 'Meter' }, 'km': { val: 1000, name: 'Kilometer' }, 'cm': { val: 0.01, name: 'Centimeter' }, 'mm': { val: 0.001, name: 'Millimeter' }, 'um': { val: 1e-6, name: 'Micrometer' }, 'nm': { val: 1e-9, name: 'Nanometer' }, 'pm': { val: 1e-12, name: 'Picometer' }, 'angstrom': { val: 1e-10, name: 'Ångström' }, 'bohr': { val: 5.291e-11, name: 'Bohr Radius' }, 'planck': { val: 1.616e-35, name: 'Planck Length' }, 'mi': { val: 1609.34, name: 'Mile' }, 'nmi': { val: 1852, name: 'Nautical Mile' }, 'yd': { val: 0.9144, name: 'Yard' }, 'ft': { val: 0.3048, name: 'Foot' }, 'inch': { val: 0.0254, name: 'Inch' }, 'ly': { val: 9.461e15, name: 'Light Year' }, 'au': { val: 1.496e11, name: 'Astronomical Unit' }, 'pc': { val: 3.086e16, name: 'Parsec' } } },
+        'mass': { name: 'Mass', dim: '[M]', base: 'kg', icon: 'fa-weight-hanging', units: { 'kg': { val: 1, name: 'Kilogram' }, 'g': { val: 0.001, name: 'Gram' }, 'mg': { val: 1e-6, name: 'Milligram' }, 'ug': { val: 1e-9, name: 'Microgram' }, 'lb': { val: 0.453592, name: 'Pound' }, 'oz': { val: 0.0283495, name: 'Ounce' }, 'stone': { val: 6.35029, name: 'Stone' }, 't': { val: 1000, name: 'Metric Ton' }, 'ton_us': { val: 907.185, name: 'US Ton' }, 'ton_uk': { val: 1016.05, name: 'UK Ton' }, 'amu': { val: 1.66e-27, name: 'Atomic Mass' }, 'slug': { val: 14.5939, name: 'Slug' } } },
+        'time': { name: 'Time', dim: '[T]', base: 's', icon: 'fa-stopwatch', units: { 's': { val: 1, name: 'Second' }, 'min': { val: 60, name: 'Minute' }, 'h': { val: 3600, name: 'Hour' }, 'day': { val: 86400, name: 'Day' }, 'week': { val: 604800, name: 'Week' }, 'mo': { val: 2.628e6, name: 'Month' }, 'yr': { val: 3.154e7, name: 'Year' }, 'ms': { val: 0.001, name: 'Millisecond' }, 'us': { val: 1e-6, name: 'Microsecond' }, 'ns': { val: 1e-9, name: 'Nanosecond' }, 'ps': { val: 1e-12, name: 'Picosecond' } } },
+        'temp': { name: 'Temp', dim: '[Θ]', base: 'k', special: true, icon: 'fa-thermometer-half', units: { 'c': { name: 'Celsius (°C)' }, 'f': { name: 'Fahrenheit (°F)' }, 'k': { name: 'Kelvin (K)' }, 'r': { name: 'Rankine (°R)' } } },
+        'area': { name: 'Area', dim: '[L²]', base: 'sqm', icon: 'fa-vector-square', units: { 'sqm': { val: 1, name: 'Sq. Meter' }, 'sqkm': { val: 1e6, name: 'Sq. Kilometer' }, 'sqcm': { val: 0.0001, name: 'Sq. Centimeter' }, 'sqmi': { val: 2.59e6, name: 'Sq. Mile' }, 'sqyd': { val: 0.836, name: 'Sq. Yard' }, 'sqft': { val: 0.0929, name: 'Sq. Foot' }, 'sqin': { val: 0.000645, name: 'Sq. Inch' }, 'ha': { val: 10000, name: 'Hectare' }, 'ac': { val: 4046.86, name: 'Acre' }, 'bigha_up': { val: 2529.28, name: 'Bigha (Standard)' }, 'biswa': { val: 126.46, name: 'Biswa' }, 'kanal': { val: 505.85, name: 'Kanal' }, 'marla': { val: 25.29, name: 'Marla' }, 'guntha': { val: 101.17, name: 'Guntha' }, 'dismil': { val: 40.46, name: 'Dismil' }, 'are': { val: 100, name: 'Are' } } },
+        'volume': { name: 'Volume', dim: '[L³]', base: 'l', icon: 'fa-cube', units: { 'l': { val: 1, name: 'Liter' }, 'ml': { val: 0.001, name: 'Milliliter' }, 'm3': { val: 1000, name: 'Cubic Meter' }, 'cm3': { val: 0.001, name: 'Cubic Centimeter' }, 'gal_us': { val: 3.785, name: 'Gallon (US)' }, 'gal_uk': { val: 4.546, name: 'Gallon (UK)' }, 'qt_us': { val: 0.946, name: 'Quart' }, 'pt_us': { val: 0.473, name: 'Pint' }, 'cup_us': { val: 0.236, name: 'Cup' }, 'floz_us': { val: 0.0295, name: 'Fluid Ounce' }, 'tbsp': { val: 0.0147, name: 'Tablespoon' }, 'tsp': { val: 0.0049, name: 'Teaspoon' }, 'bbl': { val: 158.98, name: 'Oil Barrel' } } },
+        'speed': { name: 'Speed', dim: '[LT⁻¹]', base: 'mps', icon: 'fa-tachometer-alt', units: { 'mps': { val: 1, name: 'Meter/Sec' }, 'kmh': { val: 0.277778, name: 'Km/Hour' }, 'mph': { val: 0.44704, name: 'Mile/Hour' }, 'knot': { val: 0.5144, name: 'Knot' }, 'ftps': { val: 0.3048, name: 'Foot/Sec' }, 'mach': { val: 340.3, name: 'Mach (Sound)' }, 'c': { val: 299792458, name: 'Light Speed (c)' } } },
+        'data': { name: 'Digital', dim: '[Bit]', base: 'bit', icon: 'fa-database', units: { 'bit': { val: 1, name: 'Bit (b)' }, 'byte': { val: 8, name: 'Byte (B)' }, 'kb': { val: 8192, name: 'Kilobyte (KB)' }, 'mb': { val: 8.388e6, name: 'Megabyte (MB)' }, 'gb': { val: 8.589e9, name: 'Gigabyte (GB)' }, 'tb': { val: 8.796e12, name: 'Terabyte (TB)' }, 'pb': { val: 9.007e15, name: 'Petabyte (PB)' }, 'eb': { val: 9.223e18, name: 'Exabyte (EB)' } } },
+        'energy': { name: 'Energy', dim: '[ML²T⁻²]', base: 'j', icon: 'fa-bolt', units: { 'j': { val: 1, name: 'Joule' }, 'kj': { val: 1000, name: 'Kilojoule' }, 'mj': { val: 1e6, name: 'Megajoule' }, 'cal': { val: 4.184, name: 'Calorie' }, 'kcal': { val: 4184, name: 'Kilocalorie' }, 'wh': { val: 3600, name: 'Watt-hour' }, 'kwh': { val: 3.6e6, name: 'Kilowatt-hour' }, 'mwh': { val: 3.6e9, name: 'Megawatt-hour' }, 'ev': { val: 1.602e-19, name: 'Electronvolt' }, 'btu': { val: 1055.06, name: 'BTU' }, 'therm': { val: 1.055e8, name: 'Therm' }, 'erg': { val: 1e-7, name: 'Erg' } } },
+        'power': { name: 'Power', dim: '[ML²T⁻³]', base: 'w', icon: 'fa-plug', units: { 'w': { val: 1, name: 'Watt' }, 'kw': { val: 1000, name: 'Kilowatt' }, 'mw': { val: 1e6, name: 'Megawatt' }, 'gw': { val: 1e9, name: 'Gigawatt' }, 'hp_m': { val: 735.498, name: 'Horsepower (Metric)' }, 'hp_i': { val: 745.7, name: 'Horsepower (Mechanical)' }, 'btu_h': { val: 0.293, name: 'BTU/hour' }, 'tr': { val: 3516.85, name: 'Ton of Refrigeration' } } },
+        'pressure': { name: 'Pressure', dim: '[ML⁻¹T⁻²]', base: 'pa', icon: 'fa-compress-arrows-alt', units: { 'pa': { val: 1, name: 'Pascal' }, 'kpa': { val: 1000, name: 'Kilopascal' }, 'mpa': { val: 1e6, name: 'Megapascal' }, 'bar': { val: 100000, name: 'Bar' }, 'mbar': { val: 100, name: 'Millibar' }, 'atm': { val: 101325, name: 'Atmosphere' }, 'psi': { val: 6894.76, name: 'PSI' }, 'torr': { val: 133.32, name: 'Torr' }, 'mmhg': { val: 133.32, name: 'mmHg' } } },
+        'force': { name: 'Force', dim: '[MLT⁻²]', base: 'n', icon: 'fa-hammer', units: { 'n': { val: 1, name: 'Newton' }, 'kn': { val: 1000, name: 'Kilonewton' }, 'dyn': { val: 1e-5, name: 'Dyne' }, 'kgf': { val: 9.806, name: 'Kilogram-force' }, 'lbf': { val: 4.448, name: 'Pound-force' } } },
+        'angle': { name: 'Angle', dim: '[1]', base: 'deg', icon: 'fa-compass', units: { 'deg': { val: 1, name: 'Degree' }, 'rad': { val: 57.295, name: 'Radian' }, 'grad': { val: 0.9, name: 'Gradian' }, 'arcmin': { val: 0.0166, name: 'Arcminute' }, 'arcsec': { val: 0.000277, name: 'Arcsecond' }, 'rev': { val: 360, name: 'Revolution' } } },
+        'freq': { name: 'Freq', dim: '[T⁻¹]', base: 'hz', icon: 'fa-wave-square', units: { 'hz': { val: 1, name: 'Hertz' }, 'khz': { val: 1000, name: 'Kilohertz' }, 'mhz': { val: 1e6, name: 'Megahertz' }, 'ghz': { val: 1e9, name: 'Gigahertz' }, 'rpm': { val: 0.0166, name: 'RPM' }, 'rps': { val: 1, name: 'RPS' } } },
+        'charge': { name: 'Charge', dim: '[IT]', base: 'c', icon: 'fa-battery-full', units: { 'c': { val: 1, name: 'Coulomb' }, 'mc': { val: 0.001, name: 'Millicoulomb' }, 'uc': { val: 1e-6, name: 'Microcoulomb' }, 'mah': { val: 3.6, name: 'mAh' }, 'ah': { val: 3600, name: 'Ampere-hour' }, 'e': { val: 1.602e-19, name: 'Elementary Charge' } } },
+        'torque': { name: 'Torque', dim: '[ML²T⁻²]', base: 'nm', icon: 'fa-cogs', units: { 'nm': { val: 1, name: 'Newton-meter' }, 'lbft': { val: 1.355, name: 'Pound-foot' }, 'kgfm': { val: 9.806, name: 'Kg-force meter' } } },
+        'density': { name: 'Density', dim: '[ML⁻³]', base: 'kgm3', icon: 'fa-vial', units: { 'kgm3': { val: 1, name: 'kg/m³' }, 'gcm3': { val: 1000, name: 'g/cm³' }, 'lbft3': { val: 16.018, name: 'lb/ft³' }, 'lbgal': { val: 119.826, name: 'lb/US gal' } } },
+        'voltage': { name: 'Voltage', dim: '[ML²T⁻³I⁻¹]', base: 'v', icon: 'fa-bolt', units: { 'v': { val: 1, name: 'Volt' }, 'mv': { val: 0.001, name: 'Millivolt' }, 'kv': { val: 1000, name: 'Kilovolt' }, 'Mv': { val: 1e6, name: 'Megavolt' } } },
+        'current': { name: 'Current', dim: '[I]', base: 'a', icon: 'fa-microchip', units: { 'a': { val: 1, name: 'Ampere' }, 'ma': { val: 0.001, name: 'Milliamp' }, 'ua': { val: 1e-6, name: 'Microamp' }, 'ka': { val: 1000, name: 'Kiloampere' } } },
+        'resist': { name: 'Resistance', dim: '[ML²T⁻³I⁻²]', base: 'ohm', icon: 'fa-omega', units: { 'ohm': { val: 1, name: 'Ohm' }, 'kohm': { val: 1000, name: 'Kilo-ohm' }, 'mohm': { val: 1e6, name: 'Mega-ohm' } } },
+        'cap': { name: 'Capacit.', dim: '[M⁻¹L⁻²T⁴I²]', base: 'f', icon: 'fa-car-battery', units: { 'f': { val: 1, name: 'Farad' }, 'mf': { val: 0.001, name: 'Millifarad' }, 'uf': { val: 1e-6, name: 'Microfarad' }, 'nf': { val: 1e-9, name: 'Nanofarad' }, 'pf': { val: 1e-12, name: 'Picofarad' } } },
+        'induct': { name: 'Inductance', dim: '[ML²T⁻²I⁻²]', base: 'h', icon: 'fa-magnet', units: { 'h': { val: 1, name: 'Henry' }, 'mh': { val: 0.001, name: 'Millihenry' }, 'uh': { val: 1e-6, name: 'Microhenry' } } },
+        'illum': { name: 'Illuminance', dim: '[J L⁻²]', base: 'lux', icon: 'fa-lightbulb', units: { 'lux': { val: 1, name: 'Lux' }, 'fc': { val: 10.76, name: 'Foot-candle' }, 'ph': { val: 10000, name: 'Phot' } } },
+        'radiat': { name: 'Radiation', dim: '[L²T⁻²]', base: 'gy', icon: 'fa-radiation', units: { 'gy': { val: 1, name: 'Gray' }, 'sv': { val: 1, name: 'Sievert' }, 'rad': { val: 0.01, name: 'Rad' }, 'rem': { val: 0.01, name: 'Rem' } } },
+        'flow': { name: 'Flow Rate', dim: '[L³T⁻¹]', base: 'm3s', icon: 'fa-water', units: { 'm3s': { val: 1, name: 'm³/sec' }, 'm3h': { val: 0.000277, name: 'm³/hour' }, 'lmin': { val: 1.66e-5, name: 'L/min' }, 'gpm': { val: 6.3e-5, name: 'GPM (US)' }, 'cfm': { val: 0.00047, name: 'CFM (ft³/min)' } } },
+        'sound': { name: 'Sound', dim: '[Log]', base: 'db', icon: 'fa-volume-up', units: { 'db': { val: 1, name: 'Decibel' }, 'bel': { val: 10, name: 'Bel' }, 'neper': { val: 8.68, name: 'Neper' } } },
+        'fuel': { name: 'Fuel Eff.', dim: '[L⁻²]', base: 'kml', icon: 'fa-gas-pump', units: { 'kml': { val: 1, name: 'Km/Liter' }, 'l100km': { val: 100, name: 'L/100km (Inverted)' }, 'mpg_us': { val: 0.425, name: 'MPG (US)' }, 'mpg_uk': { val: 0.354, name: 'MPG (UK)' } } },
+        'viscos': { name: 'Viscosity', dim: '[ML⁻¹T⁻¹]', base: 'pas', icon: 'fa-tint', units: { 'pas': { val: 1, name: 'Pascal-sec' }, 'poise': { val: 0.1, name: 'Poise' }, 'cp': { val: 0.001, name: 'Centipoise' } } },
+        'lumin': { name: 'Luminance', dim: '[J L⁻²]', base: 'cdm2', icon: 'fa-sun', units: { 'cdm2': { val: 1, name: 'cd/m²' }, 'nit': { val: 3183.1, name: 'Nit' }, 'footl': { val: 3.426, name: 'Foot-lambert' } } },
+        'data_speed': { name: 'Net Speed', dim: '[Bit T⁻¹]', base: 'bps', icon: 'fa-wifi', units: { 'bps': { val: 1, name: 'bps' }, 'kbps': { val: 1000, name: 'Kbps' }, 'mbps': { val: 1e6, name: 'Mbps' }, 'gbps': { val: 1e9, name: 'Gbps' }, 'mbs': { val: 8e6, name: 'MB/s' } } }
+    },
+
+    // 🚀 INIT WITH LOCAL STORAGE MEMORY
+    init: function() {
+        this.renderCategories();
+        
+        // Load State from Memory if exists
+        const savedCat = localStorage.getItem('qs_unit_cat');
+        const savedInput = localStorage.getItem('qs_unit_val');
+        const savedFrom = localStorage.getItem('qs_unit_from');
+
+        if(savedCat && this.DB[savedCat]) {
+            this.state.cat = savedCat;
+            if(savedFrom && this.DB[savedCat].units[savedFrom]) {
+                this.state.fromKey = savedFrom;
+            }
+        }
+        
+        if(savedInput) {
+            const inp = document.getElementById('u-in');
+            if(inp) inp.value = savedInput;
+        }
+
+        this.setCategory(this.state.cat, true); // True = don't overwrite fromKey on load
+    },
+
+    renderCategories: function() {
+        const catList = document.getElementById('cat-list');
+        catList.innerHTML = '';
+        Object.keys(this.DB).forEach(key => {
+            const btn = document.createElement('button');
+            btn.className = `cat-btn ${this.state.cat === key ? 'active' : ''}`;
+            btn.innerHTML = `<i class="fas ${this.DB[key].icon}"></i> ${this.DB[key].name}`;
+            btn.onclick = () => this.setCategory(key);
+            btn.id = `cat-${key}`;
+            catList.appendChild(btn);
+        });
+    },
+
+    setCategory: function(key, keepFromKey = false) {
+        this.state.cat = key;
+        localStorage.setItem('qs_unit_cat', key); // Save Memory
+        
+        const data = this.DB[key];
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        const activeBtn = document.getElementById(`cat-${key}`);
+        if(activeBtn) {
+            activeBtn.classList.add('active');
+            activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+        
+        if(!keepFromKey) {
+            this.state.fromKey = Object.keys(data.units)[0];
+            localStorage.setItem('qs_unit_from', this.state.fromKey);
+        }
+        
+        document.getElementById('selected-unit-text').innerText = data.units[this.state.fromKey].name;
+        document.getElementById('dim-disp').innerText = data.dim;
+        
+        this.calc();
+    },
+
+    // 🎭 SMART SEARCH MODAL ENGINE
+    openUnitModal: function() {
+        const modal = document.getElementById('unit-modal');
+        const list = document.getElementById('modal-unit-list');
+        
+        // Inject Search Bar dynamically
+        list.innerHTML = `
+            <div style="padding: 0 15px 15px 15px;">
+                <input type="text" id="unit-search" placeholder="Search units..." 
+                       style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--void); color: var(--text-main); font-size: 0.9rem; outline: none;"
+                       oninput="QS_Unit.filterUnits(this.value)">
+            </div>
+            <div id="modal-items-container" style="display:flex; flex-direction:column; gap:5px; overflow-y:auto; flex:1;"></div>
+        `;
+        
+        this.filterUnits(""); // Render all initially
+        modal.classList.add('show');
+        
+        // Auto focus search on desktop, leave it on mobile to avoid keyboard jumping
+        if(window.innerWidth > 768) {
+            setTimeout(() => document.getElementById('unit-search').focus(), 300);
+        }
+    },
+
+    filterUnits: function(query) {
+        const container = document.getElementById('modal-items-container');
+        const units = this.DB[this.state.cat].units;
+        const q = query.toLowerCase();
+        
+        container.innerHTML = '';
+        Object.keys(units).forEach(uKey => {
+            const uName = units[uKey].name;
+            if(uName.toLowerCase().includes(q) || uKey.toLowerCase().includes(q)) {
+                const item = document.createElement('div');
+                item.className = `um-item ${this.state.fromKey === uKey ? 'active' : ''}`;
+                item.innerHTML = `<div class="um-icon"><i class="fas ${this.DB[this.state.cat].icon}"></i></div><span>${uName}</span>`;
+                item.onclick = () => {
+                    this.state.fromKey = uKey;
+                    localStorage.setItem('qs_unit_from', uKey); // Save memory
+                    document.getElementById('selected-unit-text').innerText = uName;
+                    this.closeUnitModal();
+                    this.calc();
+                };
+                container.appendChild(item);
+            }
+        });
+    },
+
+    closeUnitModal: function() { 
+        document.getElementById('unit-modal').classList.remove('show'); 
+    },
+
+    // 🔥 HIGH-PRECISION CALC ENGINE
+    calc: function() {
+        const inputEl = document.getElementById('u-in');
+        if(!inputEl) return;
+        const valStr = inputEl.value;
+        const val = parseFloat(valStr);
+        const container = document.getElementById('res-cont');
+        const data = this.DB[this.state.cat];
+        
+        // Save state
+        localStorage.setItem('qs_unit_val', valStr);
+        container.innerHTML = '';
+        
+        if (isNaN(val)) return;
+
+        // Exception: Physics rule for negative values
+        if (val < 0 && !['temp', 'force', 'energy', 'voltage', 'current', 'charge'].includes(this.state.cat)) {
+             container.innerHTML = `<div style="color:#ef4444;text-align:center;font-weight:800;padding:20px;">Negative values break physical laws for ${data.name}!</div>`;
+             return;
+        }
+
+        // Exception: Temperature (Non-linear)
+        if (data.special && this.state.cat === 'temp') { 
+            this.calcTemp(val, container); 
+            return; 
+        }
+
+        // Exception: Fuel Economy (Inverted conversions like L/100km)
+        if(this.state.cat === 'fuel' && this.state.fromKey === 'l100km') {
+            this.calcInvertedFuel(val, container, data);
+            return;
+        }
+
+        // Standard Linear Conversion
+        const fromUnit = data.units[this.state.fromKey];
+        const baseVal = val * fromUnit.val;
+        
+        Object.keys(data.units).forEach(uKey => {
+            const target = data.units[uKey];
+            let res = baseVal / target.val;
+            
+            // Fuel inverted logic during output
+            if(this.state.cat === 'fuel' && uKey === 'l100km') {
+                res = (val === 0) ? 0 : 100 / (baseVal / data.units['kml'].val);
+            }
+            
+            this.renderCard(container, target.name, res, uKey === this.state.fromKey, fromUnit, target, val);
+        });
+    },
+
+    // Fuel is weird: L/100km is inverse to km/L
+    calcInvertedFuel: function(val, container, data) {
+        let baseKml = (val === 0) ? 0 : 100 / val;
+        Object.keys(data.units).forEach(uKey => {
+            const target = data.units[uKey];
+            let res = (uKey === 'l100km') ? val : baseKml / target.val;
+            this.renderCard(container, target.name, res, uKey === this.state.fromKey, null, null, val);
+        });
+    },
+
+    calcTemp: function(val, container) {
+        let k = 0; const from = this.state.fromKey;
+        if (from === 'c') k = val + 273.15; 
+        else if (from === 'f') k = (val - 32) * 5/9 + 273.15; 
+        else if (from === 'r') k = val * 5/9;
+        else if (from === 're') k = val * 1.25 + 273.15;
+        else k = val;
+        
+        if (k < 0) { container.innerHTML = `<div style="color:#ef4444;text-align:center;font-weight:800;padding:20px;">ABSOLUTE ZERO REACHED! (Physics breaks here)</div>`; return; }
+        
+        const units = this.DB.temp.units;
+        Object.keys(units).forEach(key => {
+            let res = k;
+            if (key === 'c') res = k - 273.15;
+            else if (key === 'f') res = (k - 273.15) * 9/5 + 32;
+            else if (key === 'r') res = k * 9/5;
+            else if (key === 're') res = (k - 273.15) * 0.8;
+            this.renderCard(container, units[key].name, res, key === from, null, null, val);
+        });
+    },
+
+    // 🎨 UI RENDERER (Dynamic Precision)
+    renderCard: function(container, name, val, isHighlight, fromU, toU, inVal) {
+        let disp = "";
+        const absVal = Math.abs(val);
+        
+        // Smart Formatting: Automatically use scientific notation for insane numbers
+        if (this.state.sciMode || (absVal > 0 && absVal < 0.000001) || absVal > 1e10) {
+            disp = val.toExponential(4).replace('e+', ' × 10^').replace('e-', ' × 10^-');
+        } else {
+            // High precision strip trailing zeros safely
+            disp = parseFloat(val.toPrecision(8)).toString();
+        }
+
+        const card = document.createElement('div');
+        card.className = `r-card ${isHighlight ? 'highlight' : ''}`;
+        card.style.animation = `fadeIn 0.3s ease-out forwards`;
+        
+        let formula = "";
+        if(fromU && toU && !isHighlight && this.state.cat !== 'temp' && this.state.cat !== 'fuel') {
+            const factor = fromU.val / toU.val;
+            const op = factor < 1 ? 'Divide by' : 'Multiply by';
+            const fVal = factor < 1 ? (1/factor) : factor;
+            let displayFactor = fVal > 1000 || fVal < 0.001 ? fVal.toExponential(4) : parseFloat(fVal.toPrecision(5));
+            
+            formula = `<div class="r-expl">Formula: <span class="expl-highlight">${op} ${displayFactor}</span></div>`;
+        } else if (!isHighlight) {
+            formula = `<div class="r-expl">Explanation: <span class="expl-highlight">Non-linear / Complex conversion</span></div>`;
+        }
+        
+        card.innerHTML = `
+            <div class="r-content-wrapper">
+                <div class="r-unit">${name}</div>
+                <div class="r-val">${disp}</div>
+            </div>
+            <i class="fas fa-check copy-icon"></i>
+            ${formula}
+            <button class="explain-btn" onclick="QS_Unit.toggleExplain(this, event)">Why</button>
+        `;
+        card.onclick = () => this.copy(disp, card);
+        container.appendChild(card);
+    },
+
+    toggleExplain: function(btn, e) {
+        e.stopPropagation();
+        const expl = btn.parentElement.querySelector('.r-expl');
+        if(!expl) return;
+        const isOpen = expl.classList.contains('show');
+        expl.classList.toggle('show', !isOpen);
+        btn.classList.toggle('active', !isOpen);
+    },
+
+    toggleDim: function() {
+        this.state.showDim = !this.state.showDim;
+        document.getElementById('btn-dim').classList.toggle('active', this.state.showDim);
+        document.getElementById('dim-disp').classList.toggle('show', this.state.showDim);
+    },
+
+    copy: function(txt, card) {
+        navigator.clipboard.writeText(txt);
+        card.classList.add('copied');
+        const t = document.getElementById('u-toast');
+        t.classList.add('show');
+        if(window.navigator && window.navigator.vibrate) navigator.vibrate(30);
+        setTimeout(() => { card.classList.remove('copied'); t.classList.remove('show'); }, 1500);
+    }
+};
+
+// 🚦 LAUNCH ENGINE SAFELY
+document.addEventListener('DOMContentLoaded', () => QS_Unit.init());
+window.addEventListener('qs-tool-opened', (e) => { 
+    if(e.detail && e.detail.tool === 'unit.js') QS_Unit.init(); 
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>GST Profit Margin & Markup Master | Business Analytics | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate exact business profit margins including GST, Markup vs Margin logic, and Input Tax Credit adjustments. Professional tool for retailers. 100% Offline.">
+    <meta name="keywords" content="gst profit calculator, markup vs margin gst, retail profit calculator, itc profit adjustment, business tax tool, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/gst_suites/profit_markup.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#020617">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           PROFIT MASTER (PLATINUM GOD MODE)
+           Theme: Obsidian / Money Green / Gold
+           ========================================= */
+        #mod-profit-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: #020617; z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .pm-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #064e3b; border-bottom: 1px solid #065f46;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .pm-head .qs-back-btn { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .pm-tit { color: #10b981; font-weight: 900; font-size: 0.9rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .pm-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 80px; }
+
+        /* Sleek Cards */
+        .pm-card { 
+            background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; 
+            padding: 15px; display: flex; flex-direction: column; gap: 10px;
+        }
+        
+        .pm-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; }
+        .pm-lbl span { color: #10b981; }
+
+        /* Mode Switcher (Markup vs Margin) */
+        .mode-toggle { display: grid; grid-template-columns: 1fr 1fr; background: rgba(2, 6, 23, 0.5); border-radius: 8px; border: 1px solid #1e293b; padding: 4px; }
+        .m-btn { padding: 10px; text-align: center; border-radius: 6px; font-weight: 900; font-size: 0.7rem; cursor: pointer; color: #64748b; transition: 0.2s; letter-spacing: 1px; }
+        .m-btn.active { background: #10b981; color: #020617; }
+
+        .pm-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 10px 12px; border-radius: 8px; border: 1px solid #1e293b; transition: 0.2s; }
+        .pm-inp-wrap:focus-within { border-color: #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.1); }
+        .pm-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.1rem; font-weight: 900; outline: none; width: 100%; text-align: right; font-family: monospace; }
+        .pm-pre { color: #475569; font-weight: 900; font-size: 0.8rem; }
+
+        /* Custom Dropdown Trigger */
+        .pm-select-trigger { flex: 1; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: #fff; font-weight: 900; font-size: 0.95rem; padding: 2px 0; }
+
+        /* Result Dashboard */
+        .res-hero { background: #020617; border: 1px solid #10b981; border-radius: 12px; padding: 20px 15px; position: relative; overflow: visible; box-shadow: inset 0 0 30px rgba(16, 185, 129, 0.05); text-align: center; }
+        .res-hero::before { content: 'NET PROFIT ANALYTICS'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #10b981; color: #020617; font-size: 0.6rem; font-weight: 900; padding: 2px 10px; border-radius: 4px; letter-spacing: 1px; }
+        
+        .main-profit { font-size: 3rem; font-weight: 900; color: #10b981; font-family: monospace; line-height: 1; margin-bottom: 5px; }
+        .main-sub { font-size: 0.8rem; font-weight: 800; color: #f8fafc; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Thermometer Progress Bar */
+        .thermo-wrap { width: 100%; height: 6px; background: #1e293b; border-radius: 3px; margin-top: 20px; position: relative; overflow: hidden; }
+        .thermo-fill { height: 100%; width: 0%; background: linear-gradient(to right, #ef4444, #facc15, #10b981); transition: width 0.8s ease; }
+
+        /* Data Grid */
+        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .data-box { background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 10px; padding: 12px; text-align: left; }
+        .d-lbl { font-size: 0.55rem; color: #64748b; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        .d-val { font-size: 1rem; color: #f8fafc; font-weight: 900; font-family: monospace; }
+        .val-gold { color: #eab308; }
+        .val-cyan { color: #38bdf8; }
+
+        /* Breakdown Table */
+        .break-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: #0f172a; border-radius: 10px; overflow: hidden; }
+        .break-table td { padding: 12px; font-size: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: bold; }
+        .break-table td:last-child { text-align: right; font-family: monospace; color: #fff; font-size: 0.85rem; }
+        .t-dim { color: #64748b; font-weight: 800; text-transform: uppercase; font-size: 0.65rem; }
+
+        /* Modals */
+        .pm-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .pm-content { background: #0f172a; border-top-left-radius: 20px; border-top-right-radius: 20px; display: flex; flex-direction: column; overflow: hidden; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .pm-open .pm-content { transform: translateY(0); }
+        .pm-modal-head { padding: 15px 20px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; }
+        .pm-modal-head span { color: #10b981; font-weight: 900; font-size: 1rem; text-transform: uppercase; }
+        .pm-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .pm-list { padding: 10px 0; max-height: 50vh; overflow-y: auto; }
+        .pl-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); cursor: pointer; }
+        .pl-name { font-weight: 900; color: #f8fafc; font-size: 0.95rem; }
+        .pl-check { color: #10b981; display: none; }
+        .pl-item.active .pl-check { display: block; }
+        .pl-item.active .pl-name { color: #10b981; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <main id="mod-profit-overlay" role="main" aria-label="GST Profit Margin Master">
+        <header class="pm-head">
+            <a href="../gst.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left"></i></a>
+            <div class="pm-tit"><i class="fas fa-hand-holding-usd"></i> PROFIT & MARKUP MASTER</div>
+        </header>
+
+        <section class="pm-body">
+            
+            <div class="pm-card">
+                <div class="pm-lbl">Purchase Cost (Exclusive) <span>BASE CP</span></div>
+                <div class="pm-inp-wrap">
+                    <span class="pm-pre">₹</span>
+                    <input type="number" id="inp-cp" class="pm-inp" placeholder="0.00" oninput="QS_Profit.calculate()">
+                </div>
+
+                <div class="pm-lbl">GST on Purchase</div>
+                <div class="pm-inp-wrap" onclick="QS_Profit.openModal('in-rate')">
+                    <div class="pm-select-trigger">
+                        <span id="lbl-in-rate">18% GST</span> <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pm-card">
+                <div class="pm-lbl">Calculation Method <span>PRO LOGIC</span></div>
+                <div class="mode-toggle">
+                    <div id="btn-markup" class="m-btn active" onclick="QS_Profit.setMode('markup')">MARKUP ON COST</div>
+                    <div id="btn-margin" class="m-btn" onclick="QS_Profit.setMode('margin')">MARGIN ON SALE</div>
+                </div>
+
+                <div class="pm-lbl">Desired Profit Percentage</div>
+                <div class="pm-inp-wrap">
+                    <input type="number" id="inp-profit-pct" class="pm-inp" placeholder="20" oninput="QS_Profit.calculate()">
+                    <span class="pm-pre">%</span>
+                </div>
+            </div>
+
+            <div class="pm-card">
+                <div class="pm-lbl">GST on Sales <span>OUT TAX</span></div>
+                <div class="pm-inp-wrap" onclick="QS_Profit.openModal('out-rate')">
+                    <div class="pm-select-trigger">
+                        <span id="lbl-out-rate">18% GST</span> <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div id="empty-state" style="text-align:center; padding: 20px; color:#475569;">
+                <i class="fas fa-chart-line fa-3x" style="margin-bottom:12px; opacity:0.3;"></i>
+                <div style="font-size:0.85rem; font-weight:bold;">Input cost and profit goal to project revenue.</div>
+            </div>
+
+            <div id="res-dashboard" class="hidden" aria-live="polite">
+                
+                <div class="res-hero">
+                    <div class="main-profit" id="res-net-profit">₹0.00</div>
+                    <div class="main-sub" id="res-profit-status">NET TAKE-HOME PROFIT</div>
+                    <div class="thermo-wrap">
+                        <div class="thermo-fill" id="res-thermo"></div>
+                    </div>
+                </div>
+
+                <div class="data-grid">
+                    <div class="data-box">
+                        <span class="d-lbl">Selling Price (Excl)</span>
+                        <span class="d-val val-cyan" id="res-sp-excl">₹0.00</span>
+                    </div>
+                    <div class="data-box">
+                        <span class="d-lbl">Selling Price (Incl)</span>
+                        <span class="d-val val-gold" id="res-sp-incl">₹0.00</span>
+                    </div>
+                    <div class="data-box">
+                        <span class="d-lbl">Total GST Collect</span>
+                        <span class="d-val" id="res-gst-collect">₹0.00</span>
+                    </div>
+                    <div class="data-box">
+                        <span class="d-lbl">Net GST Payable</span>
+                        <span class="d-val" id="res-gst-payable">₹0.00</span>
+                    </div>
+                </div>
+
+                <table class="break-table">
+                    <tr><td class="t-dim">Gross Revenue</td><td id="res-gross">₹0.00</td></tr>
+                    <tr><td class="t-dim">Total Cost (CP + In-GST)</td><td id="res-total-cost">₹0.00</td></tr>
+                    <tr><td class="t-dim">ITC Adjustment</td><td id="res-itc" style="color:#10b981;">- ₹0.00</td></tr>
+                    <tr style="border-top:2px solid #1e293b;"><td class="t-dim" style="color:#10b981;">Net Margin (Actual %)</td><td id="res-actual-pct" style="color:#10b981;">0.00%</td></tr>
+                </table>
+
+                <div style="margin-top:15px; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 8px; padding: 12px; font-size: 0.65rem; color: #cbd5e1; line-height: 1.4;">
+                    <i class="fas fa-lightbulb" style="color:#10b981;"></i> <b>Platinum Tip:</b> Your "Net Take-Home" accounts for the tax you collected from customers minus the tax you already paid to suppliers (ITC).
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <div id="pm-modal" class="pm-modal">
+        <div class="pm-content">
+            <div class="pm-modal-head"><span id="pm-title">Select</span><button class="pm-close" onclick="QS_Profit.closeModal()"><i class="fas fa-times"></i></button></div>
+            <div class="pm-list" id="pm-list"></div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - PROFIT MASTER ENGINE
+           Features: Markup vs Margin Formulas, ITC Deductions, Round-off Protection.
+        */
+        (function() {
+            window.QS_Profit = {
+                state: {
+                    mode: 'markup', // markup or margin
+                    inRate: 18,
+                    outRate: 18
+                },
+
+                init: function() {
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'gst_suites/profit_markup.js') this.calculate();
+                    });
+                    if(document.readyState === 'complete') this.calculate();
+                    else document.addEventListener('DOMContentLoaded', () => this.calculate());
+                },
+
+                setMode: function(m) {
+                    this.state.mode = m;
+                    document.getElementById('btn-markup').classList.toggle('active', m === 'markup');
+                    document.getElementById('btn-margin').classList.toggle('active', m === 'margin');
+                    this.calculate();
+                },
+
+                openModal: function(target) {
+                    const title = target === 'in-rate' ? 'Purchase GST Rate' : 'Sales GST Rate';
+                    document.getElementById('pm-title').innerText = title;
+                    const list = document.getElementById('pm-list');
+                    list.innerHTML = '';
+
+                    const opts = [0, 0.1, 0.25, 3, 5, 12, 18, 28].map(v => ({ v, n: v + '%' }));
+
+                    opts.forEach(o => {
+                        const key = target === 'in-rate' ? 'inRate' : 'outRate';
+                        const active = this.state[key] == o.v;
+                        const div = document.createElement('div');
+                        div.className = `pl-item ${active?'active':''}`;
+                        div.onclick = () => {
+                            this.state[key] = o.v;
+                            document.getElementById(`lbl-${target}`).innerText = o.n + ' GST';
+                            this.closeModal();
+                            this.calculate();
+                        };
+                        div.innerHTML = `<span class="pl-name">${o.n}</span><i class="fas fa-check pl-check"></i>`;
+                        list.appendChild(div);
+                    });
+
+                    const m = document.getElementById('pm-modal');
+                    m.style.display = 'flex';
+                    setTimeout(() => m.classList.add('pm-open'), 10);
+                },
+
+                closeModal: function() {
+                    const m = document.getElementById('pm-modal');
+                    m.classList.remove('pm-open');
+                    setTimeout(() => m.style.display = 'none', 300);
+                },
+
+                calculate: function() {
+                    const cp = parseFloat(document.getElementById('inp-cp').value);
+                    const pPct = parseFloat(document.getElementById('inp-profit-pct').value) || 0;
+
+                    if(!cp || cp <= 0) {
+                        document.getElementById('empty-state').classList.remove('hidden');
+                        document.getElementById('res-dashboard').classList.add('hidden');
+                        return;
+                    }
+
+                    document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('res-dashboard').classList.remove('hidden');
+
+                    // 1. Core Logic: Selling Price (Excl. GST)
+                    let spExcl = 0;
+                    if(this.state.mode === 'markup') {
+                        // Formula: CP * (1 + Profit%)
+                        spExcl = cp * (1 + (pPct / 100));
+                    } else {
+                        // Formula: CP / (1 - Profit%) -> Margin on Sale
+                        // Guard against 100% or more margin which is impossible
+                        const factor = 1 - (pPct / 100);
+                        spExcl = factor > 0 ? (cp / factor) : (cp * 10); 
+                    }
+
+                    // 2. Tax Calculations
+                    const inTax = cp * (this.state.inRate / 100);
+                    const outTax = spExcl * (this.state.outRate / 100);
+                    const spIncl = spExcl + outTax;
+                    const totalPurchaseCost = cp + inTax;
+
+                    // 3. Net GST Payable (Sales Tax - Purchase Tax)
+                    const netGSTPayable = Math.max(0, outTax - inTax);
+                    const itcClaimed = Math.min(outTax, inTax);
+
+                    // 4. Actual Net Profit (Take-home)
+                    // Logic: Revenue (SP-Excl) - Cost (CP) - (OutTax - InTax, if any)
+                    // If OutTax > InTax, you pay the diff. If InTax > OutTax, you carry forward.
+                    const netProfit = spExcl - cp - (outTax > inTax ? (outTax - inTax) : 0);
+                    const actualMarginPct = (netProfit / spExcl) * 100;
+
+                    this.render(spExcl, spIncl, outTax, netGSTPayable, inTax, itcClaimed, netProfit, actualMarginPct);
+                },
+
+                render: function(spE, spI, oT, nG, iT, itc, nP, aP) {
+                    const fmt = (v) => '₹' + v.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    
+                    document.getElementById('res-net-profit').innerText = fmt(nP);
+                    document.getElementById('res-sp-excl').innerText = fmt(spE);
+                    document.getElementById('res-sp-incl').innerText = fmt(spI);
+                    document.getElementById('res-gst-collect').innerText = fmt(oT);
+                    document.getElementById('res-gst-payable').innerText = fmt(nG);
+                    
+                    document.getElementById('res-gross').innerText = fmt(spI);
+                    document.getElementById('res-total-cost').innerText = fmt(spE + oT - nP); // Reverse breakdown
+                    document.getElementById('res-itc').innerText = `- ${fmt(itc)}`;
+                    document.getElementById('res-actual-pct').innerText = aP.toFixed(2) + '%';
+
+                    // Thermo Fill (Max at 50% profit for visualization)
+                    const fillPct = Math.min(100, (aP / 50) * 100);
+                    document.getElementById('res-thermo').style.width = Math.max(0, fillPct) + '%';
+                    
+                    // Dynamic Color
+                    if(nP < 0) {
+                        document.getElementById('res-net-profit').style.color = "#ef4444";
+                        document.getElementById('res-profit-status').innerText = "NET LOSS DETECTED";
+                    } else {
+                        document.getElementById('res-net-profit').style.color = "#10b981";
+                        document.getElementById('res-profit-status').innerText = "NET TAKE-HOME PROFIT";
+                    }
+                }
+            };
+
+            QS_Profit.init();
+        })();
+    </script>
+</body>
+</html>

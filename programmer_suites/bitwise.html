@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>64-Bit Bitwise Logic Lab | AND, OR, XOR, NAND Calculator | QuickSolve Platinum</title>
+    <meta name="description" content="Advanced 64-bit Bitwise logic calculator. Perform AND, OR, XOR, NOT, NAND, NOR, and XNOR operations on Decimal, Hexadecimal, or Binary inputs. Includes a real-time truth table visualizer.">
+    <meta name="keywords" content="bitwise calculator, logic gate calculator, 64 bit bitwise, XOR calculator, NAND NOR XNOR, hex bitwise operations, boolean logic calculator, programmer logic lab, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/bitwise.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Bitwise Logic Lab - 64-Bit Boolean Operations">
+    <meta property="og:description" content="Calculate AND, OR, XOR, and more. Visualize the logic gate operations step-by-step.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           BITWISE LOGIC LAB (OP EDITION)
+           Theme: Cyberpunk Terminal (Blue/Green)
+           ========================================= */
+        body { margin: 0; background-color: var(--bg-body, #09090b); }
+
+        #mod-bitwise-overlay {
+            width: 100vw; min-height: 100vh;
+            background-color: var(--bg-body, #09090b); 
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: monospace;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .bw-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: var(--surface, #18181b); border-bottom: 1px solid var(--border, #27272a);
+            position: sticky; top: 0; z-index: 10;
+        }
+        .bw-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; }
+        .bw-tit { color: #3b82f6; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .bw-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Bit Size Selector */
+        .bit-selector { display: flex; background: rgba(2, 6, 23, 0.5); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+        .bit-opt { flex: 1; padding: 10px 0; text-align: center; color: var(--text-muted); font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: 0.2s; border-right: 1px solid var(--border); }
+        .bit-opt:last-child { border-right: none; }
+        .bit-opt.active { background: rgba(59, 130, 246, 0.2); color: #3b82f6; box-shadow: inset 0 -2px 0 #3b82f6; }
+
+        /* Input Groups */
+        .bw-grp { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; transition: 0.2s; position: relative; }
+        .bw-grp:focus-within { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
+        .bw-grp.error { border-color: #ef4444 !important; box-shadow: 0 0 15px rgba(239, 68, 68, 0.1) !important; }
+        
+        .bw-lbl { color: var(--text-muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+        
+        .bw-inp-wrap { display: flex; align-items: center; gap: 8px; }
+        .bw-inp { background: transparent; border: none; color: #fff; font-size: 1.1rem; font-weight: 700; width: 100%; outline: none; font-family: monospace; word-break: break-all; min-width: 0; }
+        .bw-inp::placeholder { color: #3f3f46; font-size: 0.9rem; }
+
+        /* Operator Selector */
+        .op-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0; }
+        .op-btn { background: rgba(2, 6, 23, 0.6); border: 1px solid var(--border); color: var(--text-muted); padding: 10px 5px; border-radius: 6px; font-weight: 800; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; transition: 0.2s; font-family: monospace; }
+        .op-btn.active { background: #3b82f6; color: #fff; border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+
+        /* Results Arena */
+        .res-arena { background: rgba(16, 185, 129, 0.05); border: 1px solid #22c55e; border-radius: 12px; padding: 15px; margin-top: 5px; }
+        .res-row { margin-bottom: 12px; }
+        .res-row:last-child { margin-bottom: 0; }
+        .res-lbl { font-size: 0.65rem; color: #22c55e; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; display
+
+<body>
+
+<main id="mod-bitwise-overlay" role="main">
+    <header class="bw-head" role="banner">
+        <a href="../programmer.html" class="qs-back-btn" aria-label="Go back to Programmer Suite">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </a>
+<h1 class="bw-tit" style="position: absolute; left: 50%; transform: translateX(-50%); margin: 0; color: #38bdf8; font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);">
+    <i class="fas fa-code-branch" aria-hidden="true"></i> BITWISE LAB
+</h1>
+
+    </header>
+
+    <div class="bw-body">
+        
+        <section aria-labelledby="bit-size-heading">
+            <h2 id="bit-size-heading" class="sr-only" style="display:none;">Select Bit Boundary</h2>
+            <div class="bit-selector" id="bw-bit-selector" role="radiogroup" aria-label="Bit size limit">
+                <div class="bit-opt" data-bits="8" role="radio" aria-checked="false" tabindex="0" onclick="QS_Bitwise.setBits(8)">8-bit</div>
+                <div class="bit-opt active" data-bits="16" role="radio" aria-checked="true" tabindex="0" onclick="QS_Bitwise.setBits(16)">16-bit</div>
+                <div class="bit-opt" data-bits="32" role="radio" aria-checked="false" tabindex="0" onclick="QS_Bitwise.setBits(32)">32-bit</div>
+                <div class="bit-opt" data-bits="64" role="radio" aria-checked="false" tabindex="0" onclick="QS_Bitwise.setBits(64)">64-bit</div>
+            </div>
+            <div style="color:var(--text-muted); font-size:0.65rem; text-align:center;" aria-hidden="true">Pro Tip: Prefix with <b>0x</b> for Hex or <b>0b</b> for Binary. Default is Decimal.</div>
+        </section>
+
+        <section aria-label="Logic Gate Inputs">
+            <div class="bw-grp" id="grp-a">
+                <label for="inp-a" class="bw-lbl">Input A</label>
+                <div class="bw-inp-wrap">
+                    <input type="text" id="inp-a" class="bw-inp" placeholder="e.g. 255 or 0xFF" aria-label="Enter Input A" oninput="QS_Bitwise.calc()" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="op-selector" role="group" aria-label="Select Bitwise Operator">
+                <button class="op-btn active" data-op="AND" aria-pressed="true" onclick="QS_Bitwise.setOp('AND')">AND &</button>
+                <button class="op-btn" data-op="OR" aria-pressed="false" onclick="QS_Bitwise.setOp('OR')">OR |</button>
+                <button class="op-btn" data-op="XOR" aria-pressed="false" onclick="QS_Bitwise.setOp('XOR')">XOR ^</button>
+                <button class="op-btn" data-op="NOT" aria-pressed="false" onclick="QS_Bitwise.setOp('NOT')">NOT ~</button>
+                <button class="op-btn" data-op="NAND" aria-pressed="false" onclick="QS_Bitwise.setOp('NAND')">NAND</button>
+                <button class="op-btn" data-op="NOR" aria-pressed="false" onclick="QS_Bitwise.setOp('NOR')">NOR</button>
+                <button class="op-btn" data-op="XNOR" aria-pressed="false" onclick="QS_Bitwise.setOp('XNOR')">XNOR</button>
+            </div>
+
+            <div class="bw-grp" id="grp-b">
+                <label for="inp-b" class="bw-lbl">Input B</label>
+                <div class="bw-inp-wrap">
+                    <input type="text" id="inp-b" class="bw-inp" placeholder="e.g. 15 or 0b1111" aria-label="Enter Input B" oninput="QS_Bitwise.calc()" autocomplete="off">
+                </div>
+            </div>
+        </section>
+
+        <section class="res-arena" aria-labelledby="results-heading" aria-live="polite">
+            <h2 id="results-heading" class="sr-only" style="display:none;">Bitwise Operation Results</h2>
+            <div class="res-row">
+                <span class="res-lbl" id="lbl-dec-res">Decimal Result</span>
+                <div class="res-val" id="res-dec" aria-labelledby="lbl-dec-res">0</div>
+            </div>
+            <div class="res-row">
+                <span class="res-lbl" id="lbl-hex-res">Hexadecimal</span>
+                <div class="res-val" id="res-hex" aria-labelledby="lbl-hex-res">0x0</div>
+            </div>
+            <div class="res-row">
+                <span class="res-lbl" id="lbl-bin-res">Binary (Padded to bits)</span>
+                <div class="res-val bin-format" id="res-bin" aria-labelledby="lbl-bin-res">00000000 00000000</div>
+            </div>
+        </section>
+
+        <button class="btn-why" aria-haspopup="dialog" aria-expanded="false" aria-label="Open logic truth table visualizer" onclick="QS_Bitwise.showSteps()">
+            <i class="fas fa-eye" aria-hidden="true"></i> Visualize Logic Truth Table
+        </button>
+
+    </div>
+
+    <div id="bw-steps-modal" role="dialog" aria-modal="true" aria-labelledby="modal-vis-title">
+        <div id="bw-steps-box">
+            <header class="steps-head">
+                <h2 id="modal-vis-title" style="margin: 0; font-size: 1rem;"><i class="fas fa-microchip" aria-hidden="true"></i> LOGIC VISUALIZER</h2>
+                <button class="steps-close" aria-label="Close Visualizer" onclick="QS_Bitwise.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </header>
+            <div class="steps-content" id="bw-steps-content" aria-live="polite">
+                </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    /* QUICKSOLVE PLATINUM - BITWISE LOGIC LAB (MPA STANDALONE)
+       Features: Auto-detect base, BigInt bitwise math, Unsigned Masking, Visual Truth Table
+    */
+    const QS_Bitwise = {
+        
+        currentBits: 16,
+        currentOp: 'AND',
+        
+        // Caching for visualizer
+        lastA: 0n,
+        lastB: 0n,
+        lastRes: 0n,
+        isValid: false,
+
+        init: function() {
+            console.log("Bitwise Lab Engine Ready 🚀");
+            this.resetUI();
+        },
+
+        setBits: function(bits) {
+            this.currentBits = bits;
+            
+            // Update ARIA and Active States
+            const opts = document.querySelectorAll('#bw-bit-selector .bit-opt');
+            opts.forEach(opt => {
+                opt.classList.remove('active');
+                opt.setAttribute('aria-checked', 'false');
+            });
+            const activeOpt = document.querySelector(`#bw-bit-selector .bit-opt[data-bits="${bits}"]`);
+            if(activeOpt) {
+                activeOpt.classList.add('active');
+                activeOpt.setAttribute('aria-checked', 'true');
+            }
+            
+            this.calc();
+            if(window.doHaptic) window.doHaptic();
+        },
+
+        setOp: function(op) {
+            this.currentOp = op;
+            
+            // Update ARIA and Active States
+            const btns = document.querySelectorAll('.op-btn');
+            btns.forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-pressed', 'false');
+            });
+            const activeBtn = document.querySelector(`.op-btn[data-op="${op}"]`);
+            if(activeBtn) {
+                activeBtn.classList.add('active');
+                activeBtn.setAttribute('aria-pressed', 'true');
+            }
+
+            // Hide Input B if NOT operator is selected (unary operator)
+            const grpB = document.getElementById('grp-b');
+            if(op === 'NOT') {
+                grpB.style.display = 'none';
+                document.getElementById('inp-b').value = ''; // clear it
+            } else {
+                grpB.style.display = 'block';
+            }
+
+            this.calc();
+            if(window.doHaptic) window.doHaptic();
+        },
+
+        // Auto parse Decimal, 0x Hex, or 0b Binary
+        parseInput: function(valStr) {
+            let val = valStr.trim().toLowerCase();
+            if(!val) return null;
+            
+            try {
+                if (val.startsWith('0x')) return BigInt(val);
+                if (val.startsWith('0b')) return BigInt(val);
+                if (val.startsWith('0o')) return BigInt(val);
+                // Assume decimal if no prefix
+                if (!/^-?\d+$/.test(val)) return null;
+                return BigInt(val);
+            } catch(e) {
+                return null;
+            }
+        },
+
+        // Creates a mask to simulate fixed-width registers (e.g. 8-bit, 16-bit)
+        // Without this, JavaScript handles negatives infinitely
+        getMask: function() {
+            if (this.currentBits === 64) {
+                // Special handling for 64 bit to avoid shift overflow standard limits
+                return BigInt("18446744073709551615"); // 0xFFFFFFFFFFFFFFFF
+            }
+            return (1n << BigInt(this.currentBits)) - 1n;
+        },
+
+        calc: function() {
+            const rawA = document.getElementById('inp-a').value;
+            const rawB = document.getElementById('inp-b').value;
+            
+            const grpA = document.getElementById('grp-a');
+            const grpB = document.getElementById('grp-b');
+            
+            grpA.classList.remove('error');
+            grpB.classList.remove('error');
+            this.isValid = false;
+
+            // If empty
+            if (!rawA) {
+                this.clearResults();
+                return;
+            }
+
+            let valA = this.parseInput(rawA);
+            let valB = 0n;
+
+            if (valA === null) {
+                grpA.classList.add('error');
+                this.clearResults();
+                return;
+            }
+
+            if (this.currentOp !== 'NOT') {
+                if (!rawB) {
+                    this.clearResults();
+                    return;
+                }
+                valB = this.parseInput(rawB);
+                if (valB === null) {
+                    grpB.classList.add('error');
+                    this.clearResults();
+                    return;
+                }
+            }
+
+            // Apply Mask to inputs to enforce bit limits
+            const mask = this.getMask();
+            valA = valA & mask;
+            valB = valB & mask;
+
+            let result = 0n;
+
+            // BigInt Logic Gates
+            switch (this.currentOp) {
+                case 'AND': result = valA & valB; break;
+                case 'OR':  result = valA | valB; break;
+                case 'XOR': result = valA ^ valB; break;
+                case 'NOT': result = (~valA) & mask; break; // Mask ensures we don't get infinite 1s
+                case 'NAND': result = ~(valA & valB) & mask; break;
+                case 'NOR':  result = ~(valA | valB) & mask; break;
+                case 'XNOR': result = ~(valA ^ valB) & mask; break;
+            }
+
+            // Final safety mask
+            result = result & mask;
+
+            // Save for visualizer
+            this.lastA = valA;
+            this.lastB = valB;
+            this.lastRes = result;
+            this.isValid = true;
+
+            // Update UI
+            document.getElementById('res-dec').innerText = result.toString(10);
+            document.getElementById('res-hex').innerText = "0x" + result.toString(16).toUpperCase();
+            
+            // Format binary with padding and spaces
+            let binStr = result.toString(2).padStart(this.currentBits, '0');
+            // Add space every 8 bits for readability
+            let formattedBin = binStr.match(/.{1,8}/g).join(' ');
+            document.getElementById('res-bin').innerText = formattedBin;
+        },
+
+        // --- PLATINUM VISUALIZER (THE WHY BUTTON) ---
+        showSteps: function() {
+            const contentBox = document.getElementById('bw-steps-content');
+            
+            if (!this.isValid) {
+                contentBox.innerHTML = `<div style="text-align:center; padding:20px; color:#ef4444;"><i class="fas fa-exclamation-triangle fa-2x" aria-hidden="true"></i><br><br>Enter valid inputs to see the matrix!</div>`;
+            } else {
+                contentBox.innerHTML = this.generateVisualMatrix();
+            }
+
+            const modal = document.getElementById('bw-steps-modal');
+            const box = document.getElementById('bw-steps-box');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                box.style.transform = 'translateY(0)';
+            }, 10);
+            
+            if(window.doHaptic) window.doHaptic();
+        },
+
+        hideSteps: function() {
+            const modal = document.getElementById('bw-steps-modal');
+            const box = document.getElementById('bw-steps-box');
+            modal.style.opacity = '0';
+            box.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+            if(window.doHaptic) window.doHaptic();
+        },
+
+        generateVisualMatrix: function() {
+            // Get padded binary strings
+            const strA = this.lastA.toString(2).padStart(this.currentBits, '0');
+            const strB = this.lastB.toString(2).padStart(this.currentBits, '0');
+            const strRes = this.lastRes.toString(2).padStart(this.currentBits, '0');
+
+            // Find symbol for operator
+            let opSymbol = '';
+            switch(this.currentOp) {
+                case 'AND': opSymbol = '&'; break;
+                case 'OR': opSymbol = '|'; break;
+                case 'XOR': opSymbol = '^'; break;
+                case 'NOT': opSymbol = '~'; break;
+                case 'NAND': opSymbol = '⊼'; break;
+                case 'NOR': opSymbol = '⊽'; break;
+                case 'XNOR': opSymbol = '⊙'; break;
+            }
+
+            let html = `
+                <div style="margin-bottom:15px; border-left:3px solid #a855f7; padding-left:10px;">
+                    <span style="color:#a855f7; font-weight:bold;">${this.currentBits}-bit ${this.currentOp} Operation:</span><br>
+                    Each bit column is evaluated independently based on Truth Tables.
+                </div>
+                
+                <div class="logic-board">
+            `;
+
+            // If it's NOT (Unary)
+            if (this.currentOp === 'NOT') {
+                html += `
+                    <div class="logic-row">
+                        <span class="logic-op">~</span>
+                        <span class="logic-bits">${this.formatBinMatrix(strA)}</span>
+                    </div>
+                    <div class="logic-line"></div>
+                    <div class="logic-row">
+                        <span class="logic-op">=</span>
+                        <span class="logic-res-bits">${this.formatBinMatrix(strRes)}</span>
+                    </div>
+                </div>
+                <div style="margin-top:15px; font-size:0.75rem; color:var(--text-muted); text-align:center;">
+                    *NOT flips every bit. 0 becomes 1, and 1 becomes 0.
+                </div>`;
+                return html;
+            }
+
+            // Normal Binary Operations
+            html += `
+                <div class="logic-row">
+                    <span class="logic-op"> </span>
+                    <span class="logic-bits">${this.formatBinMatrix(strA)}</span>
+                </div>
+                <div class="logic-row">
+                    <span class="logic-op">${opSymbol}</span>
+                    <span class="logic-bits">${this.formatBinMatrix(strB)}</span>
+                </div>
+                <div class="logic-line"></div>
+                <div class="logic-row">
+                    <span class="logic-op">=</span>
+                    <span class="logic-res-bits">${this.formatBinMatrix(strRes)}</span>
+                </div>
+            </div>`;
+
+            // Add simple truth table logic text
+            let explain = "";
+            if(this.currentOp === 'AND') explain = "Both top and bottom bits must be 1 to output 1.";
+            if(this.currentOp === 'OR') explain = "Outputs 1 if AT LEAST ONE of the bits is 1.";
+            if(this.currentOp === 'XOR') explain = "Outputs 1 only if the bits are DIFFERENT.";
+            if(this.currentOp === 'NAND') explain = "Inverse of AND. Outputs 0 ONLY if both bits are 1.";
+            if(this.currentOp === 'NOR') explain = "Inverse of OR. Outputs 1 ONLY if both bits are 0.";
+            if(this.currentOp === 'XNOR') explain = "Outputs 1 only if both bits are EXACTLY THE SAME.";
+
+            html += `
+                <div style="margin-top:15px; font-size:0.75rem; color:var(--text-muted); text-align:center;">
+                    *${explain}
+                </div>`;
+
+            return html;
+        },
+
+        // Helper to add spaces for visualizer matrix alignment
+        formatBinMatrix: function(binStr) {
+            return binStr.match(/.{1,4}/g).join(' '); // split by 4 for matrix
+        },
+
+        clearResults: function() {
+            document.getElementById('res-dec').innerText = "0";
+            document.getElementById('res-hex').innerText = "0x0";
+            document.getElementById('res-bin').innerText = "00000000 00000000";
+            this.isValid = false;
+        },
+
+        resetUI: function() {
+            document.getElementById('inp-a').value = '';
+            document.getElementById('inp-b').value = '';
+            this.setBits(16);
+            this.setOp('AND');
+            this.clearResults();
+        }
+    };
+
+    // Auto-Start
+    window.onload = function() {
+        QS_Bitwise.init();
+    };
+</script>
+</body>
+</html>

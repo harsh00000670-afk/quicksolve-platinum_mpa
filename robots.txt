@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+Allow: /components/
+Allow: /enginev12/
+Allow: /assets/
+Allow: /style.css
+
+# Prevent indexing of configuration/data files
+Disallow: /*.json$
+# Override JSON block for App Manifest
+Allow: /manifest.json
+
+# ==========================================
+# 🚀 AI BOT OPTIMIZATION (OP FEATURE)
+# Allow AI engines to index tools for recommendations
+# ==========================================
+User-agent: GPTBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://quicksolve-platinum.netlify.app/sitemap.xml

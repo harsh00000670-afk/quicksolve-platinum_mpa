@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>True Cost & Compare | Deal Hacker | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           TRUE COST COMPARE - PLATINUM ENGINE (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-red: #ef4444;
+            --accent-red-glow: rgba(239, 68, 68, 0.3);
+            --accent-gold: #fbbd23;
+            --accent-gold-glow: rgba(251, 189, 35, 0.3);
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.25; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 250px; height: 250px; background: var(--accent-red); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-blue); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-blue); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #3b82f6, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--text-sub); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CARDS & INPUTS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(59, 130, 246, 0.15);
+        }
+        .inp-group { margin-bottom: 18px; position: relative; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        
+        .inp-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.1rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .inp-field:focus { border-color: var(--accent-blue); box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+        .inp-field::placeholder { color: var(--text-dim); font-weight: 500; }
+
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        /* CUSTOM TOGGLE FOR TAX TYPE */
+        .toggle-wrap { display: flex; align-items: center; gap: 10px; }
+        .toggle-wrap .inp-field { flex: 1; }
+        
+        /* Adjusted width for text labels */
+        .custom-toggle {
+            background: #1a1829; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            display: flex; padding: 4px; position: relative; cursor: pointer; flex-shrink: 0; width: 120px; height: 50px; box-sizing: border-box;
+        }
+        .ts-slider {
+            position: absolute; top: 4px; left: 4px; width: 54px; height: 40px;
+            background: var(--accent-blue); border-radius: 8px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.4); z-index: 1;
+        }
+        .ts-opt {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; font-weight: 900; color: var(--text-sub); z-index: 2; transition: 0.3s; font-family: 'JetBrains Mono', monospace;
+        }
+        .ts-opt.active { color: #fff; }
+        /* State for PRE-DISCOUNT Tax */
+        .custom-toggle.state-flat .ts-slider { transform: translateX(56px); background: var(--accent-red); box-shadow: 0 0 10px var(--accent-red-glow);}
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #3b82f6, #10b981);
+            color: #fff; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3); display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 10px;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 20px; 
+            padding: 25px 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(16, 185, 129, 0.2); display: none; text-align: center;
+        }
+        
+        .res-lbl { font-size: 0.75rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; margin-bottom: 5px; }
+        .res-main-val { font-size: 2.8rem; color: var(--accent-green); font-weight: 900; font-family: 'JetBrains Mono', monospace; margin-bottom: 20px; line-height: 1; text-shadow: 0 0 20px rgba(16, 185, 129, 0.4);}
+        .res-main-val small { font-size: 1.5rem; color: var(--text-sub); }
+        
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;}
+        .res-box { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px 10px; }
+        .res-box-lbl { font-size: 0.65rem; color: var(--text-sub); text-transform: uppercase; font-weight: 800; margin-bottom: 5px; letter-spacing: 0.5px;}
+        .res-box-val { font-size: 1.2rem; color: var(--text-main); font-weight: 900; font-family: 'JetBrains Mono', monospace; }
+
+        /* TRAP ALERT BANNER */
+        .trap-alert {
+            background: rgba(239, 68, 68, 0.1); border: 1px solid var(--accent-red); border-radius: 12px;
+            padding: 15px; text-align: left; display: none; align-items: flex-start; gap: 12px;
+            box-shadow: 0 0 15px var(--accent-red-glow); animation: shake 0.5s ease-in-out; margin-bottom: 12px;
+        }
+        .trap-icon { font-size: 1.5rem; color: var(--accent-red); margin-top: 2px;}
+        .trap-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.5; font-weight: 600;}
+        .trap-text b { color: var(--accent-red); font-weight: 900; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;}
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+
+        /* CUSTOM TOAST */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px var(--accent-red-glow); display: flex; align-items: center; gap: 8px;
+        }
+        .toast.show { bottom: 30px; }
+
+        /* ANIMATIONS */
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-balance-scale-right"></i> TRUE COST</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>The Real Price</h1>
+            <p>> expose_hidden_fees --compare</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">1. Original MRP (₹)</label>
+                    <input type="number" id="inp-mrp" class="inp-field" placeholder="e.g. 2000" min="0">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">2. Discount (%)</label>
+                    <input type="number" id="inp-disc" class="inp-field" placeholder="e.g. 30" min="0">
+                </div>
+            </div>
+
+            <div class="inp-group">
+                <label class="inp-lbl">3. GST % & Tax Type</label>
+                <div class="toggle-wrap">
+                    <input type="number" id="inp-gst" class="inp-field" placeholder="e.g. 18" min="0">
+                    <div class="custom-toggle" id="tax-toggle" onclick="TrueCost.toggleTaxType()">
+                        <div class="ts-slider"></div>
+                        <div class="ts-opt active" id="lbl-post">POST-DISC</div>
+                        <div class="ts-opt" id="lbl-pre">ON MRP</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">4. Shipping (₹)</label>
+                    <input type="number" id="inp-ship" class="inp-field" placeholder="e.g. 100" min="0">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">5. Other Fees (₹)</label>
+                    <input type="number" id="inp-other" class="inp-field" placeholder="e.g. 20" min="0">
+                </div>
+            </div>
+
+            <div class="inp-group">
+                <label class="inp-lbl">6. Competitor Price (₹) <span style="text-transform:none; color:var(--text-dim);">(Optional)</span></label>
+                <input type="number" id="inp-comp" class="inp-field" placeholder="e.g. 1600" min="0">
+            </div>
+
+            <button class="calc-btn" onclick="TrueCost.calculate()">
+                <i class="fas fa-eye"></i> Expose True Cost
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container">
+            <div class="res-lbl" style="color: var(--accent-green);">Actual Amount Payable</div>
+            <div class="res-main-val" id="res-payable"><small>₹</small>--</div>
+            
+            <div class="res-grid">
+                <div class="res-box">
+                    <div class="res-box-lbl">Tax Amount</div>
+                    <div class="res-box-val" id="res-tax" style="color:var(--accent-red);">₹--</div>
+                </div>
+                <div class="res-box">
+                    <div class="res-box-lbl">Hidden Fees</div>
+                    <div class="res-box-val" id="res-fees" style="color:var(--accent-gold);">₹--</div>
+                </div>
+            </div>
+
+            <div class="trap-alert" id="tax-trap">
+                <div class="trap-icon"><i class="fas fa-radiation"></i></div>
+                <div class="trap-text">
+                    <b>TAX SCAM DETECTED!</b><br>
+                    They are charging GST on the full MRP instead of the discounted price. You are paying an extra <b id="trap-tax-loss">₹0</b> in unnecessary taxes!
+                </div>
+            </div>
+
+            <div class="trap-alert" id="comp-trap">
+                <div class="trap-icon"><i class="fas fa-ghost"></i></div>
+                <div class="trap-text">
+                    <b>FAKE DISCOUNT ALERT!</b><br>
+                    Because of hidden fees and taxes, this "discounted" deal is actually <b id="trap-comp-diff">₹0</b> MORE EXPENSIVE than the competitor's price.
+                </div>
+            </div>
+            
+            <div class="trap-alert" id="deal-good" style="background: rgba(16, 185, 129, 0.1); border-color: var(--accent-green); box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);">
+                <div class="trap-icon" style="color: var(--accent-green);"><i class="fas fa-check-circle"></i></div>
+                <div class="trap-text" style="color: var(--text-main);">
+                    <b>SOLID DEAL!</b><br>
+                    You are saving <b id="deal-save-val" style="color: var(--accent-green);">₹0</b> compared to the competitor even after all taxes and fees.
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - TRUE COST / COMPARE ENGINE */
+        
+        window.TrueCost = {
+            isTaxPostDisc: true,
+
+            haptic: function() { if(navigator.vibrate) navigator.vibrate(20); },
+
+            showToast: function(msg) {
+                const toast = document.getElementById('custom-toast');
+                document.getElementById('toast-msg').innerText = msg;
+                if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            },
+
+            // Custom Toggle Logic for Tax Mode
+            toggleTaxType: function() {
+                this.haptic();
+                const toggle = document.getElementById('tax-toggle');
+                this.isTaxPostDisc = !this.isTaxPostDisc;
+                
+                if(this.isTaxPostDisc) {
+                    toggle.classList.remove('state-flat');
+                    document.getElementById('lbl-post').classList.add('active');
+                    document.getElementById('lbl-pre').classList.remove('active');
+                } else {
+                    toggle.classList.add('state-flat');
+                    document.getElementById('lbl-post').classList.remove('active');
+                    document.getElementById('lbl-pre').classList.add('active');
+                }
+            },
+
+            // Math Logic
+            calculate: function() {
+                this.haptic();
+
+                // Inputs
+                const mrp = parseFloat(document.getElementById('inp-mrp').value);
+                if(isNaN(mrp) || mrp <= 0) {
+                    this.showToast("Bhai original MRP toh daal!"); return;
+                }
+
+                const discPct = parseFloat(document.getElementById('inp-disc').value) || 0;
+                const gstPct = parseFloat(document.getElementById('inp-gst').value) || 0;
+                const shipFee = parseFloat(document.getElementById('inp-ship').value) || 0;
+                const otherFee = parseFloat(document.getElementById('inp-other').value) || 0;
+                const compPrice = parseFloat(document.getElementById('inp-comp').value) || 0;
+
+                // Step 1: Base Discount
+                let discAmt = mrp * (discPct / 100);
+                if(discAmt > mrp) discAmt = mrp; 
+                let discountedPrice = mrp - discAmt;
+
+                // Step 2: The Tax Logic (The Trap)
+                let taxBaseAmount = this.isTaxPostDisc ? discountedPrice : mrp;
+                let actualTaxAmt = taxBaseAmount * (gstPct / 100);
+                
+                // Extra Tax Paid if calculating on Pre-Discount
+                let validTaxAmt = discountedPrice * (gstPct / 100);
+                let extraTaxLoss = actualTaxAmt - validTaxAmt;
+
+                // Step 3: Add Hidden Fees
+                let totalHiddenFees = shipFee + otherFee;
+
+                // Step 4: Final Payable
+                let finalPayable = discountedPrice + actualTaxAmt + totalHiddenFees;
+
+                // Output UI Update
+                document.getElementById('res-payable').innerHTML = `<small>₹</small>${finalPayable.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+                document.getElementById('res-tax').innerText = `₹${actualTaxAmt.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+                document.getElementById('res-fees').innerText = `₹${totalHiddenFees.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+
+                // --- TRAP LOGIC ALERTS ---
+                
+                const taxTrap = document.getElementById('tax-trap');
+                const compTrap = document.getElementById('comp-trap');
+                const dealGood = document.getElementById('deal-good');
+                
+                taxTrap.style.display = 'none';
+                compTrap.style.display = 'none';
+                dealGood.style.display = 'none';
+
+                // Trap 1: Pre-Discount GST
+                if (!this.isTaxPostDisc && extraTaxLoss > 0) {
+                    document.getElementById('trap-tax-loss').innerText = `₹${extraTaxLoss.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+                    taxTrap.style.display = 'flex';
+                }
+
+                // Trap 2: Competitor Comparison
+                if (compPrice > 0) {
+                    if (finalPayable > compPrice) {
+                        let diff = finalPayable - compPrice;
+                        document.getElementById('trap-comp-diff').innerText = `₹${diff.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+                        compTrap.style.display = 'flex';
+                    } else if (finalPayable < compPrice) {
+                        let savings = compPrice - finalPayable;
+                        document.getElementById('deal-save-val').innerText = `₹${savings.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+                        dealGood.style.display = 'flex';
+                    }
+                }
+
+                // Trigger UI Reveal
+                const resCard = document.getElementById('results-container');
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-up');
+                void resCard.offsetWidth; // trigger reflow
+                resCard.classList.add('anim-up');
+                
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+        };
+    </script>
+</body>
+</html>

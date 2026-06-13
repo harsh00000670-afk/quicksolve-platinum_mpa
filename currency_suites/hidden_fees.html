@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Hidden Bank Fees & Remittance Calculator | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate hidden bank fees, exchange rate markups, and actual remittance costs. Discover how much banks secretly charge you through the 'Spread'. 100% Offline.">
+    <meta name="keywords" content="hidden bank fee calculator, remittance cost calculator, forex markup calculator, exchange rate spread, western union fees, wire transfer cost, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/currency_suites/hidden_fees.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Hidden Fee Finder - Stop Bank Markups">
+    <meta property="og:description" content="Uncover the real cost of international money transfers. Expose the bank's hidden 'Zero Fee' illusion.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           HIDDEN FEES & REMITTANCE CALCULATOR
+           Theme: Cyberpunk Financial (Red/Emerald)
+           ========================================= */
+        #mod-hidden-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: var(--bg-body, #09090b); z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .hf-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .hf-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .hf-tit { color: #ef4444; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .hf-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Input Cards */
+        .hf-card { 
+            background: #1e293b; border: 1px solid #475569; border-radius: 12px; 
+            padding: 15px; display: flex; flex-direction: column; gap: 10px; transition: 0.2s; position: relative;
+        }
+        .hf-card:focus-within { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.15); }
+        .hf-card.danger:focus-within { border-color: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.15); }
+
+        .hf-lbl { font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; }
+        .hf-hint { color: #64748b; font-size: 0.65rem; text-transform: none; }
+        
+        .hf-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; }
+        .hf-curr-tag { color: #f8fafc; font-weight: 900; font-size: 1rem; font-family: monospace; }
+        
+        .hf-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.5rem; font-weight: 900; outline: none; width: 100%; font-family: monospace; }
+        .hf-inp::placeholder { color: #475569; }
+
+        /* Results Dashboard */
+        .res-dash { background: #0f172a; border: 1px dashed #ef4444; border-radius: 12px; padding: 15px; margin-top: 5px; }
+        .res-tit { font-size: 0.8rem; color: #ef4444; font-weight: 900; text-transform: uppercase; text-align: center; margin-bottom: 15px; letter-spacing: 1px; }
+
+        .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .d-box { background: rgba(2, 6, 23, 0.6); border: 1px solid #334155; border-radius: 8px; padding: 12px; text-align: center; }
+        
+        .d-lbl { font-size: 0.65rem; color: #94a3b8; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .d-val { font-size: 1.2rem; font-weight: 900; color: #f8fafc; font-family: monospace; }
+        .d-val.hl-red { color: #ef4444; }
+        .d-val.hl-green { color: #10b981; }
+        .d-sub { font-size: 0.7rem; color: #64748b; margin-top: 4px; font-weight: bold; }
+
+        .total-loss-box { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: 8px; padding: 15px; text-align: center; margin-top: 10px; }
+        .tl-lbl { font-size: 0.8rem; color: #ef4444; font-weight: 900; text-transform: uppercase; }
+        .tl-val { font-size: 2rem; color: #ef4444; font-weight: 900; font-family: monospace; margin: 5px 0; }
+        .tl-desc { font-size: 0.75rem; color: #f8fafc; font-weight: bold; }
+
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #3b82f6; color: #3b82f6; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(59, 130, 246, 0.15); transform: scale(0.98); }
+
+        /* STEPS MODAL (Why) */
+        #hf-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #hf-steps-box { background: #1e293b; border: 1px solid #3b82f6; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #3b82f6; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+
+        .math-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #334155; font-family: monospace; font-size: 0.9rem; }
+        .math-row:last-child { border-bottom: none; }
+        .mr-lbl { color: #94a3b8; }
+        .mr-val { font-weight: bold; color: #f8fafc; }
+    </style>
+</head>
+<body>
+    <main id="mod-hidden-overlay" role="main" aria-label="Hidden Bank Fees Calculator">
+        <header class="hf-head">
+            <a href="../currency.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+            <div class="hf-tit"><i class="fas fa-user-secret" aria-hidden="true"></i> HIDDEN FEE FINDER</div>
+        </header>
+
+        <section class="hf-body">
+            
+            <div class="hf-card">
+                <div class="hf-lbl">
+                    <label for="hf-amount">Amount You Send</label>
+                    <span class="hf-hint">Base Currency</span>
+                </div>
+                <div class="hf-inp-wrap">
+                    <span class="hf-curr-tag" aria-hidden="true">SEND</span>
+                    <input type="number" id="hf-amount" class="hf-inp" placeholder="e.g. 1000" value="1000" oninput="QS_Hidden.calc()" aria-label="Amount to send">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="hf-card" style="padding: 12px;">
+                    <label for="hf-real-rate" class="hf-lbl" style="font-size:0.65rem;">Real Market Rate<br><span style="color:#10b981;">(Google Rate)</span></label>
+                    <div class="hf-inp-wrap" style="padding: 5px 8px;">
+                        <span class="hf-curr-tag" style="font-size:0.8rem; color:#10b981;" aria-hidden="true">@</span>
+                        <input type="number" id="hf-real-rate" class="hf-inp" placeholder="83.50" value="83.50" style="font-size: 1.2rem; color:#10b981;" oninput="QS_Hidden.calc()" aria-label="Real Market Exchange Rate">
+                    </div>
+                </div>
+                
+                <div class="hf-card danger" style="padding: 12px;">
+                    <label for="hf-bank-rate" class="hf-lbl" style="font-size:0.65rem;">Bank's Rate<br><span style="color:#ef4444;">(Offered Rate)</span></label>
+                    <div class="hf-inp-wrap" style="padding: 5px 8px;">
+                        <span class="hf-curr-tag" style="font-size:0.8rem; color:#ef4444;" aria-hidden="true">@</span>
+                        <input type="number" id="hf-bank-rate" class="hf-inp" placeholder="81.20" value="81.20" style="font-size: 1.2rem; color:#ef4444;" oninput="QS_Hidden.calc()" aria-label="Bank's Exchange Rate">
+                    </div>
+                </div>
+            </div>
+
+            <div class="hf-card danger">
+                <div class="hf-lbl">
+                    <label for="hf-upfront">Upfront Transfer Fee</label>
+                    <span class="hf-hint">"Fixed Fee" charged by Bank</span>
+                </div>
+                <div class="hf-inp-wrap">
+                    <span class="hf-curr-tag" aria-hidden="true">FEE</span>
+                    <input type="number" id="hf-upfront" class="hf-inp" placeholder="e.g. 5" value="5" style="color: #ef4444;" oninput="QS_Hidden.calc()" aria-label="Upfront Transfer Fee">
+                </div>
+            </div>
+
+            <div class="res-dash" aria-live="polite">
+                <div class="res-tit"><i class="fas fa-search-dollar" aria-hidden="true"></i> The Truth Revealed</div>
+                
+                <div class="dash-grid">
+                    <div class="d-box">
+                        <span class="d-lbl">Receiver Actually Gets</span>
+                        <div class="d-val hl-green" id="res-recv">0.00</div>
+                        <div class="d-sub">Based on Bank Rate</div>
+                    </div>
+                    <div class="d-box">
+                        <span class="d-lbl">Receiver SHOULD Get</span>
+                        <div class="d-val" id="res-ideal">0.00</div>
+                        <div class="d-sub">Based on Real Rate</div>
+                    </div>
+                </div>
+
+                <div class="total-loss-box">
+                    <span class="tl-lbl">Total Money Lost To Bank</span>
+                    <div class="tl-val" id="res-loss-total">0.00</div>
+                    <div class="tl-desc">
+                        <span id="res-spread-pct" style="color:#f59e0b;">0%</span> Hidden Exchange Markup
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-why" onclick="QS_Hidden.showSteps()" aria-label="Decode Bank's Profit Math">
+                <i class="fas fa-file-invoice-dollar" aria-hidden="true"></i> Decode Bank's Profit Math
+            </button>
+
+        </section>
+
+        <div id="hf-steps-modal" role="dialog" aria-modal="true" aria-labelledby="bank-profit-title">
+            <div id="hf-steps-box">
+                <div class="steps-head">
+                    <span id="bank-profit-title"><i class="fas fa-user-tie" aria-hidden="true"></i> HOW BANKS MAKE MONEY</span>
+                    <button class="steps-close" onclick="QS_Hidden.hideSteps()" aria-label="Close Explanation"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="steps-content" id="hf-steps-content">
+                    </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - HIDDEN FEES & REMITTANCE CALCULATOR
+           Features: Spread percentage calculator, Real vs Bank rate comparison, Breakdown of upfront vs hidden costs.
+        */
+
+        (function() {
+            window.QS_Hidden = {
+                
+                lastMath: {},
+
+                initListener: function() {
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'currency_suites/hidden_fees.js') {
+                            this.calc(); // Calculate default dummy values on open
+                        }
+                    });
+
+                    // Standalone Boot for direct access testing
+                    if(document.readyState === 'complete' || document.readyState === 'interactive'){
+                         setTimeout(() => this.calc(), 100);
+                    } else {
+                         document.addEventListener('DOMContentLoaded', () => this.calc());
+                    }
+                },
+
+                calc: function() {
+                    // Get Inputs
+                    let amountEl = document.getElementById('hf-amount');
+                    let realRateEl = document.getElementById('hf-real-rate');
+                    let bankRateEl = document.getElementById('hf-bank-rate');
+                    let upfrontFeeEl = document.getElementById('hf-upfront');
+
+                    if(!amountEl || !realRateEl || !bankRateEl || !upfrontFeeEl) return;
+
+                    let amount = parseFloat(amountEl.value) || 0;
+                    let realRate = parseFloat(realRateEl.value) || 0;
+                    let bankRate = parseFloat(bankRateEl.value) || 0;
+                    let upfrontFee = parseFloat(upfrontFeeEl.value) || 0;
+
+                    // Prevent division by zero
+                    if (realRate === 0) realRate = 1;
+
+                    // The Math
+                    // Note: Upfront fee is usually deducted from the sending amount before conversion
+                    let amountAfterFee = Math.max(0, amount - upfrontFee);
+
+                    let idealReceive = amount * realRate;
+                    let actualReceive = amountAfterFee * bankRate;
+                    
+                    // Difference in Rates (The Spread)
+                    let rateDiff = realRate - bankRate;
+                    let spreadPct = (rateDiff / realRate) * 100;
+                    if (spreadPct < 0) spreadPct = 0; // If bank rate is somehow better (rare!)
+
+                    // Calculate Loss in SENDING currency terms to make it relatable
+                    // How much SENDING currency was lost just due to the bad rate?
+                    let lossDueToRateTarget = idealReceive - (amount * bankRate); // Loss in target currency
+                    let lossDueToRateSource = lossDueToRateTarget / realRate;     // Converted back to source currency
+                    
+                    let totalLossSource = lossDueToRateSource + upfrontFee;
+
+                    // Cache for "Why" Modal
+                    this.lastMath = {
+                        amount: amount,
+                        realRate: realRate,
+                        bankRate: bankRate,
+                        upfrontFee: upfrontFee,
+                        idealReceive: idealReceive,
+                        actualReceive: actualReceive,
+                        spreadPct: spreadPct,
+                        totalLossSource: totalLossSource,
+                        lossDueToRateSource: lossDueToRateSource
+                    };
+
+                    // Update UI
+                    if(document.getElementById('res-recv')) document.getElementById('res-recv').innerText = actualReceive.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                    if(document.getElementById('res-ideal')) document.getElementById('res-ideal').innerText = idealReceive.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                    
+                    if(document.getElementById('res-loss-total')) document.getElementById('res-loss-total').innerText = totalLossSource.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " (Sent Curr)";
+                    if(document.getElementById('res-spread-pct')) document.getElementById('res-spread-pct').innerText = spreadPct.toFixed(2) + "%";
+                },
+
+                // --- THE "WHY" VISUALIZER: Bank's Profit Breakdown ---
+                showSteps: function() {
+                    const contentBox = document.getElementById('hf-steps-content');
+                    if(!contentBox) return;
+
+                    const m = this.lastMath;
+                    
+                    if (m.amount <= 0 || m.realRate <= 0 || m.bankRate <= 0) {
+                        contentBox.innerHTML = `<div style="text-align:center; padding:20px; color:#ef4444;"><i class="fas fa-exclamation-triangle fa-2x"></i><br><br>Please enter valid numbers to see the breakdown.</div>`;
+                    } else {
+                        let html = `
+                            <div style="margin-bottom:15px; border-left:3px solid #3b82f6; padding-left:10px;">
+                                <span style="color:#3b82f6; font-weight:bold;">The "Zero Fee" Illusion:</span><br>
+                                Banks often advertise low or "zero" fees, but they secretly give you a worse exchange rate. This difference is called the <b>Spread</b>, and it's pure profit for them.
+                            </div>
+                            
+                            <div style="background:#020617; border:1px solid #334155; border-radius:8px; padding:15px; margin-top:10px;">
+                                <div style="color:#f59e0b; font-weight:bold; font-size:0.75rem; text-transform:uppercase; margin-bottom:8px; border-bottom:1px dashed #334155; padding-bottom:5px;">Loss Breakdown (In Sending Currency)</div>
+                                
+                                <div class="math-row">
+                                    <span class="mr-lbl">1. Upfront Fixed Fee:</span>
+                                    <span class="mr-val" style="color:#ef4444;">${m.upfrontFee.toFixed(2)}</span>
+                                </div>
+                                
+                                <div class="math-row">
+                                    <span class="mr-lbl">2. Hidden Exchange Markup (${m.spreadPct.toFixed(2)}%):</span>
+                                    <span class="mr-val" style="color:#ef4444;">${m.lossDueToRateSource.toFixed(2)}</span>
+                                </div>
+
+                                <div class="math-row" style="border-top: 1px solid #475569; margin-top: 5px; padding-top: 10px;">
+                                    <span class="mr-lbl" style="color:#f8fafc; font-weight:bold;">Total Bank Profit from You:</span>
+                                    <span class="mr-val" style="color:#ef4444; font-size:1.1rem;">${m.totalLossSource.toFixed(2)}</span>
+                                </div>
+                            </div>
+
+                            <div style="margin-top:15px; font-size:0.75rem; color:#10b981; text-align:center; font-weight:bold;">
+                                *Pro Tip: Always compare the "Total Amount Receiver Gets" across platforms (Wise, Remitly, Banks) rather than just looking at the "Fee".
+                            </div>
+                        `;
+                        contentBox.innerHTML = html;
+                    }
+
+                    const modal = document.getElementById('hf-steps-modal');
+                    const box = document.getElementById('hf-steps-box');
+                    if(modal && box) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => {
+                            modal.style.opacity = '1';
+                            box.style.transform = 'translateY(0)';
+                        }, 10);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                hideSteps: function() {
+                    const modal = document.getElementById('hf-steps-modal');
+                    const box = document.getElementById('hf-steps-box');
+                    if(modal && box) {
+                        modal.style.opacity = '0';
+                        box.style.transform = 'translateY(20px)';
+                        setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                }
+            };
+
+            window.QS_Hidden.initListener();
+        })();
+    </script>
+</body>
+</html>

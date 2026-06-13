@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Chain Arbitrage Tracker | Crypto Spread Calculator | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate real crypto arbitrage profit across exchanges. Factor in maker/taker fees, network gas, and price spreads. Avoid the arbitrage trap instantly. 100% Offline.">
+    <meta name="keywords" content="crypto arbitrage calculator, chain arbitrage tracker, exchange fee calculator, bitcoin spread calculator, kimchi premium tracker, web3 profit calculator, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/currency_suites/arbitrage.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Chain Arbitrage Tracker - The Reality Check">
+    <meta property="og:description" content="Stop losing money to hidden gas and exchange fees. Calculate true arbitrage profit before you trade.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           CHAIN ARBITRAGE TRACKER (GOD MODE)
+           Theme: Cyberpunk Hacker (Cyan / Neon Purple)
+           ========================================= */
+        #mod-arb-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: var(--bg-body, #09090b); z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .ar-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .ar-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .ar-tit { color: #06b6d4; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .ar-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Input Cards */
+        .ar-card { 
+            flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 12px; 
+            padding: 15px; display: flex; flex-direction: column; gap: 10px; transition: 0.2s; position: relative;
+        }
+        .ar-card:focus-within { border-color: #06b6d4; box-shadow: 0 0 15px rgba(6, 182, 212, 0.15); }
+
+        .ar-lbl { font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; }
+        
+        .ar-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; }
+        .ar-tag { color: #f8fafc; font-weight: 900; font-size: 1rem; font-family: monospace; }
+        
+        .ar-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.5rem; font-weight: 900; outline: none; width: 100%; font-family: monospace; }
+        .ar-inp::placeholder { color: #475569; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        /* Exchange Columns */
+        .exch-box { background: rgba(2, 6, 23, 0.4); border: 1px solid #334155; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .exch-tit { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; text-align: center; margin-bottom: 5px; }
+        
+        .ex-sub-lbl { font-size: 0.65rem; color: #64748b; font-weight: bold; text-transform: uppercase; }
+        .ex-inp-small { background: #0f172a; border: 1px solid #475569; color: #fff; padding: 6px; border-radius: 4px; font-family: monospace; font-size: 1rem; width: 100%; outline: none; text-align: right;}
+        .ex-inp-small:focus { border-color: #06b6d4; }
+
+        /* Transfer Arrow */
+        .transfer-bridge { display: flex; flex-direction: column; align-items: center; margin: 5px 0; }
+        .bridge-line { height: 20px; width: 2px; background: dashed #475569; }
+        .bridge-badge { background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: bold; padding: 4px 10px; border-radius: 12px; border: 1px solid #ef4444; z-index: 2; text-transform: uppercase; }
+
+        /* Results Dashboard */
+        .res-dash { flex-shrink: 0; background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 15px; margin-top: 5px; }
+        .dash-tit { font-size: 0.8rem; color: #f8fafc; font-weight: 900; text-transform: uppercase; text-align: center; margin-bottom: 15px; letter-spacing: 1px; }
+
+        .profit-box { background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 8px; padding: 15px; text-align: center; margin-bottom: 15px; transition: 0.3s; }
+        .profit-box.loss { background: rgba(239, 68, 68, 0.1); border-color: #ef4444; }
+        
+        .pb-lbl { font-size: 0.8rem; font-weight: 900; text-transform: uppercase; color: #10b981; }
+        .profit-box.loss .pb-lbl { color: #ef4444; }
+        
+        .pb-val { font-size: 2rem; font-weight: 900; color: #10b981; font-family: monospace; margin: 5px 0; }
+        .profit-box.loss .pb-val { color: #ef4444; }
+
+        .breakdown-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #334155; font-size: 0.85rem; font-family: monospace; }
+        .breakdown-row:last-child { border-bottom: none; }
+        .br-lbl { color: #94a3b8; font-weight: bold; }
+        .br-val { color: #f8fafc; font-weight: bold; }
+        .br-neg { color: #ef4444; }
+
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #a855f7; color: #a855f7; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(168, 85, 247, 0.15); transform: scale(0.98); }
+
+        /* STEPS MODAL (Why) */
+        #ar-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #ar-steps-box { background: #1e293b; border: 1px solid #a855f7; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(168, 85, 247, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #a855f7; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <main id="mod-arb-overlay" role="main" aria-label="Chain Arbitrage Tracker">
+        <header class="ar-head">
+            <a href="../currency.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+            <div class="ar-tit"><i class="fas fa-random" aria-hidden="true"></i> ARBITRAGE TRACKER</div>
+        </header>
+
+        <section class="ar-body">
+            
+            <div class="ar-card">
+                <div class="ar-lbl">
+                    <label for="ar-invest">Base Capital (Investment)</label>
+                </div>
+                <div class="ar-inp-wrap">
+                    <span class="ar-tag" aria-hidden="true">$</span>
+                    <input type="number" id="ar-invest" class="ar-inp" placeholder="1000" value="1000" oninput="QS_Arbitrage.calc()" aria-label="Investment Amount in Dollars">
+                </div>
+            </div>
+
+            <div class="ar-card">
+                <div class="grid-2">
+                    <div class="exch-box" style="border-color: #06b6d4;">
+                        <div class="exch-tit" style="color: #06b6d4;"><i class="fas fa-store" aria-hidden="true"></i> Buy Exch A</div>
+                        
+                        <label for="ar-buy-price" class="ex-sub-lbl">Coin Price ($)</label>
+                        <input type="number" id="ar-buy-price" class="ex-inp-small" value="60000" oninput="QS_Arbitrage.calc()">
+                        
+                        <label for="ar-buy-fee" class="ex-sub-lbl" style="margin-top:5px;">Trading Fee (%)</label>
+                        <input type="number" id="ar-buy-fee" class="ex-inp-small" value="0.2" oninput="QS_Arbitrage.calc()">
+                    </div>
+
+                    <div class="exch-box" style="border-color: #a855f7;">
+                        <div class="exch-tit" style="color: #a855f7;"><i class="fas fa-store-alt" aria-hidden="true"></i> Sell Exch B</div>
+                        
+                        <label for="ar-sell-price" class="ex-sub-lbl">Coin Price ($)</label>
+                        <input type="number" id="ar-sell-price" class="ex-inp-small" value="62000" style="color:#a855f7;" oninput="QS_Arbitrage.calc()">
+                        
+                        <label for="ar-sell-fee" class="ex-sub-lbl" style="margin-top:5px;">Trading Fee (%)</label>
+                        <input type="number" id="ar-sell-fee" class="ex-inp-small" value="0.2" oninput="QS_Arbitrage.calc()">
+                    </div>
+                </div>
+
+                <div class="transfer-bridge">
+                    <div class="bridge-badge">Transfer Gas Fee (In Coins)</div>
+                    <div style="display:flex; align-items:center; gap:5px; margin-top:5px; background: rgba(2,6,23,0.8); padding:5px 10px; border-radius:6px; border:1px solid #ef4444;">
+                        <i class="fas fa-gas-pump" style="color:#ef4444; font-size:0.8rem;" aria-hidden="true"></i>
+                        <input type="number" id="ar-gas-fee" class="ex-inp-small" value="0.0005" style="border:none; padding:2px; font-size:0.9rem; text-align:center; color:#ef4444;" oninput="QS_Arbitrage.calc()" aria-label="Transfer Gas Fee in Coins">
+                    </div>
+                    <div style="font-size:0.6rem; color:#64748b; margin-top:4px;">*Deducted during wallet transfer</div>
+                </div>
+            </div>
+
+            <div class="res-dash" aria-live="polite">
+                <div class="dash-tit"><i class="fas fa-search-dollar" aria-hidden="true"></i> The Reality Check</div>
+                
+                <div class="profit-box" id="res-box">
+                    <div class="pb-lbl" id="res-status">Net Arbitrage Profit</div>
+                    <div class="pb-val" id="res-net">+$0.00</div>
+                    <div style="font-size:0.75rem; color:#94a3b8; margin-top:4px; font-weight:bold;">Spread: <span id="res-spread" style="color:#f8fafc;">$0.00</span></div>
+                </div>
+
+                <div style="background:rgba(2,6,23,0.5); padding:10px; border-radius:8px;">
+                    <div class="breakdown-row">
+                        <span class="br-lbl">Tokens Bought (Exch A)</span>
+                        <span class="br-val" id="bd-bought">0.00000000</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span class="br-lbl">Tokens Lost to Gas (Transfer)</span>
+                        <span class="br-val br-neg" id="bd-gas">0.00000000</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span class="br-lbl">Tokens Sold (Exch B)</span>
+                        <span class="br-val" id="bd-sold" style="color:#a855f7;">0.00000000</span>
+                    </div>
+                    <div class="breakdown-row" style="border-top:1px solid #334155; margin-top:5px; padding-top:10px;">
+                        <span class="br-lbl" style="color:#f8fafc;">Total Fees Paid ($)</span>
+                        <span class="br-val br-neg" id="bd-total-fees">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-why" onclick="QS_Arbitrage.showSteps()" aria-label="Show Arbitrage Trap Details">
+                <i class="fas fa-user-secret" aria-hidden="true"></i> The Arbitrage Trap Exposed
+            </button>
+
+        </section>
+
+        <div id="ar-steps-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <div id="ar-steps-box">
+                <div class="steps-head">
+                    <span id="modal-title"><i class="fas fa-mask" aria-hidden="true"></i> THE KIMCHI PREMIUM</span>
+                    <button class="steps-close" onclick="QS_Arbitrage.hideSteps()" aria-label="Close Details"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="steps-content" id="ar-steps-content">
+                    </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - CHAIN ARBITRAGE TRACKER
+           Features: Multi-Exchange Fee Math, Network Gas Token Deduction, Real Profit Reality Check.
+        */
+
+        (function() {
+            window.QS_Arbitrage = {
+                
+                initListener: function() {
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'currency_suites/arbitrage.js') {
+                            this.calc();
+                        }
+                    });
+                    
+                    // Initial calculation on standalone load
+                    if(document.readyState === 'complete' || document.readyState === 'interactive'){
+                         this.calc();
+                    } else {
+                         document.addEventListener('DOMContentLoaded', () => this.calc());
+                    }
+                },
+
+                calc: function() {
+                    // Inputs
+                    const invest = parseFloat(document.getElementById('ar-invest').value) || 0;
+                    
+                    const buyPrice = parseFloat(document.getElementById('ar-buy-price').value) || 0;
+                    const buyFeePct = parseFloat(document.getElementById('ar-buy-fee').value) || 0;
+                    
+                    const sellPrice = parseFloat(document.getElementById('ar-sell-price').value) || 0;
+                    const sellFeePct = parseFloat(document.getElementById('ar-sell-fee').value) || 0;
+                    
+                    const gasFeeCoins = parseFloat(document.getElementById('ar-gas-fee').value) || 0;
+
+                    if (buyPrice === 0 || invest === 0 || sellPrice === 0) {
+                        this.clearResults();
+                        return;
+                    }
+
+                    // --- The Brutal Math of Arbitrage ---
+                    
+                    // 1. Buy on Exchange A
+                    const buyFeeFiat = invest * (buyFeePct / 100);
+                    const actualInvested = invest - buyFeeFiat;
+                    const tokensBought = actualInvested / buyPrice;
+
+                    // 2. Transfer (Gas Fee deducted in TOKENS, not fiat)
+                    const tokensAfterTransfer = tokensBought - gasFeeCoins;
+                    
+                    // If gas fee is more than what we bought!
+                    if (tokensAfterTransfer <= 0) {
+                        this.showLoss(invest, tokensBought, tokensAfterTransfer, 0);
+                        return;
+                    }
+
+                    // 3. Sell on Exchange B
+                    const grossSellFiat = tokensAfterTransfer * sellPrice;
+                    const sellFeeFiat = grossSellFiat * (sellFeePct / 100);
+                    
+                    const netFiatReturned = grossSellFiat - sellFeeFiat;
+
+                    // 4. Calculate Net Profit
+                    const netProfit = netFiatReturned - invest;
+                    
+                    // 5. Total Fees Paid in Fiat equivalent
+                    const gasFeeFiat = gasFeeCoins * buyPrice; // Valuation of gas at buy time
+                    const totalFeesFiat = buyFeeFiat + sellFeeFiat + gasFeeFiat;
+                    
+                    const spread = sellPrice - buyPrice;
+
+                    this.updateUI(netProfit, spread, tokensBought, tokensAfterTransfer, totalFeesFiat, gasFeeCoins);
+                },
+
+                showLoss: function(invest, bought, remaining, fees) {
+                    document.getElementById('res-box').className = "profit-box loss";
+                    document.getElementById('res-status').innerText = "Rekt (Not Enough Gas)";
+                    document.getElementById('res-net').innerText = `-$${invest.toFixed(2)}`;
+                    document.getElementById('res-spread').innerText = "$0.00";
+
+                    document.getElementById('bd-bought').innerText = bought.toFixed(8);
+                    document.getElementById('bd-gas').innerText = "ALL";
+                    document.getElementById('bd-sold').innerText = "0.00000000";
+                    document.getElementById('bd-total-fees').innerText = "FAILED";
+                },
+
+                updateUI: function(profit, spread, bought, soldTokens, totalFees, gasFee) {
+                    const fmt = (num) => num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                    
+                    const resBox = document.getElementById('res-box');
+                    const resStatus = document.getElementById('res-status');
+                    const resNet = document.getElementById('res-net');
+
+                    // Breakdown
+                    document.getElementById('bd-bought').innerText = bought.toFixed(8);
+                    document.getElementById('bd-gas').innerText = gasFee.toFixed(8);
+                    document.getElementById('bd-sold').innerText = soldTokens.toFixed(8);
+                    document.getElementById('bd-total-fees').innerText = `$${fmt(totalFees)}`;
+                    
+                    document.getElementById('res-spread').innerText = `+$${fmt(spread)} (Price Diff)`;
+
+                    // Main Status Box
+                    if (profit >= 0) {
+                        resBox.className = "profit-box";
+                        resStatus.innerText = "Net Arbitrage Profit";
+                        resNet.innerText = `+$${fmt(profit)}`;
+                    } else {
+                        resBox.className = "profit-box loss";
+                        resStatus.innerText = "Arbitrage Failed (Net Loss)";
+                        resNet.innerText = `-$${fmt(Math.abs(profit))}`;
+                    }
+                },
+
+                clearResults: function() {
+                    document.getElementById('res-box').className = "profit-box";
+                    document.getElementById('res-net').innerText = "$0.00";
+                    document.getElementById('res-spread').innerText = "$0.00";
+                    document.getElementById('bd-bought').innerText = "0.00000000";
+                    document.getElementById('bd-gas').innerText = "0.00000000";
+                    document.getElementById('bd-sold').innerText = "0.00000000";
+                    document.getElementById('bd-total-fees').innerText = "$0.00";
+                },
+
+                // --- THE "WHY" VISUALIZER ---
+                showSteps: function() {
+                    const contentBox = document.getElementById('ar-steps-content');
+                    
+                    let html = `
+                        <div style="margin-bottom:15px; border-left:3px solid #a855f7; padding-left:10px;">
+                            <span style="color:#a855f7; font-weight:bold;">The Arbitrage Illusion:</span><br>
+                            YouTubers say: <i>"Buy Bitcoin on Binance for $60k, sell on WazirX for $62k. Easy $2k profit!"</i>
+                        </div>
+                        
+                        <div style="background:#020617; border:1px solid #334155; border-radius:8px; padding:15px; margin-top:10px;">
+                            <span style="color:#ef4444; font-weight:bold; font-size:0.8rem; text-transform:uppercase;"><i class="fas fa-skull"></i> The Hidden Assassins</span>
+                            
+                            <ul style="margin-top:10px; padding-left:15px; color:#94a3b8; font-size:0.8rem; line-height:1.5;">
+                                <li><span style="color:#f8fafc; font-weight:bold;">Maker/Taker Fees:</span> Both exchanges take a 0.1% to 0.5% cut on trades.</li>
+                                <li style="margin-top:5px;"><span style="color:#ef4444; font-weight:bold;">Network Withdrawal Gas:</span> Sending BTC between exchanges costs a fixed network fee (e.g., 0.0005 BTC = ~$30). If your capital is small, gas eats 100% of your profit!</li>
+                                <li style="margin-top:5px;"><span style="color:#06b6d4; font-weight:bold;">Slippage & Time:</span> It takes 10-30 minutes for BTC to transfer. By the time it arrives, the price difference (spread) might be gone!</li>
+                            </ul>
+                        </div>
+
+                        <div style="background:rgba(168, 85, 247, 0.1); border-left:2px solid #a855f7; padding:10px; margin-top:10px; color:#f8fafc; font-size:0.75rem;">
+                            <b>The Kimchi Premium:</b> Sometimes, extreme arbitrage exists (like Crypto being 10% more expensive in South Korea). However, strict capital control laws prevent you from moving fiat money back out!
+                        </div>
+
+                        <div style="margin-top:15px; font-size:0.75rem; color:#10b981; text-align:center; font-weight:bold;">
+                            *Use this calculator to verify if the "Spread" is large enough to cover all 3 fees before attempting a transfer!
+                        </div>
+                    `;
+                    
+                    contentBox.innerHTML = html;
+
+                    const modal = document.getElementById('ar-steps-modal');
+                    const box = document.getElementById('ar-steps-box');
+                    modal.style.display = 'flex';
+                    setTimeout(() => {
+                        modal.style.opacity = '1';
+                        box.style.transform = 'translateY(0)';
+                    }, 10);
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                hideSteps: function() {
+                    const modal = document.getElementById('ar-steps-modal');
+                    const box = document.getElementById('ar-steps-box');
+                    modal.style.opacity = '0';
+                    box.style.transform = 'translateY(20px)';
+                    setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    if(window.doHaptic) window.doHaptic();
+                }
+            };
+
+            window.QS_Arbitrage.initListener();
+        })();
+    </script>
+</body>
+</html>

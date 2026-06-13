@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Live Forex Watchlist & Currency Tracker | QuickSolve Platinum</title>
+    <meta name="description" content="Build your custom live forex dashboard. Track exchange rates for over 160 global fiat currencies simultaneously. 100% secure with offline memory cache.">
+    <meta name="keywords" content="forex watchlist, live currency tracker, multi currency converter, exchange rate dashboard, usd to inr tracker, bloomberg terminal alternative, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/currency_suites/watchlist.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Live Forex Watchlist - Multi Currency Tracking">
+    <meta property="og:description" content="Track your favorite global currencies in real-time. Instantly convert a base amount to multiple fiat currencies.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           FOREX WATCHLIST (GOD MODE)
+           Theme: Bloomberg Terminal (Dark/Emerald/Gold)
+           ========================================= */
+        #mod-watch-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: var(--bg-body, #09090b); z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .wl-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .wl-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .wl-tit { color: #10b981; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .wl-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Master Input Card */
+        .master-card { 
+            background: linear-gradient(145deg, #1e293b, #0f172a); 
+            border: 1px solid #10b981; border-radius: 12px; padding: 20px; 
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1); flex-shrink: 0;
+        }
+        .mc-lbl { font-size: 0.75rem; color: #10b981; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: block; text-align: center;}
+        
+        .mc-row { display: flex; align-items: center; gap: 15px; border-bottom: 2px solid #334155; padding-bottom: 10px; }
+        .mc-selector { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 5px 10px; border-radius: 8px; transition: 0.2s; background: rgba(2, 6, 23, 0.5); border: 1px solid #334155; }
+        .mc-selector:active { border-color: #10b981; }
+        .mc-flag { font-size: 1.8rem; }
+        .mc-code { font-weight: 900; color: #f8fafc; font-size: 1.2rem; }
+        
+        .mc-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 2.5rem; font-weight: 900; text-align: right; outline: none; width: 100%; font-family: monospace; }
+        .mc-inp::placeholder { color: #475569; }
+
+        /* Watchlist Grid */
+        .wl-grid { display: flex; flex-direction: column; gap: 10px; }
+        
+        .wl-card { 
+            background: #1e293b; border: 1px solid #334155; border-radius: 10px; 
+            padding: 15px; display: flex; align-items: center; justify-content: space-between; 
+            transition: 0.2s; position: relative; overflow: hidden;
+        }
+        .wl-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #3b82f6; }
+        
+        .wl-left { display: flex; align-items: center; gap: 12px; }
+        .wl-flag { font-size: 2rem; }
+        .wl-info { display: flex; flex-direction: column; }
+        .wl-code { font-weight: 900; color: #f8fafc; font-size: 1.1rem; }
+        .wl-name { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; }
+        
+        .wl-right { display: flex; flex-direction: column; align-items: flex-end; }
+        .wl-val { font-size: 1.4rem; font-weight: 900; color: #f8fafc; font-family: monospace; }
+        .wl-rate { font-size: 0.7rem; color: #10b981; font-family: monospace; font-weight: bold; margin-top: 2px; }
+
+        .wl-delete { position: absolute; right: -40px; top: 0; bottom: 0; width: 40px; background: #ef4444; color: #fff; display: flex; justify-content: center; align-items: center; transition: 0.3s; cursor: pointer; }
+        .wl-card:active .wl-delete { right: 0; } /* Swipe to delete simulation */
+        .wl-card:hover .wl-delete { right: 0; } /* Show on hover for desktop users */
+
+        /* Add Button */
+        .btn-add { background: rgba(16, 185, 129, 0.1); border: 2px dashed #10b981; color: #10b981; width: 100%; padding: 15px; border-radius: 10px; font-weight: 900; font-size: 0.9rem; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .btn-add:active { background: rgba(16, 185, 129, 0.2); transform: scale(0.98); }
+
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #f59e0b; color: #f59e0b; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 15px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(245, 158, 11, 0.15); transform: scale(0.98); }
+
+        /* CUSTOM SEARCHABLE DROPDOWN MODAL */
+        #wl-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .cm-content { background: #1e293b; border-top-left-radius: 20px; border-top-right-radius: 20px; height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .cm-open .cm-content { transform: translateY(0); }
+        
+        .cm-head { padding: 15px 20px; border-bottom: 1px solid #334155; display: flex; align-items: center; gap: 15px; }
+        .cm-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .cm-search-wrap { flex: 1; position: relative; }
+        .cm-search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; }
+        .cm-search { width: 100%; background: #0f172a; border: 1px solid #475569; color: #fff; padding: 10px 10px 10px 35px; border-radius: 8px; outline: none; font-size: 1rem; }
+        .cm-search:focus { border-color: #10b981; }
+        
+        .cm-list { flex: 1; overflow-y: auto; padding: 10px 0; }
+        .cl-item { display: flex; align-items: center; padding: 12px 20px; gap: 15px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); cursor: pointer; transition: 0.2s; }
+        .cl-item:active { background: rgba(16, 185, 129, 0.1); }
+        .cl-flag { font-size: 1.8rem; }
+        .cl-details { flex: 1; display: flex; flex-direction: column; }
+        .cl-code { font-weight: 900; color: #f8fafc; font-size: 1rem; }
+        .cl-name { color: #94a3b8; font-size: 0.75rem; }
+
+        /* STEPS MODAL (Why) */
+        #wl-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #wl-steps-box { background: #1e293b; border: 1px solid #f59e0b; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(245, 158, 11, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #f59e0b; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <main id="mod-watch-overlay" role="main" aria-label="Forex Watchlist Dashboard">
+        <header class="wl-head">
+            <a href="../currency.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+            <div class="wl-tit"><i class="fas fa-list-alt" aria-hidden="true"></i> COMMAND CENTER</div>
+        </header>
+
+        <section class="wl-body">
+            
+            <div class="master-card">
+                <label for="base-amt" class="mc-lbl"><i class="fas fa-satellite-dish" id="sync-icon" aria-hidden="true"></i> Base Capital</label>
+                <div class="mc-row">
+                    <button class="mc-selector" onclick="QS_Watchlist.openSelector('base')" aria-label="Select Base Currency">
+                        <span class="mc-flag" id="base-flag" aria-hidden="true">🇺🇸</span>
+                        <span class="mc-code" id="base-code">USD</span>
+                        <i class="fas fa-caret-down" style="color:#10b981; font-size:0.8rem;" aria-hidden="true"></i>
+                    </button>
+                    <input type="number" id="base-amt" class="mc-inp" placeholder="0" value="1000" oninput="QS_Watchlist.calcAll()" aria-label="Enter Base Amount">
+                </div>
+                <div style="font-size:0.65rem; color:#64748b; text-align:right; margin-top:8px;" id="wl-upd-time" aria-live="polite">Loading rates...</div>
+            </div>
+
+            <div class="wl-grid" id="wl-grid" aria-live="polite">
+                </div>
+
+            <button class="btn-add" onclick="QS_Watchlist.openSelector('add')" aria-label="Add Currency to Watchlist">
+                <i class="fas fa-plus" aria-hidden="true"></i> Add Currency to Board
+            </button>
+
+            <button class="btn-why" onclick="QS_Watchlist.showSteps()" aria-label="Decode The Forex Market">
+                <i class="fas fa-globe-americas" aria-hidden="true"></i> Decode The Forex Market
+            </button>
+
+        </section>
+
+        <div id="wl-modal" class="bs-modal" role="dialog" aria-label="Select Currency">
+            <div class="cm-content">
+                <div class="cm-head">
+                    <button class="cm-close" onclick="QS_Watchlist.closeSelector()" aria-label="Close Selector"><i class="fas fa-times" aria-hidden="true"></i></button>
+                    <div class="cm-search-wrap">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input type="search" id="cm-search-inp" class="cm-search" placeholder="Search currency to add..." oninput="QS_Watchlist.filterList()" aria-label="Search currency">
+                    </div>
+                </div>
+                <div class="cm-list" id="cm-list-box">
+                    </div>
+            </div>
+        </div>
+
+        <div id="wl-steps-modal" role="dialog" aria-modal="true" aria-labelledby="forex-edu-title">
+            <div id="wl-steps-box">
+                <div class="steps-head">
+                    <span id="forex-edu-title"><i class="fas fa-chart-line" aria-hidden="true"></i> FOREX MECHANICS</span>
+                    <button class="steps-close" onclick="QS_Watchlist.hideSteps()" aria-label="Close Details"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="steps-content" id="wl-steps-content">
+                    </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - FOREX WATCHLIST COMMAND CENTER
+           Features: Multi-sync Engine, LocalStorage Memory, Real-time 1-to-N calculation, Swipe-to-delete simulation.
+        */
+
+        (function() {
+            window.QS_Watchlist = {
+                
+                baseCode: 'USD',
+                myList: ['EUR', 'GBP', 'INR', 'JPY', 'CAD', 'AUD'], // Default list
+                ratesCache: {}, 
+                targetMode: 'base', // 'base' or 'add'
+
+                // 163 Currencies (God Mode List)
+                currencies: [
+                    {c:"USD", n:"US Dollar", f:"🇺🇸"}, {c:"EUR", n:"Euro", f:"🇪🇺"}, {c:"GBP", n:"British Pound", f:"🇬🇧"},
+                    {c:"INR", n:"Indian Rupee", f:"🇮🇳"}, {c:"JPY", n:"Japanese Yen", f:"🇯🇵"}, {c:"CNY", n:"Chinese Yuan", f:"🇨🇳"},
+                    {c:"AUD", n:"Australian Dollar", f:"🇦🇺"}, {c:"CAD", n:"Canadian Dollar", f:"🇨🇦"}, {c:"CHF", n:"Swiss Franc", f:"🇨🇭"},
+                    {c:"HKD", n:"Hong Kong Dollar", f:"🇭🇰"}, {c:"SGD", n:"Singapore Dollar", f:"🇸🇬"}, {c:"SEK", n:"Swedish Krona", f:"🇸🇪"},
+                    {c:"KRW", n:"South Korean Won", f:"🇰🇷"}, {c:"AED", n:"UAE Dirham", f:"🇦🇪"}, {c:"SAR", n:"Saudi Riyal", f:"🇸🇦"},
+                    {c:"ZAR", n:"South African Rand", f:"🇿🇦"}, {c:"TRY", n:"Turkish Lira", f:"🇹🇷"}, {c:"RUB", n:"Russian Ruble", f:"🇷🇺"},
+                    {c:"BRL", n:"Brazilian Real", f:"🇧🇷"}, {c:"MXN", n:"Mexican Peso", f:"🇲🇽"}, {c:"THB", n:"Thai Baht", f:"🇹🇭"},
+                    {c:"IDR", n:"Indonesian Rupiah", f:"🇮🇩"}, {c:"MYR", n:"Malaysian Ringgit", f:"🇲🇾"}, {c:"VND", n:"Vietnamese Dong", f:"🇻🇳"},
+                    {c:"PHP", n:"Philippine Peso", f:"🇵🇭"}, {c:"PKR", n:"Pakistani Rupee", f:"🇵🇰"}, {c:"BDT", n:"Bangladeshi Taka", f:"🇧🇩"},
+                    {c:"LKR", n:"Sri Lankan Rupee", f:"🇱🇰"}, {c:"NPR", n:"Nepalese Rupee", f:"🇳🇵"}, {c:"KWD", n:"Kuwaiti Dinar", f:"🇰🇼"},
+                    {c:"BHD", n:"Bahraini Dinar", f:"🇧🇭"}, {c:"OMR", n:"Omani Rial", f:"🇴🇲"}, {c:"QAR", n:"Qatari Riyal", f:"🇶🇦"},
+                    {c:"JOD", n:"Jordanian Dinar", f:"🇯🇴"}, {c:"ILS", n:"Israeli Shekel", f:"🇮🇱"}, {c:"EGP", n:"Egyptian Pound", f:"🇪🇬"},
+                    {c:"NGN", n:"Nigerian Naira", f:"🇳🇬"}, {c:"KES", n:"Kenyan Shilling", f:"🇰🇪"}, {c:"GHS", n:"Ghanaian Cedi", f:"🇬🇭"},
+                    {c:"MAD", n:"Moroccan Dirham", f:"🇲🇦"}, {c:"NZD", n:"New Zealand Dollar", f:"🇳🇿"}, {c:"PLN", n:"Polish Zloty", f:"🇵🇱"},
+                    {c:"DKK", n:"Danish Krone", f:"🇩🇰"}, {c:"NOK", n:"Norwegian Krone", f:"🇳🇴"}, {c:"HUF", n:"Hungarian Forint", f:"🇭🇺"},
+                    {c:"CZK", n:"Czech Koruna", f:"🇨🇿"}, {c:"RON", n:"Romanian Leu", f:"🇷🇴"}, {c:"BGN", n:"Bulgarian Lev", f:"🇧🇬"},
+                    {c:"ARS", n:"Argentine Peso", f:"🇦🇷"}, {c:"CLP", n:"Chilean Peso", f:"🇨🇱"}, {c:"COP", n:"Colombian Peso", f:"🇨🇴"},
+                    {c:"PEN", n:"Peruvian Sol", f:"🇵🇪"}, {c:"UYU", n:"Uruguayan Peso", f:"🇺🇾"}, {c:"VEF", n:"Venezuelan Bolívar", f:"🇻🇪"},
+                    {c:"DZD", n:"Algerian Dinar", f:"🇩🇿"}, {c:"TND", n:"Tunisian Dinar", f:"🇹🇳"}, {c:"LBP", n:"Lebanese Pound", f:"🇱🇧"},
+                    {c:"IQD", n:"Iraqi Dinar", f:"🇮🇶"}, {c:"IRR", n:"Iranian Rial", f:"🇮🇷"}, {c:"AFN", n:"Afghan Afghani", f:"🇦🇫"},
+                    {c:"MVR", n:"Maldivian Rufiyaa", f:"🇲🇻"}, {c:"BTN", n:"Bhutanese Ngultrum", f:"🇧🇹"}, {c:"MMK", n:"Myanmar Kyat", f:"🇲🇲"},
+                    {c:"KHR", n:"Cambodian Riel", f:"🇰🇭"}, {c:"LAK", n:"Lao Kip", f:"🇱🇦"}, {c:"BND", n:"Brunei Dollar", f:"🇧🇳"},
+                    {c:"KZT", n:"Kazakhstani Tenge", f:"🇰🇿"}, {c:"UZS", n:"Uzbekistani Som", f:"🇺🇿"}, {c:"TMT", n:"Turkmenistani Manat", f:"🇹🇲"},
+                    {c:"UAH", n:"Ukrainian Hryvnia", f:"🇺🇦"}, {c:"BYN", n:"Belarusian Ruble", f:"🇧🇾"}, {c:"AMD", n:"Armenian Dram", f:"🇦🇲"},
+                    {c:"GEL", n:"Georgian Lari", f:"🇬🇪"}, {c:"AZN", n:"Azerbaijani Manat", f:"🇦🇿"}, {c:"ISK", n:"Icelandic Króna", f:"🇮🇸"},
+                    {c:"RSD", n:"Serbian Dinar", f:"🇷🇸"}, {c:"HRK", n:"Croatian Kuna", f:"🇭🇷"}, {c:"ALL", n:"Albanian Lek", f:"🇦🇱"},
+                    {c:"BAM", n:"Bosnia-Herz Mark", f:"🇧🇦"}, {c:"MDL", n:"Moldovan Leu", f:"🇲🇩"}, {c:"MKD", n:"Macedonian Denar", f:"🇲🇰"},
+                    {c:"ETB", n:"Ethiopian Birr", f:"🇪🇹"}, {c:"TZS", n:"Tanzanian Shilling", f:"🇹🇿"}, {c:"UGX", n:"Ugandan Shilling", f:"🇺🇬"},
+                    {c:"RWF", n:"Rwandan Franc", f:"🇷🇼"}, {c:"ZMW", n:"Zambian Kwacha", f:"🇿🇲"}, {c:"MZN", n:"Mozambican Metical", f:"🇲🇿"},
+                    {c:"AOA", n:"Angolan Kwanza", f:"🇦🇴"}, {c:"XOF", n:"West African CFA", f:"🇧🇯"}, {c:"XAF", n:"Central African CFA", f:"🇨🇲"},
+                    {c:"JMD", n:"Jamaican Dollar", f:"🇯🇲"}, {c:"TTD", n:"Trinidad Dollar", f:"🇹🇹"}, {c:"BBD", n:"Barbadian Dollar", f:"🇧🇧"},
+                    {c:"XCD", n:"East Caribbean $", f:"🇱🇨"}, {c:"CRC", n:"Costa Rican Colón", f:"🇨🇷"}, {c:"DOP", n:"Dominican Peso", f:"🇩🇴"},
+                    {c:"GTQ", n:"Guatemalan Quetzal", f:"🇬🇹"}, {c:"HNL", n:"Honduran Lempira", f:"🇭🇳"}, {c:"NIO", n:"Nicaraguan Córdoba", f:"🇳🇮"},
+                    {c:"PAB", n:"Panamanian Balboa", f:"🇵🇦"}, {c:"PYG", n:"Paraguayan Guaraní", f:"🇵🇾"}, {c:"BOB", n:"Bolivian Boliviano", f:"🇧🇴"},
+                    {c:"FJD", n:"Fijian Dollar", f:"🇫🇯"}, {c:"PGK", n:"PNG Kina", f:"🇵🇬"}, {c:"WST", n:"Samoan Tala", f:"🇼🇸"},
+                    {c:"TOP", n:"Tongan Paʻanga", f:"🇹🇴"}, {c:"VUV", n:"Vanuatu Vatu", f:"🇻🇺"}, {c:"SBD", n:"Solomon Islands $", f:"🇸🇧"},
+                    {c:"MOP", n:"Macanese Pataca", f:"🇲🇴"}, {c:"TWD", n:"Taiwan Dollar", f:"🇹🇼"}, {c:"MNT", n:"Mongolian Tögrög", f:"🇲🇳"},
+                    {c:"SYP", n:"Syrian Pound", f:"🇸🇾"}, {c:"YER", n:"Yemeni Rial", f:"🇾🇪"}, {c:"SCR", n:"Seychellois Rupee", f:"🇸🇨"},
+                    {c:"MUR", n:"Mauritian Rupee", f:"🇲🇺"}, {c:"MGA", n:"Malagasy Ariary", f:"🇲🇬"}, {c:"MWK", n:"Malawian Kwacha", f:"🇲🇼"},
+                    {c:"NAD", n:"Namibian Dollar", f:"🇳🇦"}, {c:"BWP", n:"Botswana Pula", f:"🇧🇼"}, {c:"SZL", n:"Swazi Lilangeni", f:"🇸🇿"},
+                    {c:"LSL", n:"Lesotho Loti", f:"🇱🇸"}, {c:"ANG", n:"Neth. Antillean Guilder", f:"🇨🇼"}, {c:"AWG", n:"Aruban Florin", f:"🇦🇼"},
+                    {c:"BSD", n:"Bahamian Dollar", f:"🇧🇸"}, {c:"BMD", n:"Bermudian Dollar", f:"🇧🇲"}, {c:"BZD", n:"Belize Dollar", f:"🇧🇿"},
+                    {c:"KYD", n:"Cayman Islands Dollar", f:"🇰🇾"}, {c:"CUP", n:"Cuban Peso", f:"🇨🇺"}, {c:"HTG", n:"Haitian Gourde", f:"🇭🇹"},
+                    {c:"GYD", n:"Guyanese Dollar", f:"🇬🇾"}, {c:"SRD", n:"Surinamese Dollar", f:"🇸🇷"}, {c:"FKP", n:"Falkland Islands £", f:"🇫🇰"},
+                    {c:"GIP", n:"Gibraltar Pound", f:"🇬🇮"}, {c:"SHP", n:"Saint Helena Pound", f:"🇸🇭"}, {c:"IMP", n:"Isle of Man Pound", f:"🇮🇲"},
+                    {c:"JEP", n:"Jersey Pound", f:"🇯🇪"}, {c:"GGP", n:"Guernsey Pound", f:"🇬🇬"}, {c:"SOS", n:"Somali Shilling", f:"🇸🇴"},
+                    {c:"DJF", n:"Djiboutian Franc", f:"🇩🇯"}, {c:"KMF", n:"Comorian Franc", f:"🇰🇲"}, {c:"ERN", n:"Eritrean Nakfa", f:"🇪🇷"},
+                    {c:"SDG", n:"Sudanese Pound", f:"🇸🇩"}, {c:"SSP", n:"South Sudanese £", f:"🇸🇸"}, {c:"BIF", n:"Burundian Franc", f:"🇧🇮"},
+                    {c:"CDF", n:"Congolese Franc", f:"🇨🇩"}, {c:"CVE", n:"Cape Verdean Escudo", f:"🇨🇻"}, {c:"GMD", n:"Gambian Dalasi", f:"🇬🇲"},
+                    {c:"GNF", n:"Guinean Franc", f:"🇬🇳"}, {c:"LRD", n:"Liberian Dollar", f:"🇱🇷"}, {c:"SLL", n:"Sierra Leonean Leone", f:"🇸🇱"},
+                    {c:"STN", n:"São Tomé and Príncipe", f:"🇸🇹"}, {c:"TJS", n:"Tajikistani Somoni", f:"🇹🇯"}, {c:"KGS", n:"Kyrgyzstani Som", f:"🇰🇬"}
+                ],
+
+                initListener: function() {
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'currency_suites/watchlist.js') {
+                            this.loadMemory();
+                            this.updateBaseUI();
+                            this.fetchLiveRates();
+                        }
+                    });
+
+                    // Standalone Boot for direct access
+                    if(document.readyState === 'complete' || document.readyState === 'interactive'){
+                         setTimeout(() => { this.loadMemory(); this.updateBaseUI(); this.fetchLiveRates(); }, 100);
+                    } else {
+                         document.addEventListener('DOMContentLoaded', () => { this.loadMemory(); this.updateBaseUI(); this.fetchLiveRates(); });
+                    }
+                },
+
+                // --- PLATINUM FEATURE: LocalStorage Memory ---
+                loadMemory: function() {
+                    try {
+                        const savedList = localStorage.getItem('qs_watchlist');
+                        const savedBase = localStorage.getItem('qs_wl_base');
+                        
+                        if (savedList) this.myList = JSON.parse(savedList);
+                        if (savedBase) this.baseCode = savedBase;
+                    } catch(e) {
+                        console.error("Watchlist Memory Error: ", e);
+                    }
+                },
+
+                saveMemory: function() {
+                    try {
+                        localStorage.setItem('qs_watchlist', JSON.stringify(this.myList));
+                        localStorage.setItem('qs_wl_base', this.baseCode);
+                    } catch(e) {
+                        console.warn("Could not save to LocalStorage");
+                    }
+                },
+
+                updateBaseUI: function() {
+                    let bObj = this.currencies.find(c => c.c === this.baseCode) || this.currencies[0];
+                    if(document.getElementById('base-flag')) document.getElementById('base-flag').innerText = bObj.f;
+                    if(document.getElementById('base-code')) document.getElementById('base-code').innerText = bObj.c;
+                },
+
+                // --- PLATINUM FEATURE: 1-to-N Live Fetch ---
+                fetchLiveRates: async function() {
+                    const syncIcon = document.getElementById('sync-icon');
+                    const updText = document.getElementById('wl-upd-time');
+                    
+                    if(syncIcon) syncIcon.classList.add('fa-spin');
+                    if(updText) updText.innerText = "Syncing with global markets...";
+
+                    try {
+                        const res = await fetch(`https://open.er-api.com/v6/latest/${this.baseCode}`);
+                        const data = await res.json();
+
+                        if(data.result === "success") {
+                            this.ratesCache = data.rates;
+                            const date = new Date(data.time_last_update_unix * 1000);
+                            if(updText) updText.innerText = `Live Rates • ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                            this.calcAll(); // Render the board
+                        }
+                    } catch(e) {
+                        if(updText) updText.innerText = "Offline. Connect to internet.";
+                    } finally {
+                        if(syncIcon) syncIcon.classList.remove('fa-spin');
+                    }
+                },
+
+                // Calculates all cards simultaneously
+                calcAll: function() {
+                    const amtEl = document.getElementById('base-amt');
+                    if(!amtEl) return;
+                    const amt = parseFloat(amtEl.value) || 0;
+                    
+                    const grid = document.getElementById('wl-grid');
+                    if(!grid) return;
+                    grid.innerHTML = '';
+
+                    if (Object.keys(this.ratesCache).length === 0) return;
+
+                    this.myList.forEach(code => {
+                        // Don't show base code in watchlist
+                        if (code === this.baseCode) return;
+
+                        let cObj = this.currencies.find(c => c.c === code);
+                        if (!cObj) return;
+
+                        let rate = this.ratesCache[code] || 0;
+                        let finalVal = (amt * rate);
+                        
+                        // Smart formatting
+                        let dispVal = finalVal === 0 ? "0.00" : (finalVal % 1 === 0 ? finalVal.toLocaleString('en-US') : finalVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                        let dispRate = rate < 1 ? rate.toFixed(4) : rate.toFixed(2);
+
+                        let card = document.createElement('div');
+                        card.className = 'wl-card';
+                        card.innerHTML = `
+                            <div class="wl-left">
+                                <span class="wl-flag" aria-hidden="true">${cObj.f}</span>
+                                <div class="wl-info">
+                                    <span class="wl-code">${cObj.c}</span>
+                                    <span class="wl-name">${cObj.n}</span>
+                                </div>
+                            </div>
+                            <div class="wl-right">
+                                <span class="wl-val">${dispVal}</span>
+                                <span class="wl-rate">1 ${this.baseCode} = ${dispRate}</span>
+                            </div>
+                            <button class="wl-delete" onclick="QS_Watchlist.removeCurrency('${cObj.c}')" aria-label="Remove ${cObj.c} from Watchlist">
+                                <i class="fas fa-trash" aria-hidden="true"></i>
+                            </button>
+                        `;
+                        
+                        grid.appendChild(card);
+                    });
+                },
+
+                removeCurrency: function(code) {
+                    this.myList = this.myList.filter(c => c !== code);
+                    this.saveMemory();
+                    this.calcAll(); // Re-render
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                // --- PLATINUM FEATURE: Bottom Sheet Modal ---
+                openSelector: function(mode) {
+                    this.targetMode = mode; // 'base' or 'add'
+                    let searchInp = document.getElementById('cm-search-inp');
+                    if(searchInp) searchInp.value = "";
+                    this.filterList(); 
+                    
+                    const modal = document.getElementById('wl-modal');
+                    if(modal) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => { modal.classList.add('cm-open'); }, 10);
+                        setTimeout(() => { if(searchInp) searchInp.focus(); }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                closeSelector: function() {
+                    const modal = document.getElementById('wl-modal');
+                    if(modal) {
+                        modal.classList.remove('cm-open');
+                        setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                filterList: function() {
+                    const searchInp = document.getElementById('cm-search-inp');
+                    const q = searchInp ? searchInp.value.toLowerCase() : "";
+                    const listObj = document.getElementById('cm-list-box');
+                    if(!listObj) return;
+                    listObj.innerHTML = '';
+
+                    let filtered = this.currencies.filter(c => 
+                        c.n.toLowerCase().includes(q) || c.c.toLowerCase().includes(q)
+                    );
+
+                    // If in "add" mode, filter out already added ones AND base currency
+                    if (this.targetMode === 'add') {
+                        filtered = filtered.filter(c => !this.myList.includes(c.c) && c.c !== this.baseCode);
+                    }
+
+                    if(filtered.length === 0) {
+                        listObj.innerHTML = `<div style="text-align:center; color:#64748b; padding:20px;">No options available.</div>`;
+                        return;
+                    }
+
+                    filtered.forEach(c => {
+                        let div = document.createElement('div');
+                        div.className = "cl-item";
+                        div.onclick = () => this.selectCurrency(c.c);
+                        div.innerHTML = `
+                            <span class="cl-flag">${c.f}</span>
+                            <div class="cl-details">
+                                <span class="cl-code">${c.c}</span>
+                                <span class="cl-name">${c.n}</span>
+                            </div>
+                        `;
+                        listObj.appendChild(div);
+                    });
+                },
+
+                selectCurrency: function(code) {
+                    if(this.targetMode === 'base') {
+                        this.baseCode = code;
+                        this.updateBaseUI();
+                        this.saveMemory();
+                        this.fetchLiveRates(); // Must fetch new base API
+                    } else if (this.targetMode === 'add') {
+                        this.myList.push(code);
+                        this.saveMemory();
+                        this.calcAll(); // Just re-render
+                    }
+                    this.closeSelector();
+                },
+
+                // --- THE "WHY" VISUALIZER ---
+                showSteps: function() {
+                    const contentBox = document.getElementById('wl-steps-content');
+                    if(!contentBox) return;
+
+                    let html = `
+                        <div style="margin-bottom:15px; border-left:3px solid #f59e0b; padding-left:10px;">
+                            <span style="color:#f59e0b; font-weight:bold;">The $7 Trillion Market:</span><br>
+                            Forex (Foreign Exchange) is the largest financial market in the world. Over $7 Trillion is traded <b>every single day</b>!
+                        </div>
+                        
+                        <div style="background:#020617; border:1px solid #334155; border-radius:8px; padding:15px; margin-top:10px;">
+                            <span style="color:#10b981; font-weight:bold; font-size:0.8rem; text-transform:uppercase;">The "Majors" vs "Exotics"</span>
+                            
+                            <p style="margin-top:8px; font-size:0.8rem; color:#f8fafc;">
+                                <b>The Majors:</b> Pairs containing USD and another strong economy (EUR/USD, GBP/USD, USD/JPY). They are highly liquid and have low spreads.
+                            </p>
+                            
+                            <p style="margin-top:8px; font-size:0.8rem; color:#94a3b8;">
+                                <b>Exotic Pairs:</b> A major currency paired with a developing economy (e.g., USD/INR, USD/TRY). These are volatile and banks charge very high fees to exchange them!
+                            </p>
+                        </div>
+                        <div style="margin-top:15px; font-size:0.75rem; color:var(--text-muted); text-align:center;">
+                            *Prices fluctuate every second based on global news, inflation, and central bank interest rates.
+                        </div>
+                    `;
+                    
+                    contentBox.innerHTML = html;
+
+                    const modal = document.getElementById('wl-steps-modal');
+                    const box = document.getElementById('wl-steps-box');
+                    if(modal && box) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => {
+                            modal.style.opacity = '1';
+                            box.style.transform = 'translateY(0)';
+                        }, 10);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                hideSteps: function() {
+                    const modal = document.getElementById('wl-steps-modal');
+                    const box = document.getElementById('wl-steps-box');
+                    if(modal && box) {
+                        modal.style.opacity = '0';
+                        box.style.transform = 'translateY(20px)';
+                        setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                }
+            };
+
+            window.QS_Watchlist.initListener();
+        })();
+    </script>
+</body>
+</html>

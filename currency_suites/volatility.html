@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Historical Volatility & Risk Tracker | QuickSolve Platinum</title>
+    <meta name="description" content="Track 30-day historical forex volatility, analyze currency risk, and get actionable trading signals using real European Central Bank (ECB) data. Optimize your exchange timing.">
+    <meta name="keywords" content="historical volatility tracker, forex risk calculator, 30 day currency average, trading signals, currency strength meter, ecb exchange rates, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/currency_suites/volatility.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Forex Risk Tracker - Analyze Market Sentiment">
+    <meta property="og:description" content="Generate AI-like trading signals based on 30-day historical forex data. Know exactly when to trade.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           HISTORICAL VOLATILITY & RISK TRACKER
+           Theme: Trading Dashboard (Red/Green/Gold)
+           ========================================= */
+        #mod-vol-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: var(--bg-body, #09090b); z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .vl-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .vl-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .vl-tit { color: #f59e0b; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .vl-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Pair Selector Card */
+        .pair-card { flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 12px; padding: 15px; }
+        .pair-lbl { font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; text-align: center; display: block; }
+        
+        .pair-row { display: flex; justify-content: center; align-items: center; gap: 15px; }
+        .curr-btn { display: flex; flex-direction: column; align-items: center; background: rgba(2, 6, 23, 0.5); border: 1px solid #334155; padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: 0.2s; min-width: 100px; }
+        .curr-btn:active { border-color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+        .curr-flag { font-size: 1.8rem; margin-bottom: 5px; }
+        .curr-code { font-weight: 900; color: #f8fafc; font-size: 1.2rem; }
+        
+        .swap-btn { background: #334155; color: #f8fafc; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 1rem; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; }
+        .swap-btn:active { transform: scale(0.9) rotate(180deg); background: #f59e0b; color: #000; }
+
+        /* Live Rate Hero */
+        .rate-hero { text-align: center; margin: 10px 0; }
+        .rh-lbl { font-size: 0.8rem; color: #94a3b8; font-weight: bold; text-transform: uppercase; }
+        .rh-val { font-size: 2.8rem; font-weight: 900; color: #10b981; font-family: monospace; letter-spacing: -1px; text-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+        .rh-val.down { color: #ef4444; text-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
+
+        /* Actionable Insight Box */
+        .insight-box { flex-shrink: 0; background: rgba(245, 158, 11, 0.1); border: 1px solid #f59e0b; border-radius: 10px; padding: 15px; display: flex; align-items: flex-start; gap: 15px; }
+        .insight-icon { font-size: 2rem; color: #f59e0b; }
+        .insight-txt { color: #f8fafc; font-size: 0.9rem; line-height: 1.4; font-weight: bold; }
+        .insight-hl { font-weight: 900; font-size: 1rem; }
+        .ihl-green { color: #10b981; }
+        .ihl-red { color: #ef4444; }
+
+        /* Visual Risk Gauge */
+        .gauge-card { flex-shrink: 0; background: #0f172a; border: 1px dashed #334155; border-radius: 12px; padding: 20px 15px; margin-top: 5px; }
+        .gc-tit { font-size: 0.75rem; color: #38bdf8; font-weight: 900; text-transform: uppercase; margin-bottom: 20px; text-align: center; }
+        
+        .gauge-track { height: 8px; background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981); border-radius: 4px; position: relative; margin: 0 10px; }
+        .gauge-marker { position: absolute; top: -8px; width: 4px; height: 24px; background: #fff; border-radius: 2px; box-shadow: 0 0 10px rgba(255,255,255,0.8); transition: left 0.5s ease; left: 50%; }
+        .gauge-labels { display: flex; justify-content: space-between; margin-top: 12px; font-size: 0.7rem; font-weight: bold; color: #94a3b8; font-family: monospace; }
+
+        /* 30-Day Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .stat-box { background: rgba(2, 6, 23, 0.6); border: 1px solid #1e293b; padding: 12px 5px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; gap: 5px; }
+        .stat-lbl { font-size: 0.6rem; color: #64748b; text-transform: uppercase; font-weight: 900; }
+        .stat-val { font-size: 1.1rem; color: #f8fafc; font-weight: bold; font-family: monospace; }
+        .stat-box.high .stat-val { color: #10b981; }
+        .stat-box.low .stat-val { color: #ef4444; }
+        .stat-box.avg .stat-val { color: #f59e0b; }
+
+        /* Loader */
+        .loader-box { text-align: center; padding: 40px; color: #f59e0b; display: none; }
+        
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #38bdf8; color: #38bdf8; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 15px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(56, 189, 248, 0.15); transform: scale(0.98); }
+
+        /* CUSTOM SEARCHABLE DROPDOWN MODAL */
+        #vol-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .cm-content { background: #1e293b; border-top-left-radius: 20px; border-top-right-radius: 20px; height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .cm-open .cm-content { transform: translateY(0); }
+        
+        .cm-head { padding: 15px 20px; border-bottom: 1px solid #334155; display: flex; align-items: center; gap: 15px; }
+        .cm-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .cm-search-wrap { flex: 1; position: relative; }
+        .cm-search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; }
+        .cm-search { width: 100%; background: #0f172a; border: 1px solid #475569; color: #fff; padding: 10px 10px 10px 35px; border-radius: 8px; outline: none; font-size: 1rem; }
+        .cm-search:focus { border-color: #f59e0b; }
+        
+        .cm-list { flex: 1; overflow-y: auto; padding: 10px 0; }
+        .cl-item { display: flex; align-items: center; padding: 12px 20px; gap: 15px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); cursor: pointer; transition: 0.2s; }
+        .cl-item:active { background: rgba(245, 158, 11, 0.1); }
+        .cl-flag { font-size: 1.8rem; }
+        .cl-details { flex: 1; display: flex; flex-direction: column; }
+        .cl-code { font-weight: 900; color: #f8fafc; font-size: 1rem; }
+        .cl-name { color: #94a3b8; font-size: 0.75rem; }
+
+        /* STEPS MODAL (Why) */
+        #vol-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #vol-steps-box { background: #1e293b; border: 1px solid #38bdf8; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(56, 189, 248, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #38bdf8; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <main id="mod-vol-overlay" role="main" aria-label="Historical Volatility Tracker">
+        <header class="vl-head">
+            <a href="../currency.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+            <div class="vl-tit"><i class="fas fa-chart-area" aria-hidden="true"></i> RISK TRACKER</div>
+        </header>
+
+        <section class="vl-body">
+            
+            <div class="pair-card">
+                <span class="pair-lbl">Select Trading Pair (Major Currencies)</span>
+                <div class="pair-row">
+                    <div class="curr-btn" role="button" tabindex="0" onclick="QS_Vol.openSelector('base')" aria-label="Select Base Currency">
+                        <span class="curr-flag" id="flag-base" aria-hidden="true">🇺🇸</span>
+                        <span class="curr-code" id="code-base">USD</span>
+                    </div>
+                    
+                    <button class="swap-btn" onclick="QS_Vol.swapCurrencies()" aria-label="Swap Currencies">
+                        <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                    </button>
+                    
+                    <div class="curr-btn" role="button" tabindex="0" onclick="QS_Vol.openSelector('target')" aria-label="Select Target Currency">
+                        <span class="curr-flag" id="flag-target" aria-hidden="true">🇮🇳</span>
+                        <span class="curr-code" id="code-target">INR</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="data-container" style="display:none; flex-direction: column; gap:15px;" aria-live="polite">
+                <div class="rate-hero">
+                    <div class="rh-lbl" id="hero-lbl">1 USD equals</div>
+                    <div class="rh-val" id="hero-val">0.00</div>
+                </div>
+
+                <div class="insight-box" id="insight-box">
+                    <i class="fas fa-robot insight-icon" id="insight-icon" aria-hidden="true"></i>
+                    <div class="insight-txt" id="insight-txt">
+                        Analyzing 30-day market data...
+                    </div>
+                </div>
+
+                <div class="gauge-card">
+                    <div class="gc-tit">30-Day Rate Position</div>
+                    <div class="gauge-track" aria-hidden="true">
+                        <div class="gauge-marker" id="gauge-marker"></div>
+                    </div>
+                    <div class="gauge-labels">
+                        <span style="color:#ef4444;" id="g-low">Low (0.0)</span>
+                        <span style="color:#f59e0b;" id="g-avg">Avg (0.0)</span>
+                        <span style="color:#10b981;" id="g-high">High (0.0)</span>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-box low">
+                            <span class="stat-lbl">30d Low</span>
+                            <span class="stat-val" id="stat-low">0.00</span>
+                        </div>
+                        <div class="stat-box avg">
+                            <span class="stat-lbl">30d Average</span>
+                            <span class="stat-val" id="stat-avg">0.00</span>
+                        </div>
+                        <div class="stat-box high">
+                            <span class="stat-lbl">30d High</span>
+                            <span class="stat-val" id="stat-high">0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="loader-box" id="loader-box" aria-live="polite">
+                <i class="fas fa-satellite-dish fa-spin fa-2x" aria-hidden="true"></i>
+                <div style="margin-top:10px; font-weight:bold; font-size:0.8rem; text-transform:uppercase;">Pulling ECB Historical Data...</div>
+            </div>
+
+            <button class="btn-why" onclick="QS_Vol.showSteps()" aria-label="Learn about Market Sentiment">
+                <i class="fas fa-graduation-cap" aria-hidden="true"></i> How to Read Market Sentiment
+            </button>
+
+        </section>
+
+        <div id="vol-modal" role="dialog" aria-label="Select Currency">
+            <div class="cm-content">
+                <div class="cm-head">
+                    <button class="cm-close" onclick="QS_Vol.closeSelector()" aria-label="Close Selector"><i class="fas fa-times" aria-hidden="true"></i></button>
+                    <div class="cm-search-wrap">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input type="search" id="cm-search-inp" class="cm-search" placeholder="Search major currency..." oninput="QS_Vol.filterList()" aria-label="Search currency">
+                    </div>
+                </div>
+                <div class="cm-list" id="cm-list-box">
+                    </div>
+            </div>
+        </div>
+
+        <div id="vol-steps-modal" role="dialog" aria-modal="true" aria-labelledby="sentiment-title">
+            <div id="vol-steps-box">
+                <div class="steps-head">
+                    <span id="sentiment-title"><i class="fas fa-brain" aria-hidden="true"></i> MARKET SENTIMENT 101</span>
+                    <button class="steps-close" onclick="QS_Vol.hideSteps()" aria-label="Close Explanation"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="steps-content" id="vol-steps-content">
+                    </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - HISTORICAL VOLATILITY & RISK TRACKER
+           Features: 30-Day Historical API Fetch (ECB data via Frankfurter), Risk Gauge Math, Actionable Trading Signals.
+        */
+
+        (function() {
+            window.QS_Vol = {
+                
+                baseCode: 'USD',
+                targetCode: 'INR',
+                activeMode: 'base',
+
+                // 31 Major Currencies supported by European Central Bank (Frankfurter API) for historical data
+                currencies: [
+                    {c:"AUD", n:"Australian Dollar", f:"🇦🇺"}, {c:"BGN", n:"Bulgarian Lev", f:"🇧🇬"}, {c:"BRL", n:"Brazilian Real", f:"🇧🇷"},
+                    {c:"CAD", n:"Canadian Dollar", f:"🇨🇦"}, {c:"CHF", n:"Swiss Franc", f:"🇨🇭"}, {c:"CNY", n:"Chinese Yuan", f:"🇨🇳"},
+                    {c:"CZK", n:"Czech Koruna", f:"🇨🇿"}, {c:"DKK", n:"Danish Krone", f:"🇩🇰"}, {c:"EUR", n:"Euro", f:"🇪🇺"},
+                    {c:"GBP", n:"British Pound", f:"🇬🇧"}, {c:"HKD", n:"Hong Kong Dollar", f:"🇭🇰"}, {c:"HUF", n:"Hungarian Forint", f:"🇭🇺"},
+                    {c:"IDR", n:"Indonesian Rupiah", f:"🇮🇩"}, {c:"ILS", n:"Israeli Shekel", f:"🇮🇱"}, {c:"INR", n:"Indian Rupee", f:"🇮🇳"},
+                    {c:"ISK", n:"Icelandic Króna", f:"🇮🇸"}, {c:"JPY", n:"Japanese Yen", f:"🇯🇵"}, {c:"KRW", n:"South Korean Won", f:"🇰🇷"},
+                    {c:"MXN", n:"Mexican Peso", f:"🇲🇽"}, {c:"MYR", n:"Malaysian Ringgit", f:"🇲🇾"}, {c:"NOK", n:"Norwegian Krone", f:"🇳🇴"},
+                    {c:"NZD", n:"New Zealand Dollar", f:"🇳🇿"}, {c:"PHP", n:"Philippine Peso", f:"🇵🇭"}, {c:"PLN", n:"Polish Zloty", f:"🇵🇱"},
+                    {c:"RON", n:"Romanian Leu", f:"🇷🇴"}, {c:"SEK", n:"Swedish Krona", f:"🇸🇪"}, {c:"SGD", n:"Singapore Dollar", f:"🇸🇬"},
+                    {c:"THB", n:"Thai Baht", f:"🇹🇭"}, {c:"TRY", n:"Turkish Lira", f:"🇹🇷"}, {c:"USD", n:"US Dollar", f:"🇺🇸"},
+                    {c:"ZAR", n:"South African Rand", f:"🇿🇦"}
+                ],
+
+                initListener: function() {
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'currency_suites/volatility.js') {
+                            this.updateUIBoxes();
+                            this.fetchMarketData();
+                        }
+                    });
+
+                    // Standalone Boot for direct access testing
+                    if(document.readyState === 'complete' || document.readyState === 'interactive'){
+                         setTimeout(() => { this.updateUIBoxes(); this.fetchMarketData(); }, 100);
+                    } else {
+                         document.addEventListener('DOMContentLoaded', () => { this.updateUIBoxes(); this.fetchMarketData(); });
+                    }
+                },
+
+                updateUIBoxes: function() {
+                    let bObj = this.currencies.find(c => c.c === this.baseCode);
+                    let tObj = this.currencies.find(c => c.c === this.targetCode);
+
+                    if(document.getElementById('flag-base')) document.getElementById('flag-base').innerText = bObj.f;
+                    if(document.getElementById('code-base')) document.getElementById('code-base').innerText = bObj.c;
+
+                    if(document.getElementById('flag-target')) document.getElementById('flag-target').innerText = tObj.f;
+                    if(document.getElementById('code-target')) document.getElementById('code-target').innerText = tObj.c;
+                    
+                    if(document.getElementById('hero-lbl')) document.getElementById('hero-lbl').innerText = `1 ${bObj.c} equals`;
+                },
+
+                swapCurrencies: function() {
+                    let temp = this.baseCode;
+                    this.baseCode = this.targetCode;
+                    this.targetCode = temp;
+                    
+                    this.updateUIBoxes();
+                    this.fetchMarketData();
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                // --- PLATINUM FEATURE: Time-Series Data Engine ---
+                fetchMarketData: async function() {
+                    const dataContainer = document.getElementById('data-container');
+                    const loader = document.getElementById('loader-box');
+                    if(!dataContainer || !loader) return;
+                    
+                    dataContainer.style.display = 'none';
+                    loader.style.display = 'block';
+
+                    try {
+                        // Calculate dates (Today and 30 days ago)
+                        const today = new Date();
+                        const past = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+                        
+                        const d1 = past.toISOString().split('T')[0];
+                        const d2 = today.toISOString().split('T')[0];
+
+                        // Fetch time-series data from Frankfurter API (Reliable ECB data)
+                        // If base === target, handle gracefully
+                        if (this.baseCode === this.targetCode) {
+                            this.processData({"dummyDate": {[this.targetCode]: 1.0}});
+                            return;
+                        }
+
+                        const res = await fetch(`https://api.frankfurter.app/${d1}..${d2}?from=${this.baseCode}&to=${this.targetCode}`);
+                        const data = await res.json();
+
+                        if(data.rates) {
+                            this.processData(data.rates);
+                        } else {
+                            throw "No data returned";
+                        }
+                    } catch(e) {
+                        console.error("Volatility API Error:", e);
+                        loader.innerHTML = `<i class="fas fa-exclamation-triangle fa-2x" style="color:#ef4444;"></i><div style="margin-top:10px; color:#ef4444;">Failed to fetch market data. Try again later.</div>`;
+                    }
+                },
+
+                processData: function(ratesObj) {
+                    let rateValues = [];
+                    let latestRate = 0;
+                    
+                    // Extract all rates into an array
+                    const dates = Object.keys(ratesObj).sort(); // Ensure chronological order
+                    dates.forEach(date => {
+                        if(ratesObj[date][this.targetCode]) {
+                            rateValues.push(ratesObj[date][this.targetCode]);
+                            latestRate = ratesObj[date][this.targetCode]; // Last one will be the latest
+                        }
+                    });
+
+                    if (rateValues.length === 0) return;
+
+                    // Math: Min, Max, Avg
+                    const maxRate = Math.max(...rateValues);
+                    const minRate = Math.min(...rateValues);
+                    const sum = rateValues.reduce((a, b) => a + b, 0);
+                    const avgRate = sum / rateValues.length;
+
+                    this.renderDashboard(latestRate, minRate, maxRate, avgRate);
+                },
+
+                // --- PLATINUM FEATURE: Risk & Signal Generation ---
+                renderDashboard: function(current, min, max, avg) {
+                    const loader = document.getElementById('loader-box');
+                    const dataContainer = document.getElementById('data-container');
+                    
+                    if(loader) loader.style.display = 'none';
+                    if(dataContainer) dataContainer.style.display = 'flex';
+
+                    // Decimals to show
+                    let dec = current < 10 ? 4 : 2;
+
+                    // 1. Hero Value
+                    const heroVal = document.getElementById('hero-val');
+                    if(heroVal) {
+                        heroVal.innerText = current.toFixed(dec);
+                        
+                        // Color code current rate vs average
+                        if (current >= avg) {
+                            heroVal.className = "rh-val"; // Green
+                        } else {
+                            heroVal.className = "rh-val down"; // Red
+                        }
+                    }
+
+                    // 2. Stats Grid
+                    if(document.getElementById('stat-low')) document.getElementById('stat-low').innerText = min.toFixed(dec);
+                    if(document.getElementById('stat-high')) document.getElementById('stat-high').innerText = max.toFixed(dec);
+                    if(document.getElementById('stat-avg')) document.getElementById('stat-avg').innerText = avg.toFixed(dec);
+
+                    // 3. Visual Gauge Placement (0% to 100%)
+                    let range = max - min;
+                    let positionPct = 50; // default middle
+                    if (range > 0) {
+                        positionPct = ((current - min) / range) * 100;
+                    }
+                    // Clamp between 2% and 98% for visual aesthetics
+                    positionPct = Math.max(2, Math.min(98, positionPct));
+                    if(document.getElementById('gauge-marker')) document.getElementById('gauge-marker').style.left = `${positionPct}%`;
+
+                    if(document.getElementById('g-low')) document.getElementById('g-low').innerText = `Low\n${min.toFixed(dec)}`;
+                    if(document.getElementById('g-high')) document.getElementById('g-high').innerText = `High\n${max.toFixed(dec)}`;
+                    if(document.getElementById('g-avg')) document.getElementById('g-avg').innerText = `Avg\n${avg.toFixed(dec)}`;
+
+                    // 4. AI-Like Insight Generation
+                    const iIcon = document.getElementById('insight-icon');
+                    const iTxt = document.getElementById('insight-txt');
+                    const box = document.getElementById('insight-box');
+
+                    let diffPct = avg === 0 ? "0.00" : Math.abs(((current - avg) / avg) * 100).toFixed(2);
+
+                    if (box && iIcon && iTxt) {
+                        if (current > avg) {
+                            // Rate is HIGH
+                            box.style.borderColor = "#10b981";
+                            box.style.background = "rgba(16, 185, 129, 0.1)";
+                            iIcon.className = "fas fa-rocket insight-icon";
+                            iIcon.style.color = "#10b981";
+                            
+                            iTxt.innerHTML = `
+                                The ${this.baseCode} is <span class="insight-hl ihl-green">STRONGER</span> than usual! 
+                                It is currently <span class="insight-hl ihl-green">${diffPct}% above</span> its 30-day average. 
+                                <br><br><span style="color:#94a3b8; font-size:0.75rem;"><b>Signal:</b> Excellent time to convert ${this.baseCode} to ${this.targetCode}.</span>
+                            `;
+                        } else if (current < avg) {
+                            // Rate is LOW
+                            box.style.borderColor = "#ef4444";
+                            box.style.background = "rgba(239, 68, 68, 0.1)";
+                            iIcon.className = "fas fa-chart-line insight-icon";
+                            iIcon.style.color = "#ef4444";
+                            
+                            iTxt.innerHTML = `
+                                The ${this.baseCode} is currently <span class="insight-hl ihl-red">WEAK</span> against the ${this.targetCode}. 
+                                It has dropped <span class="insight-hl ihl-red">${diffPct}% below</span> the 30-day average.
+                                <br><br><span style="color:#94a3b8; font-size:0.75rem;"><b>Signal:</b> Consider waiting if you are sending ${this.baseCode}. Great time to buy ${this.baseCode}!</span>
+                            `;
+                        } else {
+                            // Edge case: Exactly average
+                            box.style.borderColor = "#f59e0b";
+                            iIcon.className = "fas fa-balance-scale insight-icon";
+                            iIcon.style.color = "#f59e0b";
+                            iTxt.innerHTML = `The rate is perfectly matching its 30-day average. The market is stable.`;
+                        }
+                    }
+                },
+
+                // --- PLATINUM FEATURE: Bottom Sheet Modal ---
+                openSelector: function(mode) {
+                    this.activeMode = mode;
+                    let searchInp = document.getElementById('cm-search-inp');
+                    if(searchInp) searchInp.value = "";
+                    this.filterList(); 
+                    
+                    const modal = document.getElementById('vol-modal');
+                    if(modal) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => { modal.classList.add('cm-open'); }, 10);
+                        setTimeout(() => { if(searchInp) searchInp.focus(); }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                closeSelector: function() {
+                    const modal = document.getElementById('vol-modal');
+                    if(modal) {
+                        modal.classList.remove('cm-open');
+                        setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                filterList: function() {
+                    const searchInp = document.getElementById('cm-search-inp');
+                    const q = searchInp ? searchInp.value.toLowerCase() : "";
+                    const listObj = document.getElementById('cm-list-box');
+                    if(!listObj) return;
+                    listObj.innerHTML = '';
+
+                    let filtered = this.currencies.filter(c => 
+                        c.n.toLowerCase().includes(q) || c.c.toLowerCase().includes(q)
+                    );
+
+                    if(filtered.length === 0) {
+                        listObj.innerHTML = `<div style="text-align:center; color:#64748b; padding:20px;">No match found in major currencies.</div>`;
+                        return;
+                    }
+
+                    filtered.forEach(c => {
+                        let div = document.createElement('div');
+                        div.className = "cl-item";
+                        div.onclick = () => this.selectCurrency(c.c);
+                        div.innerHTML = `
+                            <span class="cl-flag">${c.f}</span>
+                            <div class="cl-details">
+                                <span class="cl-code">${c.c}</span>
+                                <span class="cl-name">${c.n}</span>
+                            </div>
+                        `;
+                        listObj.appendChild(div);
+                    });
+                },
+
+                selectCurrency: function(code) {
+                    if(this.activeMode === 'base') {
+                        if (this.targetCode === code) this.swapCurrencies();
+                        else this.baseCode = code;
+                    } else {
+                        if (this.baseCode === code) this.swapCurrencies();
+                        else this.targetCode = code;
+                    }
+
+                    this.updateUIBoxes();
+                    this.closeSelector();
+                    this.fetchMarketData(); // Fetch new history data
+                },
+
+                // --- THE "WHY" VISUALIZER ---
+                showSteps: function() {
+                    const contentBox = document.getElementById('vol-steps-content');
+                    if(!contentBox) return;
+                    
+                    let html = `
+                        <div style="margin-bottom:15px; border-left:3px solid #38bdf8; padding-left:10px;">
+                            <span style="color:#38bdf8; font-weight:bold;">Why Do Currencies Fluctuate?</span><br>
+                            Forex rates are driven by supply and demand. They change every second based on four main pillars:
+                        </div>
+                        
+                        <div style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
+                            <div style="background:rgba(2,6,23,0.5); border:1px solid #334155; padding:10px; border-radius:6px;">
+                                <span style="color:#10b981; font-weight:bold;"><i class="fas fa-university"></i> 1. Interest Rates</span><br>
+                                <span style="font-size:0.75rem; color:#94a3b8;">If a country's Central Bank (like the US Fed) raises interest rates, investors flock there for higher returns, making the currency stronger.</span>
+                            </div>
+                            
+                            <div style="background:rgba(2,6,23,0.5); border:1px solid #334155; padding:10px; border-radius:6px;">
+                                <span style="color:#ef4444; font-weight:bold;"><i class="fas fa-arrow-trend-up"></i> 2. Inflation</span><br>
+                                <span style="font-size:0.75rem; color:#94a3b8;">High inflation destroys a currency's purchasing power. Countries with lower inflation usually see their currency value rise over time.</span>
+                            </div>
+
+                            <div style="background:rgba(2,6,23,0.5); border:1px solid #334155; padding:10px; border-radius:6px;">
+                                <span style="color:#f59e0b; font-weight:bold;"><i class="fas fa-newspaper"></i> 3. Market Sentiment (News)</span><br>
+                                <span style="font-size:0.75rem; color:#94a3b8;">Political instability, elections, or unexpected news can cause a currency to crash or surge within minutes.</span>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:15px; font-size:0.75rem; color:#38bdf8; text-align:center; font-weight:bold; background:rgba(56,189,248,0.1); padding:10px; border-radius:6px;">
+                            *Our AI-like logic compares the current rate with the 30-day moving average to tell you if the currency is overbought or oversold!
+                        </div>
+                    `;
+                    
+                    contentBox.innerHTML = html;
+
+                    const modal = document.getElementById('vol-steps-modal');
+                    const box = document.getElementById('vol-steps-box');
+                    if(modal && box) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => {
+                            modal.style.opacity = '1';
+                            box.style.transform = 'translateY(0)';
+                        }, 10);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                hideSteps: function() {
+                    const modal = document.getElementById('vol-steps-modal');
+                    const box = document.getElementById('vol-steps-box');
+                    if(modal && box) {
+                        modal.style.opacity = '0';
+                        box.style.transform = 'translateY(20px)';
+                        setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                }
+            };
+
+            window.QS_Vol.initListener();
+        })();
+    </script>
+</body>
+</html>

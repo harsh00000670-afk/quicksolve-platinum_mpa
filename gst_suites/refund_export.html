@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>GST Refund Calculator for Exporters | LUT vs IGST Paid | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate GST refunds for exporters under Rule 89(4) and Rule 96. Compare LUT vs IGST payment options and handle Inverted Duty Structure. 100% Offline.">
+    <meta name="keywords" content="gst export refund calculator, lut vs igst refund, rule 89(4) gst formula, inverted duty structure refund, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/gst_suites/refund_export.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#020617">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           EXPORT REFUND MASTER (PLATINUM GOD MODE)
+           Theme: Obsidian / Global Teal / Currency Gold
+           ========================================= */
+        #mod-refund-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: #020617; z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .er-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #064e3b; border-bottom: 1px solid #065f46;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .er-head .qs-back-btn { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .er-tit { color: #10b981; font-weight: 900; font-size: 0.9rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .er-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 100px; }
+
+        /* Section Cards */
+        .er-card { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .er-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; }
+        .er-lbl span { color: #10b981; }
+
+        .er-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 12px; border-radius: 8px; border: 1px solid #1e293b; transition: 0.2s; }
+        .er-inp-wrap:focus-within { border-color: #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.1); }
+        .er-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1rem; font-weight: 900; outline: none; width: 100%; text-align: right; font-family: monospace; }
+        
+        /* Currency Badge */
+        .curr-badge { background: #1e293b; border: 1px solid #334155; color: #eab308; padding: 4px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+
+        /* Results Panel */
+        .res-hero { background: #020617; border: 1px solid #10b981; border-radius: 12px; padding: 25px 15px; text-align: center; position: relative; box-shadow: inset 0 0 30px rgba(16, 185, 129, 0.05); }
+        .res-hero::before { content: 'ESTIMATED REFUND AMOUNT'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #10b981; color: #020617; font-size: 0.6rem; font-weight: 900; padding: 2px 10px; border-radius: 4px; letter-spacing: 1px; }
+        
+        .main-refund { font-size: 3rem; font-weight: 900; color: #10b981; font-family: monospace; line-height: 1; }
+        .main-sub { font-size: 0.8rem; color: #f8fafc; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; }
+
+        /* Comparison Logic Box */
+        .logic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .logic-box { background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 10px; padding: 12px; text-align: left; position: relative; }
+        .logic-box.active { border-color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
+        .l-tit { font-size: 0.6rem; color: #64748b; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        .l-val { font-size: 1rem; color: #f8fafc; font-weight: 900; font-family: monospace; }
+        .active-tag { position: absolute; top: 5px; right: 5px; font-size: 0.5rem; background: #38bdf8; color: #020617; padding: 2px 5px; border-radius: 4px; font-weight: 900; }
+
+        /* Data Breakdown */
+        .breakdown-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #0f172a; border-radius: 10px; overflow: hidden; border: 1px solid #1e293b; }
+        .breakdown-table td { padding: 12px; font-size: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: bold; color: #cbd5e1; }
+        .breakdown-table td:last-child { text-align: right; font-family: monospace; color: #fff; }
+        .t-dim { color: #64748b; font-weight: 800; text-transform: uppercase; font-size: 0.6rem; }
+
+        /* Modals */
+        .er-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .er-content { background: #0f172a; border-top-left-radius: 20px; border-top-right-radius: 20px; display: flex; flex-direction: column; overflow: hidden; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .er-open .er-content { transform: translateY(0); }
+        .er-modal-head { padding: 15px 20px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; }
+        .er-modal-head span { color: #10b981; font-weight: 900; font-size: 1rem; text-transform: uppercase; }
+        .er-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .er-list { padding: 10px 0; max-height: 55vh; overflow-y: auto; }
+        .el-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); cursor: pointer; }
+        .el-name { font-weight: 900; color: #f8fafc; font-size: 0.9rem; }
+        .el-sub { display: block; font-size: 0.6rem; color: #64748b; margin-top: 2px; }
+        .el-check { color: #10b981; display: none; }
+        .el-item.active .el-check { display: block; }
+        .el-item.active .el-name { color: #10b981; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <main id="mod-refund-overlay" role="main" aria-label="GST Export Refund Master">
+        <header class="er-head">
+            <a href="../gst.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left"></i></a>
+            <div class="er-tit"><i class="fas fa-ship"></i> EXPORT REFUND MASTER</div>
+        </header>
+
+        <section class="er-body">
+            
+            <div class="er-card">
+                <div class="er-lbl">Refund Scenario <span>COMPLIANCE</span></div>
+                <div class="er-inp-wrap" onclick="QS_Refund.openModal('mode')">
+                    <div style="flex:1; color:#fff; font-weight:900; font-size:0.95rem; display:flex; justify-content:space-between; align-items:center;">
+                        <span id="lbl-mode">Zero Rated Supply (LUT)</span> <i class="fas fa-chevron-down" style="font-size:0.7rem; color:#64748b;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="er-card">
+                <div class="er-lbl">Export Turnover <span>FOREIGN TRADE</span></div>
+                <div class="er-inp-wrap">
+                    <div class="curr-badge" onclick="QS_Refund.openModal('currency')">
+                        <span id="lbl-curr-sym">$</span> <span id="lbl-curr-code">USD</span> <i class="fas fa-caret-down"></i>
+                    </div>
+                    <input type="number" id="inp-export-val" class="er-inp" placeholder="0.00" oninput="QS_Refund.calculate()">
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
+                    <span class="er-lbl">Exch. Rate (1 <span id="lbl-curr-label">USD</span>)</span>
+                    <div class="er-inp-wrap" style="width:120px; padding:6px 10px;">
+                        <span style="font-size:0.7rem; color:#64748b;">₹</span>
+                        <input type="number" id="inp-exch-rate" class="er-inp" value="83.50" oninput="QS_Refund.calculate()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="er-card">
+                <div class="er-lbl">Net ITC Available <span>PURCHASE TAX</span></div>
+                <div class="er-inp-wrap">
+                    <span style="font-weight:900; color:#475569;">₹</span>
+                    <input type="number" id="inp-net-itc" class="er-inp" placeholder="Total ITC for period" oninput="QS_Refund.calculate()">
+                </div>
+
+                <div class="er-lbl" style="margin-top:5px;">Adjusted Total Turnover <span>DOMESTIC + EXPORT</span></div>
+                <div class="er-inp-wrap">
+                    <span style="font-weight:900; color:#475569;">₹</span>
+                    <input type="number" id="inp-total-turnover" class="er-inp" placeholder="Adjusted Turnover" oninput="QS_Refund.calculate()">
+                </div>
+            </div>
+
+            <div id="empty-state" style="text-align:center; padding: 30px; color:#475569;">
+                <i class="fas fa-file-contract fa-4x" style="margin-bottom:15px; opacity:0.2;"></i>
+                <div style="font-size:0.85rem; font-weight:bold;">Input trade values to compute tax refund potential.</div>
+            </div>
+
+            <div id="res-dashboard" class="hidden" aria-live="polite">
+                
+                <div class="res-hero">
+                    <div class="main-refund" id="res-total">₹0</div>
+                    <div class="main-sub" id="res-type-label">ESTIMATED REFUND (LUT)</div>
+                    
+                    <div class="logic-grid">
+                        <div id="box-lut" class="logic-box active">
+                            <span class="l-tit">Rule 89(4) (LUT)</span>
+                            <span class="l-val" id="res-lut-amt">₹0</span>
+                            <span class="active-tag">Formula</span>
+                        </div>
+                        <div id="box-igst" class="logic-box">
+                            <span class="l-tit">Rule 96 (IGST Paid)</span>
+                            <span class="l-val" id="res-igst-amt">₹0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="breakdown-table">
+                    <tr><td class="t-dim">Export Value (INR)</td><td id="res-exp-inr">₹0</td></tr>
+                    <tr><td class="t-dim">ITC Utilization Ratio</td><td id="res-ratio">0.00%</td></tr>
+                    <tr><td class="t-dim">Adjusted Total Sales</td><td id="res-adj-sales">₹0</td></tr>
+                    <tr style="border-top:1.5px solid #1e293b;"><td class="t-dim" style="color:#10b981;">Maximum Eligible Refund</td><td id="res-max-eligible" style="color:#10b981;">₹0</td></tr>
+                </table>
+
+                <div style="margin-top:15px; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 10px; padding: 15px; font-size: 0.65rem; color: #cbd5e1; line-height: 1.5;">
+                    <i class="fas fa-balance-scale" style="color:#10b981;"></i> <b>Lead Dev Tip:</b> Under <b>LUT Mode</b>, you get a refund of Net ITC proportional to your export turnover. Under <b>IGST Paid Mode</b>, you pay tax upfront and get a full refund of the IGST paid on export. 
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <div id="er-modal" class="er-modal">
+        <div class="er-content">
+            <div class="er-modal-head"><span id="er-title">Select</span><button class="er-close" onclick="QS_Refund.closeModal()"><i class="fas fa-times"></i></button></div>
+            <div class="er-list" id="er-list"></div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - EXPORT REFUND ENGINE
+           Features: Rule 89(4) Formula Implementation, Currency Conversion, Rule 96 Simulation.
+        */
+        (function() {
+            window.QS_Refund = {
+                state: {
+                    mode: 'lut', // lut or igst_paid
+                    currency: 'USD',
+                    exchRate: 83.50
+                },
+
+                modes: {
+                    'lut': { n: 'Zero Rated Supply (LUT)', sub: 'Refund of Net ITC (Rule 89-4)' },
+                    'igst_paid': { n: 'IGST Payment Mode', sub: 'Refund of IGST paid on Exports' },
+                    'inverted': { n: 'Inverted Duty Structure', sub: 'Refund when Input Tax > Output Tax' }
+                },
+
+                currencies: {
+                    'USD': { s: '$', r: 83.50 },
+                    'EUR': { s: '€', r: 90.20 },
+                    'GBP': { s: '£', r: 105.40 },
+                    'AED': { s: 'د.إ', r: 22.70 },
+                    'INR': { s: '₹', r: 1.00 }
+                },
+
+                init: function() {
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'gst_suites/refund_export.js') this.calculate();
+                    });
+                    if(document.readyState === 'complete') this.calculate();
+                    else document.addEventListener('DOMContentLoaded', () => this.calculate());
+                },
+
+                openModal: function(target) {
+                    const title = target === 'mode' ? 'Refund Mode' : 'Select Currency';
+                    document.getElementById('er-title').innerText = title;
+                    const list = document.getElementById('er-list');
+                    list.innerHTML = '';
+
+                    if(target === 'mode') {
+                        Object.keys(this.modes).forEach(key => {
+                            const m = this.modes[key];
+                            const active = this.state.mode === key;
+                            const div = document.createElement('div');
+                            div.className = `el-item ${active?'active':''}`;
+                            div.onclick = () => {
+                                this.state.mode = key;
+                                document.getElementById('lbl-mode').innerText = m.n;
+                                this.closeModal();
+                                this.calculate();
+                            };
+                            div.innerHTML = `<div><span class="el-name">${m.n}</span><span class="el-sub">${m.sub}</span></div><i class="fas fa-check el-check"></i>`;
+                            list.appendChild(div);
+                        });
+                    } else {
+                        Object.keys(this.currencies).forEach(key => {
+                            const c = this.currencies[key];
+                            const active = this.state.currency === key;
+                            const div = document.createElement('div');
+                            div.className = `el-item ${active?'active':''}`;
+                            div.onclick = () => {
+                                this.state.currency = key;
+                                document.getElementById('lbl-curr-sym').innerText = c.s;
+                                document.getElementById('lbl-curr-code').innerText = key;
+                                document.getElementById('lbl-curr-label').innerText = key;
+                                document.getElementById('inp-exch-rate').value = c.r;
+                                this.closeModal();
+                                this.calculate();
+                            };
+                            div.innerHTML = `<div><span class="el-name">${key} - ${c.s}</span><span class="el-sub">Standard Rate: ${c.r}</span></div><i class="fas fa-check el-check"></i>`;
+                            list.appendChild(div);
+                        });
+                    }
+
+                    const m = document.getElementById('er-modal');
+                    m.style.display = 'flex';
+                    setTimeout(() => m.classList.add('er-open'), 10);
+                },
+
+                closeModal: function() {
+                    const m = document.getElementById('er-modal');
+                    m.classList.remove('er-open');
+                    setTimeout(() => m.style.display = 'none', 300);
+                },
+
+                calculate: function() {
+                    const exportVal = parseFloat(document.getElementById('inp-export-val').value);
+                    const exchRate = parseFloat(document.getElementById('inp-exch-rate').value) || 1;
+                    const netITC = parseFloat(document.getElementById('inp-net-itc').value) || 0;
+                    const totalTurnover = parseFloat(document.getElementById('inp-total-turnover').value);
+
+                    if(!exportVal || exportVal <= 0 || !totalTurnover || totalTurnover <= 0) {
+                        document.getElementById('empty-state').classList.remove('hidden');
+                        document.getElementById('res-dashboard').classList.add('hidden');
+                        return;
+                    }
+
+                    document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('res-dashboard').classList.remove('hidden');
+
+                    // 1. Convert Foreign Value to INR
+                    const exportINR = exportVal * exchRate;
+
+                    // 2. Rule 89(4) Formula: (Export Turnover / Adjusted Total Turnover) * Net ITC
+                    // Note: Export turnover capped at 1.5x of domestic value usually, but we keep it direct for this tool.
+                    const refundLUT = (exportINR / totalTurnover) * netITC;
+
+                    // 3. Rule 96 (IGST Paid) - Pure 18% simulation (standard export rate)
+                    const refundIGST = exportINR * 0.18;
+
+                    // 4. Inverted Duty Structure Logic
+                    // Formula: (Turnover of Inverted Supply * Net ITC / Adjusted Total Turnover) - Tax Payable on Output
+                    const refundInverted = (exportINR / totalTurnover) * netITC - (exportINR * 0.05); // Assuming 5% output for inverted scenario
+
+                    let finalRefund = 0;
+                    let displayType = "ESTIMATED REFUND (LUT)";
+
+                    if(this.state.mode === 'lut') {
+                        finalRefund = refundLUT;
+                        displayType = "ESTIMATED REFUND (LUT)";
+                    } else if(this.state.mode === 'igst_paid') {
+                        finalRefund = refundIGST;
+                        displayType = "IGST REFUND PAYABLE";
+                    } else {
+                        finalRefund = Math.max(0, refundInverted);
+                        displayType = "INVERTED DUTY REFUND";
+                    }
+
+                    this.render(exportINR, refundLUT, refundIGST, netITC, totalTurnover, finalRefund, displayType);
+                },
+
+                render: function(expINR, lut, igst, itc, total, final, label) {
+                    const fmt = (v) => '₹' + v.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+                    
+                    document.getElementById('res-total').innerText = fmt(final);
+                    document.getElementById('res-type-label').innerText = label;
+                    
+                    document.getElementById('res-lut-amt').innerText = fmt(lut);
+                    document.getElementById('res-igst-amt').innerText = fmt(igst);
+                    
+                    document.getElementById('res-exp-inr').innerText = fmt(expINR);
+                    document.getElementById('res-adj-sales').innerText = fmt(total);
+                    document.getElementById('res-itc-val').innerText = fmt(itc);
+                    
+                    const ratio = (expINR / total) * 100;
+                    document.getElementById('res-ratio').innerText = Math.min(100, ratio).toFixed(2) + '%';
+                    
+                    document.getElementById('res-max-eligible').innerText = fmt(Math.max(lut, igst));
+
+                    // Active Logic Box Switch
+                    document.getElementById('box-lut').classList.toggle('active', this.state.mode === 'lut');
+                    document.getElementById('box-igst').classList.toggle('active', this.state.mode === 'igst_paid');
+                }
+            };
+
+            window.QS_Refund.init();
+        })();
+    </script>
+</body>
+</html>
+                    

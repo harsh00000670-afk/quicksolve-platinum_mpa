@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>IEEE-754 Floating Point Converter | 32-bit & 64-bit Binary | QuickSolve Platinum</title>
+    <meta name="description" content="Convert decimal numbers to IEEE-754 floating-point binary representation. Supports 32-bit single and 64-bit double precision. Visualize sign, exponent, and mantissa breakdown with formula steps. 100% Offline.">
+    <meta name="keywords" content="IEEE-754 converter, floating point to binary, 32-bit float, 64-bit double, mantissa exponent sign, binary representation of decimals, programmer calculator, floating point visualizer, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/ieee754.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="IEEE-754 Floating Point Converter - Decimal to Binary Float">
+    <meta property="og:description" content="Break down 32-bit and 64-bit floating-point numbers into Sign, Exponent, and Mantissa effortlessly.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           IEEE-754 FLOATING POINT (PRO EDITION)
+           Theme: Cyberpunk Terminal (Neon RGB Focus)
+           ========================================= */
+        body { margin: 0; background-color: var(--bg-body, #09090b); }
+
+        #mod-ieee-overlay {
+            width: 100vw; min-height: 100vh;
+            background-color: var(--bg-body, #09090b); 
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: monospace;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .ie-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .ie-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; }
+        .ie-tit { color: #a855f7; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .ie-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Precision Selector */
+        .bit-selector { 
+            display: flex; flex-shrink: 0; min-height: 42px;
+            background: #1e293b; border: 1px solid #475569; border-radius: 8px; overflow: hidden; 
+        }
+        .bit-opt { flex: 1; display: flex; justify-content: center; align-items: center; color: #94a3b8; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; border-right: 1px solid #475569; }
+        .bit-opt:last-child { border-right: none; }
+        .bit-opt.active { background: rgba(168, 85, 247, 0.15); color: #a855f7; font-weight: 900; box-shadow: inset 0 -3px 0 #a855f7; }
+
+        /* Input Group */
+        .ie-grp { 
+            flex-shrink: 0; background: #1e293b; border: 1px solid #475569; 
+            border-radius: 10px; padding: 15px; transition: 0.2s; position: relative; 
+        }
+        .ie-grp:focus-within { border-color: #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.15); }
+        .ie-grp.error { border-color: #ef4444 !important; box-shadow: 0 0 15px rgba(239, 68, 68, 0.1) !important; }
+        
+        .ie-lbl { color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+        
+        .ie-inp-wrap { display: flex; align-items: center; gap: 8px; }
+        .ie-inp { background: transparent; border: none; color: #fff; font-size: 1.3rem; font-weight: 800; width: 100%; outline: none; font-family: monospace; }
+        .ie-inp::placeholder { color: #475569; font-size: 1rem; }
+
+        /* Results Visualization */
+        .res-card { flex-shrink: 0; background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+        
+        .hex-display { font-size: 1.2rem; font-weight: bold; color: #f59e0b; text-align: center; letter-spacing: 2px; padding-bottom: 10px; border-bottom: 1px dashed #334155; }
+        
+        .bit-breakdown { display: flex; flex-direction: column; gap: 8px; }
+        .b-row { display: flex; flex-direction: column; gap: 4px; }
+        
+        .b-lbl { font-size: 0.65rem; text-transform: uppercase; font-weight: 800; }
+        .b-val { font-size: 1rem; font-weight: bold; word-break: break-all; letter-spacing: 1px; padding: 6px; border-radius: 6px; background: rgba(2, 6, 23, 0.5); }
+        
+        /* Colors for IEEE Standard */
+        .c-sign { color: #ef4444; }
+        .bg-sign { border-left: 3px solid #ef4444; }
+        
+        .c-exp { color: #22c55e; }
+        .bg-exp { border-left: 3px solid #22c55e; }
+        
+        .c-man { color: #3b82f6; }
+        .bg-man { border-left: 3px solid #3b82f6; }
+
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #a855f7; color: #a855f7; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(168, 85, 247, 0.15); transform: scale(0.98); }
+
+        /* STEPS MODAL */
+        #ie-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #ie-steps-box { background: #1e293b; border: 1px solid #a855f7; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(168, 85, 247, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #a855f7; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+
+        .formula-box { background: #020617; border: 1px solid #334155; border-radius: 8px; padding: 15px; margin-top: 10px; font-family: monospace; font-size: 0.85rem; }
+        .f-row { margin-bottom: 10px; border-bottom: 1px dashed #1e293b; padding-bottom: 10px; }
+        .f-row:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+        .math-hl { font-weight: bold; color: #f8fafc; }
+    </style>
+</head>
+
+<body>
+
+<main id="mod-ieee-overlay" role="main">
+    <header class="ie-head" role="banner">
+        <a href="../programmer.html" class="qs-back-btn" aria-label="Go back to Programmer Suite">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </a>
+<h1 class="ie-tit" style="position: absolute; left: 50%; transform: translateX(-50%); margin: 0; color: #38bdf8; font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);">
+    <i class="fas fa-percentage" aria-hidden="true"></i> IEEE-754 FLOAT
+</h1>
+
+    </header>
+
+    <div class="ie-body">
+        
+        <section aria-labelledby="precision-heading">
+            <h2 id="precision-heading" class="sr-only" style="display:none;">Select Precision Level</h2>
+            <div class="bit-selector" id="ie-bit-selector" role="radiogroup" aria-label="Floating point precision">
+                <div class="bit-opt active" data-bits="32" role="radio" aria-checked="true" tabindex="0" onclick="QS_IEEE.setBits(32)">32-bit (Single)</div>
+                <div class="bit-opt" data-bits="64" role="radio" aria-checked="false" tabindex="0" onclick="QS_IEEE.setBits(64)">64-bit (Double)</div>
+            </div>
+        </section>
+
+        <section class="ie-grp" id="grp-val" aria-labelledby="input-heading">
+            <h2 id="input-heading" class="sr-only" style="display:none;">Decimal Input</h2>
+            <label for="ie-inp-val" class="ie-lbl">Decimal Float Input</label>
+            <div class="ie-inp-wrap">
+                <input type="number" id="ie-inp-val" class="ie-inp" placeholder="e.g. -12.625" step="any" aria-describedby="ie-err" oninput="QS_IEEE.calc()" autocomplete="off">
+            </div>
+            <div style="font-size:0.65rem; color:#ef4444; margin-top:5px; display:none;" id="ie-err" role="alert" aria-live="assertive">Invalid Floating Point Number</div>
+        </section>
+
+        <button class="btn-why" aria-haspopup="dialog" aria-expanded="false" aria-label="Show IEEE-754 math breakdown" onclick="QS_IEEE.showSteps()">
+            <i class="fas fa-microscope" aria-hidden="true"></i> Decode The Formula
+        </button>
+
+        <section class="res-card" aria-labelledby="results-heading" aria-live="polite">
+            <h2 id="results-heading" class="sr-only" style="display:none;">IEEE-754 Results</h2>
+            <div class="hex-display" id="res-hex" aria-label="Hexadecimal representation">0x00000000</div>
+            
+            <div class="bit-breakdown">
+                <div class="b-row">
+                    <span class="b-lbl c-sign" id="lbl-sign">Sign (1-bit)</span>
+                    <div class="b-val bg-sign c-sign" id="res-sign" aria-labelledby="lbl-sign">0</div>
+                </div>
+                
+                <div class="b-row">
+                    <span class="b-lbl c-exp" id="lbl-exp-container">Exponent (<span id="lbl-exp-bits">8</span>-bits)</span>
+                    <div class="b-val bg-exp c-exp" id="res-exp" aria-labelledby="lbl-exp-container">00000000</div>
+                </div>
+                
+                <div class="b-row">
+                    <span class="b-lbl c-man" id="lbl-man-container">Mantissa/Fraction (<span id="lbl-man-bits">23</span>-bits)</span>
+                    <div class="b-val bg-man c-man" id="res-man" aria-labelledby="lbl-man-container">00000000000000000000000</div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div id="ie-steps-modal" role="dialog" aria-modal="true" aria-labelledby="modal-math-title">
+        <div id="ie-steps-box">
+            <header class="steps-head">
+                <h2 id="modal-math-title" style="margin: 0; font-size: 1rem;"><i class="fas fa-atom" aria-hidden="true"></i> IEEE-754 MATH REVEALED</h2>
+                <button class="steps-close" aria-label="Close Math Breakdown" onclick="QS_IEEE.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </header>
+            <div class="steps-content" id="ie-steps-content" aria-live="polite">
+                </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    /* QUICKSOLVE PLATINUM - IEEE-754 FLOATING POINT ENGINE (MPA STANDALONE)
+       Features: 32-bit Single & 64-bit Double Precision, ArrayBuffer Binary Extraction, Formula Visualizer
+    */
+    const QS_IEEE = {
+        
+        currentBits: 32,
+        isValid: false,
+        lastVal: 0,
+        
+        // Cache for visualizer
+        lastSign: "0",
+        lastExp: "",
+        lastMan: "",
+        lastHex: "",
+
+        init: function() {
+            console.log("IEEE-754 Engine Ready 🚀");
+            this.resetUI();
+        },
+
+        setBits: function(bits) {
+            this.currentBits = bits;
+            
+            // Update ARIA and Active States
+            const opts = document.querySelectorAll('#ie-bit-selector .bit-opt');
+            opts.forEach(opt => {
+                opt.classList.remove('active');
+                opt.setAttribute('aria-checked', 'false');
+            });
+            const activeOpt = document.querySelector(`#ie-bit-selector .bit-opt[data-bits="${bits}"]`);
+            if(activeOpt) {
+                activeOpt.classList.add('active');
+                activeOpt.setAttribute('aria-checked', 'true');
+            }
+            
+            // Update labels
+            document.getElementById('lbl-exp-bits').innerText = bits === 32 ? "8" : "11";
+            document.getElementById('lbl-man-bits').innerText = bits === 32 ? "23" : "52";
+            
+            this.calc();
+            this.triggerHaptic();
+        },
+
+        calc: function() {
+            const rawVal = document.getElementById('ie-inp-val').value;
+            const grpVal = document.getElementById('grp-val');
+            const errLbl = document.getElementById('ie-err');
+            
+            grpVal.classList.remove('error');
+            errLbl.style.display = 'none';
+            this.isValid = false;
+
+            if (!rawVal) {
+                this.clearResults();
+                return;
+            }
+
+            let val = parseFloat(rawVal);
+            if (isNaN(val)) {
+                grpVal.classList.add('error');
+                errLbl.style.display = 'block';
+                this.clearResults();
+                return;
+            }
+
+            this.lastVal = val;
+            this.isValid = true;
+
+            let binStr = "";
+            let hexStr = "";
+
+            // --- THE MAGIC: ARRAY BUFFER MEMORY READING ---
+            // Bypassing JS math engines by reading memory directly like C/C++ pointers!
+            
+            if (this.currentBits === 32) {
+                const buffer = new ArrayBuffer(4);
+                const view = new DataView(buffer);
+                view.setFloat32(0, val, false); // false = Big Endian
+                
+                const intVal = view.getUint32(0, false);
+                binStr = intVal.toString(2).padStart(32, '0');
+                hexStr = intVal.toString(16).toUpperCase().padStart(8, '0');
+                
+                this.lastSign = binStr.substring(0, 1);
+                this.lastExp = binStr.substring(1, 9);
+                this.lastMan = binStr.substring(9);
+                
+            } else {
+                // 64-bit Double Precision
+                const buffer = new ArrayBuffer(8);
+                const view = new DataView(buffer);
+                view.setFloat64(0, val, false);
+                
+                // Read as two 32-bit uints to avoid BigInt floating issues
+                const high = view.getUint32(0, false);
+                const low = view.getUint32(4, false);
+                
+                const highBin = high.toString(2).padStart(32, '0');
+                const lowBin = low.toString(2).padStart(32, '0');
+                binStr = highBin + lowBin;
+                
+                const highHex = high.toString(16).toUpperCase().padStart(8, '0');
+                const lowHex = low.toString(16).toUpperCase().padStart(8, '0');
+                hexStr = highHex + lowHex;
+
+                this.lastSign = binStr.substring(0, 1);
+                this.lastExp = binStr.substring(1, 12);
+                this.lastMan = binStr.substring(12);
+            }
+
+            this.lastHex = "0x" + hexStr;
+
+            // Update UI
+            document.getElementById('res-hex').innerText = this.lastHex;
+            document.getElementById('res-sign').innerText = this.lastSign;
+            document.getElementById('res-exp').innerText = this.formatSpaced(this.lastExp);
+            document.getElementById('res-man').innerText = this.formatSpaced(this.lastMan);
+        },
+
+        formatSpaced: function(str) {
+            // Group by 4 bits for easier reading
+            return str.match(/.{1,4}/g)?.join(' ') || str;
+        },
+
+        triggerHaptic: function() {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        },
+
+        // --- PLATINUM FEATURE: IEEE MATH DECODER ---
+        showSteps: function() {
+            const contentBox = document.getElementById('ie-steps-content');
+            
+            if (!this.isValid) {
+                contentBox.innerHTML = `<div style="text-align:center; padding:20px; color:#ef4444;"><i class="fas fa-exclamation-triangle fa-2x" aria-hidden="true"></i><br><br>Enter a valid decimal to decode!</div>`;
+            } else {
+                contentBox.innerHTML = this.generateIEEEFormula();
+            }
+
+            const modal = document.getElementById('ie-steps-modal');
+            const box = document.getElementById('ie-steps-box');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                box.style.transform = 'translateY(0)';
+            }, 10);
+            
+            this.triggerHaptic();
+        },
+
+        hideSteps: function() {
+            const modal = document.getElementById('ie-steps-modal');
+            const box = document.getElementById('ie-steps-box');
+            modal.style.opacity = '0';
+            box.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+            this.triggerHaptic();
+        },
+
+        generateIEEEFormula: function() {
+            // Check for special cases (0, Infinity, NaN)
+            if (this.lastVal === 0) return `<div class="formula-box">Value is exact Zero. All exponent and mantissa bits are 0.</div>`;
+            
+            const bias = this.currentBits === 32 ? 127 : 1023;
+            const expDec = parseInt(this.lastExp, 2);
+            const actualExp = expDec - bias;
+            
+            let html = `
+                <div style="margin-bottom:15px; border-left:3px solid #a855f7; padding-left:10px;">
+                    <span style="color:#a855f7; font-weight:bold;">IEEE-754 Formula:</span><br>
+                    Value = (-1)<sup>Sign</sup> × (1 + Fraction) × 2<sup>(Exponent - Bias)</sup>
+                </div>
+                
+                <div class="formula-box">
+                    <div class="f-row">
+                        <span style="color:#ef4444; font-weight:800;">1. SIGN BIT</span><br>
+                        Bit is <span class="math-hl">${this.lastSign}</span>.<br>
+                        (-1)<sup>${this.lastSign}</sup> = <span class="math-hl">${this.lastSign === '1' ? '-1 (Negative)' : '+1 (Positive)'}</span>
+                    </div>
+
+                    <div class="f-row">
+                        <span style="color:#22c55e; font-weight:800;">2. EXPONENT</span><br>
+                        Binary <span style="color:#22c55e;">${this.lastExp}</span> = Decimal ${expDec}.<br>
+                        Bias for ${this.currentBits}-bit is ${bias}.<br>
+                        Actual Exponent = ${expDec} - ${bias} = <span class="math-hl">${actualExp}</span><br>
+                        Multiplier = 2<sup>${actualExp}</sup>
+                    </div>
+
+                    <div class="f-row">
+                        <span style="color:#3b82f6; font-weight:800;">3. MANTISSA (Fraction)</span><br>
+                        We calculate: 1 + (Sum of bits as fractions).<br>
+                        <span style="font-size:0.7rem; color:var(--text-muted);">*The leading '1.' is implicit and saved to save 1 bit of memory!</span>
+                    </div>
+
+                    <div style="background:rgba(168,85,247,0.1); padding:10px; border-radius:6px; margin-top:10px;">
+                        <span style="color:#a855f7; font-weight:bold;">Why 0.1 + 0.2 ≠ 0.3?</span><br>
+                        Some decimals (like 0.1) have infinite repeating binary fractions (like 1/3 in decimal). Since Mantissa has limited bits (${this.currentBits === 32 ? 23 : 52}), the tail gets chopped off, causing tiny precision errors!
+                    </div>
+                </div>
+            `;
+            return html;
+        },
+
+        clearResults: function() {
+            document.getElementById('res-hex').innerText = "0x00000000";
+            document.getElementById('res-sign').innerText = "0";
+            document.getElementById('res-exp').innerText = "00000000";
+            document.getElementById('res-man').innerText = "00000000000000000000000";
+            this.isValid = false;
+        },
+
+        resetUI: function() {
+            document.getElementById('ie-inp-val').value = '';
+            document.getElementById('grp-val').classList.remove('error');
+            document.getElementById('ie-err').style.display = 'none';
+            this.setBits(32);
+            this.clearResults();
+        }
+    };
+
+    // Auto-Init on Load
+    window.onload = function() {
+        QS_IEEE.init();
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Legal Age Limits & Retirement Countdown | QuickSolve Platinum</title>
+    <meta name="description" content="Check voting, driving, and drinking age eligibility worldwide. Track your exact live countdown to retirement. 100% Offline.">
+    <meta name="keywords" content="retirement countdown calculator, legal age to drive, legal voting age calculator, drinking age by country, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/age_suites/pro_legal.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Pro Limits & Retirement Planner">
+    <meta property="og:description" content="Know exactly when you hit your legal milestones and track your countdown to retirement freedom.">
+    <meta property="og:image" content="../logo.png">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           PRO & LEGAL LIMITS (GOD MODE V2)
+           Theme: Sunset Orange / Planner Amber
+           ========================================= */
+        #mod-legal-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: var(--bg-body, #09090b); z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .lg-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .lg-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .lg-tit { color: #f97316; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .lg-body { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 12px; }
+
+        /* Sleek Cards */
+        .lg-card { 
+            flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 10px; 
+            padding: 12px; display: flex; flex-direction: column; gap: 8px; transition: 0.2s; position: relative;
+        }
+        .lg-card:focus-within { border-color: #f97316; box-shadow: 0 0 12px rgba(249, 115, 22, 0.15); }
+
+        .lg-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; margin-bottom: 3px; }
+        
+        .lg-inp-wrap { display: flex; align-items: center; gap: 8px; background: rgba(2, 6, 23, 0.5); padding: 12px 10px; border-radius: 8px; border: 1px solid #334155; cursor: pointer; transition: 0.2s; }
+        .lg-inp-wrap:active { border-color: #f97316; }
+        .lg-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1rem; font-weight: 900; outline: none; width: 100%; font-family: monospace; cursor: pointer; }
+        .lg-inp::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; color: #f97316; }
+        
+        .lg-select-text { flex: 1; color: #fff; font-size: 0.9rem; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* Dashboard Hero - Retirement Countdown */
+        .retire-hero { background: #0f172a; border: 1px solid #f97316; border-radius: 10px; padding: 15px 12px; text-align: center; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(249, 115, 22, 0.05); }
+        .retire-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #f97316, #facc15); }
+        
+        .rh-title { font-size: 0.7rem; color: #f8fafc; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+        .rh-val { font-size: 1.8rem; font-weight: 900; color: #f97316; font-family: monospace; letter-spacing: 1px; text-shadow: 0 0 12px rgba(249, 115, 22, 0.4); line-height: 1.2; }
+        .rh-sub { font-size: 0.75rem; color: #94a3b8; font-weight: bold; margin-top: 4px; }
+        
+        /* Eligibility Grid */
+        .lg-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 5px; }
+        .el-box { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 12px; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; }
+        
+        .el-left { display: flex; align-items: center; gap: 12px; }
+        .el-icon { font-size: 1.5rem; width: 30px; text-align: center; }
+        .el-tit { font-size: 0.85rem; font-weight: 900; color: #f8fafc; text-transform: uppercase; }
+        .el-sub { font-size: 0.65rem; color: #94a3b8; font-weight: bold; }
+        
+        .el-right { text-align: right; }
+        .el-status { font-size: 0.8rem; font-weight: 900; text-transform: uppercase; padding: 4px 8px; border-radius: 6px; }
+        .status-yes { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; }
+        .status-no { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid #ef4444; }
+        .status-banned { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid #94a3b8; }
+        .el-date { font-size: 0.65rem; color: #64748b; font-weight: bold; margin-top: 4px; font-family: monospace; }
+
+        /* Custom Bottom Sheet Selector */
+        #cm-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .cm-content { background: #1e293b; border-top-left-radius: 20px; border-top-right-radius: 20px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .cm-open .cm-content { transform: translateY(0); }
+        
+        .cm-head { padding: 15px 20px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
+        .cm-head span { color: #f97316; font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .cm-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        
+        .cm-list { flex: 1; overflow-y: auto; padding: 10px 0; }
+        .cl-item { display: flex; align-items: center; padding: 15px 20px; gap: 15px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); cursor: pointer; transition: 0.2s; }
+        .cl-item:active { background: rgba(249, 115, 22, 0.1); }
+        .cl-flag { font-size: 1.5rem; }
+        .cl-details { flex: 1; display: flex; flex-direction: column; }
+        .cl-name { font-weight: 900; color: #f8fafc; font-size: 0.95rem; }
+        .cl-rules { color: #94a3b8; font-size: 0.7rem; font-weight: bold; margin-top: 2px; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <main id="mod-legal-overlay" role="main" aria-label="Legal Limits and Retirement Planner">
+        <header class="lg-head">
+            <a href="../age.html" class="qs-back-btn" aria-label="Go Back">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            </a>
+            <div class="lg-tit"><i class="fas fa-user-tie" aria-hidden="true"></i> LIFE PLANNER</div>
+        </header>
+
+        <section class="lg-body">
+            
+            <div class="lg-card">
+                <div class="lg-lbl">
+                    <label for="inp-dob">Date of Birth</label>
+                </div>
+                <div class="lg-inp-wrap" style="cursor: text;">
+                    <i class="fas fa-calendar-check" style="color:#f97316;" aria-hidden="true"></i>
+                    <input type="date" id="inp-dob" class="lg-inp" onchange="QS_Legal.startEngine()" aria-label="Enter Date of Birth">
+                </div>
+
+                <div class="lg-lbl" style="margin-top:8px;">
+                    <label>Region / Country Rules</label>
+                </div>
+                <div class="lg-inp-wrap" onclick="QS_Legal.openModal()" aria-label="Select Country">
+                    <i class="fas fa-map-marker-alt" style="color:#facc15;" aria-hidden="true"></i>
+                    <div id="sel-country-text" class="lg-select-text">India 🇮🇳</div>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                </div>
+                
+                <div class="lg-lbl" style="margin-top:8px;">
+                    <label for="inp-retire">Target Retirement Age</label>
+                </div>
+                <div class="lg-inp-wrap" style="cursor: text;">
+                    <i class="fas fa-piggy-bank" style="color:#38bdf8;" aria-hidden="true"></i>
+                    <input type="number" id="inp-retire" class="lg-inp" value="60" placeholder="60" oninput="QS_Legal.startEngine()" aria-label="Retirement Age">
+                </div>
+            </div>
+
+            <div id="empty-state" style="text-align:center; padding: 30px 20px; color:#64748b;">
+                <i class="fas fa-id-card fa-3x" style="margin-bottom:12px; opacity:0.5;"></i>
+                <div style="font-size:0.85rem; font-weight:bold;">Enter details to check your legal standing.</div>
+            </div>
+
+            <div id="legal-dashboard" class="hidden" aria-live="polite">
+                
+                <div class="retire-hero">
+                    <div class="rh-title"><i class="fas fa-plane-departure" aria-hidden="true"></i> Time to Retirement Freedom</div>
+                    <div class="rh-val" id="res-retire">00y : 00d : 00h : 00m : 00s</div>
+                    <div class="rh-sub" id="res-retire-date">Target Date: --</div>
+                </div>
+
+                <div class="lg-grid">
+                    
+                    <div class="el-box">
+                        <div class="el-left">
+                            <i class="fas fa-car el-icon" style="color:#38bdf8;" aria-hidden="true"></i>
+                            <div>
+                                <div class="el-tit">Driving License</div>
+                                <div class="el-sub" id="sub-drive">Req. Age: --</div>
+                            </div>
+                        </div>
+                        <div class="el-right">
+                            <div class="el-status" id="st-drive">--</div>
+                            <div class="el-date" id="dt-drive">--</div>
+                        </div>
+                    </div>
+
+                    <div class="el-box">
+                        <div class="el-left">
+                            <i class="fas fa-vote-yea el-icon" style="color:#8b5cf6;" aria-hidden="true"></i>
+                            <div>
+                                <div class="el-tit">Voting Rights</div>
+                                <div class="el-sub" id="sub-vote">Req. Age: --</div>
+                            </div>
+                        </div>
+                        <div class="el-right">
+                            <div class="el-status" id="st-vote">--</div>
+                            <div class="el-date" id="dt-vote">--</div>
+                        </div>
+                    </div>
+
+                    <div class="el-box">
+                        <div class="el-left">
+                            <i class="fas fa-glass-cheers el-icon" style="color:#ec4899;" aria-hidden="true"></i>
+                            <div>
+                                <div class="el-tit">Alcohol Purchase</div>
+                                <div class="el-sub" id="sub-drink">Req. Age: --</div>
+                            </div>
+                        </div>
+                        <div class="el-right">
+                            <div class="el-status" id="st-drink">--</div>
+                            <div class="el-date" id="dt-drink">--</div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <div id="cm-modal">
+        <div class="cm-content">
+            <div class="cm-head">
+                <span>Select Region</span>
+                <button class="cm-close" onclick="QS_Legal.closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="cm-list" id="country-list">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - LEGAL & RETIREMENT ENGINE
+           Features: Dynamic country rules, Custom Platinum Bottom Sheet.
+        */
+        (function() {
+            window.QS_Legal = {
+                timerId: null,
+                currentCountry: 'IN',
+                
+                // Enhanced Platinum Rules: [Driving, Voting, Drinking]
+                // 999 means Banned/Illegal. 0 means NA.
+                rules: {
+                    'IN': { n: "India", f: "🇮🇳", d: 18, v: 18, a: 21 },
+                    'US': { n: "United States", f: "🇺🇸", d: 16, v: 18, a: 21 },
+                    'UK': { n: "United Kingdom", f: "🇬🇧", d: 17, v: 18, a: 18 },
+                    'EU': { n: "Europe (General)", f: "🇪🇺", d: 18, v: 18, a: 18 },
+                    'CA': { n: "Canada", f: "🇨🇦", d: 16, v: 18, a: 19 },
+                    'AU': { n: "Australia", f: "🇦🇺", d: 16, v: 18, a: 18 },
+                    'JP': { n: "Japan", f: "🇯🇵", d: 18, v: 18, a: 20 },
+                    'DE': { n: "Germany", f: "🇩🇪", d: 18, v: 18, a: 16 },
+                    'BR': { n: "Brazil", f: "🇧🇷", d: 18, v: 16, a: 18 },
+                    'NZ': { n: "New Zealand", f: "🇳🇿", d: 16, v: 18, a: 18 },
+                    'ZA': { n: "South Africa", f: "🇿🇦", d: 18, v: 18, a: 18 },
+                    'KR': { n: "South Korea", f: "🇰🇷", d: 18, v: 19, a: 19 },
+                    'AE': { n: "UAE", f: "🇦🇪", d: 18, v: 999, a: 21 },
+                    'SA': { n: "Saudi Arabia", f: "🇸🇦", d: 18, v: 18, a: 999 }
+                },
+
+                initListener: function() {
+                    const dobInp = document.getElementById('inp-dob');
+                    if(dobInp && !dobInp.value) {
+                        let d = new Date();
+                        d.setFullYear(d.getFullYear() - 17); // 17 years ago default
+                        dobInp.value = d.toISOString().split('T')[0];
+                    }
+
+                    this.populateModal();
+
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'age_suites/pro_legal.js') {
+                            this.startEngine();
+                        }
+                    });
+
+                    if(document.readyState === 'complete' || document.readyState === 'interactive'){
+                         setTimeout(() => this.startEngine(), 100);
+                    } else {
+                         document.addEventListener('DOMContentLoaded', () => this.startEngine());
+                    }
+                },
+
+                populateModal: function() {
+                    const listObj = document.getElementById('country-list');
+                    if(!listObj) return;
+                    listObj.innerHTML = '';
+
+                    Object.keys(this.rules).forEach(code => {
+                        let c = this.rules[code];
+                        let div = document.createElement('div');
+                        div.className = "cl-item";
+                        div.onclick = () => this.selectCountry(code);
+                        
+                        let drinkTxt = c.a === 999 ? "Banned" : c.a;
+                        let voteTxt = c.v === 999 ? "NA" : c.v;
+                        
+                        div.innerHTML = `
+                            <span class="cl-flag">${c.f}</span>
+                            <div class="cl-details">
+                                <span class="cl-name">${c.n}</span>
+                                <span class="cl-rules">Drive: ${c.d} | Vote: ${voteTxt} | Drink: ${drinkTxt}</span>
+                            </div>
+                        `;
+                        listObj.appendChild(div);
+                    });
+                },
+
+                openModal: function() {
+                    const modal = document.getElementById('cm-modal');
+                    if(modal) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => { modal.classList.add('cm-open'); }, 10);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                closeModal: function() {
+                    const modal = document.getElementById('cm-modal');
+                    if(modal) {
+                        modal.classList.remove('cm-open');
+                        setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                selectCountry: function(code) {
+                    this.currentCountry = code;
+                    const c = this.rules[code];
+                    document.getElementById('sel-country-text').innerText = `${c.n} ${c.f}`;
+                    this.closeModal();
+                    this.startEngine();
+                },
+
+                startEngine: function() {
+                    const dobVal = document.getElementById('inp-dob').value;
+                    if (!dobVal) return;
+
+                    document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('legal-dashboard').classList.remove('hidden');
+
+                    if (this.timerId) clearInterval(this.timerId);
+                    
+                    this.checkEligibility();
+                    this.tickRetirement();
+                    
+                    this.timerId = setInterval(() => {
+                        this.tickRetirement();
+                    }, 1000);
+                },
+
+                formatTargetDate: function(dob, targetAge) {
+                    let targetDate = new Date(dob);
+                    targetDate.setFullYear(targetDate.getFullYear() + targetAge);
+                    return targetDate;
+                },
+
+                updateRow: function(id, dob, now, reqAge, type) {
+                    const stEl = document.getElementById(`st-${id}`);
+                    const dtEl = document.getElementById(`dt-${id}`);
+                    const subEl = document.getElementById(`sub-${id}`);
+                    
+                    if (reqAge >= 999) {
+                        subEl.innerText = `Req. Age: N/A`;
+                        stEl.className = "el-status status-banned";
+                        stEl.innerText = type === 'vote' ? "NO ELECTIONS" : "ILLEGAL/BANNED";
+                        dtEl.innerText = "Never";
+                        return;
+                    }
+
+                    subEl.innerText = `Req. Age: ${reqAge}`;
+                    
+                    const targetDate = this.formatTargetDate(dob, reqAge);
+                    const isEligible = now >= targetDate;
+
+                    if (isEligible) {
+                        stEl.className = "el-status status-yes";
+                        stEl.innerText = "ELIGIBLE";
+                        dtEl.innerText = `Since: ${targetDate.toLocaleDateString()}`;
+                    } else {
+                        stEl.className = "el-status status-no";
+                        stEl.innerText = "LOCKED";
+                        dtEl.innerText = `Unlocks: ${targetDate.toLocaleDateString()}`;
+                    }
+                },
+
+                checkEligibility: function() {
+                    const dobVal = document.getElementById('inp-dob').value;
+                    const dob = new Date(dobVal);
+                    const now = new Date();
+                    
+                    const rule = this.rules[this.currentCountry];
+
+                    this.updateRow('drive', dob, now, rule.d, 'drive');
+                    this.updateRow('vote', dob, now, rule.v, 'vote');
+                    this.updateRow('drink', dob, now, rule.a, 'drink');
+                },
+
+                tickRetirement: function() {
+                    const dobVal = document.getElementById('inp-dob').value;
+                    const retAge = parseInt(document.getElementById('inp-retire').value) || 60;
+                    
+                    const dob = new Date(dobVal);
+                    const now = new Date();
+                    const targetDate = this.formatTargetDate(dob, retAge);
+                    
+                    document.getElementById('res-retire-date').innerText = `Target Date: ${targetDate.toLocaleDateString()}`;
+
+                    if (now >= targetDate) {
+                        document.getElementById('res-retire').innerText = "RETIRED!";
+                        return;
+                    }
+
+                    let diffMs = targetDate - now;
+                    let years = targetDate.getFullYear() - now.getFullYear();
+                    let tempDate = new Date(now);
+                    tempDate.setFullYear(tempDate.getFullYear() + years);
+                    if (tempDate > targetDate) {
+                        years--;
+                        tempDate.setFullYear(tempDate.getFullYear() - 1);
+                    }
+                    
+                    diffMs = targetDate - tempDate;
+                    
+                    let d = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                    let h = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
+                    let m = Math.floor((diffMs / 1000 / 60) % 60);
+                    let s = Math.floor((diffMs / 1000) % 60);
+
+                    const pad = (num) => num.toString().padStart(2, '0');
+                    document.getElementById('res-retire').innerText = `${pad(years)}y : ${pad(d)}d : ${pad(h)}h : ${pad(m)}m : ${pad(s)}s`;
+                }
+            };
+            window.QS_Legal.initListener();
+        })();
+    </script>
+</body>
+</html>

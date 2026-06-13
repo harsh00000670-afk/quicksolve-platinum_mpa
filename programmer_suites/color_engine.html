@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+    
+    <title>Color Engine Pro | HEX, RGB, Flutter & WCAG Checker | QuickSolve Platinum</title>
+    <meta name="description" content="Advanced universal color engine for developers. Convert HEX to RGB, HSL, CMYK, Android, and Flutter color codes instantly. Check WCAG contrast ratios in real-time. 100% Offline.">
+    <meta name="keywords" content="color converter, hex to rgb, hex to cmyk, flutter color code, android color code, wcag contrast checker, color palette generator, programmer color tools, css color converter, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/color_engine.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Color Engine Pro - The Ultimate UI/UX Dev Tool">
+    <meta property="og:description" content="Convert any color format instantly. Ensure perfect readability with our built-in WCAG Contrast Checker.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
+        /* =========================================
+           COLOR ENGINE (GOD MODE V2)
+           Theme: Cyberpunk Terminal with Dynamic Colors
+           ========================================= */
+        body { margin: 0; background-color: var(--bg-body, #09090b); }
+
+        #mod-color-overlay {
+            width: 100vw; min-height: 100vh;
+            background-color: var(--bg-body, #09090b); 
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: monospace;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .ce-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .ce-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; }
+        .ce-tit { color: #f43f5e; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .ce-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Smart Input Area */
+        .ce-grp { flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 10px; padding: 12px; transition: 0.2s; display: flex; flex-direction: column; }
+        .ce-grp:focus-within { border-color: #f43f5e; box-shadow: 0 0 15px rgba(244, 63, 94, 0.15); }
+        .ce-grp.error { border-color: #ef4444 !important; box-shadow: 0 0 15px rgba(239, 68, 68, 0.1) !important; }
+        
+        .ce-lbl { color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .ce-inp-wrap { display: flex; align-items: center; gap: 10px; }
+        .ce-inp { background: transparent; border: none; color: #fff; font-size: 1.5rem; width: 100%; outline: none; font-family: monospace; font-weight: 900; }
+        .ce-inp::placeholder { color: #475569; font-weight: normal; }
+        
+        /* Live Swatch */
+        .color-swatch { width: 45px; height: 45px; border-radius: 10px; border: 2px solid #334155; background-color: #f43f5e; box-shadow: 0 0 15px rgba(0,0,0,0.5); transition: background-color 0.2s; flex-shrink: 0; }
+
+        /* Results Grids */
+        .res-sec { flex-shrink: 0; background: #0f172a; border: 1px dashed #334155; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .res-tit { font-size: 0.75rem; color: #f43f5e; font-weight: 900; text-transform: uppercase; border-bottom: 1px dashed #334155; padding-bottom: 5px; margin-bottom: 5px; }
+        
+        .fmt-row { display: flex; justify-content: space-between; align-items: center; background: rgba(2, 6, 23, 0.5); padding: 8px; border-radius: 6px; border: 1px solid #1e293b; transition: 0.2s; cursor: pointer; }
+        .fmt-row:active { border-color: #f43f5e; }
+        .fmt-lbl { font-size: 0.65rem; color: #94a3b8; font-weight: bold; width: 50px; }
+        .fmt-val { font-size: 0.9rem; color: #f8fafc; font-weight: bold; flex: 1; margin-left: 10px; word-break: break-all; }
+        .fmt-copy { color: #64748b; cursor: pointer; font-size: 0.9rem; padding: 5px; }
+
+        /* WCAG Contrast Checker */
+        .wcag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .wcag-card { border-radius: 8px; padding: 15px; text-align: center; border: 1px solid #334155; position: relative; overflow: hidden; }
+        .wcag-card.w-light { background: #ffffff; color: #000000; }
+        .wcag-card.w-dark { background: #000000; color: #ffffff; }
+        .wcag-text { font-size: 1.5rem; font-weight: 900; font-family: sans-serif; }
+        .wcag-sub { font-size: 0.65rem; font-family: monospace; font-weight: bold; margin-top: 5px; opacity: 0.8; }
+        
+        .wcag-badge { position: absolute; top: 5px; right: 5px; font-size: 0.55rem; padding: 2px 5px; border-radius: 4px; font-weight: 900; }
+        .badge-pass { background: #22c55e; color: #000; }
+        .badge-fail { background: #ef4444; color: #fff; }
+
+        /* Color Palette Generator */
+        .palette-box { display: flex; border-radius: 8px; overflow: hidden; height: 40px; border: 1px solid #334155; margin-top: 5px; }
+        .pal-color { flex: 1; display: flex; justify-content: center; align-items: center; font-size: 0.55rem; font-weight: bold; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.8); cursor: pointer; }
+
+        /* The "WHY" Button */
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #38bdf8; color: #38bdf8; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(56, 189, 248, 0.15); transform: scale(0.98); }
+
+        /* STEPS MODAL */
+        #ce-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #ce-steps-box { background: #1e293b; border: 1px solid #38bdf8; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(56, 189, 248, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #38bdf8; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+
+        .math-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; text-align: center; }
+        .mg-box { background: #020617; border: 1px solid #334155; border-radius: 8px; padding: 10px; }
+        .mg-lbl { font-size: 0.65rem; font-weight: bold; text-transform: uppercase; color: #94a3b8; }
+        .mg-val { font-size: 1.5rem; font-weight: 900; margin-top: 5px; }
+        .mg-hex { font-size: 0.8rem; color: #f59e0b; margin-top: 2px; }
+    </style>
+</head>
+
+<body>
+
+<main id="mod-color-overlay" role="main">
+    <header class="ce-head" role="banner">
+        <a href="../programmer.html" class="qs-back-btn" aria-label="Go back to Programmer Suite">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </a>
+<h1 class="ce-tit" style="position: absolute; left: 50%; transform: translateX(-50%); margin: 0; color: #a78bfa; font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 12px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; text-shadow: 0 0 15px rgba(167, 139, 250, 0.4); padding-left: 40px;">
+    <i class="fas fa-palette" aria-hidden="true"></i> COLOR ENGINE PRO
+</h1>
+
+    </header>
+
+    <div class="ce-body">
+        
+        <section class="ce-grp" id="grp-val" aria-labelledby="input-heading">
+            <h2 id="input-heading" class="sr-only" style="display:none;">Color Input</h2>
+            <div class="ce-lbl">
+                <label for="ce-inp-val">Universal Color Input</label>
+                <span style="font-size:0.6rem; color:#f59e0b;" aria-hidden="true">Auto-detects format</span>
+            </div>
+            <div class="ce-inp-wrap">
+                <div class="color-swatch" id="main-swatch" aria-label="Color Preview" role="img"></div>
+                <input type="text" id="ce-inp-val" class="ce-inp" placeholder="#F43F5E or rgb(244,63,94)" aria-label="Enter HEX, RGB, or HSL color value" oninput="QS_Color.parseInput()" autocomplete="off">
+            </div>
+        </section>
+
+        <section class="res-sec" aria-labelledby="web-standards-heading">
+            <h2 id="web-standards-heading" class="res-tit">Web Core Standards</h2>
+            
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy HEX value" onclick="QS_Color.copy('res-hex')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-hex')">
+                <span class="fmt-lbl">HEX</span>
+                <span class="fmt-val" id="res-hex" aria-live="polite">#000000</span>
+                <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
+            </div>
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy RGB value" onclick="QS_Color.copy('res-rgb')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-rgb')">
+                <span class="fmt-lbl">RGB</span>
+                <span class="fmt-val" id="res-rgb" aria-live="polite">rgb(0, 0, 0)</span>
+                <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
+            </div>
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy HSL value" onclick="QS_Color.copy('res-hsl')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-hsl')">
+                <span class="fmt-lbl">HSL</span>
+                <span class="fmt-val" id="res-hsl" aria-live="polite">hsl(0, 0%, 0%)</span>
+                <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
+            </div>
+        </section>
+
+        <section class="res-sec" style="border-color: #a855f7;" aria-labelledby="app-dev-heading">
+            <h2 id="app-dev-heading" class="res-tit" style="color: #a855f7;">App Dev / Native</h2>
+            
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy Flutter value" onclick="QS_Color.copy('res-flutter')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-flutter')">
+                <span class="fmt-lbl" style="color:#a855f7;">Flutter</span>
+                <span class="fmt-val" id="res-flutter" aria-live="polite">Color(0xFF000000)</span>
+                <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
+            </div>
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy Android value" onclick="QS_Color.copy('res-android')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-android')">
+                <span class="fmt-lbl" style="color:#a855f7;">Android</span>
+                <span class="fmt-val" id="res-android" aria-live="polite">#FF000000</span>
+                <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
+            </div>
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy iOS Swift value" onclick="QS_Color.copy('res-ios')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-ios')">
+                <span class="fmt-lbl" style="color:#a855f7;">iOS (Swift)</span>
+                <span class="fmt-val" id="res-ios" aria-live="polite">UIColor(r:0, g:0, b:0, a:1)</span>
+                <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
+            </div>
+        </section>
+
+        <section class="res-sec" style="border-color: #06b6d4;" aria-labelledby="print-adv-heading">
+            <h2 id="print-adv-heading" class="res-tit" style="color: #06b6d4;">Print & Advanced</h2>
+            
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy CMYK value" onclick="QS_Color.copy('res-cmyk')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-cmyk')">
+                <span class="fmt-lbl" style="color:#06b6d4;">CMYK</span>
+                <span class="fmt-val" id="res-cmyk" aria-live="polite">cmyk(0%, 0%, 0%, 100%)</span>
+                <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
+            </div>
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy HSV value" onclick="QS_Color.copy('res-hsv')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-hsv')">
+                <span class="fmt-lbl" style="color:#06b6d4;">HSV</span>
+                <span class="fmt-val" id="res-hsv" aria-live="polite">hsv(0, 0%, 0%)</span>
+                <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
+            </div>
+        </section>
+
+        <section class="res-sec" style="border-color: #22c55e;" aria-labelledby="wcag-heading">
+            <h2 id="wcag-heading" class="res-tit" style="color: #22c55e;">WCAG Accessibility Contrast</h2>
+            <div class="wcag-grid">
+                <div class="wcag-card w-light" id="wcag-bg-light" aria-live="polite">
+                    <span class="wcag-badge badge-pass" id="wcag-badge-light">PASS</span>
+                    <div class="wcag-text" id="wcag-text-light" aria-hidden="true">Aa</div>
+                    <div class="wcag-sub" id="wcag-ratio-light">Ratio: 21:1</div>
+                </div>
+                <div class="wcag-card w-dark" id="wcag-bg-dark" aria-live="polite">
+                    <span class="wcag-badge badge-fail" id="wcag-badge-dark">FAIL</span>
+                    <div class="wcag-text" id="wcag-text-dark" aria-hidden="true">Aa</div>
+                    <div class="wcag-sub" id="wcag-ratio-dark">Ratio: 1:1</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="res-sec" style="border-color: #f59e0b;" aria-labelledby="palette-heading">
+            <h2 id="palette-heading" class="res-tit" style="color: #f59e0b;">Harmonic Palette (Analogous)</h2>
+            <div class="palette-box" id="palette-box" role="group" aria-label="Generated Color Palette">
+                </div>
+        </section>
+
+        <button class="btn-why" aria-haspopup="dialog" aria-expanded="false" aria-label="Open RGB to Hex Math Decoder" onclick="QS_Color.showSteps()">
+            <i class="fas fa-vial" aria-hidden="true"></i> Decode RGB Math Matrix
+        </button>
+
+    </div>
+
+    <div id="ce-steps-modal" role="dialog" aria-modal="true" aria-labelledby="modal-math-title">
+        <div id="ce-steps-box">
+            <header class="steps-head">
+                <h2 id="modal-math-title" style="margin: 0; font-size: 1rem;"><i class="fas fa-microscope" aria-hidden="true"></i> RGB TO HEX LOGIC</h2>
+                <button class="steps-close" aria-label="Close Math Matrix" onclick="QS_Color.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </header>
+            <div class="steps-content" id="ce-steps-content" aria-live="polite">
+                </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    /* QUICKSOLVE PLATINUM - COLOR ENGINE PRO (MPA STANDALONE)
+       Features: Universal auto-parser, Native App codes (Flutter, Android, iOS), WCAG Contrast Math, CMYK/HSV.
+    */
+    const QS_Color = {
+        
+        lastRGB: { r: 0, g: 0, b: 0 },
+        lastHex: "#000000",
+        isValid: false,
+
+        init: function() {
+            console.log("Color Engine Pro Ready 🚀");
+            document.getElementById('ce-inp-val').value = '#F43F5E'; // Default Theme Color
+            this.parseInput();
+        },
+
+        // --- PLATINUM FEATURE: Universal Parser ---
+        parseInput: function() {
+            let raw = document.getElementById('ce-inp-val').value.trim().toLowerCase();
+            const grp = document.getElementById('grp-val');
+            
+            grp.classList.remove('error');
+            this.isValid = false;
+
+            if (!raw) {
+                this.updateUI({ r: 0, g: 0, b: 0 }, "#000000");
+                return;
+            }
+
+            let rgb = null;
+
+            // 1. HEX Detect (e.g. #fff, #ff0055, ff0055)
+            const hexMatch = raw.match(/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i);
+            if (hexMatch) {
+                let hex = hexMatch[1];
+                if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
+                rgb = {
+                    r: parseInt(hex.substring(0,2), 16),
+                    g: parseInt(hex.substring(2,4), 16),
+                    b: parseInt(hex.substring(4,6), 16)
+                };
+            }
+            // 2. RGB Detect (e.g. rgb(255, 0, 50) or 255,0,50)
+            else if (raw.includes(',')) {
+                let nums = raw.match(/\d+/g);
+                if (nums && nums.length >= 3) {
+                    rgb = {
+                        r: Math.min(255, Math.max(0, parseInt(nums[0]))),
+                        g: Math.min(255, Math.max(0, parseInt(nums[1]))),
+                        b: Math.min(255, Math.max(0, parseInt(nums[2])))
+                    };
+                    // Basic HSL detection catch
+                    if (raw.includes('hsl')) {
+                        rgb = this.hslToRgb(parseInt(nums[0]), parseInt(nums[1])/100, parseInt(nums[2])/100);
+                    }
+                }
+            }
+
+            if (rgb) {
+                this.isValid = true;
+                let hexStr = "#" + ((1 << 24) + (rgb.r << 16) + (rgb.g << 8) + rgb.b).toString(16).slice(1).toUpperCase();
+                this.updateUI(rgb, hexStr);
+            } else {
+                grp.classList.add('error');
+            }
+        },
+
+        updateUI: function(rgb, hex) {
+            this.lastRGB = rgb;
+            this.lastHex = hex;
+
+            // Swatch
+            document.getElementById('main-swatch').style.backgroundColor = hex;
+
+            // 1. Web Formats
+            document.getElementById('res-hex').innerText = hex;
+            document.getElementById('res-rgb').innerText = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+            
+            const hsl = this.rgbToHsl(rgb.r, rgb.g, rgb.b);
+            document.getElementById('res-hsl').innerText = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+
+            // 2. App Dev Formats
+            document.getElementById('res-flutter').innerText = `Color(0xFF${hex.replace('#','')})`;
+            document.getElementById('res-android').innerText = `#FF${hex.replace('#','')}`;
+            
+            let iR = (rgb.r / 255).toFixed(3);
+            let iG = (rgb.g / 255).toFixed(3);
+            let iB = (rgb.b / 255).toFixed(3);
+            document.getElementById('res-ios').innerText = `UIColor(red:${iR}, green:${iG}, blue:${iB}, alpha:1)`;
+
+            // 3. Print & Scientific
+            const cmyk = this.rgbToCmyk(rgb.r, rgb.g, rgb.b);
+            document.getElementById('res-cmyk').innerText = `cmyk(${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%)`;
+            
+            const hsv = this.rgbToHsv(rgb.r, rgb.g, rgb.b);
+            document.getElementById('res-hsv').innerText = `hsv(${hsv.h}, ${hsv.s}%, ${hsv.v}%)`;
+
+            // 4. WCAG Contrast Check
+            this.calcContrast(rgb);
+
+            // 5. Palette Gen
+            this.genPalette(hsl);
+        },
+
+        // --- PLATINUM FEATURE: WCAG Contrast Math ---
+        getLuminance: function(r, g, b) {
+            let a = [r, g, b].map(function (v) {
+                v /= 255;
+                return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+            });
+            return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+        },
+
+        calcContrast: function(rgb) {
+            const lumTarget = this.getLuminance(rgb.r, rgb.g, rgb.b);
+            const lumWhite = this.getLuminance(255, 255, 255); // 1.0
+            const lumBlack = this.getLuminance(0, 0, 0); // 0.0
+
+            const ratioWhite = (lumTarget > lumWhite) ? (lumTarget + 0.05) / (lumWhite + 0.05) : (lumWhite + 0.05) / (lumTarget + 0.05);
+            const ratioBlack = (lumTarget > lumBlack) ? (lumTarget + 0.05) / (lumBlack + 0.05) : (lumBlack + 0.05) / (lumTarget + 0.05);
+
+            const updateCard = (type, ratio, textColor) => {
+                const elRatio = document.getElementById(`wcag-ratio-${type}`);
+                const elBadge = document.getElementById(`wcag-badge-${type}`);
+                const elText = document.getElementById(`wcag-text-${type}`);
+                
+                elRatio.innerText = `Ratio: ${ratio.toFixed(2)}:1`;
+                elText.style.color = this.lastHex; // Test color applied to text
+
+                if (ratio >= 4.5) {
+                    elBadge.innerText = "AA PASS";
+                    elBadge.className = "wcag-badge badge-pass";
+                } else if (ratio >= 3.0) {
+                    elBadge.innerText = "AA LARGE"; // Passes for large text only
+                    elBadge.className = "wcag-badge badge-pass";
+                    elBadge.style.background = "#f59e0b";
+                } else {
+                    elBadge.innerText = "FAIL";
+                    elBadge.className = "wcag-badge badge-fail";
+                }
+            };
+
+            updateCard('light', ratioWhite, '#FFFFFF');
+            updateCard('dark', ratioBlack, '#000000');
+        },
+
+        // --- PLATINUM FEATURE: Harmonious Palette ---
+        genPalette: function(hsl) {
+            const box = document.getElementById('palette-box');
+            box.innerHTML = '';
+            
+            // Analogous colors (H-30, H, H+30)
+            let h1 = (hsl.h + 330) % 360;
+            let h3 = (hsl.h + 30) % 360;
+
+            const c1 = this.hslToRgbHex(h1, hsl.s/100, hsl.l/100);
+            const c2 = this.lastHex;
+            const c3 = this.hslToRgbHex(h3, hsl.s/100, hsl.l/100);
+
+            [c1, c2, c3].forEach(hex => {
+                let div = document.createElement('div');
+                div.className = "pal-color";
+                div.style.backgroundColor = hex;
+                div.innerText = hex;
+                div.setAttribute("role", "button");
+                div.setAttribute("tabindex", "0");
+                div.setAttribute("aria-label", `Apply palette color ${hex}`);
+                div.onclick = () => { document.getElementById('ce-inp-val').value = hex; this.parseInput(); };
+                div.onkeydown = (e) => { if(e.key === 'Enter') div.onclick(); };
+                box.appendChild(div);
+            });
+        },
+
+        // Conversion Math Functions
+        rgbToHsl: function(r, g, b) {
+            r /= 255, g /= 255, b /= 255;
+            let max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max == min) { h = s = 0; } 
+            else {
+                let d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+        },
+
+        hslToRgb: function(h, s, l) {
+            let r, g, b;
+            if (s === 0) { r = g = b = l; } 
+            else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1/6) return p + (q - p) * 6 * t;
+                    if (t < 1/2) return q;
+                    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                    return p;
+                };
+                let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                let p = 2 * l - q;
+                h /= 360;
+                r = hue2rgb(p, q, h + 1/3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1/3);
+            }
+            return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+        },
+
+        hslToRgbHex: function(h, s, l) {
+            const rgb = this.hslToRgb(h, s, l);
+            return "#" + ((1 << 24) + (rgb.r << 16) + (rgb.g << 8) + rgb.b).toString(16).slice(1).toUpperCase();
+        },
+
+        rgbToCmyk: function(r, g, b) {
+            let c = 1 - (r / 255);
+            let m = 1 - (g / 255);
+            let y = 1 - (b / 255);
+            let k = Math.min(c, Math.min(m, y));
+            
+            if (k === 1) { c = 0; m = 0; y = 0; } 
+            else {
+                c = (c - k) / (1 - k);
+                m = (m - k) / (1 - k);
+                y = (y - k) / (1 - k);
+            }
+            return { c: Math.round(c * 100), m: Math.round(m * 100), y: Math.round(y * 100), k: Math.round(k * 100) };
+        },
+
+        rgbToHsv: function(r, g, b) {
+            r /= 255, g /= 255, b /= 255;
+            let max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, v = max;
+            let d = max - min;
+            s = max == 0 ? 0 : d / max;
+
+            if (max == min) { h = 0; } 
+            else {
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            return { h: Math.round(h * 360), s: Math.round(s * 100), v: Math.round(v * 100) };
+        },
+
+        triggerHaptic: function() {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        },
+
+        copy: function(id) {
+            const val = document.getElementById(id).innerText;
+            const temp = document.createElement('textarea');
+            temp.value = val;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            this.triggerHaptic();
+        },
+
+        // --- THE "WHY" VISUALIZER: HEX/RGB Core Concept ---
+        showSteps: function() {
+            const contentBox = document.getElementById('ce-steps-content');
+            
+            if (!this.isValid) {
+                contentBox.innerHTML = `<div style="text-align:center; padding:20px; color:#ef4444;"><i class="fas fa-exclamation-triangle fa-2x" aria-hidden="true"></i><br><br>Enter valid color to decode!</div>`;
+            } else {
+                let rHex = this.lastRGB.r.toString(16).padStart(2,'0').toUpperCase();
+                let gHex = this.lastRGB.g.toString(16).padStart(2,'0').toUpperCase();
+                let bHex = this.lastRGB.b.toString(16).padStart(2,'0').toUpperCase();
+
+                let html = `
+                    <div style="margin-bottom:15px; border-left:3px solid #38bdf8; padding-left:10px;">
+                        <span style="color:#38bdf8; font-weight:bold;">Hexadecimal Color Matrix:</span><br>
+                        Hex colors like <span style="color:${this.lastHex}">${this.lastHex}</span> are just three 8-bit numbers glued together!
+                    </div>
+                    
+                    <div class="math-grid">
+                        <div class="mg-box" style="border-top:3px solid #ef4444;">
+                            <div class="mg-lbl">Red (R)</div>
+                            <div class="mg-val" style="color:#ef4444;">${this.lastRGB.r}</div>
+                            <div class="mg-hex">0x${rHex}</div>
+                        </div>
+                        <div class="mg-box" style="border-top:3px solid #22c55e;">
+                            <div class="mg-lbl">Green (G)</div>
+                            <div class="mg-val" style="color:#22c55e;">${this.lastRGB.g}</div>
+                            <div class="mg-hex">0x${gHex}</div>
+                        </div>
+                        <div class="mg-box" style="border-top:3px solid #3b82f6;">
+                            <div class="mg-lbl">Blue (B)</div>
+                            <div class="mg-val" style="color:#3b82f6;">${this.lastRGB.b}</div>
+                            <div class="mg-hex">0x${bHex}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top:15px; background:rgba(2,6,23,0.5); padding:10px; border-radius:6px; font-size:0.75rem; color:var(--text-muted);">
+                        <b>Additive Light (RGB):</b> Screens start Black. We add Red, Green, and Blue light to create colors. Maxing all three (255, 255, 255) makes pure White!
+                    </div>
+                `;
+                contentBox.innerHTML = html;
+            }
+
+            const modal = document.getElementById('ce-steps-modal');
+            const box = document.getElementById('ce-steps-box');
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.style.opacity = '1'; box.style.transform = 'translateY(0)'; }, 10);
+            this.triggerHaptic();
+        },
+
+        hideSteps: function() {
+            const modal = document.getElementById('ce-steps-modal');
+            const box = document.getElementById('ce-steps-box');
+            modal.style.opacity = '0';
+            box.style.transform = 'translateY(20px)';
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+            this.triggerHaptic();
+        }
+    };
+
+    // Initialize Engine
+    window.onload = function() {
+        QS_Color.init();
+    };
+</script>
+</body>
+</html>

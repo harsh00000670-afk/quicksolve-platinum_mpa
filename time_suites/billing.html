@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Work Billing Pro | The Freelancer | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           WORK BILLING - PLATINUM ENGINE (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-green: #10b981;
+            --accent-green-glow: rgba(16, 185, 129, 0.2);
+            --accent-gold: #fbbd23;
+            --accent-red: #ef4444;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.3; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 200px; height: 200px; background: var(--accent-green); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-gold); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .head-left { display: flex; align-items: center; gap: 12px; }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-green); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #10b981, #fbbd23); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--accent-green); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CARDS & INPUTS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; 
+            padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 40px var(--accent-green-glow);
+        }
+        .inp-group { margin-bottom: 18px; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        
+        /* FAUX TIME FIELD (Triggers Bottom Sheet) */
+        .faux-time {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 10px; font-size: 1.1rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; box-sizing: border-box;
+        }
+        .faux-time:active { border-color: var(--accent-green); background: rgba(16, 185, 129, 0.05); transform: scale(0.98);}
+        .faux-time i { color: var(--accent-green); }
+
+        /* NORMAL INPUTS */
+        .inp-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 10px; font-size: 1rem; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .inp-field:focus { border-color: var(--accent-green); box-shadow: 0 0 10px var(--accent-green-glow); }
+
+        .row-inputs { display: flex; gap: 15px; }
+        .row-inputs .inp-group { flex: 1; }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #10b981, #fbbd23);
+            color: #000; border: none; padding: 14px; border-radius: 10px; font-size: 0.95rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px var(--accent-green-glow); display: flex; justify-content: center; gap: 8px; align-items: center;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 16px; 
+            padding: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px var(--accent-green-glow); display: none; text-align: center;
+        }
+        .res-lbl { font-size: 0.75rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; margin-bottom: 5px; }
+        .res-main-val { font-size: 2.2rem; color: var(--accent-green); font-weight: 900; font-family: 'JetBrains Mono', monospace; margin-bottom: 20px; line-height: 1.2;}
+        .res-main-val small { font-size: 1.2rem; color: var(--text-sub); }
+        
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .res-box { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 15px 10px; }
+        .res-box-lbl { font-size: 0.65rem; color: var(--text-sub); text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
+        .res-box-val { font-size: 1.1rem; color: var(--text-main); font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+
+        /* =========================================
+           FAADU TIME DRUM MODAL (BOTTOM SHEET)
+           ========================================= */
+        .drum-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7);
+            z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s; backdrop-filter: blur(5px);
+        }
+        .drum-sheet {
+            position: fixed; bottom: -100%; left: 0; width: 100%; background: #151322;
+            border-top-left-radius: 24px; border-top-right-radius: 24px; border-top: 1px solid var(--accent-green);
+            z-index: 1001; padding: 20px; box-sizing: border-box; box-shadow: 0 -10px 40px var(--accent-green-glow);
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; gap: 15px;
+        }
+        .drum-overlay.show { display: block; opacity: 1; }
+        .drum-sheet.show { bottom: 0; }
+
+        .ds-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .ds-title { color: var(--text-main); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .drum-wrapper { display: flex; justify-content: space-around; align-items: center; position: relative; padding: 5px 0;}
+        .drum-col { display: flex; flex-direction: column; align-items: center; width: 30%; position: relative; z-index: 2; }
+        .drum-btn { background: transparent; border: none; color: var(--accent-green); font-size: 1.3rem; padding: 2px 0; cursor: pointer; transition: 0.2s; }
+        .drum-btn:active { transform: scale(0.8); }
+        
+        .d-list { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; margin: 5px 0; }
+        .d-item { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 600; color: var(--text-dim); transition: 0.3s; }
+        .d-item.active { font-size: 1.4rem; font-weight: 800; color: var(--text-main); }
+        .d-item.near { color: var(--text-sub); }
+
+        .drum-highlight {
+            position: absolute; top: 50%; left: 0; width: 100%; height: 42px; transform: translateY(-50%);
+            border: 2px solid var(--accent-green); border-radius: 10px; background: rgba(16, 185, 129, 0.05);
+            z-index: 1; pointer-events: none;
+        }
+        .drum-sep { font-size: 1.5rem; font-weight: 900; color: var(--text-dim); z-index: 2; margin-top: 5px;}
+
+        .ds-actions { display: flex; gap: 15px; margin-top: 10px; }
+        .ds-btn { flex: 1; padding: 14px; border-radius: 10px; font-weight: 800; text-transform: uppercase; font-size: 0.9rem; cursor: pointer; }
+        .ds-cancel { background: transparent; border: 1px solid var(--text-dim); color: var(--text-sub); }
+        .ds-cancel:active { background: rgba(255,255,255,0.05); }
+        .ds-set { background: var(--accent-green); border: none; color: #000; box-shadow: 0 0 15px var(--accent-green-glow); }
+        .ds-set:active { transform: scale(0.98); }
+
+        /* CUSTOM TOAST (NO ALERTS) */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4); display: flex; align-items: center; gap: 8px;
+        }
+        .toast.show { bottom: 30px; }
+
+        /* ANIMATIONS */
+        .anim-slide { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header">
+        <div class="head-left">
+            <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+            <div class="brand"><i class="fas fa-file-invoice-dollar"></i> WORK BILLING</div>
+        </div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto;">
+        
+        <div class="hero anim-slide" style="animation-delay: 0.1s;">
+            <h1>The Freelancer</h1>
+            <p>> calc_payout --precision</p>
+        </div>
+
+        <div class="config-card anim-slide" style="animation-delay: 0.2s;">
+            
+            <div class="row-inputs">
+                <div class="inp-group">
+                    <label class="inp-lbl">Shift Start</label>
+                    <div class="faux-time" onclick="SSJ4_TimePicker.open('t-start')" id="t-start-disp">
+                        <span id="t-start-val">09:00 AM</span>
+                    </div>
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">Shift End</label>
+                    <div class="faux-time" onclick="SSJ4_TimePicker.open('t-end')" id="t-end-disp">
+                        <span id="t-end-val">05:00 PM</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-inputs">
+                <div class="inp-group">
+                    <label class="inp-lbl">Unpaid Break (Mins)</label>
+                    <input type="number" id="break-mins" class="inp-field" value="60" min="0">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">Hourly Rate ($/₹)</label>
+                    <input type="number" id="hourly-rate" class="inp-field" value="25" min="1">
+                </div>
+            </div>
+
+            <button class="calc-btn" onclick="SSJ4_Billing.calc()">
+                <i class="fas fa-money-check-alt"></i> Generate Payout
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container"></div>
+
+    </main>
+
+    <div class="drum-overlay" id="drum-overlay" onclick="SSJ4_TimePicker.close()"></div>
+    <div class="drum-sheet" id="drum-sheet">
+        <div class="ds-header">
+            <span class="ds-title" id="ds-main-title">Select Time</span>
+            <i class="fas fa-times" style="color:var(--text-sub); cursor:pointer; font-size: 1.2rem;" onclick="SSJ4_TimePicker.close()"></i>
+        </div>
+        
+        <div class="drum-wrapper">
+            <div class="drum-highlight"></div>
+            
+            <div class="drum-col">
+                <button class="drum-btn" onclick="SSJ4_TimePicker.move('h', -1)"><i class="fas fa-chevron-up"></i></button>
+                <div class="d-list" id="p-hours"></div>
+                <button class="drum-btn" onclick="SSJ4_TimePicker.move('h', 1)"><i class="fas fa-chevron-down"></i></button>
+            </div>
+
+            <div class="drum-sep">:</div>
+
+            <div class="drum-col">
+                <button class="drum-btn" onclick="SSJ4_TimePicker.move('m', -1)"><i class="fas fa-chevron-up"></i></button>
+                <div class="d-list" id="p-mins"></div>
+                <button class="drum-btn" onclick="SSJ4_TimePicker.move('m', 1)"><i class="fas fa-chevron-down"></i></button>
+            </div>
+
+            <div class="drum-col">
+                <button class="drum-btn" onclick="SSJ4_TimePicker.move('a', -1)"><i class="fas fa-chevron-up"></i></button>
+                <div class="d-list" id="p-ampm"></div>
+                <button class="drum-btn" onclick="SSJ4_TimePicker.move('a', 1)"><i class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+
+        <div class="ds-actions">
+            <button class="ds-btn ds-cancel" onclick="SSJ4_TimePicker.close()">Cancel</button>
+            <button class="ds-btn ds-set" onclick="SSJ4_TimePicker.set()">Set Time</button>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - WORK BILLING & TIME DRUM ENGINE */
+
+        // Global Custom Toast (Replaces Alert)
+        function showToast(msg) {
+            const toast = document.getElementById('custom-toast');
+            document.getElementById('toast-msg').innerText = msg;
+            if(window.navigator && window.navigator.vibrate) { try { navigator.vibrate([50, 50, 50]); } catch(e){} }
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Data Storage for the Faux Inputs
+        const timeState = {
+            't-start': { h: 9, m: 0, a: 'AM' },
+            't-end': { h: 5, m: 0, a: 'PM' }
+        };
+
+        const formatTimeStr = (t) => {
+            let hStr = String(t.h).padStart(2, '0');
+            let mStr = String(t.m).padStart(2, '0');
+            return `${hStr}:${mStr} ${t.a}`;
+        };
+
+        // --- CUSTOM BOTTOM-SHEET TIME PICKER ENGINE ---
+        window.SSJ4_TimePicker = {
+            hours: Array.from({length: 12}, (_, i) => String(i + 1).padStart(2, '0')),
+            mins: Array.from({length: 60}, (_, i) => String(i).padStart(2, '0')),
+            ampm: ['AM', 'PM'],
+            
+            c_h: 8, c_m: 0, c_a: 0,
+            activeTarget: null,
+
+            init: function() {
+                document.getElementById('t-start-val').innerText = formatTimeStr(timeState['t-start']);
+                document.getElementById('t-end-val').innerText = formatTimeStr(timeState['t-end']);
+            },
+
+            haptic: function() {
+                if(window.navigator && window.navigator.vibrate) { try { navigator.vibrate(15); } catch(e){} }
+            },
+
+            open: function(targetId) {
+                this.haptic();
+                this.activeTarget = targetId;
+                
+                const curr = timeState[targetId];
+                this.c_h = curr.h - 1; // 0-indexed
+                this.c_m = curr.m;
+                this.c_a = curr.a === 'AM' ? 0 : 1;
+
+                document.getElementById('ds-main-title').innerText = targetId === 't-start' ? 'Select Start Time' : 'Select End Time';
+
+                this.render();
+                
+                document.getElementById('drum-overlay').classList.add('show');
+                setTimeout(() => { document.getElementById('drum-sheet').classList.add('show'); }, 10);
+            },
+
+            close: function() {
+                this.haptic();
+                document.getElementById('drum-sheet').classList.remove('show');
+                setTimeout(() => { document.getElementById('drum-overlay').classList.remove('show'); }, 300);
+            },
+
+            set: function() {
+                this.haptic();
+                timeState[this.activeTarget] = {
+                    h: parseInt(this.hours[this.c_h]),
+                    m: parseInt(this.mins[this.c_m]),
+                    a: this.ampm[this.c_a]
+                };
+                document.getElementById(`${this.activeTarget}-val`).innerText = formatTimeStr(timeState[this.activeTarget]);
+                this.close();
+            },
+
+            move: function(type, dir) {
+                this.haptic();
+                if(type === 'h') this.c_h = (this.c_h + dir + this.hours.length) % this.hours.length;
+                else if(type === 'm') this.c_m = (this.c_m + dir + this.mins.length) % this.mins.length;
+                else if(type === 'a') this.c_a = (this.c_a + dir + this.ampm.length) % this.ampm.length;
+                this.render();
+            },
+
+            renderCol: function(arr, centerIdx, elementId) {
+                const el = document.getElementById(elementId);
+                let html = '';
+                for(let i = -1; i <= 1; i++) {
+                    let idx = (centerIdx + i + arr.length) % arr.length;
+                    // For AM/PM, avoid wrapping if only 2 elements, just clamp it visually or logic. 
+                    // Actually, modulo works fine for 2 elements too.
+                    let cls = i === 0 ? 'd-item active' : 'd-item near';
+                    html += `<div class="${cls}">${arr[idx]}</div>`;
+                }
+                el.innerHTML = html;
+            },
+
+            render: function() {
+                this.renderCol(this.hours, this.c_h, 'p-hours');
+                this.renderCol(this.mins, this.c_m, 'p-mins');
+                this.renderCol(this.ampm, this.c_a, 'p-ampm');
+            }
+        };
+
+        // --- MATH ENGINE ---
+        window.SSJ4_Billing = {
+            haptic: function() { if(window.navigator && window.navigator.vibrate) navigator.vibrate(30); },
+
+            timeToMins: function(tObj) {
+                let h = tObj.h;
+                if(tObj.a === 'PM' && h !== 12) h += 12;
+                if(tObj.a === 'AM' && h === 12) h = 0;
+                return (h * 60) + tObj.m;
+            },
+
+            calc: function() {
+                this.haptic();
+                const breakMins = parseFloat(document.getElementById('break-mins').value);
+                const rate = parseFloat(document.getElementById('hourly-rate').value);
+
+                if(isNaN(breakMins) || isNaN(rate)) { 
+                    showToast("Enter valid numbers!"); return; 
+                }
+
+                let startMins = this.timeToMins(timeState['t-start']);
+                let endMins = this.timeToMins(timeState['t-end']);
+
+                // If end time is earlier than start time, assume it crossed midnight
+                if (endMins < startMins) {
+                    endMins += (24 * 60);
+                }
+
+                let grossMins = endMins - startMins;
+                let netMins = grossMins - breakMins;
+
+                if(netMins < 0) {
+                    showToast("Break is longer than shift!"); return;
+                }
+
+                let decimalHours = netMins / 60;
+                let totalPayout = decimalHours * rate;
+
+                // Format Time String for display
+                let h = Math.floor(netMins / 60);
+                let m = netMins % 60;
+                let durationStr = `${h}h ${m}m`;
+
+                const resCard = document.getElementById('results-container');
+                resCard.innerHTML = `
+                    <div class="res-lbl">Total Estimated Payout</div>
+                    <div class="res-main-val"><small>$</small>${totalPayout.toFixed(2)}</div>
+                    
+                    <div class="res-grid">
+                        <div class="res-box">
+                            <div class="res-box-lbl">Billable Time</div>
+                            <div class="res-box-val" style="color:var(--accent-gold);">${durationStr}</div>
+                        </div>
+                        <div class="res-box">
+                            <div class="res-box-lbl">Decimal Hours</div>
+                            <div class="res-box-val" style="color:var(--accent-blue);">${decimalHours.toFixed(2)} Hrs</div>
+                        </div>
+                        <div class="res-box" style="grid-column: span 2;">
+                            <div class="res-box-lbl">Deducted Break</div>
+                            <div class="res-box-val" style="color:var(--accent-red); font-size:1rem;">- ${breakMins} Minutes</div>
+                        </div>
+                    </div>
+                `;
+                
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-slide');
+                void resCard.offsetWidth;
+                resCard.classList.add('anim-slide');
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'end' }); }, 100);
+            }
+        };
+
+        // Initialize UI
+        document.addEventListener('DOMContentLoaded', () => {
+            SSJ4_TimePicker.init();
+        });
+
+    </script>
+</body>
+</html>

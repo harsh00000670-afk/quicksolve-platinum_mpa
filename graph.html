@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Chart Master | Visual Analytics Suite | QuickSolve Platinum</title>
+    <meta name="description" content="Ultimate visualizer suite. Plot complex equations, compounding curves, break-even charts, and financial trends.">
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* =========================================
+           CHART SUITE - PLATINUM ENGINE (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent-gold: #fbbd23;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-purple: #a855f7;
+            --accent-pink: #ec4899;
+            --accent-cyan: #06b6d4;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+        }
+
+        /* 🚀 STAGGERED FLY-IN ENGINE */
+        .anim-card {
+            opacity: 0; transform: scale(0.95) translateY(20px);
+            animation: flyIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            will-change: transform, opacity;
+        }
+        @keyframes flyIn { to { opacity: 1; transform: scale(1) translateY(0); } }
+
+        .d-1 { animation-delay: 0.05s; } .d-2 { animation-delay: 0.1s; }
+        .d-3 { animation-delay: 0.15s; } .d-4 { animation-delay: 0.2s; }
+        .d-5 { animation-delay: 0.25s; } .d-6 { animation-delay: 0.3s; }
+        .d-7 { animation-delay: 0.35s; } .d-8 { animation-delay: 0.4s; }
+        .d-9 { animation-delay: 0.45s; } .d-10 { animation-delay: 0.5s; }
+        .d-11 { animation-delay: 0.55s; } .d-12 { animation-delay: 0.6s; }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px 20px; display: flex; align-items: center;
+        }
+        .qs-back-btn { color: var(--text-main); margin-right: 15px; text-decoration: none; font-size: 1.4rem; transition: 0.2s; cursor: pointer;}
+        .qs-back-btn:active { transform: scale(0.9); color: var(--accent-pink); }
+        .brand { flex: 1; text-align: center; color: var(--accent-pink); font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; margin-right: 30px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 25px; padding-top: 10px; }
+        .hero h1 { margin: 0; font-size: 2.2rem; background: linear-gradient(135deg, #ec4899, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--text-sub); font-size: 0.85rem; margin-top: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 600;}
+
+        /* PLATINUM HORIZONTAL CARDS */
+        .tools-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 15px; }
+        
+        .tool-card {
+            background: var(--card-bg); border-radius: 16px; padding: 20px;
+            border: 1px solid var(--border-subtle); display: flex; align-items: flex-start; gap: 15px;
+            text-decoration: none; color: inherit; transition: 0.3s; position: relative; overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .tool-card:active { transform: scale(0.96); background: var(--bg-deep); }
+        
+        .tc-icon-wrap {
+            width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; flex-shrink: 0; background: rgba(255,255,255,0.03);
+        }
+        
+        .tc-info { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+        .tc-title { font-size: 1.05rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .tc-desc { font-size: 0.8rem; color: var(--text-sub); line-height: 1.4; font-weight: 500; }
+        
+        .badge {
+            font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 900; letter-spacing: 0.5px;
+            font-family: 'JetBrains Mono', monospace; text-transform: uppercase;
+        }
+
+        /* Thematic Card Styles */
+        .c-pink .tc-icon-wrap { color: var(--accent-pink); background: rgba(236, 72, 153, 0.1); }
+        .c-pink .badge { background: rgba(236, 72, 153, 0.2); color: var(--accent-pink); }
+        .c-pink:active { border-color: var(--accent-pink); }
+
+        .c-blue .tc-icon-wrap { color: var(--accent-blue); background: rgba(59, 130, 246, 0.1); }
+        .c-blue .badge { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+        .c-blue:active { border-color: var(--accent-blue); }
+
+        .c-green .tc-icon-wrap { color: var(--accent-green); background: rgba(16, 185, 129, 0.1); }
+        .c-green .badge { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .c-green:active { border-color: var(--accent-green); }
+
+        .c-cyan .tc-icon-wrap { color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); }
+        .c-cyan .badge { background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); }
+        .c-cyan:active { border-color: var(--accent-cyan); }
+
+        .c-gold .tc-icon-wrap { color: var(--accent-gold); background: rgba(251, 191, 36, 0.1); }
+        .c-gold .badge { background: rgba(251, 191, 36, 0.2); color: var(--accent-gold); }
+        .c-gold:active { border-color: var(--accent-gold); }
+
+        .c-purple .tc-icon-wrap { color: var(--accent-purple); background: rgba(168, 85, 247, 0.1); }
+        .c-purple .badge { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
+        .c-purple:active { border-color: var(--accent-purple); }
+
+        .tc-arrow { color: var(--border-subtle); font-size: 1rem; align-self: center; transition: 0.3s; }
+        .tool-card:active .tc-arrow { color: var(--text-main); transform: translateX(3px); }
+        
+        .section-divider {
+            color: var(--text-sub); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; 
+            letter-spacing: 2px; margin: 30px 0 10px 5px; display: flex; align-items: center; gap: 8px;
+        }
+        .section-divider div { flex: 1; height: 1px; background: var(--border-subtle); opacity: 0.5; }
+
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <a href="index.html" class="qs-back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="brand"><i class="fas fa-chart-area"></i> GRAPH MASTER</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;" role="main">
+        
+        <div class="hero anim-card d-1">
+            <h1>The Visualizer Suite</h1>
+            <p>> plot --data --expose_trends</p>
+        </div>
+
+        <div class="section-divider anim-card d-2">
+            <i class="fas fa-square-root-alt" style="color:var(--accent-pink);"></i> Math & Algebra
+            <div></div>
+        </div>
+        
+        <nav class="tools-grid">
+            <a href="chart_suites/equation_visualizer.html" class="tool-card c-pink anim-card d-3">
+                <div class="tc-icon-wrap"><i class="fas fa-chart-line"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Equation Visualizer <span class="badge">MATH</span></div>
+                    <div class="tc-desc">Plot complex 2D algebraic and trigonometric equations instantly to visualize their intersections and slopes.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+
+            <a href="chart_suites/trig_waves.html" class="tool-card c-cyan anim-card d-4">
+                <div class="tc-icon-wrap"><i class="fas fa-water"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Trigonometric Waves <span class="badge">PHYSICS</span></div>
+                    <div class="tc-desc">Observe the behavior of Sine, Cosine, and Tangent waves under varying frequencies and amplitudes.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+        </nav>
+
+        <div class="section-divider anim-card d-5">
+            <i class="fas fa-money-bill-wave" style="color:var(--accent-green);"></i> Finance & Wealth
+            <div></div>
+        </div>
+
+        <nav class="tools-grid">
+            <a href="chart_suites/compounding_curve.html" class="tool-card c-green anim-card d-6">
+                <div class="tc-icon-wrap"><i class="fas fa-rocket"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Compounding Curve <span class="badge">WEALTH</span></div>
+                    <div class="tc-desc">Visualize the exponential explosion of your investments vs the linear growth of standard savings over decades.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+
+            <a href="chart_suites/emi_amortization.html" class="tool-card c-red anim-card d-7">
+                <div class="tc-icon-wrap"><i class="fas fa-fire"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">EMI Amortization Chart <span class="badge">DEBT</span></div>
+                    <div class="tc-desc">Graphically expose how banks front-load interest. See the exact month your principal actually starts dropping.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+        </nav>
+
+        <div class="section-divider anim-card d-8">
+            <i class="fas fa-briefcase" style="color:var(--accent-gold);"></i> Business & Projections
+            <div></div>
+        </div>
+
+        <nav class="tools-grid">
+            <a href="chart_suites/breakeven_graph.html" class="tool-card c-gold anim-card d-9">
+                <div class="tc-icon-wrap"><i class="fas fa-chart-pie"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Break-Even Analyzer <span class="badge">FOUNDER</span></div>
+                    <div class="tc-desc">Plot fixed costs vs variable revenue. Find the exact coordinate where your business crosses from loss to profit.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+
+            <a href="chart_suites/depreciation_curve.html" class="tool-card c-purple anim-card d-10">
+                <div class="tc-icon-wrap"><i class="fas fa-arrow-circle-down"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Depreciation Decay <span class="badge">ASSET</span></div>
+                    <div class="tc-desc">Map the rapid value decay of tech and vehicles. See the exact point where holding the asset becomes a liability.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+        </nav>
+
+    </main>
+</body>
+</html>

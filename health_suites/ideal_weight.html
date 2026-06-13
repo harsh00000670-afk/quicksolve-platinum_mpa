@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Ideal Body Weight (IBW) Calculator | 4 Pro Formulas | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate your ideal body weight using Devine, Robinson, Miller, and Hamwi formulas. Get your healthy weight range instantly. 100% Offline.">
+    <meta name="keywords" content="ideal weight calculator, ibw formula, devine formula, healthy weight range, weight goals, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/health_suites/ideal_weight.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#020617">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           IDEAL WEIGHT (PLATINUM GOD MODE)
+           Theme: Royal Slate / Neon Gold
+           ========================================= */
+        #mod-ibw-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: #020617; z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .ib-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #0f172a; border-bottom: 1px solid #1e293b;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .ib-head .qs-back-btn { background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .ib-tit { color: #eab308; font-weight: 900; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .ib-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 80px; }
+
+        /* Sleek Cards */
+        .ib-card { 
+            background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; 
+            padding: 15px; display: flex; flex-direction: column; gap: 10px;
+        }
+        
+        .ib-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .ib-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 12px; border-radius: 8px; border: 1px solid #1e293b; cursor: pointer; transition: 0.2s; }
+        .ib-inp-wrap:focus-within { border-color: #eab308; box-shadow: 0 0 10px rgba(234, 179, 8, 0.1); }
+        .ib-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.1rem; font-weight: 900; outline: none; width: 100%; text-align: center; font-family: monospace; }
+        .ib-unit { color: #475569; font-weight: bold; font-size: 0.75rem; }
+
+        /* Custom Select Trigger */
+        .ib-select-text { flex: 1; color: #fff; font-size: 0.95rem; font-weight: 900; display: flex; align-items: center; gap: 10px; }
+
+        /* Result Range Panel */
+        .res-panel { background: #020617; border: 1px solid #eab308; border-radius: 12px; padding: 25px 15px; text-align: center; position: relative; box-shadow: inset 0 0 30px rgba(234, 179, 8, 0.05); }
+        .res-panel::before { content: 'HEALTHY RANGE'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #eab308; color: #020617; font-size: 0.6rem; font-weight: 900; padding: 2px 10px; border-radius: 4px; letter-spacing: 1px; }
+        
+        .range-val { font-size: 2.2rem; font-weight: 900; color: #eab308; font-family: monospace; line-height: 1; margin-bottom: 5px; }
+        .range-sub { font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Comparison Table */
+        .formula-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+        .f-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 8px; }
+        .f-name { font-size: 0.75rem; color: #cbd5e1; font-weight: 900; text-transform: uppercase; }
+        .f-val { font-size: 1.1rem; color: #f8fafc; font-weight: 900; font-family: monospace; }
+
+        /* Modal Styles */
+        .im-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .im-content { background: #0f172a; border-top-left-radius: 20px; border-top-right-radius: 20px; display: flex; flex-direction: column; overflow: hidden; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .im-open .im-content { transform: translateY(0); }
+        .im-head { padding: 15px 20px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; }
+        .im-head span { color: #eab308; font-weight: 900; font-size: 1rem; text-transform: uppercase; }
+        .im-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .im-list { padding: 10px 0; }
+        .il-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); cursor: pointer; }
+        .il-name { font-weight: 900; color: #f8fafc; font-size: 0.95rem; }
+        .il-check { color: #eab308; display: none; }
+        .il-item.active .il-check { display: block; }
+        .il-item.active .il-name { color: #eab308; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <main id="mod-ibw-overlay" role="main" aria-label="Ideal Body Weight Calculator">
+        <header class="ib-head">
+            <a href="../health.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left"></i></a>
+            <div class="ib-tit"><i class="fas fa-star"></i> IDEAL WEIGHT</div>
+        </header>
+
+        <section class="ib-body">
+            
+            <div class="ib-card">
+                <div class="ib-lbl">Biological Gender</div>
+                <div class="ib-inp-wrap" onclick="QS_IBW.openModal('gender')" aria-label="Select Gender">
+                    <div id="sel-gender-text" class="ib-select-text">
+                        <i class="fas fa-venus-mars" style="color:#eab308;"></i> Select Gender
+                    </div>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                </div>
+
+                <div class="ib-lbl">Height</div>
+                <div class="ib-inp-wrap" onclick="QS_IBW.openModal('height')">
+                    <div id="sel-h-text" class="ib-select-text">
+                        <i class="fas fa-ruler-vertical" style="color:#10b981;"></i> cm / ft
+                    </div>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                </div>
+                
+                <div id="inp-wrap-cm">
+                    <div class="ib-inp-wrap" style="cursor: text;">
+                        <input type="number" id="inp-h-cm" class="ib-inp" placeholder="Height in cm" oninput="QS_IBW.calculate()">
+                        <span class="ib-unit">CM</span>
+                    </div>
+                </div>
+
+                <div id="inp-wrap-ft" class="hidden">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                        <div class="ib-inp-wrap" style="cursor: text;"><input type="number" id="inp-h-ft" class="ib-inp" placeholder="Ft" oninput="QS_IBW.calculate()"><span class="ib-unit">FT</span></div>
+                        <div class="ib-inp-wrap" style="cursor: text;"><input type="number" id="inp-h-in" class="ib-inp" placeholder="In" oninput="QS_IBW.calculate()"><span class="ib-unit">IN</span></div>
+                    </div>
+                </div>
+
+                <div class="ib-lbl">Result Unit</div>
+                <div class="ib-inp-wrap" onclick="QS_IBW.openModal('weight')">
+                    <div id="sel-w-text" class="ib-select-text">
+                        <i class="fas fa-balance-scale" style="color:#38bdf8;"></i> kg / lbs
+                    </div>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                </div>
+            </div>
+
+            <div id="empty-state" style="text-align:center; padding:30px 20px; color:#475569;">
+                <i class="fas fa-weight fa-3x" style="opacity:0.3; margin-bottom:15px;"></i>
+                <div style="font-size:0.85rem; font-weight:bold;">Enter your height to calculate scientific weight goals.</div>
+            </div>
+
+            <div id="res-dashboard" class="hidden" aria-live="polite">
+                
+                <div class="res-panel">
+                    <div class="range-val" id="res-range">0 - 0</div>
+                    <div class="range-sub" id="res-unit-label">KILOGRAMS</div>
+                </div>
+
+                <div class="formula-grid">
+                    <div class="f-row">
+                        <span class="f-name">Devine Formula</span>
+                        <span class="f-val" id="res-devine">--</span>
+                    </div>
+                    <div class="f-row">
+                        <span class="f-name">Robinson Formula</span>
+                        <span class="f-val" id="res-robinson">--</span>
+                    </div>
+                    <div class="f-row">
+                        <span class="f-name">Miller Formula</span>
+                        <span class="f-val" id="res-miller">--</span>
+                    </div>
+                    <div class="f-row">
+                        <span class="f-name">Hamwi Formula</span>
+                        <span class="f-val" id="res-hamwi">--</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <div id="cm-modal" class="im-modal">
+        <div class="im-content">
+            <div class="im-head"><span id="cm-title">Select</span><button class="im-close" onclick="QS_IBW.closeModal()"><i class="fas fa-times"></i></button></div>
+            <div class="im-list" id="cm-list"></div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - IDEAL WEIGHT ENGINE
+           Features: Devine, Robinson, Miller, Hamwi multi-formula support.
+        */
+        (function() {
+            window.QS_IBW = {
+                state: { gender: 'male', hUnit: 'cm', wUnit: 'kg' },
+                
+                initListener: function() {
+                    this.updateSelectionText();
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'health_suites/ideal_weight.js') this.calculate();
+                    });
+                    if(document.readyState === 'complete') this.calculate();
+                    else document.addEventListener('DOMContentLoaded', () => this.calculate());
+                },
+
+                openModal: function(type) {
+                    const titleMap = { gender: 'Select Gender', height: 'Height Unit', weight: 'Result Unit' };
+                    document.getElementById('cm-title').innerText = titleMap[type];
+                    const list = document.getElementById('cm-list');
+                    list.innerHTML = '';
+
+                    let opts = [];
+                    if(type === 'gender') opts = [{v:'male', n:'Male'}, {v:'female', n:'Female'}];
+                    else if(type === 'height') opts = [{v:'cm', n:'Centimeters (cm)'}, {v:'ft', n:'Feet & Inches'}];
+                    else opts = [{v:'kg', n:'Kilograms (kg)'}, {v:'lbs', n:'Pounds (lbs)'}];
+
+                    opts.forEach(o => {
+                        const currentVal = (type === 'gender' ? this.state.gender : (type === 'height' ? this.state.hUnit : this.state.wUnit));
+                        const div = document.createElement('div');
+                        div.className = `il-item ${currentVal === o.v ? 'active' : ''}`;
+                        div.onclick = () => this.setVal(type, o.v);
+                        div.innerHTML = `<span class="il-name">${o.n}</span><i class="fas fa-check il-check"></i>`;
+                        list.appendChild(div);
+                    });
+
+                    const m = document.getElementById('cm-modal');
+                    m.style.display = 'flex';
+                    setTimeout(() => m.classList.add('im-open'), 10);
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                closeModal: function() {
+                    const m = document.getElementById('cm-modal');
+                    if(m) {
+                        m.classList.remove('im-open');
+                        setTimeout(() => m.style.display = 'none', 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                setVal: function(type, v) {
+                    if(type === 'gender') this.state.gender = v;
+                    else if(type === 'height') this.state.hUnit = v;
+                    else this.state.wUnit = v;
+                    
+                    this.updateSelectionText();
+                    this.closeModal();
+                    this.calculate();
+                },
+
+                updateSelectionText: function() {
+                    document.getElementById('sel-gender-text').innerHTML = `<i class="fas ${this.state.gender === 'male' ? 'fa-mars' : 'fa-venus'}" style="color:#eab308;"></i> ${this.state.gender.toUpperCase()}`;
+                    document.getElementById('sel-h-text').innerHTML = `<i class="fas fa-ruler-vertical" style="color:#10b981;"></i> ${this.state.hUnit.toUpperCase()}`;
+                    document.getElementById('sel-w-text').innerHTML = `<i class="fas fa-balance-scale" style="color:#38bdf8;"></i> ${this.state.wUnit.toUpperCase()}`;
+                    
+                    document.getElementById('inp-wrap-cm').className = this.state.hUnit === 'cm' ? '' : 'hidden';
+                    document.getElementById('inp-wrap-ft').className = this.state.hUnit === 'ft' ? '' : 'hidden';
+                    document.getElementById('res-unit-label').innerText = this.state.wUnit === 'kg' ? 'KILOGRAMS' : 'POUNDS';
+                },
+
+                calculate: function() {
+                    let hCm = 0;
+                    if(this.state.hUnit === 'cm') {
+                        hCm = parseFloat(document.getElementById('inp-h-cm').value);
+                    } else {
+                        hCm = ((parseFloat(document.getElementById('inp-h-ft').value)||0)*12 + (parseFloat(document.getElementById('inp-h-in').value)||0)) * 2.54;
+                    }
+
+                    if(!hCm || hCm < 100) return this.hide();
+
+                    document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('res-dashboard').classList.remove('hidden');
+
+                    const hIn = hCm / 2.54;
+                    const baseIn = hIn - 60; // Formulas start at 5 feet (60 inches)
+                    const isMale = this.state.gender === 'male';
+
+                    // 1. Devine (The Standard)
+                    let devine = isMale ? 50 + (2.3 * baseIn) : 45.5 + (2.3 * baseIn);
+                    // 2. Robinson
+                    let robinson = isMale ? 52 + (1.9 * baseIn) : 49 + (1.7 * baseIn);
+                    // 3. Miller
+                    let miller = isMale ? 56.2 + (1.41 * baseIn) : 53.1 + (1.36 * baseIn);
+                    // 4. Hamwi
+                    let hamwi = isMale ? 48 + (2.7 * baseIn) : 45.5 + (2.2 * baseIn);
+
+                    // Clamp to prevent negative
+                    const results = [devine, robinson, miller, hamwi].map(v => v < 30 ? 30 : v);
+                    const min = Math.min(...results);
+                    const max = Math.max(...results);
+
+                    const unitConv = (val) => this.state.wUnit === 'lbs' ? (val * 2.20462).toFixed(1) : val.toFixed(1);
+
+                    document.getElementById('res-range').innerText = `${unitConv(min)} - ${unitConv(max)}`;
+                    document.getElementById('res-devine').innerText = unitConv(results[0]);
+                    document.getElementById('res-robinson').innerText = unitConv(results[1]);
+                    document.getElementById('res-miller').innerText = unitConv(results[2]);
+                    document.getElementById('res-hamwi').innerText = unitConv(results[3]);
+                },
+
+                hide: function() {
+                    document.getElementById('empty-state').classList.remove('hidden');
+                    document.getElementById('res-dashboard').classList.add('hidden');
+                }
+            };
+            window.QS_IBW.initListener();
+        })();
+    </script>
+</body>
+</html>
