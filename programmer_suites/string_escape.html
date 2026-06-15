@@ -11,11 +11,12 @@
     <meta name="description" content="Advanced string escaper and unescaper for developers. Secure your data for HTML, JavaScript, JSON, SQL, Regex, and URLs. Prevent XSS and SQL injection instantly. Fast and 100% offline.">
     <meta name="keywords" content="string escaper, unescape string, html entities converter, sql escape, javascript escape, regex escaper, url encoder, xss prevention tool, data sanitization, programmer toolkit, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/string_escape.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="String Escaper">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -24,8 +25,31 @@
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="String Escape Suite - Secure Your Code">
     <meta property="og:description" content="Instantly escape or unescape strings for HTML, SQL, JS, and more. Stop XSS attacks in their tracks.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/programmer_suites/string_escape.html">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum String Escaper Logo">
     
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="String Escape & Unescape Suite | QuickSolve Platinum">
+    <meta name="twitter:description" content="Secure your data for HTML, JavaScript, JSON, SQL, Regex, and URLs. Prevent XSS and SQL injection instantly.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "String Escape Suite",
+      "url": "https://quicksolve-platinum.netlify.app/programmer_suites/string_escape.html",
+      "description": "Professional developer tool to escape and unescape strings for HTML, JavaScript, JSON, SQL, Regex, and URLs to prevent XSS and injection attacks.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
+
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
     <link rel="stylesheet" href="../style.css">
@@ -52,7 +76,7 @@
             background: #121214; border-bottom: 1px solid #334155;
             position: sticky; top: 0; z-index: 100; flex-shrink: 0;
         }
-        .es-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; }
+        .es-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; transition: 0.2s; }
         .es-tit { color: #ec4899; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
 
         .es-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
@@ -62,7 +86,8 @@
         .es-grp:focus-within { border-color: #ec4899; box-shadow: 0 0 15px rgba(236, 72, 153, 0.15); }
         
         .es-lbl { color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .es-clear { color: #ef4444; font-size: 0.7rem; cursor: pointer; border: 1px solid #ef4444; padding: 2px 6px; border-radius: 4px; }
+        .es-clear { color: #ef4444; font-size: 0.7rem; cursor: pointer; border: 1px solid #ef4444; padding: 2px 6px; border-radius: 4px; transition: 0.2s; }
+        .es-clear:active { background: rgba(239, 68, 68, 0.15); }
         
         .es-textarea { background: transparent; border: none; color: #fff; font-size: 0.95rem; width: 100%; outline: none; font-family: monospace; resize: vertical; min-height: 100px; line-height: 1.5; }
         .es-textarea::placeholder { color: #475569; }
@@ -81,6 +106,7 @@
         .r-tit { font-size: 0.75rem; font-weight: 900; color: #06b6d4; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
         .r-copy { color: #94a3b8; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
         .r-copy:active { color: #06b6d4; transform: scale(0.9); }
+        .res-card:hover .r-copy, .res-card:focus-within .r-copy { color: #f8fafc; }
         
         .r-val { background: transparent; border: none; color: #f8fafc; font-size: 0.85rem; width: 100%; outline: none; font-family: monospace; word-break: break-all; resize: vertical; min-height: 40px; }
 
@@ -102,6 +128,15 @@
         .st-char { color: #f43f5e; font-weight: bold; font-size: 1.2rem; text-align: center; }
         .st-esc { color: #22c55e; font-weight: bold; }
         .st-rsn { color: #a855f7; font-size: 0.75rem; font-family: sans-serif; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules (Laptop Compatibility) */
+        *:focus-visible { outline: 2px solid #ec4899; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; outline-color: #06b6d4; }
+        .es-textarea:focus-visible, .r-val:focus-visible { outline: none; }
+        .es-clear:focus-visible { outline-color: #ef4444; }
+        .r-copy:focus-visible { outline-color: #06b6d4; outline-offset: 4px; border-radius: 4px; }
+        .act-btn:focus-visible { z-index: 1; outline-color: #06b6d4; }
+        .btn-why:focus-visible { outline-color: #f59e0b; outline-offset: 4px; }
     </style>
 </head>
 
@@ -121,15 +156,15 @@
     <div class="es-body">
         
         <section class="action-row" role="tablist" aria-label="Select mode">
-            <button class="act-btn active" id="mode-esc" role="tab" aria-selected="true" onclick="QS_Escape.setMode('escape')">Escape</button>
-            <button class="act-btn" id="mode-unesc" role="tab" aria-selected="false" onclick="QS_Escape.setMode('unescape')">Unescape</button>
+            <button type="button" class="act-btn active" id="mode-esc" role="tab" aria-selected="true" onclick="QS_Escape.setMode('escape')">Escape</button>
+            <button type="button" class="act-btn" id="mode-unesc" role="tab" aria-selected="false" onclick="QS_Escape.setMode('unescape')">Unescape</button>
         </section>
 
         <section class="es-grp" aria-labelledby="input-heading">
             <h2 id="input-heading" class="sr-only" style="display:none;">String Input</h2>
             <div class="es-lbl">
                 <label for="inp-str" id="main-lbl">Raw String Input</label>
-                <span class="es-clear" role="button" tabindex="0" onclick="QS_Escape.clearInput()" onkeydown="if(event.key==='Enter') QS_Escape.clearInput()">CLEAR</span>
+                <span class="es-clear" role="button" tabindex="0" onclick="QS_Escape.clearInput()" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); QS_Escape.clearInput(); }">CLEAR</span>
             </div>
             <textarea id="inp-str" class="es-textarea" placeholder="Type or paste your string here... (e.g. <script>alert('XSS')</script>)" oninput="QS_Escape.process()"></textarea>
         </section>
@@ -138,7 +173,7 @@
             <div class="res-card">
                 <div class="r-head">
                     <span class="r-tit" id="lbl-html"><i class="fas fa-code" aria-hidden="true"></i> HTML / XML Entities</span>
-                    <i class="fas fa-copy r-copy" aria-label="Copy HTML Entities" role="button" tabindex="0" onclick="QS_Escape.copy('res-html')" onkeydown="if(event.key==='Enter') QS_Escape.copy('res-html')"></i>
+                    <i class="fas fa-copy r-copy" aria-label="Copy HTML Entities" role="button" tabindex="0" onclick="QS_Escape.copy('res-html')" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); QS_Escape.copy('res-html'); }"></i>
                 </div>
                 <textarea id="res-html" class="r-val" readonly aria-labelledby="lbl-html" placeholder="Output here..."></textarea>
             </div>
@@ -146,7 +181,7 @@
             <div class="res-card" style="border-color: #eab308;">
                 <div class="r-head">
                     <span class="r-tit" style="color: #eab308;" id="lbl-js"><i class="fab fa-js-square" aria-hidden="true"></i> JavaScript / JSON</span>
-                    <i class="fas fa-copy r-copy" aria-label="Copy JavaScript string" role="button" tabindex="0" onclick="QS_Escape.copy('res-js')" onkeydown="if(event.key==='Enter') QS_Escape.copy('res-js')"></i>
+                    <i class="fas fa-copy r-copy" aria-label="Copy JavaScript string" role="button" tabindex="0" onclick="QS_Escape.copy('res-js')" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); QS_Escape.copy('res-js'); }"></i>
                 </div>
                 <textarea id="res-js" class="r-val" style="color: #fef08a;" readonly aria-labelledby="lbl-js" placeholder="Output here..."></textarea>
             </div>
@@ -154,7 +189,7 @@
             <div class="res-card" style="border-color: #3b82f6;">
                 <div class="r-head">
                     <span class="r-tit" style="color: #3b82f6;" id="lbl-sql"><i class="fas fa-database" aria-hidden="true"></i> SQL Query Safe</span>
-                    <i class="fas fa-copy r-copy" aria-label="Copy SQL safe string" role="button" tabindex="0" onclick="QS_Escape.copy('res-sql')" onkeydown="if(event.key==='Enter') QS_Escape.copy('res-sql')"></i>
+                    <i class="fas fa-copy r-copy" aria-label="Copy SQL safe string" role="button" tabindex="0" onclick="QS_Escape.copy('res-sql')" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); QS_Escape.copy('res-sql'); }"></i>
                 </div>
                 <textarea id="res-sql" class="r-val" style="color: #bfdbfe;" readonly aria-labelledby="lbl-sql" placeholder="Output here..."></textarea>
             </div>
@@ -162,7 +197,7 @@
             <div class="res-card" style="border-color: #a855f7;">
                 <div class="r-head">
                     <span class="r-tit" style="color: #a855f7;" id="lbl-regex"><i class="fas fa-asterisk" aria-hidden="true"></i> Regex Literal</span>
-                    <i class="fas fa-copy r-copy" aria-label="Copy Regex safe string" role="button" tabindex="0" onclick="QS_Escape.copy('res-regex')" onkeydown="if(event.key==='Enter') QS_Escape.copy('res-regex')"></i>
+                    <i class="fas fa-copy r-copy" aria-label="Copy Regex safe string" role="button" tabindex="0" onclick="QS_Escape.copy('res-regex')" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); QS_Escape.copy('res-regex'); }"></i>
                 </div>
                 <textarea id="res-regex" class="r-val" style="color: #e9d5ff;" readonly aria-labelledby="lbl-regex" placeholder="Output here..."></textarea>
             </div>
@@ -170,13 +205,13 @@
             <div class="res-card" style="border-color: #22c55e;">
                 <div class="r-head">
                     <span class="r-tit" style="color: #22c55e;" id="lbl-url"><i class="fas fa-link" aria-hidden="true"></i> URL Component</span>
-                    <i class="fas fa-copy r-copy" aria-label="Copy URL component" role="button" tabindex="0" onclick="QS_Escape.copy('res-url')" onkeydown="if(event.key==='Enter') QS_Escape.copy('res-url')"></i>
+                    <i class="fas fa-copy r-copy" aria-label="Copy URL component" role="button" tabindex="0" onclick="QS_Escape.copy('res-url')" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); QS_Escape.copy('res-url'); }"></i>
                 </div>
                 <textarea id="res-url" class="r-val" style="color: #bbf7d0;" readonly aria-labelledby="lbl-url" placeholder="Output here..."></textarea>
             </div>
         </section>
 
-        <button class="btn-why" aria-haspopup="dialog" aria-expanded="false" aria-label="Show Security Matrix visualizer" onclick="QS_Escape.showSteps()">
+        <button type="button" class="btn-why" aria-haspopup="dialog" aria-expanded="false" aria-label="Show Security Matrix visualizer" onclick="QS_Escape.showSteps()">
             <i class="fas fa-shield-alt" aria-hidden="true"></i> Security Matrix (Why Escape?)
         </button>
 
@@ -186,7 +221,7 @@
         <div id="es-steps-box">
             <header class="steps-head">
                 <h2 id="modal-sec-title" style="margin: 0; font-size: 1rem;"><i class="fas fa-bug" aria-hidden="true"></i> INJECTION DEFENSE MATRIX</h2>
-                <button class="steps-close" aria-label="Close Security Matrix" onclick="QS_Escape.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
+                <button type="button" class="steps-close" aria-label="Close Security Matrix" onclick="QS_Escape.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
             </header>
             <div class="steps-content" id="es-steps-content" aria-live="polite">
                 </div>
@@ -324,11 +359,22 @@
             });
         },
 
-        copy: function(id) {
+        // FIX: Modern Clipboard API implementation
+        copy: async function(id) {
             const el = document.getElementById(id);
             if (!el.value) return;
-            el.select();
-            document.execCommand('copy');
+            const textToCopy = el.value;
+            
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(textToCopy);
+                } else {
+                    throw new Error("Fallback required");
+                }
+            } catch(e) {
+                el.select();
+                document.execCommand('copy');
+            }
             this.triggerHaptic();
         },
 
@@ -364,7 +410,7 @@
                         </tr>
                         <tr>
                             <td class="st-char">' "</td>
-                            <td class="st-esc">\' \"</td>
+                            <td class="st-esc">\\' \\"</td>
                             <td class="st-rsn"><span style="color:#38bdf8; font-weight:bold;">String Breakout</span>. Prevents hackers from ending your JS strings early.</td>
                         </tr>
                         <tr>

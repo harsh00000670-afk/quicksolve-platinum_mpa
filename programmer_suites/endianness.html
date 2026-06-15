@@ -11,11 +11,12 @@
     <meta name="description" content="Advanced Endianness Swapper. Convert 16-bit, 32-bit, and 64-bit Integers, Floats, or Text data between Big-Endian and Little-Endian formats. Includes a real-time RAM layout visualizer.">
     <meta name="keywords" content="endianness converter, byte swapper, big endian to little endian, little endian to big endian, float endianness, memory layout visualizer, network byte order converter, programmer calculator, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/endianness.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Endian Swapper">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -24,7 +25,32 @@
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="Endianness Swapper - Visualize RAM Memory Layout">
     <meta property="og:description" content="Convert Ints, Floats, and Text between Big and Little Endian instantly. A must-have for C/C++ developers.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/programmer_suites/endianness.html">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Endianness Swapper Logo">
+
+    <!-- ADDED: Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Endianness Swapper & Visualizer | QuickSolve Platinum">
+    <meta name="twitter:description" content="Convert Integers, Floats, or Text data between Big-Endian and Little-Endian formats with a real-time RAM visualizer.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <!-- ADDED: JSON-LD Structured Data for Rich Snippets -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Endianness Swapper & Memory Visualizer",
+      "url": "https://quicksolve-platinum.netlify.app/programmer_suites/endianness.html",
+      "description": "Professional developer tool to convert 16-bit, 32-bit, and 64-bit Integers, Floats, or Text data between Big-Endian and Little-Endian formats with RAM layout visualization.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
     
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
@@ -128,6 +154,13 @@
         .mem-addr { background: #1e293b; color: #f59e0b; border-right: 1px solid #334155; }
         .mem-val-big { background: rgba(20, 184, 166, 0.1); color: #14b8a6; font-weight: bold; border-right: 1px solid #334155;}
         .mem-val-lit { background: rgba(139, 92, 246, 0.1); color: #a78bfa; font-weight: bold; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules */
+        *:focus-visible { outline: 2px solid #14b8a6; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; }
+        .en-inp:focus-visible { outline: none; }
+        .sel-opt:focus-visible { background: rgba(20, 184, 166, 0.1); border-radius: 4px; z-index: 1; }
+        .btn-why:focus-visible { outline-color: #a78bfa; outline-offset: 4px; }
     </style>
 </head>
 
@@ -148,15 +181,15 @@
         
         <section class="ctrl-row" aria-label="Configuration Options">
             <div class="custom-selector" id="en-type-selector" role="radiogroup" aria-label="Select Data Type">
-                <div class="sel-opt active-type" data-type="int" role="radio" aria-checked="true" tabindex="0" onclick="QS_Endian.setType('int')">Int/Hex</div>
-                <div class="sel-opt" data-type="float" role="radio" aria-checked="false" tabindex="0" onclick="QS_Endian.setType('float')">Float</div>
-                <div class="sel-opt" data-type="text" role="radio" aria-checked="false" tabindex="0" onclick="QS_Endian.setType('text')">Text</div>
+                <div class="sel-opt active-type" data-type="int" role="radio" aria-checked="true" tabindex="0" onclick="QS_Endian.setType('int')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Endian.setType('int')">Int/Hex</div>
+                <div class="sel-opt" data-type="float" role="radio" aria-checked="false" tabindex="0" onclick="QS_Endian.setType('float')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Endian.setType('float')">Float</div>
+                <div class="sel-opt" data-type="text" role="radio" aria-checked="false" tabindex="0" onclick="QS_Endian.setType('text')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Endian.setType('text')">Text</div>
             </div>
             
             <div class="custom-selector" id="en-bit-selector" role="radiogroup" aria-label="Select Bit Size">
-                <div class="sel-opt active-bit" data-bits="16" role="radio" aria-checked="true" tabindex="0" onclick="QS_Endian.setBits(16)">16b</div>
-                <div class="sel-opt" data-bits="32" role="radio" aria-checked="false" tabindex="0" onclick="QS_Endian.setBits(32)">32b</div>
-                <div class="sel-opt" data-bits="64" role="radio" aria-checked="false" tabindex="0" onclick="QS_Endian.setBits(64)">64b</div>
+                <div class="sel-opt active-bit" data-bits="16" role="radio" aria-checked="true" tabindex="0" onclick="QS_Endian.setBits(16)" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Endian.setBits(16)">16b</div>
+                <div class="sel-opt" data-bits="32" role="radio" aria-checked="false" tabindex="0" onclick="QS_Endian.setBits(32)" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Endian.setBits(32)">32b</div>
+                <div class="sel-opt" data-bits="64" role="radio" aria-checked="false" tabindex="0" onclick="QS_Endian.setBits(64)" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Endian.setBits(64)">64b</div>
             </div>
         </section>
 

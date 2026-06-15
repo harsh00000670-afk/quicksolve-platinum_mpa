@@ -11,11 +11,12 @@
     <meta name="description" content="Advanced Unix Epoch Timestamp converter. Auto-detects seconds, milliseconds, microseconds, and nanoseconds. View ISO 8601, RFC 2822, Local, and UTC time formats instantly. Includes Y2K38 bug visualizer.">
     <meta name="keywords" content="epoch converter, unix timestamp calculator, epoch to date, timestamp to local time, y2k38 bug explainer, iso 8601 converter, programmer time tools, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/epoch.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Epoch Time">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -24,7 +25,30 @@
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="Unix Epoch Converter - Master Time & Dates">
     <meta property="og:description" content="Convert Unix timestamps to human-readable time formats instantly. See the Y2K38 bug in action.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/programmer_suites/epoch.html">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Epoch Converter Logo">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Unix Epoch Converter & Live Clock | QuickSolve Platinum">
+    <meta name="twitter:description" content="Convert Unix timestamps to local time, ISO 8601, and see the Y2K38 bug. Auto-detects ms, us, and ns.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Unix Epoch Timestamp Converter",
+      "url": "https://quicksolve-platinum.netlify.app/programmer_suites/epoch.html",
+      "description": "Professional developer tool to convert Unix Epoch Timestamps to human-readable dates. Auto-detects seconds, ms, us, and ns.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
     
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
@@ -62,7 +86,7 @@
         .lc-lbl { font-size: 0.65rem; color: #f59e0b; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; display: block; }
         .lc-val { font-size: 2rem; font-weight: 900; color: #f8fafc; font-family: sans-serif; letter-spacing: 2px; }
         .lc-ms { font-size: 1rem; color: #94a3b8; }
-        .lc-copy { position: absolute; top: 10px; right: 15px; color: #f59e0b; cursor: pointer; font-size: 1.2rem; padding: 5px; }
+        .lc-copy { position: absolute; top: 10px; right: 15px; color: #f59e0b; cursor: pointer; font-size: 1.2rem; padding: 5px; transition: 0.2s; }
         .lc-copy:active { transform: scale(0.9); }
 
         /* Input Area */
@@ -76,17 +100,19 @@
         .ep-inp-wrap { display: flex; align-items: center; gap: 8px; }
         .ep-inp { background: transparent; border: none; color: #fff; font-size: 1.3rem; font-weight: 800; width: 100%; outline: none; font-family: monospace; }
         .ep-inp::placeholder { color: #475569; font-size: 1rem; }
-        .btn-now { background: #3b82f6; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 0.75rem; cursor: pointer; text-transform: uppercase; }
+        .btn-now { background: #3b82f6; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 0.75rem; cursor: pointer; text-transform: uppercase; transition: 0.2s; }
+        .btn-now:active { transform: scale(0.95); }
 
         /* Results Grid */
         .res-grid { flex-shrink: 0; display: grid; grid-template-columns: 1fr; gap: 10px; }
-        .res-card { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 5px; position: relative; cursor: pointer; }
+        .res-card { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 5px; position: relative; cursor: pointer; transition: 0.2s; }
         .res-card:focus-within, .res-card:active { border-color: #3b82f6; }
         
         .r-tit { font-size: 0.65rem; color: #3b82f6; font-weight: 900; text-transform: uppercase; }
         .r-val { font-size: 0.95rem; color: #f8fafc; font-weight: bold; word-break: break-all; }
         .r-val-lg { font-size: 1.2rem; color: #10b981; } /* Green for relative time */
-        .r-copy { position: absolute; right: 12px; top: 12px; color: #64748b; font-size: 1rem; }
+        .r-copy { position: absolute; right: 12px; top: 12px; color: #64748b; font-size: 1rem; transition: 0.2s; }
+        .res-card:hover .r-copy, .res-card:focus-visible .r-copy { color: #f8fafc; }
 
         /* Format Toggles */
         .fmt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 5px; }
@@ -107,6 +133,15 @@
         .y2k-num { font-size: 1.5rem; color: #ef4444; font-weight: 900; letter-spacing: 2px; }
         .y2k-bin { color: #f59e0b; font-size: 0.8rem; margin: 5px 0; }
         .y2k-date { font-size: 1.1rem; color: #f8fafc; font-weight: bold; border-top: 1px dashed #334155; padding-top: 8px; margin-top: 8px; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules */
+        *:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; }
+        .ep-inp:focus-visible { outline: none; }
+        .btn-now:focus-visible { outline-color: #f8fafc; }
+        .res-card:focus-visible { outline-color: #3b82f6; z-index: 1; }
+        .btn-why:focus-visible { outline-color: #ef4444; outline-offset: 4px; }
+        .lc-copy:focus-visible { outline-color: #f59e0b; border-radius: 4px; }
     </style>
 </head>
 
@@ -128,7 +163,7 @@
         <section class="live-clock-card" aria-label="Live System Clock">
             <span class="lc-lbl"><i class="fas fa-satellite-dish fa-spin" style="margin-right:5px;" aria-hidden="true"></i> Current Epoch Time</span>
             <span class="lc-val" id="lc-sec" aria-live="polite">0000000000</span><span class="lc-ms" id="lc-ms" aria-hidden="true">.000</span>
-            <i class="fas fa-copy lc-copy" aria-label="Copy current epoch time" role="button" tabindex="0" onclick="QS_Epoch.copyLive()" onkeydown="if(event.key==='Enter') QS_Epoch.copyLive()"></i>
+            <i class="fas fa-copy lc-copy" aria-label="Copy current epoch time" role="button" tabindex="0" onclick="QS_Epoch.copyLive()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Epoch.copyLive();}"></i>
         </section>
 
         <section class="ep-grp" id="grp-val" aria-labelledby="input-heading">
@@ -151,25 +186,25 @@
             </div>
 
             <div class="fmt-grid">
-                <div class="res-card" role="button" tabindex="0" aria-label="Copy Local Time" onclick="QS_Epoch.copy('res-local')" onkeydown="if(event.key==='Enter') QS_Epoch.copy('res-local')">
+                <div class="res-card" role="button" tabindex="0" aria-label="Copy Local Time" onclick="QS_Epoch.copy('res-local')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Epoch.copy('res-local');}">
                     <span class="r-tit" id="lbl-local">Local Time (Your Device)</span>
                     <i class="fas fa-copy r-copy" aria-hidden="true"></i>
                     <span class="r-val" id="res-local" aria-labelledby="lbl-local" aria-live="polite">--</span>
                 </div>
-                <div class="res-card" role="button" tabindex="0" aria-label="Copy UTC Time" onclick="QS_Epoch.copy('res-utc')" onkeydown="if(event.key==='Enter') QS_Epoch.copy('res-utc')">
+                <div class="res-card" role="button" tabindex="0" aria-label="Copy UTC Time" onclick="QS_Epoch.copy('res-utc')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Epoch.copy('res-utc');}">
                     <span class="r-tit" id="lbl-utc">GMT / UTC (Server Time)</span>
                     <i class="fas fa-copy r-copy" aria-hidden="true"></i>
                     <span class="r-val" id="res-utc" style="color:#f59e0b;" aria-labelledby="lbl-utc" aria-live="polite">--</span>
                 </div>
             </div>
 
-            <div class="res-card" role="button" tabindex="0" aria-label="Copy ISO 8601 Format" onclick="QS_Epoch.copy('res-iso')" onkeydown="if(event.key==='Enter') QS_Epoch.copy('res-iso')">
+            <div class="res-card" role="button" tabindex="0" aria-label="Copy ISO 8601 Format" onclick="QS_Epoch.copy('res-iso')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Epoch.copy('res-iso');}">
                 <span class="r-tit" id="lbl-iso">ISO 8601 Format (Standard)</span>
                 <i class="fas fa-copy r-copy" aria-hidden="true"></i>
                 <span class="r-val" id="res-iso" aria-labelledby="lbl-iso" aria-live="polite">--</span>
             </div>
 
-            <div class="res-card" role="button" tabindex="0" aria-label="Copy RFC 2822 Format" onclick="QS_Epoch.copy('res-rfc')" onkeydown="if(event.key==='Enter') QS_Epoch.copy('res-rfc')">
+            <div class="res-card" role="button" tabindex="0" aria-label="Copy RFC 2822 Format" onclick="QS_Epoch.copy('res-rfc')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Epoch.copy('res-rfc');}">
                 <span class="r-tit" id="lbl-rfc">RFC 2822 (Email / HTTP Headers)</span>
                 <i class="fas fa-copy r-copy" aria-hidden="true"></i>
                 <span class="r-val" id="res-rfc" aria-labelledby="lbl-rfc" aria-live="polite">--</span>
@@ -379,13 +414,22 @@
             this.copyToClipboard(text);
         },
 
-        copyToClipboard: function(str) {
-            const temp = document.createElement('textarea');
-            temp.value = str;
-            document.body.appendChild(temp);
-            temp.select();
-            document.execCommand('copy');
-            document.body.removeChild(temp);
+        // FIX: Replaced legacy execCommand with Modern Clipboard API and fallback
+        copyToClipboard: async function(str) {
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(str);
+                } else {
+                    throw new Error("Clipboard API not available");
+                }
+            } catch (err) {
+                const temp = document.createElement('textarea');
+                temp.value = str;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+            }
             this.triggerHaptic();
         },
 

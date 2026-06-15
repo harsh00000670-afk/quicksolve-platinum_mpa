@@ -11,11 +11,12 @@
     <meta name="description" content="Advanced Signed Numbers Lab for developers. Convert decimal integers to Two's Complement, One's Complement, and Sign-Magnitude representations instantly. Supports 8-bit to 64-bit precision with a logic visualizer.">
     <meta name="keywords" content="twos complement calculator, signed binary converter, sign-magnitude representation, ones complement calculator, 64-bit signed numbers, binary overflow checker, programmer binary calculator, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/signed_num.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Signed Nums">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -24,7 +25,30 @@
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="Signed Numbers Lab - Visualize Two's Complement">
     <meta property="og:description" content="Understand how computers store negative numbers. Convert and visualize binary logic step-by-step.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/programmer_suites/signed_num.html">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Signed Numbers Logo">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Signed Numbers Lab | QuickSolve Platinum">
+    <meta name="twitter:description" content="Convert decimal integers to Two's Complement, One's Complement, and Sign-Magnitude representations instantly.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Signed Numbers Lab",
+      "url": "https://quicksolve-platinum.netlify.app/programmer_suites/signed_num.html",
+      "description": "Professional developer tool to convert decimal integers to Two's Complement, One's Complement, and Sign-Magnitude representations instantly. Supports up to 64-bit precision.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
     
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
@@ -125,6 +149,13 @@
         .m-hl-flip { color: #f59e0b; }
         .m-hl-add { color: #22c55e; font-weight: bold; }
         .m-hl-final { color: #d946ef; font-weight: bold; border-bottom: 2px solid #d946ef; padding-bottom: 2px; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules */
+        *:focus-visible { outline: 2px solid #d946ef; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; outline-color: #38bdf8; }
+        .bit-opt:focus-visible { background: rgba(217, 70, 239, 0.1); border-radius: 4px; z-index: 1; }
+        .sn-inp:focus-visible { outline: none; }
+        .btn-why:focus-visible { outline-color: #38bdf8; outline-offset: 4px; }
     </style>
 </head>
 
@@ -146,10 +177,10 @@
         <section aria-labelledby="bit-size-heading">
             <h2 id="bit-size-heading" class="sr-only" style="display:none;">Select Bit Boundary</h2>
             <div class="bit-selector" id="sn-bit-selector" role="radiogroup" aria-label="Register bit size">
-                <div class="bit-opt active" data-bits="8" role="radio" aria-checked="true" tabindex="0" onclick="QS_Signed.setBits(8)">8-bit</div>
-                <div class="bit-opt" data-bits="16" role="radio" aria-checked="false" tabindex="0" onclick="QS_Signed.setBits(16)">16-bit</div>
-                <div class="bit-opt" data-bits="32" role="radio" aria-checked="false" tabindex="0" onclick="QS_Signed.setBits(32)">32-bit</div>
-                <div class="bit-opt" data-bits="64" role="radio" aria-checked="false" tabindex="0" onclick="QS_Signed.setBits(64)">64-bit</div>
+                <div class="bit-opt active" data-bits="8" role="radio" aria-checked="true" tabindex="0" onclick="QS_Signed.setBits(8)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Signed.setBits(8);}">8-bit</div>
+                <div class="bit-opt" data-bits="16" role="radio" aria-checked="false" tabindex="0" onclick="QS_Signed.setBits(16)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Signed.setBits(16);}">16-bit</div>
+                <div class="bit-opt" data-bits="32" role="radio" aria-checked="false" tabindex="0" onclick="QS_Signed.setBits(32)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Signed.setBits(32);}">32-bit</div>
+                <div class="bit-opt" data-bits="64" role="radio" aria-checked="false" tabindex="0" onclick="QS_Signed.setBits(64)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Signed.setBits(64);}">64-bit</div>
             </div>
         </section>
 
@@ -391,7 +422,7 @@
             this.triggerHaptic();
         },
 
-generateTwosComplementMath: function() {
+        generateTwosComplementMath: function() {
             let absVal = -this.lastVal;
             let step1Bin = absVal.toString(2).padStart(this.currentBits, '0');
             let step2Bin = step1Bin.split('').map(b => b === '1' ? '0' : '1').join('');

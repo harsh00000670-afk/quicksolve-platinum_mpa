@@ -11,11 +11,12 @@
     <meta name="description" content="Advanced JSON Lab Pro. Beautify, minify, and validate JSON instantly. Features include Deep A-Z sorting, JSONPath query engine, TypeScript interface generator, and interactive object tree. 100% Offline and Secure.">
     <meta name="keywords" content="json formatter, json validator, json to typescript generator, jsonpath query tester, json beautifier, minify json, deep sort json keys, parse json online, programmer tools offline, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/json_fmt.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="JSON Lab">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -24,7 +25,30 @@
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="JSON Lab Pro - Format, Query & Generate TypeScript">
     <meta property="og:description" content="Stop struggling with messy JSON. Validate, query, and generate interfaces directly in your browser.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/programmer_suites/json_fmt.html">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum JSON Lab Logo">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JSON Lab Pro | QuickSolve Platinum">
+    <meta name="twitter:description" content="Advanced JSON Lab Pro. Beautify, minify, validate, and generate TypeScript interfaces offline.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "JSON Lab Pro",
+      "url": "https://quicksolve-platinum.netlify.app/programmer_suites/json_fmt.html",
+      "description": "Professional developer utility to format, minify, validate JSON, sort keys, run JSONPath queries, and generate TypeScript interfaces offline.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
     
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
@@ -62,7 +86,8 @@
         .js-grp:focus-within { border-color: #06b6d4; box-shadow: 0 0 15px rgba(6, 182, 212, 0.15); }
         
         .js-lbl { color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .js-clear { color: #ef4444; font-size: 0.7rem; cursor: pointer; border: 1px solid #ef4444; padding: 2px 6px; border-radius: 4px; }
+        .js-clear { color: #ef4444; font-size: 0.7rem; cursor: pointer; border: 1px solid #ef4444; padding: 2px 6px; border-radius: 4px; transition: 0.2s; }
+        .js-clear:active { background: rgba(239,68,68,0.2); }
         
         .js-textarea { background: transparent; border: none; color: #fff; font-size: 0.85rem; width: 100%; outline: none; font-family: monospace; resize: vertical; min-height: 120px; line-height: 1.5; }
         .js-textarea::placeholder { color: #475569; }
@@ -122,6 +147,15 @@
         .tree-item { margin-left: 15px; color: #f8fafc; border-left: 1px dashed #475569; padding-left: 10px; margin-top: 4px; }
         .tree-key { color: #a855f7; font-weight: bold; }
         .tree-type { font-size: 0.65rem; color: #64748b; margin-left: 5px; text-transform: uppercase; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules */
+        *:focus-visible { outline: 2px solid #22c55e; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; outline-color: #06b6d4; }
+        .js-clear:focus-visible { outline-color: #ef4444; }
+        .js-textarea:focus-visible, .path-inp:focus-visible { outline: none; }
+        .out-copy:focus-visible { outline-color: #06b6d4; outline-offset: 4px; }
+        .act-btn:focus-visible { z-index: 1; }
+        .btn-why:focus-visible { outline-color: #22c55e; outline-offset: 4px; }
     </style>
 </head>
 
@@ -144,7 +178,7 @@
             <h2 id="input-heading" class="sr-only" style="display:none;">Raw JSON Input</h2>
             <div class="js-lbl">
                 <label for="inp-json">Raw JSON Input</label>
-                <span class="js-clear" role="button" tabindex="0" onclick="QS_JSON.clearInput()" onkeydown="if(event.key==='Enter') QS_JSON.clearInput()">CLEAR</span>
+                <span class="js-clear" role="button" tabindex="0" onclick="QS_JSON.clearInput()" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); QS_JSON.clearInput(); }">CLEAR</span>
             </div>
             <textarea id="inp-json" class="js-textarea" placeholder='{"status": "success", "data": [1, 2, 3]}' aria-describedby="json-err" oninput="QS_JSON.autoProcess()"></textarea>
             
@@ -171,7 +205,7 @@
             <div class="out-head">
                 <h2 class="out-lbl" id="res-lbl" style="margin:0;">Beautified Output</h2>
                 <div style="display:flex; gap:15px;">
-                    <i class="fas fa-copy out-copy" aria-label="Copy code output" role="button" tabindex="0" onclick="QS_JSON.copyOutput()" onkeydown="if(event.key==='Enter') QS_JSON.copyOutput()" title="Copy Code"></i>
+                    <i class="fas fa-copy out-copy" aria-label="Copy code output" role="button" tabindex="0" onclick="QS_JSON.copyOutput()" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); QS_JSON.copyOutput(); }" title="Copy Code"></i>
                 </div>
             </div>
             <pre class="out-pre" id="out-json" aria-live="polite">Output will appear here...</pre>
@@ -387,16 +421,27 @@
             });
         },
 
-        copyOutput: function() {
+        // FIX: Modern Clipboard API implementation
+        copyOutput: async function() {
             const outPre = document.getElementById('out-json');
             if (!this.isValid && this.lastMode !== 'ts') return;
 
-            const temp = document.createElement('textarea');
-            temp.value = outPre.innerText; // Cleans HTML tags
-            document.body.appendChild(temp);
-            temp.select();
-            document.execCommand('copy');
-            document.body.removeChild(temp);
+            const textToCopy = outPre.innerText; // Cleans HTML tags
+            
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(textToCopy);
+                } else {
+                    throw new Error("Fallback");
+                }
+            } catch(e) {
+                const temp = document.createElement('textarea');
+                temp.value = textToCopy;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+            }
             
             this.triggerHaptic();
         },

@@ -11,11 +11,12 @@
     <meta name="description" content="Convert decimal numbers to IEEE-754 floating-point binary representation. Supports 32-bit single and 64-bit double precision. Visualize sign, exponent, and mantissa breakdown with formula steps. 100% Offline.">
     <meta name="keywords" content="IEEE-754 converter, floating point to binary, 32-bit float, 64-bit double, mantissa exponent sign, binary representation of decimals, programmer calculator, floating point visualizer, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/ieee754.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="IEEE-754 Float">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -24,7 +25,30 @@
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="IEEE-754 Floating Point Converter - Decimal to Binary Float">
     <meta property="og:description" content="Break down 32-bit and 64-bit floating-point numbers into Sign, Exponent, and Mantissa effortlessly.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/programmer_suites/ieee754.html">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum IEEE-754 Converter Logo">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="IEEE-754 Floating Point Converter | QuickSolve Platinum">
+    <meta name="twitter:description" content="Break down 32-bit and 64-bit floating-point numbers into Sign, Exponent, and Mantissa effortlessly. 100% Offline.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "IEEE-754 Floating Point Converter",
+      "url": "https://quicksolve-platinum.netlify.app/programmer_suites/ieee754.html",
+      "description": "Professional developer tool to convert decimal numbers to IEEE-754 floating-point binary representation. Visualizes sign, exponent, and mantissa.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
     
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
@@ -52,7 +76,7 @@
             background: #121214; border-bottom: 1px solid #334155;
             position: sticky; top: 0; z-index: 100; flex-shrink: 0;
         }
-        .ie-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; }
+        .ie-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; transition: 0.2s; }
         .ie-tit { color: #a855f7; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
 
         .ie-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
@@ -117,6 +141,13 @@
         .f-row { margin-bottom: 10px; border-bottom: 1px dashed #1e293b; padding-bottom: 10px; }
         .f-row:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
         .math-hl { font-weight: bold; color: #f8fafc; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules */
+        *:focus-visible { outline: 2px solid #a855f7; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; outline-color: #38bdf8; }
+        .bit-opt:focus-visible { background: rgba(168, 85, 247, 0.1); border-radius: 4px; z-index: 1; }
+        .ie-inp:focus-visible { outline: none; }
+        .btn-why:focus-visible { outline-color: #a855f7; outline-offset: 4px; }
     </style>
 </head>
 
@@ -138,8 +169,8 @@
         <section aria-labelledby="precision-heading">
             <h2 id="precision-heading" class="sr-only" style="display:none;">Select Precision Level</h2>
             <div class="bit-selector" id="ie-bit-selector" role="radiogroup" aria-label="Floating point precision">
-                <div class="bit-opt active" data-bits="32" role="radio" aria-checked="true" tabindex="0" onclick="QS_IEEE.setBits(32)">32-bit (Single)</div>
-                <div class="bit-opt" data-bits="64" role="radio" aria-checked="false" tabindex="0" onclick="QS_IEEE.setBits(64)">64-bit (Double)</div>
+                <div class="bit-opt active" data-bits="32" role="radio" aria-checked="true" tabindex="0" onclick="QS_IEEE.setBits(32)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_IEEE.setBits(32);}">32-bit (Single)</div>
+                <div class="bit-opt" data-bits="64" role="radio" aria-checked="false" tabindex="0" onclick="QS_IEEE.setBits(64)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_IEEE.setBits(64);}">64-bit (Double)</div>
             </div>
         </section>
 

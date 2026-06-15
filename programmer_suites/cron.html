@@ -11,11 +11,12 @@
     <meta name="description" content="Translate any Cron Expression into human-readable text instantly. Calculate the next 5 execution dates and times perfectly. Essential toolkit for Backend Devs & SysAdmins. 100% Offline.">
     <meta name="keywords" content="cron explainer, cron expression translator, next cron execution calculator, crontab syntax breakdown, cron job scheduler tool, programmer server tools, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/cron.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Cron Tool">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -24,8 +25,31 @@
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="Cron Expression Explainer - Decode Server Schedules">
     <meta property="og:description" content="Never guess a Cron job again. Get human-readable translations and exact future execution times.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/programmer_suites/cron.html">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Cron Explainer Logo">
     
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cron Expression Explainer | QuickSolve Platinum">
+    <meta name="twitter:description" content="Translate any Cron Expression into human-readable text and calculate exact future execution dates offline.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Cron Expression Explainer",
+      "url": "https://quicksolve-platinum.netlify.app/programmer_suites/cron.html",
+      "description": "Professional toolkit for Backend Devs & SysAdmins to translate Cron Expressions into human-readable text and calculate the next 5 execution dates.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
+
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
     <link rel="stylesheet" href="../style.css">
@@ -103,6 +127,13 @@
         .c-map-desc { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 8px; display: flex; flex-direction: column; justify-content: center; }
         .cmd-tit { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; font-weight: bold; }
         .cmd-val { font-size: 1rem; color: #a855f7; font-weight: bold; margin-top: 4px; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules */
+        *:focus-visible { outline: 2px solid #a855f7; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; }
+        .cr-inp:focus-visible { outline: none; box-shadow: 0 0 0 2px #22c55e inset; border-color: #22c55e; }
+        .preset-btn:focus-visible { outline-color: #22c55e; outline-offset: 1px; }
+        .btn-why:focus-visible { outline-offset: 4px; }
     </style>
 </head>
 

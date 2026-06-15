@@ -11,11 +11,12 @@
     <meta name="description" content="Advanced IPv4 Subnet Calculator for network engineers. Calculate network address, broadcast address, wildcard masks, and usable host ranges instantly. Visualize the binary split between network and host bits. 100% Offline.">
     <meta name="keywords" content="subnet calculator, ipv4 calculator, CIDR calculator, binary subnet visualizer, network address calculator, broadcast address calculator, ip class identifier, private ip checker, wildcard mask generator, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/subnet.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Subnet Engine">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -23,8 +24,31 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="IPv4 Subnet Engine - Master Your Networks">
-    <meta property="og:description" content="Calculate CIDR, network ranges, and visualize binary IP masks flawlessly.">
+    <meta property="og:description" content="Calculate CIDR, network ranges, and visualize binary IP masks flawlessly. 100% Offline.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/programmer_suites/subnet.html">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Subnet Calculator Logo">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="IPv4 Subnet Calculator | QuickSolve Platinum">
+    <meta name="twitter:description" content="Calculate network address, broadcast address, and wildcard masks instantly. Visualize binary splits.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "IPv4 Subnet Calculator",
+      "url": "https://quicksolve-platinum.netlify.app/programmer_suites/subnet.html",
+      "description": "Professional developer tool to calculate IPv4 subnet masks, CIDR routing prefixes, broadcast addresses, and usable host ranges with binary visualization.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
     
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
@@ -33,7 +57,7 @@
     <style>
         /* MANTRA: NO PADDING/MARGIN CHANGES - EXACT DESIGN PRESERVED */
         /* =========================================
-           IPv4 SUBNET CALCULATOR (GOD MODE)
+           IPv4 SUBNET CALCULATOR (GOD MODE V2)
            Theme: Cyberpunk Terminal (Crimson/Red)
            ========================================= */
         body { margin: 0; background-color: var(--bg-body, #09090b); }
@@ -52,7 +76,7 @@
             background: #121214; border-bottom: 1px solid #334155;
             position: sticky; top: 0; z-index: 100; flex-shrink: 0;
         }
-        .su-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; }
+        .su-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; transition: 0.2s; }
         .su-tit { color: #ef4444; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
 
         .su-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
@@ -83,12 +107,14 @@
         /* Results Grid */
         .su-res-card { flex-shrink: 0; background: #0f172a; border: 1px solid #334155; border-radius: 10px; overflow: hidden; }
         
-        .res-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid #1e293b; }
+        .res-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid #1e293b; cursor: pointer; transition: 0.2s; }
         .res-row:last-child { border-bottom: none; }
         .res-row:nth-child(even) { background: rgba(30, 41, 59, 0.3); }
+        .res-row:hover, .res-row:focus-visible { background: rgba(239, 68, 68, 0.1); border-color: #ef4444; outline: none; }
+        .res-row:active { transform: scale(0.98); }
         
-        .r-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; }
-        .r-val { font-size: 1rem; color: #f8fafc; font-weight: bold; }
+        .r-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; pointer-events: none; }
+        .r-val { font-size: 1rem; color: #f8fafc; font-weight: bold; pointer-events: none; }
         .r-val.hl-red { color: #ef4444; }
         
         /* The "WHY" Button */
@@ -112,6 +138,12 @@
         .b-net { color: #ef4444; font-weight: bold; }
         .b-host { color: #3b82f6; font-weight: bold; }
         .b-sep { color: #475569; margin: 0 4px; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules (Laptop Compatibility) */
+        *:focus-visible { outline: 2px solid #ef4444; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; outline-color: #3b82f6; }
+        .su-inp:focus-visible, .su-cidr-sel:focus-visible { outline: none; }
+        .btn-why:focus-visible { outline-color: #ef4444; outline-offset: 4px; }
     </style>
 </head>
 
@@ -152,27 +184,27 @@
         </button>
 
         <section class="su-res-card" aria-label="Subnet Calculation Results" aria-live="polite">
-            <div class="res-row">
+            <div class="res-row" role="button" tabindex="0" aria-label="Copy Network Address" onclick="QS_Subnet.copy('res-net')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Subnet.copy('res-net');}" title="Click to copy">
                 <span class="r-lbl" id="lbl-net">Network Address</span>
                 <span class="r-val" id="res-net" aria-labelledby="lbl-net">--</span>
             </div>
-            <div class="res-row">
+            <div class="res-row" role="button" tabindex="0" aria-label="Copy Broadcast Address" onclick="QS_Subnet.copy('res-broad')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Subnet.copy('res-broad');}" title="Click to copy">
                 <span class="r-lbl" id="lbl-broad">Broadcast Address</span>
                 <span class="r-val" id="res-broad" aria-labelledby="lbl-broad">--</span>
             </div>
-            <div class="res-row">
+            <div class="res-row" role="button" tabindex="0" aria-label="Copy Usable Host Range" onclick="QS_Subnet.copy('res-range')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Subnet.copy('res-range');}" title="Click to copy">
                 <span class="r-lbl" id="lbl-range">Usable Host Range</span>
                 <span class="r-val" id="res-range" style="font-size:0.8rem; color:#3b82f6;" aria-labelledby="lbl-range">--</span>
             </div>
-            <div class="res-row">
+            <div class="res-row" role="button" tabindex="0" aria-label="Copy Total Usable Hosts" onclick="QS_Subnet.copy('res-hosts')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Subnet.copy('res-hosts');}" title="Click to copy">
                 <span class="r-lbl" id="lbl-hosts">Total Usable Hosts</span>
                 <span class="r-val hl-red" id="res-hosts" aria-labelledby="lbl-hosts">0</span>
             </div>
-            <div class="res-row">
+            <div class="res-row" role="button" tabindex="0" aria-label="Copy Subnet Mask" onclick="QS_Subnet.copy('res-mask')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Subnet.copy('res-mask');}" title="Click to copy">
                 <span class="r-lbl" id="lbl-mask">Subnet Mask</span>
                 <span class="r-val" id="res-mask" aria-labelledby="lbl-mask">--</span>
             </div>
-            <div class="res-row">
+            <div class="res-row" role="button" tabindex="0" aria-label="Copy Wildcard Mask" onclick="QS_Subnet.copy('res-wild')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Subnet.copy('res-wild');}" title="Click to copy">
                 <span class="r-lbl" id="lbl-wild">Wildcard Mask</span>
                 <span class="r-val" id="res-wild" aria-labelledby="lbl-wild">--</span>
             </div>
@@ -195,7 +227,7 @@
 
 <script>
     /* QUICKSOLVE PLATINUM - IPv4 SUBNET CALCULATOR (MPA STANDALONE)
-       Features: CIDR parsing, Binary Subnetting Visualization, Network/Broadcast/Wildcard Math
+       Features: CIDR parsing, Binary Subnetting Visualization, Network/Broadcast/Wildcard Math, Click-to-copy
     */
     const QS_Subnet = {
         
@@ -354,6 +386,29 @@
             this.binMask = this.intToBinStr(maskInt);
             this.binNet = this.intToBinStr(networkInt);
             this.binBroad = this.intToBinStr(broadcastInt);
+        },
+
+        // FIX: Modern Clipboard API implementation for desktop/mobile compatibility
+        copy: async function(id) {
+            const el = document.getElementById(id);
+            if (!el || el.innerText === '--' || el.innerText === '0') return;
+            const textToCopy = el.innerText;
+            
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(textToCopy);
+                } else {
+                    throw new Error("Fallback required");
+                }
+            } catch(e) {
+                const temp = document.createElement('textarea');
+                temp.value = textToCopy;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+            }
+            this.triggerHaptic();
         },
 
         triggerHaptic: function() {

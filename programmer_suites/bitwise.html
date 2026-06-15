@@ -11,11 +11,12 @@
     <meta name="description" content="Advanced 64-bit Bitwise logic calculator. Perform AND, OR, XOR, NOT, NAND, NOR, and XNOR operations on Decimal, Hexadecimal, or Binary inputs. Includes a real-time truth table visualizer.">
     <meta name="keywords" content="bitwise calculator, logic gate calculator, 64 bit bitwise, XOR calculator, NAND NOR XNOR, hex bitwise operations, boolean logic calculator, programmer logic lab, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/bitwise.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Logic Lab">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -24,8 +25,31 @@
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="Bitwise Logic Lab - 64-Bit Boolean Operations">
     <meta property="og:description" content="Calculate AND, OR, XOR, and more. Visualize the logic gate operations step-by-step.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/programmer_suites/bitwise.html">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Bitwise Lab Logo">
     
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="64-Bit Bitwise Logic Lab | QuickSolve Platinum">
+    <meta name="twitter:description" content="Perform AND, OR, XOR, NOT, NAND, NOR, and XNOR operations with a real-time truth table visualizer.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "64-Bit Bitwise Logic Lab",
+      "url": "https://quicksolve-platinum.netlify.app/programmer_suites/bitwise.html",
+      "description": "Professional 64-bit Bitwise logic calculator with a real-time truth table visualizer for logic gate operations.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
+
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
     <link rel="stylesheet" href="../style.css">
@@ -83,7 +107,41 @@
         .res-arena { background: rgba(16, 185, 129, 0.05); border: 1px solid #22c55e; border-radius: 12px; padding: 15px; margin-top: 5px; }
         .res-row { margin-bottom: 12px; }
         .res-row:last-child { margin-bottom: 0; }
-        .res-lbl { font-size: 0.65rem; color: #22c55e; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; display
+        
+        /* FIX: CSS Block was broken here originally. Restored completely. */
+        .res-lbl { font-size: 0.65rem; color: #22c55e; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; display: block; }
+        .res-val { font-size: 1.1rem; color: #f4f4f5; font-weight: bold; word-break: break-all; }
+        .bin-format { color: #f59e0b; font-size: 0.95rem; letter-spacing: 1px; }
+
+        /* The "WHY" Button */
+        .btn-why { background: transparent; border: 1px dashed #f59e0b; color: #f59e0b; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 10px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why:active { background: rgba(245, 158, 11, 0.1); transform: scale(0.98); }
+
+        /* STEPS MODAL */
+        #bw-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(9, 9, 11, 0.9); backdrop-filter: blur(5px); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #bw-steps-box { background: var(--surface); border: 1px solid #f59e0b; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(245, 158, 11, 0.15); transform: translateY(20px); transition: 0.3s ease; }
+        
+        .steps-head { padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; color: #f59e0b; font-weight: 800; }
+        .steps-close { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: var(--text-main); font-size: 0.85rem; line-height: 1.6; }
+
+        /* LOGIC MATRIX STYLES (Restored) */
+        .logic-board { background: #000; border: 1px solid #334155; border-radius: 8px; padding: 15px; margin-top: 10px; overflow-x: auto; display: flex; flex-direction: column; gap: 5px; }
+        .logic-row { display: flex; align-items: center; font-family: monospace; font-size: 1rem; letter-spacing: 2px; white-space: nowrap; }
+        .logic-op { color: #f59e0b; font-weight: bold; width: 20px; text-align: center; margin-right: 10px; }
+        .logic-bits { color: #94a3b8; }
+        .logic-res-bits { color: #22c55e; font-weight: bold; }
+        .logic-line { height: 1px; background: #334155; width: 100%; margin: 5px 0; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules */
+        *:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; }
+        .bw-inp:focus-visible { outline: none; }
+        .bit-opt:focus-visible { background: rgba(59, 130, 246, 0.1); border-radius: 4px; }
+        .op-btn:focus-visible { outline-offset: 4px; outline-color: #3b82f6; }
+        .btn-why:focus-visible { outline-color: #f59e0b; outline-offset: 4px; }
+    </style>
+</head>
 
 <body>
 
@@ -103,10 +161,10 @@
         <section aria-labelledby="bit-size-heading">
             <h2 id="bit-size-heading" class="sr-only" style="display:none;">Select Bit Boundary</h2>
             <div class="bit-selector" id="bw-bit-selector" role="radiogroup" aria-label="Bit size limit">
-                <div class="bit-opt" data-bits="8" role="radio" aria-checked="false" tabindex="0" onclick="QS_Bitwise.setBits(8)">8-bit</div>
-                <div class="bit-opt active" data-bits="16" role="radio" aria-checked="true" tabindex="0" onclick="QS_Bitwise.setBits(16)">16-bit</div>
-                <div class="bit-opt" data-bits="32" role="radio" aria-checked="false" tabindex="0" onclick="QS_Bitwise.setBits(32)">32-bit</div>
-                <div class="bit-opt" data-bits="64" role="radio" aria-checked="false" tabindex="0" onclick="QS_Bitwise.setBits(64)">64-bit</div>
+                <div class="bit-opt" data-bits="8" role="radio" aria-checked="false" tabindex="0" onclick="QS_Bitwise.setBits(8)" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Bitwise.setBits(8)">8-bit</div>
+                <div class="bit-opt active" data-bits="16" role="radio" aria-checked="true" tabindex="0" onclick="QS_Bitwise.setBits(16)" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Bitwise.setBits(16)">16-bit</div>
+                <div class="bit-opt" data-bits="32" role="radio" aria-checked="false" tabindex="0" onclick="QS_Bitwise.setBits(32)" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Bitwise.setBits(32)">32-bit</div>
+                <div class="bit-opt" data-bits="64" role="radio" aria-checked="false" tabindex="0" onclick="QS_Bitwise.setBits(64)" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Bitwise.setBits(64)">64-bit</div>
             </div>
             <div style="color:var(--text-muted); font-size:0.65rem; text-align:center;" aria-hidden="true">Pro Tip: Prefix with <b>0x</b> for Hex or <b>0b</b> for Binary. Default is Decimal.</div>
         </section>
@@ -120,13 +178,13 @@
             </div>
 
             <div class="op-selector" role="group" aria-label="Select Bitwise Operator">
-                <button class="op-btn active" data-op="AND" aria-pressed="true" onclick="QS_Bitwise.setOp('AND')">AND &</button>
-                <button class="op-btn" data-op="OR" aria-pressed="false" onclick="QS_Bitwise.setOp('OR')">OR |</button>
-                <button class="op-btn" data-op="XOR" aria-pressed="false" onclick="QS_Bitwise.setOp('XOR')">XOR ^</button>
-                <button class="op-btn" data-op="NOT" aria-pressed="false" onclick="QS_Bitwise.setOp('NOT')">NOT ~</button>
-                <button class="op-btn" data-op="NAND" aria-pressed="false" onclick="QS_Bitwise.setOp('NAND')">NAND</button>
-                <button class="op-btn" data-op="NOR" aria-pressed="false" onclick="QS_Bitwise.setOp('NOR')">NOR</button>
-                <button class="op-btn" data-op="XNOR" aria-pressed="false" onclick="QS_Bitwise.setOp('XNOR')">XNOR</button>
+                <button class="op-btn active" data-op="AND" aria-pressed="true" onclick="QS_Bitwise.setOp('AND')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Bitwise.setOp('AND')">AND &</button>
+                <button class="op-btn" data-op="OR" aria-pressed="false" onclick="QS_Bitwise.setOp('OR')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Bitwise.setOp('OR')">OR |</button>
+                <button class="op-btn" data-op="XOR" aria-pressed="false" onclick="QS_Bitwise.setOp('XOR')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Bitwise.setOp('XOR')">XOR ^</button>
+                <button class="op-btn" data-op="NOT" aria-pressed="false" onclick="QS_Bitwise.setOp('NOT')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Bitwise.setOp('NOT')">NOT ~</button>
+                <button class="op-btn" data-op="NAND" aria-pressed="false" onclick="QS_Bitwise.setOp('NAND')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Bitwise.setOp('NAND')">NAND</button>
+                <button class="op-btn" data-op="NOR" aria-pressed="false" onclick="QS_Bitwise.setOp('NOR')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Bitwise.setOp('NOR')">NOR</button>
+                <button class="op-btn" data-op="XNOR" aria-pressed="false" onclick="QS_Bitwise.setOp('XNOR')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Bitwise.setOp('XNOR')">XNOR</button>
             </div>
 
             <div class="bw-grp" id="grp-b">

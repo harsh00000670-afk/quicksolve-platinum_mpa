@@ -11,11 +11,12 @@
     <meta name="description" content="Advanced universal color engine for developers. Convert HEX to RGB, HSL, CMYK, Android, and Flutter color codes instantly. Check WCAG contrast ratios in real-time. 100% Offline.">
     <meta name="keywords" content="color converter, hex to rgb, hex to cmyk, flutter color code, android color code, wcag contrast checker, color palette generator, programmer color tools, css color converter, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/color_engine.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Color Engine">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -24,8 +25,31 @@
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="Color Engine Pro - The Ultimate UI/UX Dev Tool">
     <meta property="og:description" content="Convert any color format instantly. Ensure perfect readability with our built-in WCAG Contrast Checker.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/programmer_suites/color_engine.html">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Color Engine Logo">
     
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Color Engine Pro | QuickSolve Platinum">
+    <meta name="twitter:description" content="Convert HEX to RGB, HSL, CMYK, Android, and Flutter color codes instantly.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Color Engine Pro",
+      "url": "https://quicksolve-platinum.netlify.app/programmer_suites/color_engine.html",
+      "description": "Advanced universal color engine for developers to convert HEX to RGB, HSL, CMYK, Android, and Flutter color codes with built-in WCAG contrast checking.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
+
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
     <link rel="stylesheet" href="../style.css">
@@ -78,7 +102,8 @@
         .fmt-row:active { border-color: #f43f5e; }
         .fmt-lbl { font-size: 0.65rem; color: #94a3b8; font-weight: bold; width: 50px; }
         .fmt-val { font-size: 0.9rem; color: #f8fafc; font-weight: bold; flex: 1; margin-left: 10px; word-break: break-all; }
-        .fmt-copy { color: #64748b; cursor: pointer; font-size: 0.9rem; padding: 5px; }
+        .fmt-copy { color: #64748b; cursor: pointer; font-size: 0.9rem; padding: 5px; transition: 0.2s; }
+        .fmt-row:hover .fmt-copy, .fmt-row:focus-visible .fmt-copy { color: #f8fafc; }
 
         /* WCAG Contrast Checker */
         .wcag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -94,7 +119,8 @@
 
         /* Color Palette Generator */
         .palette-box { display: flex; border-radius: 8px; overflow: hidden; height: 40px; border: 1px solid #334155; margin-top: 5px; }
-        .pal-color { flex: 1; display: flex; justify-content: center; align-items: center; font-size: 0.55rem; font-weight: bold; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.8); cursor: pointer; }
+        .pal-color { flex: 1; display: flex; justify-content: center; align-items: center; font-size: 0.55rem; font-weight: bold; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.8); cursor: pointer; transition: 0.2s; }
+        .pal-color:active { opacity: 0.8; }
 
         /* The "WHY" Button */
         .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #38bdf8; color: #38bdf8; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
@@ -113,6 +139,14 @@
         .mg-lbl { font-size: 0.65rem; font-weight: bold; text-transform: uppercase; color: #94a3b8; }
         .mg-val { font-size: 1.5rem; font-weight: 900; margin-top: 5px; }
         .mg-hex { font-size: 0.8rem; color: #f59e0b; margin-top: 2px; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules */
+        *:focus-visible { outline: 2px solid #a78bfa; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; }
+        .ce-inp:focus-visible { outline: none; }
+        .fmt-row:focus-visible { outline-color: #f43f5e; outline-offset: 1px; }
+        .pal-color:focus-visible { outline-color: #f8fafc; z-index: 1; }
+        .btn-why:focus-visible { outline-color: #38bdf8; outline-offset: 4px; }
     </style>
 </head>
 
@@ -146,17 +180,17 @@
         <section class="res-sec" aria-labelledby="web-standards-heading">
             <h2 id="web-standards-heading" class="res-tit">Web Core Standards</h2>
             
-            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy HEX value" onclick="QS_Color.copy('res-hex')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-hex')">
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy HEX value" onclick="QS_Color.copy('res-hex')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Color.copy('res-hex')">
                 <span class="fmt-lbl">HEX</span>
                 <span class="fmt-val" id="res-hex" aria-live="polite">#000000</span>
                 <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
             </div>
-            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy RGB value" onclick="QS_Color.copy('res-rgb')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-rgb')">
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy RGB value" onclick="QS_Color.copy('res-rgb')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Color.copy('res-rgb')">
                 <span class="fmt-lbl">RGB</span>
                 <span class="fmt-val" id="res-rgb" aria-live="polite">rgb(0, 0, 0)</span>
                 <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
             </div>
-            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy HSL value" onclick="QS_Color.copy('res-hsl')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-hsl')">
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy HSL value" onclick="QS_Color.copy('res-hsl')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Color.copy('res-hsl')">
                 <span class="fmt-lbl">HSL</span>
                 <span class="fmt-val" id="res-hsl" aria-live="polite">hsl(0, 0%, 0%)</span>
                 <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
@@ -166,17 +200,17 @@
         <section class="res-sec" style="border-color: #a855f7;" aria-labelledby="app-dev-heading">
             <h2 id="app-dev-heading" class="res-tit" style="color: #a855f7;">App Dev / Native</h2>
             
-            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy Flutter value" onclick="QS_Color.copy('res-flutter')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-flutter')">
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy Flutter value" onclick="QS_Color.copy('res-flutter')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Color.copy('res-flutter')">
                 <span class="fmt-lbl" style="color:#a855f7;">Flutter</span>
                 <span class="fmt-val" id="res-flutter" aria-live="polite">Color(0xFF000000)</span>
                 <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
             </div>
-            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy Android value" onclick="QS_Color.copy('res-android')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-android')">
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy Android value" onclick="QS_Color.copy('res-android')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Color.copy('res-android')">
                 <span class="fmt-lbl" style="color:#a855f7;">Android</span>
                 <span class="fmt-val" id="res-android" aria-live="polite">#FF000000</span>
                 <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
             </div>
-            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy iOS Swift value" onclick="QS_Color.copy('res-ios')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-ios')">
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy iOS Swift value" onclick="QS_Color.copy('res-ios')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Color.copy('res-ios')">
                 <span class="fmt-lbl" style="color:#a855f7;">iOS (Swift)</span>
                 <span class="fmt-val" id="res-ios" aria-live="polite">UIColor(r:0, g:0, b:0, a:1)</span>
                 <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
@@ -186,12 +220,12 @@
         <section class="res-sec" style="border-color: #06b6d4;" aria-labelledby="print-adv-heading">
             <h2 id="print-adv-heading" class="res-tit" style="color: #06b6d4;">Print & Advanced</h2>
             
-            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy CMYK value" onclick="QS_Color.copy('res-cmyk')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-cmyk')">
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy CMYK value" onclick="QS_Color.copy('res-cmyk')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Color.copy('res-cmyk')">
                 <span class="fmt-lbl" style="color:#06b6d4;">CMYK</span>
                 <span class="fmt-val" id="res-cmyk" aria-live="polite">cmyk(0%, 0%, 0%, 100%)</span>
                 <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
             </div>
-            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy HSV value" onclick="QS_Color.copy('res-hsv')" onkeydown="if(event.key==='Enter') QS_Color.copy('res-hsv')">
+            <div class="fmt-row" role="button" tabindex="0" aria-label="Copy HSV value" onclick="QS_Color.copy('res-hsv')" onkeydown="if(event.key==='Enter'||event.key===' ') QS_Color.copy('res-hsv')">
                 <span class="fmt-lbl" style="color:#06b6d4;">HSV</span>
                 <span class="fmt-val" id="res-hsv" aria-live="polite">hsv(0, 0%, 0%)</span>
                 <i class="fas fa-copy fmt-copy" aria-hidden="true"></i>
@@ -407,7 +441,7 @@
                 div.setAttribute("tabindex", "0");
                 div.setAttribute("aria-label", `Apply palette color ${hex}`);
                 div.onclick = () => { document.getElementById('ce-inp-val').value = hex; this.parseInput(); };
-                div.onkeydown = (e) => { if(e.key === 'Enter') div.onclick(); };
+                div.onkeydown = (e) => { if(e.key === 'Enter'|| e.key === ' ') div.onclick(); };
                 box.appendChild(div);
             });
         },
@@ -499,14 +533,23 @@
             }
         },
 
-        copy: function(id) {
+        // FIX: Replaced legacy execCommand with Modern Clipboard API and fallback
+        copy: async function(id) {
             const val = document.getElementById(id).innerText;
-            const temp = document.createElement('textarea');
-            temp.value = val;
-            document.body.appendChild(temp);
-            temp.select();
-            document.execCommand('copy');
-            document.body.removeChild(temp);
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(val);
+                } else {
+                    throw new Error("Clipboard API not available");
+                }
+            } catch (err) {
+                const temp = document.createElement('textarea');
+                temp.value = val;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+            }
             this.triggerHaptic();
         },
 
