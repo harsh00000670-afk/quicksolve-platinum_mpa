@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Trigonometric Waves Visualizer | 12 Functions | QuickSolve Platinum</title>
+    <meta name="description" content="Interactive trigonometric wave visualizer. Real-time rendering of Sine, Cosine, Tangent, Secant, Cosecant, Cotangent and all their Inverse functions with adjustable parameters.">
+    <meta name="keywords" content="trigonometry graph, sine wave visualizer, inverse trigonometry plotter, secant cosecant cotangent graph, phase shift calculator, math graphing tool, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/chart_suites/trig_waves.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Trig Waves">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0d0a15">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Trigonometric Waves Visualizer - Live Math Engine">
+    <meta property="og:description" content="Visualize 12 different Trigonometric and Inverse functions in real-time. Adjust Amplitude, Frequency, and Phase Shift instantly.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/chart_suites/trig_waves.html">
+    <meta property="og:image" content="../logo.png">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Trigonometric Waves Visualizer | QuickSolve Platinum">
+    <meta name="twitter:description" content="Interactive real-time rendering of 12 Trigonometric wave functions with advanced equation parameters.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Trigonometric Waves Visualizer",
+      "url": "https://quicksolve-platinum.netlify.app/chart_suites/trig_waves.html",
+      "description": "Interactive educational tool to visualize and manipulate 12 Trigonometric and Inverse wave functions.",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* =========================================
+           TRIG WAVES - PLATINUM ENGINE (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800;900&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent-cyan: #06b6d4;
+            --accent-blue: #3b82f6;
+            --accent-pink: #ec4899;
+            --accent-gold: #fbbd23;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden;
+        }
+
+        /* Glowing Background */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.2; z-index: -1; pointer-events: none;}
+        .glow-1 { top: 0; left: -10%; width: 250px; height: 250px; background: var(--accent-cyan); }
+        .glow-2 { bottom: -10%; right: -5%; width: 250px; height: 250px; background: var(--accent-blue); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { 
+            position: absolute; left: 50%; transform: translateX(-50%); 
+            color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace; 
+            font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;
+        }
+
+        /* 12-WAVE SCROLLABLE TABS */
+        .wave-scroll-wrap {
+            display: flex; gap: 8px; overflow-x: auto; padding: 15px; margin-bottom: 10px;
+            scrollbar-width: none; /* Firefox */
+        }
+        .wave-scroll-wrap::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
+        
+        .wave-tab {
+            background: rgba(2, 6, 23, 0.5); border: 1px solid var(--border-subtle);
+            padding: 8px 16px; border-radius: 20px; font-weight: 800; font-size: 0.85rem;
+            color: var(--text-sub); cursor: pointer; transition: 0.2s; white-space: nowrap;
+            text-transform: uppercase; font-family: 'JetBrains Mono', monospace; flex-shrink: 0;
+        }
+        .wave-tab:active { transform: scale(0.95); }
+        .wave-tab.active { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan); box-shadow: 0 0 10px rgba(6,182,212,0.2); }
+
+        /* GRAPH CONTAINER */
+        .graph-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(6, 182, 212, 0.3); 
+            border-radius: 20px; padding: 15px; margin: 0 15px 25px 15px; box-shadow: 0 10px 40px rgba(6, 182, 212, 0.1);
+        }
+        .eq-display {
+            text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; font-weight: 900;
+            color: var(--accent-cyan); padding: 10px; border-bottom: 1px dashed var(--border-subtle); margin-bottom: 15px;
+            transition: color 0.3s;
+        }
+        .canvas-wrap { width: 100%; height: 280px; position: relative; }
+
+        /* SLIDER CONTROLS */
+        .controls-card {
+            background: var(--card-bg); border: 1px solid var(--border-subtle); border-radius: 20px; 
+            padding: 20px; margin: 0 15px 30px 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .slider-group { margin-bottom: 20px; }
+        .slider-group:last-child { margin-bottom: 0; }
+        
+        .sl-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .sl-lbl { font-size: 0.8rem; font-weight: 800; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
+        .sl-val-box { 
+            background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--accent-cyan);
+            padding: 4px 10px; border-radius: 6px; font-weight: 900; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+            min-width: 50px; text-align: center;
+        }
+
+        /* Custom Platinum Range Slider */
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]:focus { outline: none; }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%;
+            background: var(--accent-cyan); cursor: pointer; margin-top: -8px;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.6); transition: 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:active { transform: scale(1.2); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #334155; border-radius: 2px; }
+
+        /* Specific Slider Colors */
+        .slider-a::-webkit-slider-thumb { background: #ec4899; box-shadow: 0 0 15px rgba(236, 72, 153, 0.6); }
+        .slider-b::-webkit-slider-thumb { background: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.6); }
+        .slider-c::-webkit-slider-thumb { background: #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.6); }
+        .slider-d::-webkit-slider-thumb { background: #fbbd23; box-shadow: 0 0 15px rgba(251, 189, 35, 0.6); }
+
+        /* The "WHY" Button & Modal */
+        .btn-why {
+            background: transparent; border: 1px dashed var(--accent-cyan); color: var(--accent-cyan);
+            width: calc(100% - 30px); margin: 0 15px 30px 15px; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem;
+            font-family: monospace; cursor: pointer; text-transform: uppercase; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .btn-why:active { background: rgba(6, 182, 212, 0.15); transform: scale(0.98); }
+
+        #tw-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #tw-steps-box { background: #1e293b; border: 1px solid var(--accent-cyan); border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(6, 182, 212, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: var(--accent-cyan); font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+        .math-def { background: #020617; padding: 10px; border-radius: 6px; font-family: monospace; border-left: 3px solid var(--accent-cyan); margin-bottom: 10px;}
+
+        /* Keyboard Accessibility */
+        *:focus-visible { outline: 2px solid var(--accent-cyan); outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 10px; }
+        .wave-tab:focus-visible { outline-color: #fff; }
+        input[type=range]:focus-visible::-webkit-slider-thumb { border: 2px solid #fff; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+
+    <header class="app-header" role="banner">
+        <a href="../graph.html" class="qs-back-btn" aria-label="Go back to Chart Master"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+        <div class="brand" aria-hidden="true"><i class="fas fa-water"></i> TRIG WAVES</div>
+    </header>
+
+    <main style="max-width: 600px; margin: 0 auto;" role="main">
+
+        <section class="wave-scroll-wrap" role="tablist" aria-label="Select Trigonometric Function">
+            <div class="wave-tab active" data-w="sin" role="tab" aria-selected="true" tabindex="0" onclick="TrigEngine.setWave('sin')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); TrigEngine.setWave('sin');}">Sin</div>
+            <div class="wave-tab" data-w="cos" role="tab" aria-selected="false" tabindex="0" onclick="TrigEngine.setWave('cos')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); TrigEngine.setWave('cos');}">Cos</div>
+            <div class="wave-tab" data-w="tan" role="tab" aria-selected="false" tabindex="0" onclick="TrigEngine.setWave('tan')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); TrigEngine.setWave('tan');}">Tan</div>
+            
+            <div class="wave-tab" data-w="csc" role="tab" aria-selected="false" tabindex="0" onclick="TrigEngine.setWave('csc')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); TrigEngine.setWave('csc');}">Csc</div>
+            <div class="wave-tab" data-w="sec" role="tab" aria-selected="false" tabindex="0" onclick="TrigEngine.setWave('sec')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); TrigEngine.setWave('sec');}">Sec</div>
+            <div class="wave-tab" data-w="cot" role="tab" aria-selected="false" tabindex="0" onclick="TrigEngine.setWave('cot')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); TrigEngine.setWave('cot');}">Cot</div>
+            
+            <div class="wave-tab" data-w="arcsin" role="tab" aria-selected="false" tabindex="0" onclick="TrigEngine.setWave('arcsin')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); TrigEngine.setWave('arcsin');}">ArcSin</div>
+            <div class="wave-tab" data-w="arccos" role="tab" aria-selected="false" tabindex="0" onclick="TrigEngine.setWave('arccos')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); TrigEngine.setWave('arccos');}">ArcCos</div>
+            <div class="wave-tab" data-w="arctan" role="tab" aria-selected="false" tabindex="0" onclick="TrigEngine.setWave('arctan')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); TrigEngine.setWave('arctan');}">ArcTan</div>
+            
+            <div class="wave-tab" data-w="arccsc" role="tab" aria-selected="false" tabindex="0" onclick="TrigEngine.setWave('arccsc')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); TrigEngine.setWave('arccsc');}">ArcCsc</div>
+            <div class="wave-tab" data-w="arcsec" role="tab" aria-selected="false" tabindex="0" onclick="TrigEngine.setWave('arcsec')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); TrigEngine.setWave('arcsec');}">ArcSec</div>
+            <div class="wave-tab" data-w="arccot" role="tab" aria-selected="false" tabindex="0" onclick="TrigEngine.setWave('arccot')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); TrigEngine.setWave('arccot');}">ArcCot</div>
+        </section>
+
+        <section class="graph-card">
+            <div class="eq-display" id="math-equation" aria-live="polite">y = 1 sin(1(x - 0)) + 0</div>
+            <div class="canvas-wrap">
+                <canvas id="waveCanvas" role="img" aria-label="Trigonometric wave graph"></canvas>
+            </div>
+        </section>
+
+        <section class="controls-card" aria-label="Wave Parameters Controls">
+            
+            <div class="slider-group">
+                <div class="sl-header">
+                    <span class="sl-lbl" style="color:var(--accent-pink);">A: Amplitude (Height)</span>
+                    <div class="sl-val-box" id="val-a" style="color:var(--accent-pink);">1.0</div>
+                </div>
+                <input type="range" id="sl-a" class="slider-a" min="-5" max="5" step="0.1" value="1" aria-label="Adjust Amplitude" oninput="TrigEngine.render()">
+            </div>
+
+            <div class="slider-group">
+                <div class="sl-header">
+                    <span class="sl-lbl" style="color:var(--accent-blue);">B: Multiplier (Speed/Domain)</span>
+                    <div class="sl-val-box" id="val-b" style="color:var(--accent-blue);">1.0</div>
+                </div>
+                <input type="range" id="sl-b" class="slider-b" min="0.1" max="5" step="0.1" value="1" aria-label="Adjust Frequency or Domain Modifier" oninput="TrigEngine.render()">
+            </div>
+
+            <div class="slider-group">
+                <div class="sl-header">
+                    <span class="sl-lbl" style="color:var(--accent-green);">C: Phase Shift (X-Offset)</span>
+                    <div class="sl-val-box" id="val-c" style="color:var(--accent-green);">0.0</div>
+                </div>
+                <input type="range" id="sl-c" class="slider-c" min="-6.28" max="6.28" step="0.01" value="0" aria-label="Adjust Phase Shift" oninput="TrigEngine.render()">
+            </div>
+
+            <div class="slider-group">
+                <div class="sl-header">
+                    <span class="sl-lbl" style="color:var(--accent-gold);">D: Vert Shift (Y-Offset)</span>
+                    <div class="sl-val-box" id="val-d" style="color:var(--accent-gold);">0.0</div>
+                </div>
+                <input type="range" id="sl-d" class="slider-d" min="-5" max="5" step="0.1" value="0" aria-label="Adjust Vertical Shift" oninput="TrigEngine.render()">
+            </div>
+
+        </section>
+
+        <button class="btn-why" aria-haspopup="dialog" aria-expanded="false" onclick="TrigEngine.showSteps()">
+            <i class="fas fa-book-open" aria-hidden="true"></i> Physics of Waves Explained
+        </button>
+
+    </main>
+
+    <div id="tw-steps-modal" role="dialog" aria-modal="true" aria-labelledby="modal-tw-title">
+        <div id="tw-steps-box">
+            <header class="steps-head">
+                <h2 id="modal-tw-title" style="margin:0; font-size:1rem;"><i class="fas fa-atom" aria-hidden="true"></i> WAVE MECHANICS & DOMAINS</h2>
+                <button class="steps-close" aria-label="Close Explainer" onclick="TrigEngine.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </header>
+            <div class="steps-content">
+                <div style="margin-bottom:15px; border-left:3px solid var(--accent-cyan); padding-left:10px;">
+                    <span style="color:var(--accent-cyan); font-weight:bold;">The Standard Form:</span><br>
+                    <code style="font-size:1.1rem; color:#fff;">y = A * func(B(x - C)) + D</code>
+                </div>
+                
+                <div class="math-def"><span style="color:var(--accent-pink); font-weight:bold;">A (Amplitude):</span> How tall the wave gets from its center line. Negative 'A' flips the wave upside down.</div>
+                <div class="math-def"><span style="color:var(--accent-blue); font-weight:bold;">B (Frequency):</span> How fast the wave oscillates. For inverses, it stretches or shrinks the valid X domain.</div>
+                <div class="math-def"><span style="color:var(--accent-green); font-weight:bold;">C (Phase Shift):</span> Moves the entire wave left or right along the X-axis.</div>
+                <div class="math-def"><span style="color:var(--accent-gold); font-weight:bold;">D (Vertical Shift):</span> Moves the center line of the wave up or down the Y-axis.</div>
+                
+                <div style="margin-top:15px; font-size:0.75rem; color:var(--text-muted); text-align:center;">
+                    *Functions like Tangent, Secant, and Cosecant shoot to infinity (Asymptotes). Inverse functions (ArcSin, ArcCos) only exist in specific constrained domains!
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    /* QUICKSOLVE PLATINUM - TRIGONOMETRIC WAVES ENGINE (12 FUNCTIONS OP EDITION) */
+    
+    window.TrigEngine = {
+        chart: null,
+        currentWave: 'sin',
+        
+        // Neon UI Colors mapped to 12 Functions
+        colors: {
+            'sin': '#06b6d4', 'cos': '#a855f7', 'tan': '#ec4899',
+            'csc': '#10b981', 'sec': '#f59e0b', 'cot': '#ef4444',
+            'arcsin': '#3b82f6', 'arccos': '#8b5cf6', 'arctan': '#f43f5e',
+            'arccsc': '#14b8a6', 'arcsec': '#d946ef', 'arccot': '#f97316'
+        },
+
+        init: function() {
+            console.log("Trig Wave Engine Ready 🚀");
+            this.initChart();
+            this.render();
+        },
+
+        setWave: function(waveType) {
+            this.currentWave = waveType;
+            
+            // Manage UI active states
+            document.querySelectorAll('.wave-tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+                tab.style.color = '';
+                tab.style.borderColor = '';
+                tab.style.boxShadow = '';
+            });
+            
+            const activeTab = document.querySelector(`.wave-tab[data-w="${waveType}"]`);
+            if(activeTab) {
+                activeTab.classList.add('active');
+                activeTab.setAttribute('aria-selected', 'true');
+                
+                // Dynamic Theming
+                let neon = this.colors[waveType];
+                activeTab.style.color = neon;
+                activeTab.style.borderColor = neon;
+                activeTab.style.boxShadow = `0 0 10px ${neon}33`;
+                
+                // Auto scroll tab into view nicely
+                activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+            
+            if(navigator.vibrate) navigator.vibrate(10);
+            this.render();
+        },
+
+        initChart: function() {
+            const ctx = document.getElementById('waveCanvas').getContext('2d');
+            this.chart = new Chart(ctx, {
+                type: 'line',
+                data: { labels: [], datasets: [{ label: 'y', data: [], borderColor: '#06b6d4', borderWidth: 2, tension: 0.2, pointRadius: 0, fill: false, spanGaps: false }] },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    animation: { duration: 0 }, // Instant update for slider feel
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#475569', maxTicksLimit: 7 } },
+                        y: { min: -6, max: 6, grid: { color: 'rgba(255,255,255,0.1)', zeroLineColor: '#fff' }, ticks: { color: '#475569' } }
+                    }
+                }
+            });
+        },
+
+        render: function() {
+            const A = parseFloat(document.getElementById('sl-a').value);
+            const B = parseFloat(document.getElementById('sl-b').value);
+            const C = parseFloat(document.getElementById('sl-c').value);
+            const D = parseFloat(document.getElementById('sl-d').value);
+
+            // Update UI Labels
+            document.getElementById('val-a').innerText = A.toFixed(1);
+            document.getElementById('val-b').innerText = B.toFixed(1);
+            document.getElementById('val-c').innerText = C.toFixed(2);
+            document.getElementById('val-d').innerText = D.toFixed(1);
+
+            // Dynamic Chart Color
+            let neonColor = this.colors[this.currentWave];
+            this.chart.data.datasets[0].borderColor = neonColor;
+            document.getElementById('math-equation').style.color = neonColor;
+
+            // Update Equation Text
+            let eqText = `y = ${A} ${this.currentWave}(${B}(x - ${C})) + ${D}`;
+            document.getElementById('math-equation').innerText = eqText;
+
+            // Generate Points
+            let xLabels = [];
+            let yPoints = [];
+            
+            // Resolution setup
+            const step = 0.05;
+            const rangeMin = -2 * Math.PI;
+            const rangeMax = 2 * Math.PI;
+
+            for (let x = rangeMin; x <= rangeMax; x += step) {
+                let y = null;
+                let angle = B * (x - C);
+                
+                // Super Math Engine for all 12 functions
+                switch(this.currentWave) {
+                    case 'sin': 
+                        y = A * Math.sin(angle) + D; 
+                        break;
+                    case 'cos': 
+                        y = A * Math.cos(angle) + D; 
+                        break;
+                    case 'tan': 
+                        y = A * Math.tan(angle) + D; 
+                        if (Math.abs(y) > 20) y = null; // Asymptote Slicer
+                        break;
+                    case 'csc': 
+                        y = A * (1 / Math.sin(angle)) + D; 
+                        if (Math.abs(y) > 20) y = null; 
+                        break;
+                    case 'sec': 
+                        y = A * (1 / Math.cos(angle)) + D; 
+                        if (Math.abs(y) > 20) y = null; 
+                        break;
+                    case 'cot': 
+                        y = A * (1 / Math.tan(angle)) + D; 
+                        if (Math.abs(y) > 20) y = null; 
+                        break;
+                    case 'arcsin': 
+                        if(Math.abs(angle) <= 1) y = A * Math.asin(angle) + D; 
+                        break;
+                    case 'arccos': 
+                        if(Math.abs(angle) <= 1) y = A * Math.acos(angle) + D; 
+                        break;
+                    case 'arctan': 
+                        y = A * Math.atan(angle) + D; 
+                        break;
+                    case 'arccsc': 
+                        if(Math.abs(angle) >= 1) y = A * Math.asin(1 / angle) + D; 
+                        break;
+                    case 'arcsec': 
+                        if(Math.abs(angle) >= 1) y = A * Math.acos(1 / angle) + D; 
+                        break;
+                    case 'arccot': 
+                        y = A * (Math.PI / 2 - Math.atan(angle)) + D; 
+                        break;
+                }
+
+                xLabels.push(x.toFixed(2));
+                yPoints.push(y);
+            }
+
+            this.chart.data.labels = xLabels;
+            this.chart.data.datasets[0].data = yPoints;
+            this.chart.update();
+        },
+
+        showSteps: function() {
+            const modal = document.getElementById('tw-steps-modal');
+            const box = document.getElementById('tw-steps-box');
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.style.opacity = '1'; box.style.transform = 'translateY(0)'; }, 10);
+            if(navigator.vibrate) navigator.vibrate(5);
+        },
+
+        hideSteps: function() {
+            const modal = document.getElementById('tw-steps-modal');
+            const box = document.getElementById('tw-steps-box');
+            modal.style.opacity = '0';
+            box.style.transform = 'translateY(20px)';
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+            if(navigator.vibrate) navigator.vibrate(5);
+        }
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+        window.TrigEngine.init();
+    });
+</script>
+</body>
+</html>

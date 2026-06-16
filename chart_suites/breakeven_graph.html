@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Break-Even Analyzer | Business Projections | QuickSolve Platinum</title>
+    <meta name="description" content="Advanced Break-Even Analyzer. Plot fixed costs, variable costs, and revenue to find the exact point your business crosses from loss to profit. 100% Offline.">
+    <meta name="keywords" content="break even calculator, break even analysis chart, business projection visualizer, fixed vs variable costs, contribution margin calculator, startup finance tool, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/chart_suites/breakeven_graph.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Break-Even">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0d0a15">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Break-Even Analyzer - Map Your Startup's Profit Zone">
+    <meta property="og:description" content="Find the exact coordinate where your revenue overtakes your costs. Essential tool for founders and businesses.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/chart_suites/breakeven_graph.html">
+    <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Break-Even Visualizer Logo">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Break-Even Analyzer Visualizer | QuickSolve Platinum">
+    <meta name="twitter:description" content="Plot fixed costs, variable costs, and revenue to find your exact Break-Even Point offline.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <!-- JSON-LD Structured Data for Business Tools -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Break-Even Analyzer Visualizer",
+      "url": "https://quicksolve-platinum.netlify.app/chart_suites/breakeven_graph.html",
+      "description": "Professional business tool to calculate and graph the break-even point by comparing fixed costs, variable costs, and sales revenue.",
+      "applicationCategory": "BusinessApplication, FinancialApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* =========================================
+           BREAK-EVEN ANALYZER - PLATINUM (SSJ4)
+           Theme: Business/Projections (Gold / Red)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800;900&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-gold: #fbbd23;
+            --accent-gold-glow: rgba(251, 189, 35, 0.3);
+            --accent-red: #ef4444;
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.15; z-index: -1; pointer-events: none;}
+        .glow-1 { top: 10%; right: -10%; width: 300px; height: 300px; background: var(--accent-gold); }
+        .glow-2 { bottom: 0%; left: -5%; width: 250px; height: 250px; background: var(--accent-red); }
+
+        /* HEADER - FIXED CENTERING BUG */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; 
+            /* Removed justify-content: space-between to allow absolute centering */
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; z-index: 2;
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { 
+            position: absolute; left: 50%; transform: translateX(-50%);
+            color: var(--accent-gold); font-weight: 900; font-size: 1rem; text-transform: uppercase; 
+            letter-spacing: 1px; display: flex; align-items: center; gap: 8px; white-space: nowrap; z-index: 1;
+        }
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #fbbd23, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--text-sub); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CARDS & INPUTS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(251, 189, 35, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(251, 189, 35, 0.1);
+        }
+        .inp-group { margin-bottom: 18px; position: relative; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: flex; justify-content: space-between;}
+        
+        .inp-field-wrap { display: flex; align-items: center; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; transition: 0.3s; overflow: hidden; }
+        .inp-field-wrap:focus-within { border-color: var(--accent-gold); box-shadow: 0 0 10px var(--accent-gold-glow); }
+        .inp-icon { padding: 14px 0 14px 15px; color: var(--accent-gold); font-weight: 900; font-family: 'JetBrains Mono', monospace; }
+        
+        .inp-field {
+            width: 100%; background: transparent; border: none; color: var(--text-main);
+            padding: 14px 15px; font-size: 1.1rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; box-sizing: border-box;
+        }
+        .inp-field::placeholder { color: var(--text-dim); font-weight: 500; font-family: 'Inter', sans-serif;}
+
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        /* PRESET CHIPS */
+        .preset-wrap { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; scrollbar-width: none;}
+        .preset-wrap::-webkit-scrollbar { display: none; }
+        .preset-chip {
+            background: rgba(251, 189, 35, 0.1); color: var(--accent-gold); border: 1px solid rgba(251, 189, 35, 0.3);
+            padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap; cursor: pointer; transition: 0.2s;
+        }
+        .preset-chip:active { transform: scale(0.95); background: var(--accent-gold); color: #000; }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #fbbd23, #ef4444);
+            color: #111; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px var(--accent-gold-glow); display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 10px;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS DASHBOARD */
+        .res-dash { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; display: none; }
+        .dash-box { background: rgba(2, 6, 23, 0.5); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 15px; text-align: center; }
+        .dash-box.full { grid-column: span 2; background: rgba(251, 189, 35, 0.05); border-color: var(--accent-gold); }
+        
+        .db-lbl { font-size: 0.65rem; color: var(--text-sub); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; margin-bottom: 5px;}
+        .db-val { font-size: 1.3rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; color: var(--text-main); }
+        .db-val.hl-gold { color: var(--accent-gold); font-size: 1.8rem; }
+        .db-val.hl-green { color: var(--accent-green); }
+        .db-sub { font-size: 0.75rem; color: var(--accent-blue); font-weight: bold; margin-top: 5px; }
+
+        /* GRAPH CARD */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(251, 189, 35, 0.4); border-radius: 20px; 
+            padding: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(251, 189, 35, 0.1); display: none;
+        }
+        .res-header { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;}
+        .res-title { color: var(--accent-gold); font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;}
+
+        /* CANVAS CONTAINER */
+        .graph-container {
+            width: 100%; height: 350px; background: #0d0a15; border-radius: 12px; padding: 10px; box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,0.05); position: relative;
+        }
+
+        /* ALERTS */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3); display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .toast.show { bottom: 30px; }
+
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* The "WHY" Button & Modal */
+        .btn-why {
+            background: transparent; border: 1px dashed var(--accent-blue); color: var(--accent-blue);
+            width: 100%; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem;
+            font-family: monospace; cursor: pointer; text-transform: uppercase; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 15px;
+        }
+        .btn-why:active { background: rgba(59, 130, 246, 0.15); transform: scale(0.98); }
+
+        #be-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #be-steps-box { background: #1e293b; border: 1px solid var(--accent-blue); border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: var(--accent-blue); font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+
+        /* Keyboard Focus Accessibility Rules (Laptop Compatibility) */
+        *:focus-visible { outline: 2px solid var(--accent-gold); outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 10px; outline-color: var(--accent-cyan); }
+        .inp-field:focus-visible { outline: none; }
+        .inp-field-wrap:focus-within { outline: 2px solid var(--accent-gold); outline-offset: 2px; }
+        .preset-chip:focus-visible { background: rgba(251, 189, 35, 0.3); border-color: var(--accent-gold); outline: none; color: #fff; }
+        .calc-btn:focus-visible { outline-offset: 4px; }
+        .btn-why:focus-visible { outline-color: var(--accent-blue); outline-offset: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header" role="banner">
+        <button onclick="window.history.back()" class="qs-back-btn" aria-label="Go back to Dashboard"><i class="fas fa-arrow-left" aria-hidden="true"></i></button>
+        <div class="brand" aria-hidden="true"><i class="fas fa-chart-pie"></i> BREAK-EVEN</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;" role="main">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>Analyzer Engine</h1>
+            <p aria-label="Command line interface style subtitle">> locate --profit_zone --intersect</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            
+            <div class="preset-wrap" role="group" aria-label="Business Profile Presets">
+                <div class="preset-chip" role="button" tabindex="0" onclick="BE_Engine.setPreset(50000, 200, 500)" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); BE_Engine.setPreset(50000, 200, 500); }">Retail Store</div>
+                <div class="preset-chip" role="button" tabindex="0" onclick="BE_Engine.setPreset(120000, 50, 999)" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); BE_Engine.setPreset(120000, 50, 999); }">Software (SaaS)</div>
+                <div class="preset-chip" role="button" tabindex="0" onclick="BE_Engine.setPreset(300000, 800, 1200)" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); BE_Engine.setPreset(300000, 800, 1200); }">Manufacturing</div>
+            </div>
+
+            <div class="inp-group">
+                <label class="inp-lbl" for="inp-fixed">Total Fixed Costs (Rent, Salary)</label>
+                <div class="inp-field-wrap">
+                    <span class="inp-icon" aria-hidden="true">₹</span>
+                    <input type="number" id="inp-fixed" class="inp-field" placeholder="50000" value="50000">
+                </div>
+            </div>
+
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl" for="inp-variable">Var Cost / Unit</label>
+                    <div class="inp-field-wrap">
+                        <span class="inp-icon" aria-hidden="true">₹</span>
+                        <input type="number" id="inp-variable" class="inp-field" placeholder="200" value="200">
+                    </div>
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl" for="inp-price">Selling Price / Unit</label>
+                    <div class="inp-field-wrap">
+                        <span class="inp-icon" aria-hidden="true">₹</span>
+                        <input type="number" id="inp-price" class="inp-field" placeholder="500" value="500">
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="calc-btn" onclick="BE_Engine.calculate()">
+                <i class="fas fa-bullseye" aria-hidden="true"></i> Find Break-Even
+            </button>
+        </div>
+
+        <div class="res-dash" id="res-dash" aria-live="polite">
+            <div class="dash-box full">
+                <div class="db-lbl">Break-Even Volume (Units)</div>
+                <div class="db-val hl-gold" id="val-units">0</div>
+                <div class="db-sub" id="val-cm">Contribution Margin: ₹0</div>
+            </div>
+            <div class="dash-box">
+                <div class="db-lbl">Break-Even Revenue</div>
+                <div class="db-val hl-green" id="val-rev">₹0</div>
+            </div>
+            <div class="dash-box">
+                <div class="db-lbl">Total Fixed Costs</div>
+                <div class="db-val" style="color: var(--accent-red);" id="val-fcost">₹0</div>
+            </div>
+        </div>
+
+        <div class="res-card" id="results-container">
+            <div class="res-header">
+                <div class="res-title"><i class="fas fa-chart-line" aria-hidden="true"></i> Profit vs Loss Projection</div>
+            </div>
+
+            <div class="graph-container">
+                <canvas id="beCanvas" role="img" aria-label="Line chart showing intersection of total costs and total revenue"></canvas>
+            </div>
+
+            <button type="button" class="btn-why" aria-haspopup="dialog" aria-expanded="false" onclick="BE_Engine.showSteps()">
+                <i class="fas fa-book-open" aria-hidden="true"></i> How to Read This Chart
+            </button>
+        </div>
+
+    </main>
+
+    <div id="be-steps-modal" role="dialog" aria-modal="true" aria-labelledby="modal-be-title">
+        <div id="be-steps-box">
+            <header class="steps-head">
+                <h2 id="modal-be-title" style="margin: 0; font-size: 1rem;"><i class="fas fa-map-marked-alt" aria-hidden="true"></i> CHART DECODER</h2>
+                <button type="button" class="steps-close" aria-label="Close Explainer" onclick="BE_Engine.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </header>
+            <div class="steps-content">
+                <div style="margin-bottom:15px; border-left:3px solid var(--accent-gold); padding-left:10px;">
+                    <span style="color:var(--accent-gold); font-weight:bold;">The Intersection (Target Acquired):</span><br>
+                    The exact point where the <span style="color:var(--accent-green); font-weight:bold;">Green Line (Revenue)</span> crosses above the <span style="color:var(--accent-red); font-weight:bold;">Red Line (Total Costs)</span> is your Break-Even Point.
+                </div>
+
+                <div style="background: rgba(2, 6, 23, 0.5); border: 1px solid #334155; padding: 15px; border-radius: 8px;">
+                    <span style="color:var(--accent-blue); font-weight:bold; font-size:1rem;">The 3 Zones</span><br><br>
+                    <p style="margin:0 0 10px 0; color:#ef4444;"><b>1. The Danger Zone (Left):</b> Before the intersection, your costs are higher than your sales. You are losing money.</p>
+                    <p style="margin:0 0 10px 0; color:#fbbd23;"><b>2. Ground Zero (Intersection):</b> You have exactly paid off your fixed costs. Profit is exactly ₹0.</p>
+                    <p style="margin:0; color:#10b981; font-weight:bold;"><b>3. The Profit Zone (Right):</b> After the intersection, every single unit sold adds directly to your pure profit!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    /* QUICKSOLVE PLATINUM - BREAK-EVEN ANALYZER ENGINE V1.0 */
+    
+    window.BE_Engine = {
+        chartInstance: null,
+
+        haptic: function() { if(navigator.vibrate) navigator.vibrate(20); },
+
+        showToast: function(msg) {
+            const toast = document.getElementById('custom-toast');
+            if(!toast) return; 
+            document.getElementById('toast-msg').innerText = msg;
+            if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        },
+
+        setPreset: function(fc, vc, price) {
+            this.haptic();
+            document.getElementById('inp-fixed').value = fc;
+            document.getElementById('inp-variable').value = vc;
+            document.getElementById('inp-price').value = price;
+            this.calculate(); 
+        },
+
+        formatINR: function(num) {
+            let x = Math.round(num).toString();
+            let lastThree = x.substring(x.length - 3);
+            let otherNumbers = x.substring(0, x.length - 3);
+            if (otherNumbers != '') lastThree = ',' + lastThree;
+            return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+        },
+
+        calculate: function() {
+            this.haptic();
+
+            const FC = parseFloat(document.getElementById("inp-fixed").value) || 0;
+            const VC = parseFloat(document.getElementById("inp-variable").value) || 0;
+            const P = parseFloat(document.getElementById("inp-price").value) || 0;
+
+            if (FC < 0 || VC < 0 || P <= 0) { 
+                this.showToast("Values must be positive numbers."); 
+                return; 
+            }
+
+            const contributionMargin = P - VC;
+
+            // Failsafe: If variable cost is higher than selling price, business is impossible.
+            if (contributionMargin <= 0) {
+                this.showToast("Selling Price must be higher than Variable Cost to break even!");
+                return;
+            }
+
+            const breakEvenUnits = Math.ceil(FC / contributionMargin);
+            const breakEvenRevenue = breakEvenUnits * P;
+
+            // Reveal UI
+            const resDash = document.getElementById('res-dash');
+            const resCard = document.getElementById('results-container');
+            resDash.style.display = 'grid';
+            resCard.style.display = 'block';
+
+            // Update Dashboards
+            document.getElementById('val-units').innerText = breakEvenUnits.toLocaleString('en-IN') + " Units";
+            document.getElementById('val-cm').innerText = "Contribution Margin per unit: ₹" + this.formatINR(contributionMargin);
+            document.getElementById('val-rev').innerText = "₹" + this.formatINR(breakEvenRevenue);
+            document.getElementById('val-fcost').innerText = "₹" + this.formatINR(FC);
+
+            // Chart Logic - Scale X Axis to show profit zone clearly (up to 2x BE units)
+            let maxUnits = breakEvenUnits * 2;
+            if (maxUnits < 10) maxUnits = 10; // Minimum scale
+
+            // Generate roughly 10 points for a smooth line
+            let step = Math.ceil(maxUnits / 10);
+            if (step < 1) step = 1;
+
+            let labels = [];
+            let dataRevenue = [];
+            let dataTotalCost = [];
+            let dataFixedCost = [];
+
+            // Ensure Break-Even point is EXACTLY plotted
+            let points = [0];
+            for (let i = step; i < maxUnits; i += step) {
+                points.push(i);
+            }
+            if (!points.includes(breakEvenUnits)) points.push(breakEvenUnits);
+            if (!points.includes(maxUnits)) points.push(maxUnits);
+            
+            points.sort((a, b) => a - b); // Order the points
+
+            for (let x of points) {
+                labels.push(x + " U");
+                dataFixedCost.push(FC);
+                dataTotalCost.push(FC + (VC * x));
+                dataRevenue.push(P * x);
+            }
+
+            // Render Chart
+            if (this.chartInstance) {
+                this.chartInstance.destroy();
+            }
+
+            const ctx = document.getElementById("beCanvas").getContext("2d");
+            
+            this.chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Total Revenue (₹)',
+                            data: dataRevenue,
+                            borderColor: '#10b981', // Green
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 3,
+                            tension: 0, // Straight lines
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            fill: false
+                        },
+                        {
+                            label: 'Total Costs (₹)',
+                            data: dataTotalCost,
+                            borderColor: '#ef4444', // Red
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            borderWidth: 3,
+                            tension: 0,
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            fill: false
+                        },
+                        {
+                            label: 'Fixed Costs (₹)',
+                            data: dataFixedCost,
+                            borderColor: '#3b82f6', // Blue
+                            borderWidth: 2,
+                            borderDash: [5, 5], // Dashed to show it's a baseline
+                            tension: 0,
+                            pointRadius: 0,
+                            pointHoverRadius: 0,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { intersect: false, mode: 'index' },
+                    plugins: {
+                        legend: { 
+                            display: true,
+                            position: 'top',
+                            labels: { color: '#94a3b8', font: { family: "'JetBrains Mono', monospace", size: 11 }, usePointStyle: true, boxWidth: 8 }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(13, 10, 21, 0.95)',
+                            titleColor: '#f8fafc',
+                            bodyFont: { family: "'JetBrains Mono', monospace", size: 13 },
+                            borderColor: 'rgba(255,255,255,0.1)',
+                            borderWidth: 1,
+                            callbacks: {
+                                title: function(context) { return 'Volume: ' + context[0].label; },
+                                label: function(context) { 
+                                    let val = context.parsed.y;
+                                    return context.dataset.label.replace(' (₹)', '') + ': ₹' + window.BE_Engine.formatINR(val); 
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { 
+                            grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false }, 
+                            ticks: { color: '#475569', maxTicksLimit: 6 } 
+                        },
+                        y: { 
+                            grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false }, 
+                            ticks: { 
+                                color: '#475569',
+                                callback: function(value) {
+                                    if(value >= 10000000) return '₹' + (value/10000000).toFixed(1) + 'Cr';
+                                    if(value >= 100000) return '₹' + (value/100000).toFixed(0) + 'L';
+                                    if(value >= 1000) return '₹' + (value/1000).toFixed(0) + 'K';
+                                    return '₹' + value;
+                                }
+                            } 
+                        }
+                    },
+                    animation: { duration: 600, easing: 'easeOutQuart' }
+                }
+            });
+
+            // Scroll Animation
+            resDash.classList.remove('anim-up');
+            resCard.classList.remove('anim-up');
+            void resDash.offsetWidth; // reflow
+            resDash.classList.add('anim-up');
+            resCard.classList.add('anim-up');
+            setTimeout(() => { resDash.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+        },
+
+        showSteps: function() {
+            const modal = document.getElementById('be-steps-modal');
+            const box = document.getElementById('be-steps-box');
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.style.opacity = '1'; box.style.transform = 'translateY(0)'; }, 10);
+            this.haptic();
+        },
+
+        hideSteps: function() {
+            const modal = document.getElementById('be-steps-modal');
+            const box = document.getElementById('be-steps-box');
+            modal.style.opacity = '0';
+            box.style.transform = 'translateY(20px)';
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+            this.haptic();
+        }
+    };
+
+    // Global Key Listener for all inputs
+    const inputsArray = [
+        document.getElementById("inp-fixed"),
+        document.getElementById("inp-variable"),
+        document.getElementById("inp-price")
+    ];
+    
+    inputsArray.forEach(inputEl => {
+        if(inputEl) {
+            inputEl.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") { 
+                    event.preventDefault(); 
+                    window.BE_Engine.calculate(); 
+                }
+            });
+        }
+    });
+
+    // Auto-plot default on load
+    window.addEventListener('DOMContentLoaded', () => {
+        window.BE_Engine.calculate();
+    });
+</script>
+</body>
+</html>

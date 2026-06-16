@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Compounding Curve Visualizer | Wealth Calculator | QuickSolve Platinum</title>
+    <meta name="description" content="Advanced compounding interest and SIP visualizer. Graphically compare your total investment against exponential wealth growth over time. The ultimate financial plotting tool.">
+    <meta name="keywords" content="compounding curve, compound interest calculator, SIP calculator graph, investment visualizer, wealth growth chart, exponential growth finance, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/chart_suites/compounding_curve.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Compounding">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0d0a15">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Compounding Curve Visualizer - See Your Wealth Grow">
+    <meta property="og:description" content="Plot the magic of compound interest. Compare linear savings vs exponential investment growth.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/chart_suites/compounding_curve.html">
+    <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Compounding Visualizer Logo">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Compounding Curve Visualizer | QuickSolve Platinum">
+    <meta name="twitter:description" content="Plot the magic of compound interest. Compare linear savings vs exponential investment growth offline.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Compounding Curve Visualizer",
+      "url": "https://quicksolve-platinum.netlify.app/chart_suites/compounding_curve.html",
+      "description": "Advanced financial calculator and graphing tool to visualize compound interest, SIPs, and exponential wealth growth over time.",
+      "applicationCategory": "FinancialApplication, BusinessApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* =========================================
+           COMPOUNDING CURVE - PLATINUM (SSJ4)
+           Theme: Finance (Emerald Green / Cyan)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800;900&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-green: #10b981;
+            --accent-green-glow: rgba(16, 185, 129, 0.3);
+            --accent-cyan: #06b6d4;
+            --accent-gold: #fbbd23;
+            --accent-blue: #3b82f6;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.2; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; left: -10%; width: 300px; height: 300px; background: var(--accent-green); }
+        .glow-2 { bottom: 10%; right: -10%; width: 250px; height: 250px; background: var(--accent-cyan); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-green); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #10b981, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--text-sub); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CARDS & INPUTS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(16, 185, 129, 0.1);
+        }
+        .inp-group { margin-bottom: 18px; position: relative; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: flex; justify-content: space-between;}
+        
+        .inp-field-wrap { display: flex; align-items: center; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; transition: 0.3s; overflow: hidden; }
+        .inp-field-wrap:focus-within { border-color: var(--accent-green); box-shadow: 0 0 10px var(--accent-green-glow); }
+        .inp-icon { padding: 14px 0 14px 15px; color: var(--accent-green); font-weight: 900; font-family: 'JetBrains Mono', monospace; }
+        
+        .inp-field {
+            width: 100%; background: transparent; border: none; color: var(--text-main);
+            padding: 14px 15px; font-size: 1.1rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; box-sizing: border-box;
+        }
+        .inp-field::placeholder { color: var(--text-dim); font-weight: 500; font-family: 'Inter', sans-serif;}
+
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        /* PRESET CHIPS */
+        .preset-wrap { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; scrollbar-width: none;}
+        .preset-wrap::-webkit-scrollbar { display: none; }
+        .preset-chip {
+            background: rgba(16, 185, 129, 0.1); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap; cursor: pointer; transition: 0.2s;
+        }
+        .preset-chip:active { transform: scale(0.95); background: var(--accent-green); color: #000; }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #10b981, #06b6d4);
+            color: #fff; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px var(--accent-green-glow); display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 10px;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS DASHBOARD */
+        .res-dash { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; display: none; }
+        .dash-box { background: rgba(2, 6, 23, 0.5); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 15px; text-align: center; }
+        .dash-box.full { grid-column: span 2; background: rgba(16, 185, 129, 0.05); border-color: var(--accent-green); }
+        
+        .db-lbl { font-size: 0.65rem; color: var(--text-sub); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; margin-bottom: 5px;}
+        .db-val { font-size: 1.3rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; color: var(--text-main); }
+        .db-val.hl-green { color: var(--accent-green); font-size: 1.6rem; }
+        .db-val.hl-blue { color: var(--accent-cyan); }
+
+        /* GRAPH CARD */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 20px; 
+            padding: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(16, 185, 129, 0.1); display: none;
+        }
+        .res-header { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;}
+        .res-title { color: var(--accent-green); font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;}
+
+        /* CANVAS CONTAINER */
+        .graph-container {
+            width: 100%; height: 320px; background: #0d0a15; border-radius: 12px; padding: 10px; box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,0.05); position: relative;
+        }
+
+        /* ALERTS */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3); display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .toast.show { bottom: 30px; }
+
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* The "WHY" Button & Modal */
+        .btn-why {
+            background: transparent; border: 1px dashed var(--accent-gold); color: var(--accent-gold);
+            width: 100%; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem;
+            font-family: monospace; cursor: pointer; text-transform: uppercase; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 15px;
+        }
+        .btn-why:active { background: rgba(251, 189, 35, 0.15); transform: scale(0.98); }
+
+        #cc-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
+        #cc-steps-box { background: #1e293b; border: 1px solid var(--accent-gold); border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(251, 189, 35, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: var(--accent-gold); font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+
+        /* Keyboard Focus Accessibility Rules (Laptop Compatibility) */
+        *:focus-visible { outline: 2px solid var(--accent-green); outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 10px; outline-color: var(--accent-cyan); }
+        .inp-field:focus-visible { outline: none; }
+        .inp-field-wrap:focus-within { outline: 2px solid var(--accent-green); outline-offset: 2px; }
+        .preset-chip:focus-visible { background: rgba(16, 185, 129, 0.3); border-color: var(--accent-green); outline: none; }
+        .calc-btn:focus-visible { outline-offset: 4px; }
+        .btn-why:focus-visible { outline-color: var(--accent-gold); outline-offset: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header" role="banner">
+        <a href="../graph.html" class="qs-back-btn" aria-label="Go back to Dashboard"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+        <div class="brand" aria-hidden="true"><i class="fas fa-rocket"></i> COMPOUNDING</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;" role="main">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>Exponential Wealth</h1>
+            <p aria-label="Command line interface style subtitle">> calc --sip --plot_curve</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            
+            <div class="preset-wrap" role="group" aria-label="Investment Strategy Presets">
+                <div class="preset-chip" role="button" tabindex="0" onclick="CompEngine.setPreset(0, 5000, 12, 10)" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); CompEngine.setPreset(0, 5000, 12, 10); }">Standard SIP</div>
+                <div class="preset-chip" role="button" tabindex="0" onclick="CompEngine.setPreset(100000, 0, 10, 15)" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); CompEngine.setPreset(100000, 0, 10, 15); }">Lumpsum Only</div>
+                <div class="preset-chip" role="button" tabindex="0" onclick="CompEngine.setPreset(50000, 10000, 15, 20)" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); CompEngine.setPreset(50000, 10000, 15, 20); }">Aggressive</div>
+            </div>
+
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl" for="inp-init">Initial Deposit</label>
+                    <div class="inp-field-wrap">
+                        <span class="inp-icon" aria-hidden="true">₹</span>
+                        <input type="number" id="inp-init" class="inp-field" placeholder="0" value="0">
+                    </div>
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl" for="inp-sip">Monthly Add (SIP)</label>
+                    <div class="inp-field-wrap">
+                        <span class="inp-icon" aria-hidden="true">₹</span>
+                        <input type="number" id="inp-sip" class="inp-field" placeholder="5000" value="5000">
+                    </div>
+                </div>
+            </div>
+
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl" for="inp-rate">Est. Return Rate</label>
+                    <div class="inp-field-wrap">
+                        <span class="inp-icon" aria-hidden="true">%</span>
+                        <input type="number" id="inp-rate" class="inp-field" placeholder="12" value="12">
+                    </div>
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl" for="inp-time">Time Period</label>
+                    <div class="inp-field-wrap">
+                        <span class="inp-icon" aria-hidden="true">Yr</span>
+                        <input type="number" id="inp-time" class="inp-field" placeholder="10" value="10">
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="calc-btn" onclick="CompEngine.calculate()">
+                <i class="fas fa-chart-area" aria-hidden="true"></i> Generate Curve
+            </button>
+        </div>
+
+        <div class="res-dash" id="res-dash" aria-live="polite">
+            <div class="dash-box">
+                <div class="db-lbl">Total Invested</div>
+                <div class="db-val hl-blue" id="val-invested">₹0</div>
+            </div>
+            <div class="dash-box">
+                <div class="db-lbl">Wealth Gained</div>
+                <div class="db-val" style="color: var(--accent-gold);" id="val-gained">₹0</div>
+            </div>
+            <div class="dash-box full">
+                <div class="db-lbl" style="color: var(--accent-green);">Total Final Value</div>
+                <div class="db-val hl-green" id="val-total">₹0</div>
+            </div>
+        </div>
+
+        <div class="res-card" id="results-container">
+            <div class="res-header">
+                <div class="res-title"><i class="fas fa-chart-line" aria-hidden="true"></i> Wealth Trajectory</div>
+            </div>
+
+            <div class="graph-container">
+                <canvas id="compCanvas" role="img" aria-label="Compounding growth chart showing total value vs invested amount"></canvas>
+            </div>
+
+            <button type="button" class="btn-why" aria-haspopup="dialog" aria-expanded="false" onclick="CompEngine.showSteps()">
+                <i class="fas fa-snowplow" aria-hidden="true"></i> The Snowball Effect Explained
+            </button>
+        </div>
+
+    </main>
+
+    <div id="cc-steps-modal" role="dialog" aria-modal="true" aria-labelledby="modal-cc-title">
+        <div id="cc-steps-box">
+            <header class="steps-head">
+                <h2 id="modal-cc-title" style="margin: 0; font-size: 1rem;"><i class="fas fa-magic" aria-hidden="true"></i> THE 8TH WONDER</h2>
+                <button class="steps-close" aria-label="Close Explainer" onclick="CompEngine.hideSteps()"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </header>
+            <div class="steps-content">
+                <div style="margin-bottom:15px; border-left:3px solid var(--accent-green); padding-left:10px;">
+                    <span style="color:var(--accent-green); font-weight:bold;">Linear vs Exponential:</span><br>
+                    Notice how the <span style="color:var(--accent-cyan); font-weight:bold;">Blue Line (Your Money)</span> goes up in a straight line, but the <span style="color:var(--accent-green); font-weight:bold;">Green Curve (Total Wealth)</span> shoots upward like a rocket!
+                </div>
+
+                <div style="background: rgba(2, 6, 23, 0.5); border: 1px solid #334155; padding: 15px; border-radius: 8px;">
+                    <span style="color:var(--accent-gold); font-weight:bold; font-size:1rem;">The Snowball Effect</span><br><br>
+                    <p style="margin:0 0 10px 0; color:#94a3b8;"><b>Year 1:</b> You earn interest on your initial money.</p>
+                    <p style="margin:0 0 10px 0; color:#cbd5e1;"><b>Year 2:</b> You earn interest on your money AND the interest from Year 1.</p>
+                    <p style="margin:0; color:#f8fafc; font-weight:bold;"><b>Year 10+:</b> The interest starts earning so much interest itself, that it overtakes your actual deposits!</p>
+                </div>
+
+                <div style="margin-top:15px; font-size:0.75rem; color:var(--text-muted); text-align:center;">
+                    "Compound interest is the eighth wonder of the world. He who understands it, earns it; he who doesn't, pays it." - Albert Einstein
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    /* QUICKSOLVE PLATINUM - COMPOUNDING CURVE ENGINE V1.0 */
+    
+    window.CompEngine = {
+        chartInstance: null,
+
+        haptic: function() { if(navigator.vibrate) navigator.vibrate(20); },
+
+        showToast: function(msg) {
+            const toast = document.getElementById('custom-toast');
+            if(!toast) return; 
+            document.getElementById('toast-msg').innerText = msg;
+            if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        },
+
+        setPreset: function(init, sip, rate, time) {
+            this.haptic();
+            document.getElementById('inp-init').value = init;
+            document.getElementById('inp-sip').value = sip;
+            document.getElementById('inp-rate').value = rate;
+            document.getElementById('inp-time').value = time;
+            this.calculate(); 
+        },
+
+        formatINR: function(num) {
+            // Formats number to Indian Rupee standard (e.g. 1,00,000)
+            let x = Math.round(num).toString();
+            let lastThree = x.substring(x.length - 3);
+            let otherNumbers = x.substring(0, x.length - 3);
+            if (otherNumbers != '') lastThree = ',' + lastThree;
+            return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+        },
+
+        calculate: function() {
+            this.haptic();
+
+            // 1. Get Inputs
+            const P = parseFloat(document.getElementById("inp-init").value) || 0;
+            const PMT = parseFloat(document.getElementById("inp-sip").value) || 0;
+            const R_annual = parseFloat(document.getElementById("inp-rate").value) || 0;
+            const T_years = parseInt(document.getElementById("inp-time").value) || 0;
+
+            if (T_years <= 0) { this.showToast("Time period must be at least 1 year."); return; }
+            if (P <= 0 && PMT <= 0) { this.showToast("Please enter an initial deposit or SIP amount."); return; }
+
+            // Reveal UI elements BEFORE creating chart
+            const resDash = document.getElementById('res-dash');
+            const resCard = document.getElementById('results-container');
+            resDash.style.display = 'grid';
+            resCard.style.display = 'block';
+
+            // 2. The Core Financial Engine (Step-by-step for accurate graphing)
+            let labels = [];
+            let dataInvested = [];
+            let dataTotal = [];
+
+            let currentTotal = P;
+            let currentInvested = P;
+            let r_monthly = (R_annual / 100) / 12;
+
+            // Start point (Year 0)
+            labels.push("Yr 0");
+            dataInvested.push(P);
+            dataTotal.push(P);
+
+            for (let year = 1; year <= T_years; year++) {
+                // Calculate month by month for accuracy within the year
+                for (let month = 1; month <= 12; month++) {
+                    currentInvested += PMT;
+                    // Compound existing money, then add new SIP at end of month (Standard practice)
+                    currentTotal = currentTotal * (1 + r_monthly) + PMT;
+                }
+                
+                labels.push("Yr " + year);
+                dataInvested.push(Math.round(currentInvested));
+                dataTotal.push(Math.round(currentTotal));
+            }
+
+            const finalTotal = dataTotal[dataTotal.length - 1];
+            const finalInvested = dataInvested[dataInvested.length - 1];
+            const finalGained = finalTotal - finalInvested;
+
+            // 3. Update Dashboard Numbers
+            document.getElementById('val-total').innerText = "₹" + this.formatINR(finalTotal);
+            document.getElementById('val-invested').innerText = "₹" + this.formatINR(finalInvested);
+            document.getElementById('val-gained').innerText = "₹" + this.formatINR(finalGained);
+
+            // 4. Render Chart
+            if (this.chartInstance) {
+                this.chartInstance.destroy();
+            }
+
+            const ctx = document.getElementById("compCanvas").getContext("2d");
+            
+            this.chartInstance = new Chart(ctx, {
+                type: "line",
+                data: { 
+                    labels: labels, 
+                    datasets: [
+                        {
+                            label: "Total Value (₹)",
+                            data: dataTotal,
+                            borderColor: "#10b981", // Platinum Green
+                            backgroundColor: "rgba(16, 185, 129, 0.1)",
+                            borderWidth: 3,
+                            tension: 0.4, 
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            fill: true
+                        },
+                        {
+                            label: "Total Invested (₹)",
+                            data: dataInvested,
+                            borderColor: "#06b6d4", // Platinum Cyan
+                            borderWidth: 2,
+                            borderDash: [5, 5], // Dashed line to show it's baseline
+                            tension: 0,
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            fill: false
+                        }
+                    ] 
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { intersect: false, mode: 'index' },
+                    plugins: {
+                        legend: { 
+                            display: true,
+                            position: 'top',
+                            labels: { color: '#94a3b8', font: { family: "'JetBrains Mono', monospace", size: 11 }, usePointStyle: true, boxWidth: 8 }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(13, 10, 21, 0.95)',
+                            titleColor: '#f8fafc',
+                            bodyFont: { family: "'JetBrains Mono', monospace", size: 13 },
+                            borderColor: 'rgba(255,255,255,0.1)',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(context) { 
+                                    let val = context.parsed.y;
+                                    return context.dataset.label.replace(' (₹)', '') + ': ₹' + window.CompEngine.formatINR(val); 
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false }, ticks: { color: '#475569', maxTicksLimit: 8 } },
+                        y: { 
+                            grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false }, 
+                            ticks: { 
+                                color: '#475569',
+                                callback: function(value) {
+                                    if(value >= 10000000) return '₹' + (value/10000000).toFixed(1) + 'Cr';
+                                    if(value >= 100000) return '₹' + (value/100000).toFixed(1) + 'L';
+                                    if(value >= 1000) return '₹' + (value/1000).toFixed(0) + 'K';
+                                    return '₹' + value;
+                                }
+                            } 
+                        }
+                    },
+                    animation: { duration: 600, easing: 'easeOutQuart' }
+                }
+            });
+
+            // Scroll Animation
+            resDash.classList.remove('anim-up');
+            resCard.classList.remove('anim-up');
+            void resDash.offsetWidth; // reflow
+            resDash.classList.add('anim-up');
+            resCard.classList.add('anim-up');
+            setTimeout(() => { resDash.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+        },
+
+        showSteps: function() {
+            const modal = document.getElementById('cc-steps-modal');
+            const box = document.getElementById('cc-steps-box');
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.style.opacity = '1'; box.style.transform = 'translateY(0)'; }, 10);
+            this.haptic();
+        },
+
+        hideSteps: function() {
+            const modal = document.getElementById('cc-steps-modal');
+            const box = document.getElementById('cc-steps-box');
+            modal.style.opacity = '0';
+            box.style.transform = 'translateY(20px)';
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+            this.haptic();
+        }
+    };
+
+    // Global Key Listener for all inputs
+    const inputsArray = [
+        document.getElementById("inp-init"),
+        document.getElementById("inp-sip"),
+        document.getElementById("inp-rate"),
+        document.getElementById("inp-time")
+    ];
+    
+    inputsArray.forEach(inputEl => {
+        if(inputEl) {
+            inputEl.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") { 
+                    event.preventDefault(); 
+                    window.CompEngine.calculate(); 
+                }
+            });
+        }
+    });
+
+    // Auto-plot default on load
+    window.addEventListener('DOMContentLoaded', () => {
+        window.CompEngine.calculate();
+    });
+</script>
+</body>
+</html>

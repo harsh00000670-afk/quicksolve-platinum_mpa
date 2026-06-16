@@ -8,7 +8,47 @@
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
 
     <title>Equation Visualizer | Chart Master | QuickSolve Platinum</title>
+    <meta name="description" content="Advanced 2D function grapher and algebraic function plotter. Graph mathematical expressions, evaluate trigonometric waves, slice asymptotes, and simulate dynamic multi-point math equations offline.">
+    <meta name="keywords" content="equation plotter, graph visualizer, function calculator, 2d math grapher, algebra visualizer, trigonometry wave plotter, mathjs charts, chartjs engine, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/chart_suites/equation_visualizer.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Plotter Pro">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#0d0a15">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Equation Visualizer - Interactive Graph Analytics Lab">
+    <meta property="og:description" content="Plot algebraic, transcendental, and trigonometric equations in high-fidelity 4000-point matrices natively.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/chart_suites/equation_visualizer.html">
+    <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Function Grapher Engine Logo">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Advanced Equation Visualizer Suite | QuickSolve Platinum">
+    <meta name="twitter:description" content="Plot dynamic multi-point algebraic equations, solve functions, and analyze curve parameters offline flawlessly.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Advanced Equation Visualizer",
+      "url": "https://quicksolve-platinum.netlify.app/chart_suites/equation_visualizer.html",
+      "description": "High-fidelity algebraic and trigonometric function visualizer built on top of MathJS and ChartJS plotting engines.",
+      "applicationCategory": "DeveloperApplication, EducationalApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
 
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
@@ -53,17 +93,32 @@
         .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-cyan); }
 
         /* HEADER */
-        .app-header {
-            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
-            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
-        }
+.app-header {
+    position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+    border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center;
+}
+
         .qs-back-btn { 
             background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
             border-radius: 10px; display: flex; align-items: center; justify-content: center; 
             font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
         }
         .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
-        .brand { color: var(--accent-pink); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+.brand { 
+    position: absolute; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    color: var(--accent-pink); 
+    font-weight: 800; 
+    font-size: 1rem; 
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px;
+    white-space: nowrap;
+}
+
 
         /* HERO */
         .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
@@ -144,6 +199,12 @@
         .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
         @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
 
+        /* Keyboard Focus Accessibility Rules (Laptop Compatibility) */
+        *:focus-visible { outline: 2px solid var(--accent-pink); outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 10px; outline-color: var(--accent-cyan); }
+        .inp-field:focus-visible { outline: none; }
+        .preset-chip:focus-visible { background: rgba(6, 182, 212, 0.3); border-color: var(--accent-cyan); outline: none; }
+        .calc-btn:focus-visible { outline-offset: 4px; }
     </style>
 </head>
 <body>
@@ -153,87 +214,87 @@
     
     <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
 
-    <header class="app-header">
-        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
-        <div class="brand"><i class="fas fa-chart-line"></i> EQUATION VISUALIZER</div>
+    <header class="app-header" role="banner">
+        <button onclick="window.history.back()" class="qs-back-btn" aria-label="Go back to Dashboard"><i class="fas fa-arrow-left" aria-hidden="true"></i></button>
+        <div class="brand" aria-hidden="true"><i class="fas fa-chart-line"></i> EQUATION VISUALIZER</div>
     </header>
 
-    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;" role="main">
         
         <div class="hero anim-up" style="animation-delay: 0.1s;">
             <h1>Advanced Plotter V3</h1>
-            <p>> render --anti_alias --asymptote_slice</p>
+            <p aria-label="Command line interface style subtitle">> render --anti_alias --asymptote_slice</p>
         </div>
 
         <div class="config-card anim-up" style="animation-delay: 0.2s;">
             
             <div class="inp-group">
-                <label class="inp-lbl">
+                <label class="inp-lbl" for="inp-eq">
                     <span style="color:var(--accent-pink);">1. Primary Function f(x)</span>
                 </label>
                 <input type="text" id="inp-eq" class="inp-field" placeholder="e.g. x^2 + 2*x" value="1 / (x * sin(x))">
             </div>
 
             <div class="inp-group">
-                <label class="inp-lbl">
+                <label class="inp-lbl" for="inp-eq2">
                     <span style="color:var(--accent-cyan);">2. Secondary Function g(x) <span style="color:var(--text-dim); text-transform:none;">(Optional)</span></span>
                 </label>
                 <input type="text" id="inp-eq2" class="inp-field" placeholder="e.g. cos(x)" style="border-color: rgba(6, 182, 212, 0.3);">
             </div>
 
-            <div class="preset-wrap">
-                <div class="preset-chip" onclick="GraphEngine.setPreset('1 / (x * sin(x))', '')">1/(x*sin(x))</div>
-                <div class="preset-chip" onclick="GraphEngine.setPreset('sin(x^2) * cos(3*x)', '')">Wave Alias</div>
-                <div class="preset-chip" onclick="GraphEngine.setPreset('tan(x)', '')">Tan (Sliced)</div>
-                <div class="preset-chip" onclick="GraphEngine.setPreset('x^(1/3)', '')">Cube Root</div>
+            <div class="preset-wrap" role="group" aria-label="Mathematical Presets Conversion">
+                <div class="preset-chip" role="button" id="pr-1" tabindex="0" onclick="window.GraphEngine.setPreset('1 / (x * sin(x))', '')" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.GraphEngine.setPreset('1 / (x * sin(x))', ''); }">1/(x*sin(x))</div>
+                <div class="preset-chip" role="button" id="pr-2" tabindex="0" onclick="window.GraphEngine.setPreset('sin(x^2) * cos(3*x)', '')" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.GraphEngine.setPreset('sin(x^2) * cos(3*x)', ''); }">Wave Alias</div>
+                <div class="preset-chip" role="button" id="pr-3" tabindex="0" onclick="window.GraphEngine.setPreset('tan(x)', '')" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.GraphEngine.setPreset('tan(x)', ''); }">Tan (Sliced)</div>
+                <div class="preset-chip" role="button" id="pr-4" tabindex="0" onclick="window.GraphEngine.setPreset('x^(1/3)', '')" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.GraphEngine.setPreset('x^(1/3)', ''); }">Cube Root</div>
             </div>
 
             <div class="inp-grid">
                 <div class="inp-group">
-                    <label class="inp-lbl">X-Axis Min</label>
+                    <label class="inp-lbl" for="inp-xmin">X-Axis Min</label>
                     <input type="number" id="inp-xmin" class="inp-field" value="-10">
                 </div>
                 <div class="inp-group">
-                    <label class="inp-lbl">X-Axis Max</label>
+                    <label class="inp-lbl" for="inp-xmax">X-Axis Max</label>
                     <input type="number" id="inp-xmax" class="inp-field" value="10">
                 </div>
             </div>
 
             <div class="inp-grid">
                 <div class="inp-group">
-                    <label class="inp-lbl">Y-Axis Min (Zoom)</label>
+                    <label class="inp-lbl" for="inp-ymin">Y-Axis Min (Zoom)</label>
                     <input type="number" id="inp-ymin" class="inp-field" value="-10" placeholder="Auto">
                 </div>
                 <div class="inp-group">
-                    <label class="inp-lbl">Y-Axis Max (Zoom)</label>
+                    <label class="inp-lbl" for="inp-ymax">Y-Axis Max (Zoom)</label>
                     <input type="number" id="inp-ymax" class="inp-field" value="10" placeholder="Auto">
                 </div>
             </div>
 
-            <button class="calc-btn" onclick="GraphEngine.plot()">
-                <i class="fas fa-project-diagram"></i> Render Graph
+            <button type="button" class="calc-btn" onclick="window.GraphEngine.plot()">
+                <i class="fas fa-project-diagram" aria-hidden="true"></i> Render Graph
             </button>
         </div>
 
         <div class="res-card" id="results-container">
             
             <div class="res-header">
-                <div class="res-title"><i class="fas fa-satellite-dish"></i> Mathematical Projection</div>
-                <div class="res-eq-disp" id="disp-eq">f(x) = ...</div>
-                <div class="res-eq-disp2" id="disp-eq2">g(x) = ...</div>
+                <div class="res-title"><i class="fas fa-satellite-dish" aria-hidden="true"></i> Mathematical Projection</div>
+                <div class="res-eq-disp" id="disp-eq" aria-live="polite">f(x) = ...</div>
+                <div class="res-eq-disp2" id="disp-eq2" aria-live="polite">g(x) = ...</div>
             </div>
 
             <div class="graph-container">
-                <canvas id="graphCanvas"></canvas>
+                <canvas id="graphCanvas" role="img" aria-label="Rendered equation coordinate visualization graph"></canvas>
             </div>
 
             <div class="info-alert">
-                <div class="info-icon"><i class="fas fa-code"></i></div>
+                <div class="info-icon"><i class="fas fa-code" aria-hidden="true"></i></div>
                 <div class="info-text">
                     <b>V3 ENGINE PROTOCOLS ACTIVE</b><br>
-                    <i class="fas fa-bolt" style="color:var(--accent-cyan);"></i> <b>Anti-Aliasing:</b> Dynamic 4000-point renderer activated for high-frequency ranges.<br>
-                    <i class="fas fa-cut" style="color:var(--accent-red);"></i> <b>Asymptote Slicer:</b> Vertical infinity-glitches are automatically severed.<br>
-                    <i class="fas fa-check" style="color:var(--accent-green);"></i> Use explicit operators: <code>2*x</code> (Not 2x).
+                    <i class="fas fa-bolt" style="color:var(--accent-cyan);" aria-hidden="true"></i> <b>Anti-Aliasing:</b> Dynamic 4000-point renderer activated for high-frequency ranges.<br>
+                    <i class="fas fa-cut" style="color:var(--accent-red);" aria-hidden="true"></i> <b>Asymptote Slicer:</b> Vertical infinity-glitches are automatically severed.<br>
+                    <i class="fas fa-check" style="color:var(--accent-green);" aria-hidden="true"></i> Use explicit operators: <code>2*x</code> (Not 2x).
                 </div>
             </div>
 
@@ -241,7 +302,8 @@
 
     </main>
 
-<script>        /* QUICKSOLVE PLATINUM - FUNCTION GRAPH ENGINE V3.5 */
+<script>
+        /* QUICKSOLVE PLATINUM - FUNCTION GRAPH ENGINE V3.5 */
         
         window.GraphEngine = {
             chartInstance: null,
@@ -250,7 +312,7 @@
 
             showToast: function(msg) {
                 const toast = document.getElementById('custom-toast');
-                if(!toast) return; // Fallback if UI element missing
+                if(!toast) return; 
                 document.getElementById('toast-msg').innerText = msg;
                 if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
                 toast.classList.add('show');
@@ -258,7 +320,7 @@
             },
 
             setPreset: function(expr1, expr2) {
-                this.haptic();
+                window.GraphEngine.haptic();
                 document.getElementById('inp-eq').value = expr1;
                 
                 const eq2Input = document.getElementById('inp-eq2');
@@ -268,21 +330,23 @@
                 if(document.getElementById('inp-ymin')) document.getElementById('inp-ymin').value = '';
                 if(document.getElementById('inp-ymax')) document.getElementById('inp-ymax').value = '';
                 
-                this.plot(); 
+                window.GraphEngine.plot(); 
             },
 
-            // Safe Evaluation Helper (Handles Complex numbers & Infinity)
+            // Safe Evaluation Helper (Strict Infinity and NaN Check)
             safeEvaluate: function(compiledExpr, xVal) {
                 try {
                     let result = compiledExpr.evaluate({ x: xVal });
                     
-                    if (typeof result === 'object' && result.isComplex) {
+                    if (result && (result.isComplex || result.type === 'Complex')) {
                         // Extract real part if imaginary is negligible
                         if (Math.abs(result.im) < 1e-10) return result.re;
                         return null; 
                     }
                     
-                    if (typeof result === 'number' && !isNaN(result)) {
+                    if (typeof result === 'number') {
+                        // Reject strictly undefined, NaN, and Infinity numbers
+                        if (isNaN(result) || !isFinite(result)) return null;
                         if (Math.abs(result) > 1e6) return null; // Cap extreme infinities
                         return result;
                     }
@@ -293,7 +357,7 @@
             },
 
             plot: function() {
-                this.haptic();
+                window.GraphEngine.haptic();
 
                 // 1. Get Inputs
                 const expr1 = document.getElementById("inp-eq").value;
@@ -309,10 +373,16 @@
                 const ymaxRaw = ymaxEl ? ymaxEl.value : "";
 
                 // Validations
-                if (!expr1.trim()) { this.showToast("Primary Equation f(x) cannot be empty."); return; }
-                if (isNaN(xmin) || isNaN(xmax) || xmin >= xmax) { this.showToast("Invalid X-Axis range parameters."); return; }
+                if (!expr1.trim()) { window.GraphEngine.showToast("Primary Equation f(x) cannot be empty."); return; }
+                if (isNaN(xmin) || isNaN(xmax) || xmin >= xmax) { window.GraphEngine.showToast("Invalid X-Axis range parameters."); return; }
 
-                // 2. V3.5 FEATURE: Dynamic Resolution Scaling
+                // 2. Reveal UI elements BEFORE creating chart! (Crucial for Chart.js dimensions)
+                const resCard = document.getElementById('results-container');
+                if (resCard) {
+                    resCard.style.display = 'block';
+                }
+
+                // 3. Dynamic Resolution Scaling
                 const range = xmax - xmin;
                 let dataPoints = 4000;
                 if (range <= 10) dataPoints = 5000; // Deep micro-rendering
@@ -327,34 +397,34 @@
                 let comp1, comp2;
 
                 try { comp1 = math.compile(expr1); } 
-                catch (err) { this.showToast("Syntax Error in f(x). Check explicit operators (e.g., 2*x)."); return; }
+                catch (err) { window.GraphEngine.showToast("Syntax Error in f(x). Check explicit operators (e.g., 2*x)."); return; }
 
                 if (expr2.trim()) {
                     try { comp2 = math.compile(expr2); } 
-                    catch (err) { this.showToast("Syntax Error in g(x)."); return; }
+                    catch (err) { window.GraphEngine.showToast("Syntax Error in g(x)."); return; }
                 }
 
-                // V3.5 FEATURE: Dynamic Asymptote Slicer Threshold
+                // Dynamic Asymptote Slicer Threshold
                 const threshold = range * 10; 
                 let prevY1 = null, prevY2 = null;
 
-                // 3. Generate Coordinates
+                // Generate Coordinates
                 for (let x = xmin; x <= xmax; x += step) {
                     xVals.push(x.toFixed(2));
                     
                     // Function 1
-                    let y1 = this.safeEvaluate(comp1, x);
+                    let y1 = window.GraphEngine.safeEvaluate(comp1, x);
                     if (y1 !== null && prevY1 !== null && Math.abs(y1 - prevY1) > threshold) {
                         yVals1.push(null); // Sever the infinity glitch
                     } else {
                         yVals1.push(y1);
-                        if(y1 !== null) validY1.push(y1);
+                        if (y1 !== null) validY1.push(y1);
                     }
                     prevY1 = y1 !== null ? y1 : prevY1;
 
                     // Function 2
                     if (comp2) {
-                        let y2 = this.safeEvaluate(comp2, x);
+                        let y2 = window.GraphEngine.safeEvaluate(comp2, x);
                         if (y2 !== null && prevY2 !== null && Math.abs(y2 - prevY2) > threshold) {
                             yVals2.push(null); 
                         } else {
@@ -364,14 +434,13 @@
                     }
                 }
 
-                // 4. V3.5 FEATURE: Peak Normalization (Auto Y-Scaling)
+                // 4. Peak Normalization (Auto Y-Scaling)
                 let finalYMin = parseFloat(yminRaw);
                 let finalYMax = parseFloat(ymaxRaw);
                 let useYBounds = !isNaN(finalYMin) && !isNaN(finalYMax) && finalYMin < finalYMax;
 
                 if (!useYBounds && validY1.length > 0) {
                     validY1.sort((a, b) => a - b);
-                    // Extract 5th and 95th percentiles to ignore infinite asymptotes
                     let p5 = validY1[Math.floor(validY1.length * 0.05)];
                     let p95 = validY1[Math.floor(validY1.length * 0.95)];
                     
@@ -398,9 +467,9 @@
                     dispEq2.style.display = 'none';
                 }
 
-                // Destroy old chart
-                if (this.chartInstance) {
-                    this.chartInstance.destroy();
+                // Destroy old chart cleanly
+                if (window.GraphEngine.chartInstance) {
+                    window.GraphEngine.chartInstance.destroy();
                 }
 
                 const ctx = document.getElementById("graphCanvas").getContext("2d");
@@ -410,7 +479,7 @@
                     data: yVals1,
                     borderColor: "#ec4899", // Platinum Pink
                     borderWidth: 2,
-                    tension: 0.1, // Sharp corners
+                    tension: 0.1, 
                     pointRadius: 0,
                     pointHoverRadius: 6,
                     fill: false, 
@@ -431,7 +500,6 @@
                     });
                 }
 
-                // 5. V3.5 FEATURE: Legend Sync
                 let legendFontSize = (expr1.length > 20 || expr2.length > 20) ? 10 : 12;
 
                 let chartOptions = {
@@ -454,7 +522,9 @@
                                 label: function(context) { 
                                     let val = context.parsed.y;
                                     let name = context.dataset.label;
-                                    return name + ' = ' + (val !== null ? val.toFixed(4) : 'Undefined'); 
+                                    // Tooltip crash fix: Explicitly handle null/asymptote values
+                                    if (val === null || isNaN(val)) return name + ' = Undefined (Asymptote)';
+                                    return name + ' = ' + val.toFixed(4); 
                                 }
                             }
                         }
@@ -471,47 +541,47 @@
                     chartOptions.scales.y.max = finalYMax;
                 }
 
-                this.chartInstance = new Chart(ctx, {
+                window.GraphEngine.chartInstance = new Chart(ctx, {
                     type: "line",
                     data: { labels: xVals, datasets: datasets },
                     options: chartOptions
                 });
 
-                // Reveal UI elements
-                const resCard = document.getElementById('results-container');
-                const graphBox = document.getElementById('graph-box');
-                const protocolAlert = document.querySelector('.protocol-alert');
-                
-                if(resCard) {
-                    resCard.style.display = 'block';
+                // Scroll animation
+                if (resCard) {
                     resCard.classList.remove('anim-up');
                     void resCard.offsetWidth; // trigger reflow
                     resCard.classList.add('anim-up');
                     setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
-                } else if (graphBox) {
-                    // Fallback for V3 specific HTML
-                    graphBox.style.display = 'block';
-                    if(protocolAlert) protocolAlert.style.display = 'block';
-                    setTimeout(() => { graphBox.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
                 }
             }
         };
 
-        // Listeners for Enter Key
-        const eqInput1 = document.getElementById("inp-eq");
-        const eqInput2 = document.getElementById("inp-eq2");
+        // Event Listeners for unified Input Enter-Trigger
+        const inputsArray = [
+            document.getElementById("inp-eq"),
+            document.getElementById("inp-eq2"),
+            document.getElementById("inp-xmin"),
+            document.getElementById("inp-xmax"),
+            document.getElementById("inp-ymin"),
+            document.getElementById("inp-ymax")
+        ];
         
-        if(eqInput1) {
-            eqInput1.addEventListener("keypress", function(event) {
-                if (event.key === "Enter") { event.preventDefault(); window.GraphEngine.plot(); }
-            });
-        }
-        if(eqInput2) {
-            eqInput2.addEventListener("keypress", function(event) {
-                if (event.key === "Enter") { event.preventDefault(); window.GraphEngine.plot(); }
-            });
-        }
+        inputsArray.forEach(inputEl => {
+            if(inputEl) {
+                inputEl.addEventListener("keypress", function(event) {
+                    if (event.key === "Enter") { 
+                        event.preventDefault(); 
+                        window.GraphEngine.plot(); 
+                    }
+                });
+            }
+        });
+
+        // Initialize default graph automatically to prevent blank screen
+        window.addEventListener('DOMContentLoaded', () => {
+            window.GraphEngine.plot();
+        });
 </script>
 </body>
 </html>
-                

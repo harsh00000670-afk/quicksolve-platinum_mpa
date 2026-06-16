@@ -8,8 +8,47 @@
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
 
     <title>Chart Master | Visual Analytics Suite | QuickSolve Platinum</title>
-    <meta name="description" content="Ultimate visualizer suite. Plot complex equations, compounding curves, break-even charts, and financial trends.">
+    <meta name="description" content="Ultimate visualizer suite. Plot complex equations, compounding curves, break-even charts, and financial trends offline.">
+    <meta name="keywords" content="chart master, graph visualizer, math equations plotter, compounding curve calculator, break-even analyzer, depreciation graph, financial charts, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/graph.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Chart Master">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#0d0a15">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Chart Master | Visual Analytics Suite">
+    <meta property="og:description" content="Plot complex equations, compounding curves, break-even charts, and financial trends seamlessly.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/graph.html">
+    <meta property="og:image" content="logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Chart Master Logo">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Chart Master | Visual Analytics Suite">
+    <meta name="twitter:description" content="Plot complex equations, compounding curves, break-even charts, and financial trends seamlessly.">
+    <meta name="twitter:image" content="logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Chart Master - QuickSolve Platinum",
+      "url": "https://quicksolve-platinum.netlify.app/graph.html",
+      "description": "Professional visual analytics suite to plot algebraic equations, trigonometric waves, financial compounding, and business break-even charts.",
+      "applicationCategory": "BusinessApplication, EducationalApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
 
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" href="assets/css/all.min.css">
@@ -54,16 +93,19 @@
         .d-5 { animation-delay: 0.25s; } .d-6 { animation-delay: 0.3s; }
         .d-7 { animation-delay: 0.35s; } .d-8 { animation-delay: 0.4s; }
         .d-9 { animation-delay: 0.45s; } .d-10 { animation-delay: 0.5s; }
-        .d-11 { animation-delay: 0.55s; } .d-12 { animation-delay: 0.6s; }
 
-        /* HEADER */
+        /* HEADER FIX: Absolute Centering */
         .app-header {
             position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
             border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px 20px; display: flex; align-items: center;
         }
-        .qs-back-btn { color: var(--text-main); margin-right: 15px; text-decoration: none; font-size: 1.4rem; transition: 0.2s; cursor: pointer;}
+        .qs-back-btn { color: var(--text-main); text-decoration: none; font-size: 1.4rem; transition: 0.2s; cursor: pointer;}
         .qs-back-btn:active { transform: scale(0.9); color: var(--accent-pink); }
-        .brand { flex: 1; text-align: center; color: var(--accent-pink); font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; margin-right: 30px;}
+        .brand { 
+            position: absolute; left: 50%; transform: translateX(-50%); 
+            color: var(--accent-pink); font-family: 'JetBrains Mono', monospace; 
+            font-weight: 900; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;
+        }
 
         /* HERO */
         .hero { text-align: center; margin-bottom: 25px; padding-top: 10px; }
@@ -121,7 +163,7 @@
         .c-purple:active { border-color: var(--accent-purple); }
 
         .tc-arrow { color: var(--border-subtle); font-size: 1rem; align-self: center; transition: 0.3s; }
-        .tool-card:active .tc-arrow { color: var(--text-main); transform: translateX(3px); }
+        .tool-card:active .tc-arrow, .tool-card:hover .tc-arrow, .tool-card:focus-visible .tc-arrow { color: var(--text-main); transform: translateX(3px); }
         
         .section-divider {
             color: var(--text-sub); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; 
@@ -129,96 +171,109 @@
         }
         .section-divider div { flex: 1; height: 1px; background: var(--border-subtle); opacity: 0.5; }
 
+        /* Keyboard Focus Accessibility Rules */
+        *:focus-visible { outline: 2px solid var(--accent-pink); outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; outline-color: var(--accent-cyan); }
+        .tool-card:focus-visible { outline-color: var(--accent-blue); z-index: 1; border-color: var(--accent-blue); }
     </style>
 </head>
 <body>
 
-    <header class="app-header">
-        <a href="index.html" class="qs-back-btn"><i class="fas fa-arrow-left"></i></a>
-        <div class="brand"><i class="fas fa-chart-area"></i> GRAPH MASTER</div>
+    <header class="app-header" role="banner">
+        <a href="index.html" class="qs-back-btn" aria-label="Go back to Home"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+        <div class="brand" aria-hidden="true"><i class="fas fa-chart-area"></i> GRAPH MASTER</div>
     </header>
 
     <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;" role="main">
         
-        <div class="hero anim-card d-1">
+        <header class="hero anim-card d-1">
             <h1>The Visualizer Suite</h1>
-            <p>> plot --data --expose_trends</p>
-        </div>
+            <p aria-label="Command line interface style subtitle">> plot --data --expose_trends</p>
+        </header>
 
-        <div class="section-divider anim-card d-2">
-            <i class="fas fa-square-root-alt" style="color:var(--accent-pink);"></i> Math & Algebra
-            <div></div>
-        </div>
-        
-        <nav class="tools-grid">
-            <a href="chart_suites/equation_visualizer.html" class="tool-card c-pink anim-card d-3">
-                <div class="tc-icon-wrap"><i class="fas fa-chart-line"></i></div>
-                <div class="tc-info">
-                    <div class="tc-title">Equation Visualizer <span class="badge">MATH</span></div>
-                    <div class="tc-desc">Plot complex 2D algebraic and trigonometric equations instantly to visualize their intersections and slopes.</div>
-                </div>
-                <i class="fas fa-chevron-right tc-arrow"></i>
-            </a>
+        <section aria-labelledby="math-algebra-heading">
+            <h2 id="math-algebra-heading" class="sr-only" style="display:none;">Math & Algebra</h2>
+            <div class="section-divider anim-card d-2" aria-hidden="true">
+                <i class="fas fa-square-root-alt" style="color:var(--accent-pink);"></i> Math & Algebra
+                <div></div>
+            </div>
+            
+            <nav class="tools-grid" aria-label="Math and Algebra Tools Navigation">
+                <a href="chart_suites/equation_visualizer.html" class="tool-card c-pink anim-card d-3" aria-label="Equation Visualizer: Plot 2D algebraic and trigonometric equations">
+                    <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-chart-line"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Equation Visualizer <span class="badge" aria-label="Math Tool">MATH</span></div>
+                        <div class="tc-desc">Plot complex 2D algebraic and trigonometric equations instantly to visualize their intersections and slopes.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                </a>
 
-            <a href="chart_suites/trig_waves.html" class="tool-card c-cyan anim-card d-4">
-                <div class="tc-icon-wrap"><i class="fas fa-water"></i></div>
-                <div class="tc-info">
-                    <div class="tc-title">Trigonometric Waves <span class="badge">PHYSICS</span></div>
-                    <div class="tc-desc">Observe the behavior of Sine, Cosine, and Tangent waves under varying frequencies and amplitudes.</div>
-                </div>
-                <i class="fas fa-chevron-right tc-arrow"></i>
-            </a>
-        </nav>
+                <a href="chart_suites/trig_waves.html" class="tool-card c-cyan anim-card d-4" aria-label="Trigonometric Waves: Observe Sine, Cosine, and Tangent waves">
+                    <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-water"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Trigonometric Waves <span class="badge" aria-label="Physics Tool">PHYSICS</span></div>
+                        <div class="tc-desc">Observe the behavior of Sine, Cosine, and Tangent waves under varying frequencies and amplitudes.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                </a>
+            </nav>
+        </section>
 
-        <div class="section-divider anim-card d-5">
-            <i class="fas fa-money-bill-wave" style="color:var(--accent-green);"></i> Finance & Wealth
-            <div></div>
-        </div>
+        <section aria-labelledby="finance-wealth-heading">
+            <h2 id="finance-wealth-heading" class="sr-only" style="display:none;">Finance & Wealth</h2>
+            <div class="section-divider anim-card d-5" aria-hidden="true">
+                <i class="fas fa-money-bill-wave" style="color:var(--accent-green);"></i> Finance & Wealth
+                <div></div>
+            </div>
 
-        <nav class="tools-grid">
-            <a href="chart_suites/compounding_curve.html" class="tool-card c-green anim-card d-6">
-                <div class="tc-icon-wrap"><i class="fas fa-rocket"></i></div>
-                <div class="tc-info">
-                    <div class="tc-title">Compounding Curve <span class="badge">WEALTH</span></div>
-                    <div class="tc-desc">Visualize the exponential explosion of your investments vs the linear growth of standard savings over decades.</div>
-                </div>
-                <i class="fas fa-chevron-right tc-arrow"></i>
-            </a>
+            <nav class="tools-grid" aria-label="Finance and Wealth Tools Navigation">
+                <a href="chart_suites/compounding_curve.html" class="tool-card c-green anim-card d-6" aria-label="Compounding Curve Visualizer">
+                    <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-rocket"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Compounding Curve <span class="badge" aria-label="Wealth Tool">WEALTH</span></div>
+                        <div class="tc-desc">Visualize the exponential explosion of your investments vs the linear growth of standard savings over decades.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                </a>
 
-            <a href="chart_suites/emi_amortization.html" class="tool-card c-red anim-card d-7">
-                <div class="tc-icon-wrap"><i class="fas fa-fire"></i></div>
-                <div class="tc-info">
-                    <div class="tc-title">EMI Amortization Chart <span class="badge">DEBT</span></div>
-                    <div class="tc-desc">Graphically expose how banks front-load interest. See the exact month your principal actually starts dropping.</div>
-                </div>
-                <i class="fas fa-chevron-right tc-arrow"></i>
-            </a>
-        </nav>
+                <a href="chart_suites/emi_amortization.html" class="tool-card c-red anim-card d-7" aria-label="EMI Amortization Chart Visualizer">
+                    <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-fire"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">EMI Amortization Chart <span class="badge" aria-label="Debt Tool">DEBT</span></div>
+                        <div class="tc-desc">Graphically expose how banks front-load interest. See the exact month your principal actually starts dropping.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                </a>
+            </nav>
+        </section>
 
-        <div class="section-divider anim-card d-8">
-            <i class="fas fa-briefcase" style="color:var(--accent-gold);"></i> Business & Projections
-            <div></div>
-        </div>
+        <section aria-labelledby="business-projections-heading">
+            <h2 id="business-projections-heading" class="sr-only" style="display:none;">Business & Projections</h2>
+            <div class="section-divider anim-card d-8" aria-hidden="true">
+                <i class="fas fa-briefcase" style="color:var(--accent-gold);"></i> Business & Projections
+                <div></div>
+            </div>
 
-        <nav class="tools-grid">
-            <a href="chart_suites/breakeven_graph.html" class="tool-card c-gold anim-card d-9">
-                <div class="tc-icon-wrap"><i class="fas fa-chart-pie"></i></div>
-                <div class="tc-info">
-                    <div class="tc-title">Break-Even Analyzer <span class="badge">FOUNDER</span></div>
-                    <div class="tc-desc">Plot fixed costs vs variable revenue. Find the exact coordinate where your business crosses from loss to profit.</div>
-                </div>
-                <i class="fas fa-chevron-right tc-arrow"></i>
-            </a>
+            <nav class="tools-grid" aria-label="Business and Projections Tools Navigation">
+                <a href="chart_suites/breakeven_graph.html" class="tool-card c-gold anim-card d-9" aria-label="Break-Even Analyzer Chart">
+                    <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-chart-pie"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Break-Even Analyzer <span class="badge" aria-label="Founder Tool">FOUNDER</span></div>
+                        <div class="tc-desc">Plot fixed costs vs variable revenue. Find the exact coordinate where your business crosses from loss to profit.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                </a>
 
-            <a href="chart_suites/depreciation_curve.html" class="tool-card c-purple anim-card d-10">
-                <div class="tc-icon-wrap"><i class="fas fa-arrow-circle-down"></i></div>
-                <div class="tc-info">
-                    <div class="tc-title">Depreciation Decay <span class="badge">ASSET</span></div>
-                    <div class="tc-desc">Map the rapid value decay of tech and vehicles. See the exact point where holding the asset becomes a liability.</div>
-                </div>
-                <i class="fas fa-chevron-right tc-arrow"></i>
-            </a>
-        </nav>
+                <a href="chart_suites/depreciation_curve.html" class="tool-card c-purple anim-card d-10" aria-label="Depreciation Decay Chart Visualizer">
+                    <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-arrow-circle-down"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Depreciation Decay <span class="badge" aria-label="Asset Tool">ASSET</span></div>
+                        <div class="tc-desc">Map the rapid value decay of tech and vehicles. See the exact point where holding the asset becomes a liability.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                </a>
+            </nav>
+        </section>
 
     </main>
 </body>
