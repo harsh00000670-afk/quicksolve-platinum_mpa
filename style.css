@@ -22,7 +22,7 @@
 /* Extra Bold */
 @font-face {
     font-family: 'JetBrains Mono';
-    src: url('fonts/JetBrainsMono-ExtraBold.ttf') format('truetype');
+    src: url('assets/fonts/JetBrainsMono-ExtraBold.ttf') format('truetype');
     font-weight: 800;
     font-style: normal;
     font-display: swap;
