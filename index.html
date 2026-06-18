@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 🚀 FIX 1: Accessibility Issue Cleared (Removed user-scalable=no, added max-scale=5.0) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
   
@@ -66,7 +67,24 @@
     
     <link rel="icon" type="image/png" href="logo.png">
     <!-- DNS Prefetch for faster asset loading -->
+    <link rel="preconnect" href="https://quicksolve-platinum.netlify.app" crossorigin>
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
+    <!-- ==========================================
+         🚀 FIX 2: THE "SPEED X-RAY" PRELOAD ENGINE
+         ========================================== -->
+    <!-- Fonts preloaded to kill the 'Blank Gap' -->
+    <link rel="preload" href="assets/fonts/JetBrainsMono-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="preload" href="assets/fonts/JetBrainsMono-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="preload" href="assets/fonts/JetBrainsMono-ExtraBold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    
+    <!-- Stylesheets preloaded to fix Render-Blocking -->
+    <link rel="preload" href="assets/css/all.min.css" as="style">
+    <link rel="preload" href="style.css" as="style">
+    
+    <!-- Heavy Logo preloaded to fix Largest Contentful Paint (LCP) Delay -->
+    <link rel="preload" href="logo.png" as="image" fetchpriority="high">
+
     <link rel="stylesheet" href="assets/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 
