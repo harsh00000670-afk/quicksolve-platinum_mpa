@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- FIX: Made the page fully zoomable for accessibility -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
 
@@ -11,11 +12,12 @@
     <meta name="description" content="Calculate your true crypto ROI. Instantly deduct exchange fees, maker/taker costs, and flat government crypto taxes (like the 30% India tax). Plan your exit strategy safely. 100% Offline.">
     <meta name="keywords" content="crypto profit calculator, ROI calculator, crypto tax calculator, 30 percent crypto tax india, exchange fee calculator, bitcoin exit strategy, web3 profit tracker, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/currency_suites/crypto_profit.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Crypto Profit">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -24,8 +26,33 @@
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="Crypto Profit Calculator - Decode Hidden Taxes">
     <meta property="og:description" content="Stop losing money to hidden taxes and fees. Calculate your true net profit and plan a safe exit.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/currency_suites/crypto_profit.html">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Crypto Profit Logo">
     
+    <!-- ADDED: Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Crypto Profit & Exit Strategy Calculator | QuickSolve Platinum">
+    <meta name="twitter:description" content="Instantly deduct exchange fees, maker/taker costs, and flat government crypto taxes. Plan your exit strategy safely.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <!-- ADDED: JSON-LD Structured Data for Financial Tools -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Crypto Profit & Tax Calculator",
+      "url": "https://quicksolve-platinum.netlify.app/currency_suites/crypto_profit.html",
+      "description": "Advanced web3 financial tool to calculate accurate cryptocurrency return on investment (ROI) by deducting exchange fees and government taxes.",
+      "applicationCategory": "FinancialApplication, InvestmentApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
+
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
     <link rel="stylesheet" href="../style.css">
@@ -36,22 +63,30 @@
            CRYPTO PROFIT & EXIT STRATEGY
            Theme: Cyberpunk Trading (Neon Green / Red)
            ========================================= */
+        body { margin: 0; background-color: var(--bg-body, #09090b); color: #f8fafc; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
+
         #mod-profit-overlay {
             position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
             background-color: var(--bg-body, #09090b); z-index: 5000 !important;
             display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
-            font-family: sans-serif;
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* HEADER FIX: Absolute Centering & Cleanup */
         .cp-head {
-            display: flex; align-items: center; padding: 12px 15px; 
-            background: #121214; border-bottom: 1px solid #334155;
-            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+            display: flex; align-items: center; padding: 15px 20px; 
+            background: rgba(9, 9, 11, 0.9); backdrop-filter: blur(10px);
+            border-bottom: 1px solid #334155; position: sticky; top: 0; z-index: 100; flex-shrink: 0;
         }
-        .cp-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
-        .cp-tit { color: #22c55e; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+        .qs-back-btn { background: none; border: none; color: #f4f4f5; font-size: 1.3rem; cursor: pointer; text-decoration: none; z-index: 2; transition: 0.2s;}
+        .qs-back-btn:active { transform: scale(0.9); color: #22c55e; }
+        .cp-tit { 
+            position: absolute; left: 50%; transform: translateX(-50%);
+            color: #22c55e; font-weight: 900; font-size: 1.1rem; 
+            text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; z-index: 1;
+            display: flex; align-items: center; gap: 8px;
+        }
 
         .cp-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
 
@@ -64,7 +99,8 @@
 
         .cp-lbl { font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; }
         
-        .cp-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; }
+        .cp-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; transition: 0.2s;}
+        .cp-inp-wrap:focus-within { border-color: #22c55e; }
         .cp-curr-tag { color: #f8fafc; font-weight: 900; font-size: 1rem; font-family: monospace; }
         
         .cp-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.5rem; font-weight: 900; outline: none; width: 100%; font-family: monospace; }
@@ -74,7 +110,7 @@
 
         /* Sliders & Toggles */
         .slider-wrap { display: flex; flex-direction: column; gap: 8px; margin-top: 5px; }
-        .cp-slider { width: 100%; accent-color: #22c55e; }
+        .cp-slider { width: 100%; accent-color: #22c55e; cursor: pointer; }
         .slider-lbl { font-size: 0.7rem; color: #f8fafc; font-weight: bold; display: flex; justify-content: space-between; }
 
         /* Results Dashboard */
@@ -100,7 +136,7 @@
         .br-neg { color: #ef4444; }
 
         /* The "WHY" Button */
-        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #3b82f6; color: #3b82f6; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #3b82f6; color: #3b82f6; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%;}
         .btn-why:active { background: rgba(59, 130, 246, 0.15); transform: scale(0.98); }
 
         /* STEPS MODAL (Why) */
@@ -109,6 +145,14 @@
         .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #3b82f6; font-weight: 800; }
         .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
         .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules (Laptop Compatibility) */
+        *:focus-visible { outline: 2px solid #22c55e; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; outline-color: #3b82f6; }
+        .cp-inp:focus-visible { outline: none; }
+        .cp-inp-wrap:focus-within { outline: 2px solid #22c55e; outline-offset: 2px; }
+        .cp-slider:focus-visible { outline-offset: 4px; }
+        .btn-why:focus-visible { outline-color: #3b82f6; outline-offset: 4px; }
     </style>
 </head>
 <body>
@@ -158,7 +202,7 @@
                         <label for="cp-fee-slider">Exchange Fee (Buy + Sell)</label>
                         <span id="fee-val" aria-live="polite">0.2%</span>
                     </div>
-                    <input type="range" id="cp-fee-slider" class="cp-slider" min="0" max="5" step="0.1" value="0.2" oninput="QS_Profit.syncSlider('fee')" aria-label="Adjust Exchange Fee">
+                    <input type="range" id="cp-fee-slider" class="cp-slider" min="0" max="5" step="0.1" value="0.2" oninput="QS_Profit.syncSlider('fee')" aria-label="Adjust Exchange Fee Percentage">
                 </div>
 
                 <div class="slider-wrap" style="margin-top:10px;">
@@ -166,7 +210,7 @@
                         <label for="cp-tax-slider">Govt Tax on Profit (e.g. India 30%)</label>
                         <span id="tax-val" style="color:#ef4444;" aria-live="polite">30%</span>
                     </div>
-                    <input type="range" id="cp-tax-slider" class="cp-slider" style="accent-color:#ef4444;" min="0" max="50" step="1" value="30" oninput="QS_Profit.syncSlider('tax')" aria-label="Adjust Tax Rate">
+                    <input type="range" id="cp-tax-slider" class="cp-slider" style="accent-color:#ef4444;" min="0" max="50" step="1" value="30" oninput="QS_Profit.syncSlider('tax')" aria-label="Adjust Government Tax Rate Percentage">
                 </div>
             </div>
 
@@ -199,7 +243,7 @@
                 </div>
             </div>
 
-            <button class="btn-why" onclick="QS_Profit.showSteps()" aria-label="Show Crypto Tax Details">
+            <button type="button" class="btn-why" onclick="QS_Profit.showSteps()" aria-label="Show Crypto Tax Details">
                 <i class="fas fa-gavel" aria-hidden="true"></i> How Crypto Tax Works
             </button>
 
@@ -209,7 +253,7 @@
             <div id="cp-steps-box">
                 <div class="steps-head">
                     <span id="tax-title"><i class="fas fa-file-invoice-dollar" aria-hidden="true"></i> CRYPTO TAX DECODED</span>
-                    <button class="steps-close" onclick="QS_Profit.hideSteps()" aria-label="Close Modal"><i class="fas fa-times" aria-hidden="true"></i></button>
+                    <button type="button" class="steps-close" onclick="QS_Profit.hideSteps()" aria-label="Close Modal"><i class="fas fa-times" aria-hidden="true"></i></button>
                 </div>
                 <div class="steps-content" id="cp-steps-content">
                     </div>
@@ -227,6 +271,24 @@
             window.QS_Profit = {
                 
                 initListener: function() {
+                    // Laptop Keyboard 'Enter' Trigger Listener for all inputs
+                    const inputsArray = [
+                        document.getElementById("cp-invest"),
+                        document.getElementById("cp-buy"),
+                        document.getElementById("cp-sell")
+                    ];
+                    
+                    inputsArray.forEach(inputEl => {
+                        if(inputEl) {
+                            inputEl.addEventListener("keypress", function(event) {
+                                if (event.key === "Enter") { 
+                                    event.preventDefault(); 
+                                    window.QS_Profit.calc(); 
+                                }
+                            });
+                        }
+                    });
+
                     window.addEventListener('qs-tool-opened', (e) => {
                         if(e.detail && e.detail.tool === 'currency_suites/crypto_profit.js') {
                             this.calc();

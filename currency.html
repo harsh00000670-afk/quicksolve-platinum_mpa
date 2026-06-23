@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
     <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
 
     <title>Currency & Crypto Suite | Global Forex Dashboard | QuickSolve Platinum</title>
-    <meta name="description" content="Live Universal Fiat Converter, Forex Watchlist, Crypto Core, ROI Calculator, and PPP tools. Your ultimate offline dashboard for global currency and Web3 assets.">
+    <meta name="description" content="Live Universal Fiat Converter, Forex Watchlist, Crypto Core, ROI Calculator, and PPP tools. Your ultimate offline and online dashboard for global currency and Web3 assets.">
     <meta name="keywords" content="currency converter, crypto converter, forex dashboard, fiat exchange, cryptocurrency roi, ppp calculator, hidden bank fees, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/currency.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Forex Suite">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -25,7 +26,30 @@
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="Currency & Crypto Suite - Global Forex Control Room">
     <meta property="og:description" content="Track live Fiat and Crypto rates, calculate hidden bank fees, and estimate Web3 gas instantly.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/currency.html">
     <meta property="og:image" content="logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Global Forex Dashboard Logo">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Currency & Crypto Suite | Global Forex Dashboard">
+    <meta name="twitter:description" content="Track live Fiat and Crypto rates, calculate hidden bank fees, and estimate Web3 gas instantly.">
+    <meta name="twitter:image" content="logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Currency & Crypto Suite - QuickSolve Platinum",
+      "url": "https://quicksolve-platinum.netlify.app/currency.html",
+      "description": "Professional financial suite featuring live fiat currency conversion, crypto tracking, hidden bank fee analyzers, and purchasing power parity calculators.",
+      "applicationCategory": "FinancialApplication, BusinessApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
     
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" href="assets/css/all.min.css">
@@ -63,6 +87,22 @@
         .d-9 { animation-delay: 0.45s; } .d-10 { animation-delay: 0.5s; }
         .d-11 { animation-delay: 0.55s; } .d-12 { animation-delay: 0.6s; }
         .d-13 { animation-delay: 0.65s; } .d-14 { animation-delay: 0.7s; }
+
+        /* HEADER FIX: Absolute Centering & Cleaned Inline Styles */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(9, 9, 11, 0.9); backdrop-filter: blur(10px); 
+            border-bottom: 1px solid var(--border-subtle); padding: 15px 20px; display: flex; align-items: center;
+        }
+        .qs-back-btn { 
+            color: var(--text-main); text-decoration: none; font-size: 1.4rem; transition: 0.2s; cursor: pointer; z-index: 2;
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--accent-green); }
+        .brand { 
+            position: absolute; left: 50%; transform: translateX(-50%); 
+            color: var(--accent-green); font-family: 'JetBrains Mono', monospace; 
+            font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; 
+            text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; z-index: 1;
+        }
 
         /* PLATINUM HORIZONTAL CARDS */
         .tools-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 15px; }
@@ -107,152 +147,167 @@
         .c-red:active { border-color: var(--accent-red); }
 
         .tc-arrow { color: var(--border-subtle); font-size: 1rem; align-self: center; transition: 0.3s; }
-        .tool-card:active .tc-arrow { color: var(--text-main); transform: translateX(3px); }
+        .tool-card:active .tc-arrow, .tool-card:hover .tc-arrow, .tool-card:focus-visible .tc-arrow { color: var(--text-main); transform: translateX(3px); }
         
         .section-divider {
             color: var(--text-sub); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; 
             letter-spacing: 2px; margin: 30px 0 10px 5px; display: flex; align-items: center; gap: 8px;
         }
         .section-divider div { flex: 1; height: 1px; background: var(--border-subtle); opacity: 0.5; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules (Laptop Compatibility) */
+        *:focus-visible { outline: 2px solid var(--accent-green); outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; outline-color: var(--accent-gold); }
+        .tool-card:focus-visible { outline-color: var(--accent-green); z-index: 1; border-color: var(--accent-green); }
     </style>
 </head>
 <body>
     <main role="main" aria-label="Currency and Crypto Dashboard">
-        <header class="app-header" style="position: sticky; top: 0; z-index: 100; background: rgba(9, 9, 11, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-subtle); padding: 15px 20px; display: flex; align-items: center;" role="banner">
-            <a href="index.html" class="qs-back-btn icon-btn" aria-label="Go Back to Home" style="color: var(--text-main); margin-right: 15px; text-decoration: none; font-size: 1.4rem; transition: 0.2s;">
+        
+        <header class="app-header" role="banner">
+            <a href="index.html" class="qs-back-btn" aria-label="Go Back to Home">
                 <i class="fas fa-arrow-left" aria-hidden="true"></i>
             </a>
-            <div class="brand" style="margin-right: auto; color: var(--accent-green); font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px;">
+            <div class="brand" aria-hidden="true">
                 <i class="fas fa-hand-holding-usd" aria-hidden="true"></i> Global Forex
             </div>
         </header>
 
-        <section style="padding: 20px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        <section style="padding: 20px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;" aria-labelledby="dashboard-title">
             
             <div class="hero anim-card d-1" style="text-align: center; margin-bottom: 25px;">
-                <h2 style="margin: 0; font-size: 2rem; background: linear-gradient(135deg, var(--accent-green), var(--accent-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;">Currency & Crypto</h2>
-                <p style="color: var(--text-sub); font-size: 0.85rem; margin-top: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">> exchange --live --all_assets</p>
+                <h2 id="dashboard-title" style="margin: 0; font-size: 2rem; background: linear-gradient(135deg, var(--accent-green), var(--accent-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;">Currency & Crypto</h2>
+                <p style="color: var(--text-sub); font-size: 0.85rem; margin-top: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 600;" aria-label="Command line style text">> exchange --live --all_assets</p>
             </div>
             
-            <div class="section-divider anim-card d-2">
-                <i class="fas fa-globe-americas" style="color:var(--accent-green);"></i> Forex & Fiat
-                <div></div>
-            </div>
-            
-            <nav class="tools-grid" aria-label="Forex Tools">
-                <a href="currency_suites/fiat_converter.html" class="tool-card c-green anim-card d-3">
-                    <div class="tc-icon-wrap"><i class="fas fa-sync"></i></div>
-                    <div class="tc-info">
-                        <div class="tc-title">Universal Fiat <span class="badge">LIVE</span></div>
-                        <div class="tc-desc">Convert 150+ global fiat currencies with real-time exchange rates.</div>
-                    </div>
-                    <i class="fas fa-chevron-right tc-arrow"></i>
-                </a>
+            <section aria-labelledby="fiat-tools-heading">
+                <h3 id="fiat-tools-heading" class="sr-only" style="display:none;">Forex and Fiat Currency Tools</h3>
+                <div class="section-divider anim-card d-2" aria-hidden="true">
+                    <i class="fas fa-globe-americas" style="color:var(--accent-green);"></i> Forex & Fiat
+                    <div></div>
+                </div>
                 
-                <a href="currency_suites/watchlist.html" class="tool-card c-green anim-card d-4">
-                    <div class="tc-icon-wrap"><i class="fas fa-list-ul"></i></div>
-                    <div class="tc-info">
-                        <div class="tc-title">Forex Watchlist</div>
-                        <div class="tc-desc">Track your favorite currency pairs and monitor live market trends.</div>
-                    </div>
-                    <i class="fas fa-chevron-right tc-arrow"></i>
-                </a>
-                
-                <a href="currency_suites/hidden_fees.html" class="tool-card c-red anim-card d-5">
-                    <div class="tc-icon-wrap"><i class="fas fa-user-secret"></i></div>
-                    <div class="tc-info">
-                        <div class="tc-title">Hidden Bank Fees <span class="badge">SAVE $</span></div>
-                        <div class="tc-desc">Uncover the real markup banks charge on international transfers.</div>
-                    </div>
-                    <i class="fas fa-chevron-right tc-arrow"></i>
-                </a>
-                
-                <a href="currency_suites/ppp_calc.html" class="tool-card c-green anim-card d-6">
-                    <div class="tc-icon-wrap"><i class="fas fa-hamburger"></i></div>
-                    <div class="tc-info">
-                        <div class="tc-title">Real Value (PPP)</div>
-                        <div class="tc-desc">Compare true purchasing power across countries (The Big Mac Index).</div>
-                    </div>
-                    <i class="fas fa-chevron-right tc-arrow"></i>
-                </a>
-                
-                <a href="currency_suites/volatility.html" class="tool-card c-green anim-card d-7">
-                    <div class="tc-icon-wrap"><i class="fas fa-chart-line"></i></div>
-                    <div class="tc-info">
-                        <div class="tc-title">Rate Volatility</div>
-                        <div class="tc-desc">Analyze historical currency swings and predict market risk.</div>
-                    </div>
-                    <i class="fas fa-chevron-right tc-arrow"></i>
-                </a>
-            </nav>
+                <nav class="tools-grid" aria-label="Forex Tools Navigation">
+                    <a href="currency_suites/fiat_converter.html" class="tool-card c-green anim-card d-3" aria-label="Universal Fiat Converter Tool">
+                        <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-sync"></i></div>
+                        <div class="tc-info">
+                            <div class="tc-title">Universal Fiat <span class="badge" aria-label="Live data available">LIVE</span></div>
+                            <div class="tc-desc">Convert 150+ global fiat currencies with real-time exchange rates.</div>
+                        </div>
+                        <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                    </a>
+                    
+                    <a href="currency_suites/watchlist.html" class="tool-card c-green anim-card d-4" aria-label="Forex Watchlist Tool">
+                        <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-list-ul"></i></div>
+                        <div class="tc-info">
+                            <div class="tc-title">Forex Watchlist</div>
+                            <div class="tc-desc">Track your favorite currency pairs and monitor live market trends.</div>
+                        </div>
+                        <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                    </a>
+                    
+                    <a href="currency_suites/hidden_fees.html" class="tool-card c-red anim-card d-5" aria-label="Hidden Bank Fees Analyzer">
+                        <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-user-secret"></i></div>
+                        <div class="tc-info">
+                            <div class="tc-title">Hidden Bank Fees <span class="badge" aria-label="Saves Money">SAVE $</span></div>
+                            <div class="tc-desc">Uncover the real markup banks charge on international transfers.</div>
+                        </div>
+                        <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                    </a>
+                    
+                    <a href="currency_suites/ppp_calc.html" class="tool-card c-green anim-card d-6" aria-label="Purchasing Power Parity Calculator">
+                        <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-hamburger"></i></div>
+                        <div class="tc-info">
+                            <div class="tc-title">Real Value (PPP)</div>
+                            <div class="tc-desc">Compare true purchasing power across countries (The Big Mac Index).</div>
+                        </div>
+                        <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                    </a>
+                    
+                    <a href="currency_suites/volatility.html" class="tool-card c-green anim-card d-7" aria-label="Currency Rate Volatility Analyzer">
+                        <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-chart-line"></i></div>
+                        <div class="tc-info">
+                            <div class="tc-title">Rate Volatility</div>
+                            <div class="tc-desc">Analyze historical currency swings and predict market risk.</div>
+                        </div>
+                        <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                    </a>
+                </nav>
+            </section>
 
-            <div class="section-divider anim-card d-8">
-                <i class="fab fa-bitcoin" style="color:var(--accent-gold);"></i> Crypto & Web3
-                <div></div>
-            </div>
-            
-            <nav class="tools-grid" aria-label="Crypto Tools">
-                <a href="currency_suites/crypto_converter.html" class="tool-card c-gold anim-card d-9">
-                    <div class="tc-icon-wrap"><i class="fas fa-coins"></i></div>
-                    <div class="tc-info">
-                        <div class="tc-title">Crypto Core <span class="badge">WEB3</span></div>
-                        <div class="tc-desc">Live tracking and precision conversion for Top cryptocurrencies.</div>
-                    </div>
-                    <i class="fas fa-chevron-right tc-arrow"></i>
-                </a>
+            <section aria-labelledby="crypto-tools-heading">
+                <h3 id="crypto-tools-heading" class="sr-only" style="display:none;">Cryptocurrency and Web3 Tools</h3>
+                <div class="section-divider anim-card d-8" aria-hidden="true">
+                    <i class="fab fa-bitcoin" style="color:var(--accent-gold);"></i> Crypto & Web3
+                    <div></div>
+                </div>
                 
-                <a href="currency_suites/gas_fees.html" class="tool-card c-gold anim-card d-10">
-                    <div class="tc-icon-wrap"><i class="fas fa-gas-pump"></i></div>
-                    <div class="tc-info">
-                        <div class="tc-title">Gas Estimator</div>
-                        <div class="tc-desc">Calculate live transaction fees for Ethereum, Solana, and more.</div>
-                    </div>
-                    <i class="fas fa-chevron-right tc-arrow"></i>
-                </a>
-                
-                <a href="currency_suites/crypto_profit.html" class="tool-card c-gold anim-card d-11">
-                    <div class="tc-icon-wrap"><i class="fas fa-chart-pie"></i></div>
-                    <div class="tc-info">
-                        <div class="tc-title">Profit & Exit <span class="badge">ROI</span></div>
-                        <div class="tc-desc">Determine exact ROI, profit margins, and calculate safe exit strategies.</div>
-                    </div>
-                    <i class="fas fa-chevron-right tc-arrow"></i>
-                </a>
-                
-                <a href="currency_suites/arbitrage.html" class="tool-card c-gold anim-card d-12">
-                    <div class="tc-icon-wrap"><i class="fas fa-random"></i></div>
-                    <div class="tc-info">
-                        <div class="tc-title">Chain Arbitrage</div>
-                        <div class="tc-desc">Find price differences across major centralized crypto exchanges.</div>
-                    </div>
-                    <i class="fas fa-chevron-right tc-arrow"></i>
-                </a>
-            </nav>
+                <nav class="tools-grid" aria-label="Crypto Tools Navigation">
+                    <a href="currency_suites/crypto_converter.html" class="tool-card c-gold anim-card d-9" aria-label="Crypto Core Converter Tool">
+                        <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-coins"></i></div>
+                        <div class="tc-info">
+                            <div class="tc-title">Crypto Core <span class="badge" aria-label="Web3 Integration">WEB3</span></div>
+                            <div class="tc-desc">Live tracking and precision conversion for Top cryptocurrencies.</div>
+                        </div>
+                        <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                    </a>
+                    
+                    <a href="currency_suites/gas_fees.html" class="tool-card c-gold anim-card d-10" aria-label="Crypto Gas Fees Estimator">
+                        <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-gas-pump"></i></div>
+                        <div class="tc-info">
+                            <div class="tc-title">Gas Estimator</div>
+                            <div class="tc-desc">Calculate live transaction fees for Ethereum, Solana, and more.</div>
+                        </div>
+                        <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                    </a>
+                    
+                    <a href="currency_suites/crypto_profit.html" class="tool-card c-gold anim-card d-11" aria-label="Crypto Profit and ROI Calculator">
+                        <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-chart-pie"></i></div>
+                        <div class="tc-info">
+                            <div class="tc-title">Profit & Exit <span class="badge" aria-label="Return on Investment">ROI</span></div>
+                            <div class="tc-desc">Determine exact ROI, profit margins, and calculate safe exit strategies.</div>
+                        </div>
+                        <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                    </a>
+                    
+                    <a href="currency_suites/arbitrage.html" class="tool-card c-gold anim-card d-12" aria-label="Crypto Chain Arbitrage Finder">
+                        <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-random"></i></div>
+                        <div class="tc-info">
+                            <div class="tc-title">Chain Arbitrage</div>
+                            <div class="tc-desc">Find price differences across major centralized crypto exchanges.</div>
+                        </div>
+                        <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                    </a>
+                </nav>
+            </section>
 
-            <div class="section-divider anim-card d-13">
-                <i class="fas fa-tools" style="color:var(--accent-blue);"></i> Global Utilities
-                <div></div>
-            </div>
-            
-            <nav class="tools-grid" aria-label="Utility Tools">
-                <a href="currency_suites/inflation.html" class="tool-card c-blue anim-card d-14">
-                    <div class="tc-icon-wrap"><i class="fas fa-hourglass-half"></i></div>
-                    <div class="tc-info">
-                        <div class="tc-title">Time Machine</div>
-                        <div class="tc-desc">Calculate historical inflation and the true value of money over decades.</div>
-                    </div>
-                    <i class="fas fa-chevron-right tc-arrow"></i>
-                </a>
+            <section aria-labelledby="global-utilities-heading">
+                <h3 id="global-utilities-heading" class="sr-only" style="display:none;">Global Financial Utilities</h3>
+                <div class="section-divider anim-card d-13" aria-hidden="true">
+                    <i class="fas fa-tools" style="color:var(--accent-blue);"></i> Global Utilities
+                    <div></div>
+                </div>
                 
-                <a href="currency_suites/global_tax.html" class="tool-card c-blue anim-card d-15">
-                    <div class="tc-icon-wrap"><i class="fas fa-receipt"></i></div>
-                    <div class="tc-info">
-                        <div class="tc-title">Global Tax Map</div>
-                        <div class="tc-desc">Compare income and capital gains tax brackets across the globe.</div>
-                    </div>
-                    <i class="fas fa-chevron-right tc-arrow"></i>
-                </a>
-            </nav>
+                <nav class="tools-grid" aria-label="Utility Tools Navigation">
+                    <a href="currency_suites/inflation.html" class="tool-card c-blue anim-card d-14" aria-label="Historical Inflation Calculator">
+                        <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-hourglass-half"></i></div>
+                        <div class="tc-info">
+                            <div class="tc-title">Time Machine</div>
+                            <div class="tc-desc">Calculate historical inflation and the true value of money over decades.</div>
+                        </div>
+                        <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                    </a>
+                    
+                    <a href="currency_suites/global_tax.html" class="tool-card c-blue anim-card d-15" aria-label="Global Tax Map Tool">
+                        <div class="tc-icon-wrap" aria-hidden="true"><i class="fas fa-receipt"></i></div>
+                        <div class="tc-info">
+                            <div class="tc-title">Global Tax Map</div>
+                            <div class="tc-desc">Compare income and capital gains tax brackets across the globe.</div>
+                        </div>
+                        <i class="fas fa-chevron-right tc-arrow" aria-hidden="true"></i>
+                    </a>
+                </nav>
+            </section>
 
         </section>
     </main>
