@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- FIX: Made the page fully zoomable for accessibility -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
 
@@ -11,11 +12,12 @@
     <meta name="description" content="Calculate VAT, GST, and Sales Tax for over 150+ countries. Estimate your airport tourist tax refund instantly. Toggle between Tax Inclusive and Exclusive prices. 100% Offline.">
     <meta name="keywords" content="global tax calculator, vat calculator, gst calculator, tourist tax refund estimator, tax free shopping calculator, international sales tax, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/currency_suites/global_tax.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Global Tax">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -24,7 +26,32 @@
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="Global Tax & Refund Map - Shop Smarter">
     <meta property="og:description" content="Find out exactly how much tax you are paying abroad and how much you can claim back at the airport.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/currency_suites/global_tax.html">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Global Tax Map Logo">
+
+    <!-- ADDED: Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Global Tax Map & Refund Estimator | QuickSolve Platinum">
+    <meta name="twitter:description" content="Calculate VAT, GST, and Sales Tax for over 150+ countries. Estimate your airport tourist tax refund instantly.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <!-- ADDED: JSON-LD Structured Data for Financial Tools -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Global Tax Map & Tourist Refund Estimator",
+      "url": "https://quicksolve-platinum.netlify.app/currency_suites/global_tax.html",
+      "description": "Calculate VAT, GST, and Sales Tax globally, and estimate eligible airport tourist tax refunds in real-time.",
+      "applicationCategory": "FinancialApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
     
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
@@ -36,22 +63,30 @@
            GLOBAL TAX & REFUND MAP (GOD MODE)
            Theme: Cyberpunk Finance (Blue / Neon Green)
            ========================================= */
+        body { margin: 0; background-color: var(--bg-body, #09090b); color: #f8fafc; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
+
         #mod-tax-overlay {
             position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
             background-color: var(--bg-body, #09090b); z-index: 5000 !important;
             display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
-            font-family: sans-serif;
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* HEADER FIX: Absolute Centering & Cleanup */
         .tx-head {
-            display: flex; align-items: center; padding: 12px 15px; 
-            background: #121214; border-bottom: 1px solid #334155;
-            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+            display: flex; align-items: center; padding: 15px 20px; 
+            background: rgba(9, 9, 11, 0.9); backdrop-filter: blur(10px);
+            border-bottom: 1px solid #334155; position: sticky; top: 0; z-index: 100; flex-shrink: 0;
         }
-        .tx-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
-        .tx-tit { color: #3b82f6; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+        .qs-back-btn { background: none; border: none; color: #f4f4f5; font-size: 1.3rem; cursor: pointer; text-decoration: none; z-index: 2; transition: 0.2s;}
+        .qs-back-btn:active { transform: scale(0.9); color: #3b82f6; }
+        .tx-tit { 
+            position: absolute; left: 50%; transform: translateX(-50%);
+            color: #3b82f6; font-weight: 900; font-size: 1.1rem; 
+            text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; z-index: 1;
+            display: flex; align-items: center; gap: 8px;
+        }
 
         .tx-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
 
@@ -65,21 +100,22 @@
         .tx-lbl { font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; margin-bottom: 5px; }
         
         /* Custom Selectors */
-        .tx-custom-sel { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.6); border: 1px dashed #3b82f6; padding: 12px 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .tx-custom-sel { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.6); border: 1px dashed #3b82f6; padding: 12px 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; outline: none; width: 100%; text-align: left;}
         .tx-custom-sel:active { background: rgba(59, 130, 246, 0.1); }
         .tcs-flag { font-size: 1.5rem; }
         .tcs-details { flex: 1; display: flex; flex-direction: column; }
         .tcs-title { font-weight: 900; color: #f8fafc; font-size: 1rem; }
         .tcs-sub { font-size: 0.75rem; color: #ef4444; margin-top: 2px; font-weight: bold; }
 
-        .tx-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; }
+        .tx-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; transition: 0.2s;}
+        .tx-inp-wrap:focus-within { border-color: #3b82f6; }
         .tx-tag { color: #f8fafc; font-weight: 900; font-size: 1.2rem; font-family: monospace; }
         .tx-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.8rem; font-weight: 900; outline: none; width: 100%; font-family: monospace; text-align: right; }
         .tx-inp::placeholder { color: #475569; }
 
         /* Toggle Mode */
         .mode-switch { display: flex; background: rgba(2, 6, 23, 0.5); border: 1px solid #334155; border-radius: 8px; overflow: hidden; margin-top: 5px; }
-        .m-btn { flex: 1; text-align: center; padding: 10px; font-size: 0.75rem; font-weight: 900; color: #64748b; cursor: pointer; text-transform: uppercase; transition: 0.2s; }
+        .m-btn { flex: 1; text-align: center; padding: 10px; font-size: 0.75rem; font-weight: 900; color: #64748b; cursor: pointer; text-transform: uppercase; transition: 0.2s; outline: none; border: none; background: transparent;}
         .m-btn.active { background: rgba(59, 130, 246, 0.2); color: #3b82f6; box-shadow: inset 0 -3px 0 #3b82f6; }
 
         /* Results Dashboard */
@@ -105,7 +141,7 @@
         .ref-sub { font-size: 0.75rem; color: #f8fafc; margin-top: 8px; line-height: 1.4; font-weight: bold; }
 
         /* The "WHY" Button */
-        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #f59e0b; color: #f59e0b; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #f59e0b; color: #f59e0b; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%;}
         .btn-why:active { background: rgba(245, 158, 11, 0.15); transform: scale(0.98); }
 
         /* CUSTOM BOTTOM SHEET MODALS */
@@ -122,15 +158,24 @@
         .cm-search:focus { border-color: #3b82f6; }
 
         .bs-list { flex: 1; overflow-y: auto; padding: 10px 0; }
-        .bs-item { display: flex; align-items: center; padding: 15px 20px; gap: 15px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); cursor: pointer; transition: 0.2s; }
+        .bs-item { display: flex; align-items: center; padding: 15px 20px; gap: 15px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); cursor: pointer; transition: 0.2s; outline: none;}
         .bs-item:active { background: rgba(59, 130, 246, 0.1); }
+        .bs-item:focus-visible { background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; padding-left: 16px;}
         
         .tcs-tax-badge { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-left: auto; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules (Laptop Compatibility) */
+        *:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; outline-color: #3b82f6; }
+        .tx-inp:focus-visible, .cm-search:focus-visible { outline: none; }
+        .btn-why:focus-visible { outline-color: #f59e0b; outline-offset: 4px; }
+        .tx-custom-sel:focus-visible { outline-color: #3b82f6; outline-offset: 4px; }
+        .m-btn:focus-visible { outline-color: #3b82f6; outline-offset: -2px; z-index: 1;}
     </style>
 </head>
 <body>
     <main id="mod-tax-overlay" role="main" aria-label="Global Tax and Refund Calculator">
-        <header class="tx-head">
+        <header class="tx-head" role="banner">
             <a href="../currency.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
             <div class="tx-tit"><i class="fas fa-receipt" aria-hidden="true"></i> GLOBAL TAX MAP</div>
         </header>
@@ -139,7 +184,7 @@
             
             <div class="tx-card">
                 <div class="tx-lbl">Shopping Destination</div>
-                <button class="tx-custom-sel" onclick="QS_Tax.openModal()" aria-label="Select Country">
+                <button class="tx-custom-sel" onclick="QS_Tax.openModal()" aria-label="Select Country, currently India">
                     <div class="tcs-flag" id="ui-flag" aria-hidden="true">🇮🇳</div>
                     <div class="tcs-details">
                         <span class="tcs-title" id="ui-title">India</span>
@@ -151,8 +196,8 @@
                 <div class="tx-lbl" style="margin-top:10px;">Item Price / Amount</div>
                 
                 <div class="mode-switch" role="group" aria-label="Tax Calculation Mode">
-                    <button class="m-btn active" id="mode-exc" onclick="QS_Tax.setMode('exclusive')" aria-pressed="true">Tax Exclusive (+%)</button>
-                    <button class="m-btn" id="mode-inc" onclick="QS_Tax.setMode('inclusive')" aria-pressed="false">Tax Inclusive (Inside)</button>
+                    <button class="m-btn active" id="mode-exc" onclick="QS_Tax.setMode('exclusive')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Tax.setMode('exclusive');}" aria-pressed="true">Tax Exclusive (+%)</button>
+                    <button class="m-btn" id="mode-inc" onclick="QS_Tax.setMode('inclusive')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Tax.setMode('inclusive');}" aria-pressed="false">Tax Inclusive (Inside)</button>
                 </div>
 
                 <div class="tx-inp-wrap" style="margin-top:10px;">
@@ -205,10 +250,10 @@
                     <button class="bs-close" onclick="QS_Tax.closeModal()" aria-label="Close Selector"><i class="fas fa-times" aria-hidden="true"></i></button>
                     <div class="cm-search-wrap">
                         <i class="fas fa-search" aria-hidden="true"></i>
-                        <input type="search" id="tx-search-inp" class="cm-search" placeholder="Search 150+ countries..." oninput="QS_Tax.filterModal()" aria-label="Search Country">
+                        <input type="search" id="tx-search-inp" class="cm-search" placeholder="Search 150+ countries..." oninput="QS_Tax.filterModal()" onkeydown="if(event.key==='Enter'){event.preventDefault(); this.blur();}" aria-label="Search Country">
                     </div>
                 </div>
-                <div class="bs-list" id="list-tax">
+                <div class="bs-list" id="list-tax" role="listbox">
                     </div>
             </div>
         </div>
@@ -344,6 +389,17 @@
                 ],
 
                 initListener: function() {
+                    // Laptop Keyboard 'Enter' Trigger Listener for the main input
+                    const taxInput = document.getElementById("tx-amt");
+                    if(taxInput) {
+                        taxInput.addEventListener("keypress", function(event) {
+                            if (event.key === "Enter") { 
+                                event.preventDefault(); 
+                                window.QS_Tax.calc(); 
+                            }
+                        });
+                    }
+
                     // Populate taxList with rawList ensuring robust DB
                     this.taxList = [...this.rawList];
 
@@ -396,10 +452,20 @@
                     filtered.forEach(e => {
                         let div = document.createElement('div');
                         div.className = 'bs-item';
+                        div.setAttribute('role', 'option');
+                        div.setAttribute('tabindex', '0');
                         div.onclick = () => { 
                             this.currentEcon = e.n; 
                             this.updateUI(); 
                             this.closeModal(); 
+                        };
+                        div.onkeydown = (event) => {
+                            if(event.key === 'Enter' || event.key === ' ') {
+                                event.preventDefault();
+                                this.currentEcon = e.n; 
+                                this.updateUI(); 
+                                this.closeModal(); 
+                            }
                         };
                         div.innerHTML = `
                             <div class="tcs-flag">${e.f}</div>

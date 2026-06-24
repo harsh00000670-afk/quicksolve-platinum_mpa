@@ -1,0 +1,14 @@
+# Static CSS Config
+/assets/css/*
+  Cache-Control: public, max-age=259200, must-revalidate
+
+# Fonts & Webfonts Configuration (Immutable)
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/webfonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Root level images like logo
+/*.png
+  Cache-Control: public, max-age=31536000, immutable

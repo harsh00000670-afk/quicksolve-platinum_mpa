@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- FIX: Made the page fully zoomable for accessibility -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
 
     <title>Inflation Time Machine | Purchasing Power Calculator | QuickSolve Platinum</title>
-    <meta name="description" content="Calculate historical inflation and the true purchasing power of money over time across 160+ countries. Understand wealth destruction and the fiat money trap. 100% Offline.">
-    <meta name="keywords" content="inflation calculator, purchasing power calculator, time value of money, cpi calculator, historical inflation rates, fiat money, wealth preservation, QuickSolve Platinum">
+    <meta name="description" content="Calculate historical inflation and the true purchasing power of money over time across 160+ countries. Understand wealth economics professionally. 100% Offline.">
+    <meta name="keywords" content="inflation calculator, purchasing power calculator, time value of money, cpi calculator, historical inflation rates, wealth preservation, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/currency_suites/inflation.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Inflation Calc">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -23,8 +25,33 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="Inflation Time Machine - See Your True Wealth">
-    <meta property="og:description" content="Travel through time to see how much purchasing power your money has lost to inflation.">
+    <meta property="og:description" content="Travel through time to see how much purchasing power your money has adjusted due to historical inflation.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/currency_suites/inflation.html">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Inflation Calculator Logo">
+
+    <!-- ADDED: Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Inflation Time Machine | QuickSolve Platinum">
+    <meta name="twitter:description" content="Calculate historical inflation and the true purchasing power of money over time across 160+ countries.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <!-- ADDED: JSON-LD Structured Data for Financial Tools -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Inflation Time Machine",
+      "url": "https://quicksolve-platinum.netlify.app/currency_suites/inflation.html",
+      "description": "Professional financial calculator to determine historical inflation impacts and calculate the true purchasing power of money across 160+ global economies.",
+      "applicationCategory": "FinancialApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
     
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
@@ -36,22 +63,30 @@
            INFLATION TIME MACHINE (GOD MODE V2)
            Theme: Synthwave / Time Travel (Cyan / Magenta)
            ========================================= */
+        body { margin: 0; background-color: var(--bg-body, #09090b); color: #f8fafc; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
+
         #mod-inflation-overlay {
             position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
             background-color: var(--bg-body, #09090b); z-index: 5000 !important;
             display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
-            font-family: sans-serif;
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* HEADER FIX: Absolute Centering & Cleanup */
         .inf-head {
-            display: flex; align-items: center; padding: 12px 15px; 
-            background: #121214; border-bottom: 1px solid #334155;
-            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+            display: flex; align-items: center; padding: 15px 20px; 
+            background: rgba(9, 9, 11, 0.9); backdrop-filter: blur(10px);
+            border-bottom: 1px solid #334155; position: sticky; top: 0; z-index: 100; flex-shrink: 0;
         }
-        .inf-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
-        .inf-tit { color: #d946ef; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+        .qs-back-btn { background: none; border: none; color: #f4f4f5; font-size: 1.3rem; cursor: pointer; text-decoration: none; z-index: 2; transition: 0.2s;}
+        .qs-back-btn:active { transform: scale(0.9); color: #06b6d4; }
+        .inf-tit { 
+            position: absolute; left: 50%; transform: translateX(-50%);
+            color: #d946ef; font-weight: 900; font-size: 1.1rem; 
+            text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; z-index: 1;
+            display: flex; align-items: center; gap: 8px;
+        }
 
         .inf-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
 
@@ -65,14 +100,15 @@
         .inf-lbl { font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; margin-bottom: 5px; }
         
         /* Custom Selectors */
-        .inf-custom-sel { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.6); border: 1px dashed #d946ef; padding: 12px 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .inf-custom-sel { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.6); border: 1px dashed #d946ef; padding: 12px 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; outline: none; width: 100%; text-align: left; }
         .inf-custom-sel:active { background: rgba(217, 70, 239, 0.1); }
         .ics-flag { font-size: 1.5rem; }
         .ics-details { flex: 1; display: flex; flex-direction: column; }
         .ics-title { font-weight: 900; color: #f8fafc; font-size: 1rem; }
         .ics-sub { font-size: 0.7rem; color: #94a3b8; margin-top: 2px; }
 
-        .inf-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; }
+        .inf-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; transition: 0.2s; }
+        .inf-inp-wrap:focus-within { border-color: #06b6d4; }
         .inf-tag { color: #f8fafc; font-weight: 900; font-size: 1.2rem; font-family: monospace; }
         .inf-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.8rem; font-weight: 900; outline: none; width: 100%; font-family: monospace; text-align: right; }
         .inf-inp::placeholder { color: #475569; }
@@ -82,7 +118,7 @@
         .year-box { background: rgba(2, 6, 23, 0.5); border: 1px solid #334155; border-radius: 8px; padding: 10px; text-align: center; }
         .year-lbl { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; font-weight: bold; }
         .year-val { font-size: 1.5rem; color: #06b6d4; font-weight: 900; font-family: monospace; margin-top: 5px; }
-        .year-inp { width: 100%; accent-color: #06b6d4; margin-top: 8px; }
+        .year-inp { width: 100%; accent-color: #06b6d4; margin-top: 8px; cursor: pointer; outline: none; }
         
         .time-arrow { color: #d946ef; font-size: 1.5rem; text-shadow: 0 0 10px rgba(217, 70, 239, 0.5); animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
@@ -109,7 +145,7 @@
         .insight-txt { font-size: 0.85rem; color: #f8fafc; line-height: 1.5; font-weight: bold; }
 
         /* The "WHY" Button */
-        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #d946ef; color: #d946ef; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #d946ef; color: #d946ef; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%;}
         .btn-why:active { background: rgba(217, 70, 239, 0.15); transform: scale(0.98); }
 
         /* CUSTOM BOTTOM SHEET MODALS */
@@ -126,13 +162,22 @@
         .cm-search:focus { border-color: #d946ef; }
 
         .bs-list { flex: 1; overflow-y: auto; padding: 10px 0; }
-        .bs-item { display: flex; align-items: center; padding: 15px 20px; gap: 15px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); cursor: pointer; transition: 0.2s; }
+        .bs-item { display: flex; align-items: center; padding: 15px 20px; gap: 15px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); cursor: pointer; transition: 0.2s; outline: none;}
         .bs-item:active { background: rgba(217, 70, 239, 0.1); }
+        .bs-item:focus-visible { background: rgba(217, 70, 239, 0.1); border-left: 4px solid #d946ef; padding-left: 16px;}
+
+        /* ADDED: Keyboard Focus Accessibility Rules (Laptop Compatibility) */
+        *:focus-visible { outline: 2px solid #06b6d4; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; outline-color: #06b6d4; }
+        .inf-inp:focus-visible, .cm-search:focus-visible { outline: none; }
+        .btn-why:focus-visible { outline-color: #d946ef; outline-offset: 4px; }
+        .inf-custom-sel:focus-visible { outline-color: #d946ef; outline-offset: 4px; }
+        .year-inp:focus-visible { outline-offset: 8px; }
     </style>
 </head>
 <body>
     <main id="mod-inflation-overlay" role="main" aria-label="Inflation Time Machine Calculator">
-        <header class="inf-head">
+        <header class="inf-head" role="banner">
             <a href="../currency.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
             <div class="inf-tit"><i class="fas fa-hourglass-half" aria-hidden="true"></i> TIME MACHINE</div>
         </header>
@@ -141,7 +186,7 @@
             
             <div class="inf-card">
                 <div class="inf-lbl">Select Economy</div>
-                <button class="inf-custom-sel" onclick="QS_Inflation.openModal()" aria-label="Select Economy or Currency">
+                <button class="inf-custom-sel" onclick="QS_Inflation.openModal()" aria-label="Select Economy or Currency, currently Indian Rupee">
                     <div class="ics-flag" id="ui-flag" aria-hidden="true">🇮🇳</div>
                     <div class="ics-details">
                         <span class="ics-title" id="ui-title">Indian Rupee (INR)</span>
@@ -185,7 +230,7 @@
                 <div class="val-box">
                     <div class="vb-lbl">Adjusted Value</div>
                     <div class="vb-val" id="res-val">₹0.00</div>
-                    <div class="vb-sub" id="res-sub">What you need in 2026 to buy the same things.</div>
+                    <div class="vb-sub" id="res-sub">Equivalent purchasing power requirement.</div>
                 </div>
 
                 <div class="stats-grid">
@@ -194,20 +239,20 @@
                         <div class="st-val c-orange" id="res-cum">+0.00%</div>
                     </div>
                     <div class="stat-box">
-                        <div class="st-lbl">Value Destroyed</div>
+                        <div class="st-lbl">Value Adjusted</div>
                         <div class="st-val c-red" id="res-loss">-0.00%</div>
                     </div>
                 </div>
 
                 <div class="insight-box">
                     <div class="insight-txt" id="res-insight">
-                        Loading AI Economic Insight...
+                        Loading Economic Insight...
                     </div>
                 </div>
             </div>
 
-            <button class="btn-why" onclick="QS_Inflation.showSteps()" aria-label="Learn about the Fiat Money Trap">
-                <i class="fas fa-chart-line" aria-hidden="true"></i> The "Fiat Money" Trap
+            <button class="btn-why" onclick="QS_Inflation.showSteps()" aria-label="Learn about the Impact of Inflation">
+                <i class="fas fa-chart-line" aria-hidden="true"></i> The Impact of Inflation
             </button>
 
         </section>
@@ -218,10 +263,10 @@
                     <button class="bs-close" onclick="QS_Inflation.closeModal()" aria-label="Close Search"><i class="fas fa-times" aria-hidden="true"></i></button>
                     <div class="cm-search-wrap">
                         <i class="fas fa-search" aria-hidden="true"></i>
-                        <input type="search" id="inf-search-inp" class="cm-search" placeholder="Search 160+ countries..." oninput="QS_Inflation.filterModal()" aria-label="Search for an economy">
+                        <input type="search" id="inf-search-inp" class="cm-search" placeholder="Search 160+ countries..." oninput="QS_Inflation.filterModal()" onkeydown="if(event.key==='Enter'){event.preventDefault(); this.blur();}" aria-label="Search for an economy">
                     </div>
                 </div>
-                <div class="bs-list" id="list-economy">
+                <div class="bs-list" id="list-economy" role="listbox">
                     </div>
             </div>
         </div>
@@ -229,7 +274,7 @@
         <div id="inf-steps-modal" class="bs-modal" role="dialog" aria-modal="true" aria-labelledby="fiat-trap-title">
             <div class="bs-content">
                 <div class="bs-head">
-                    <span style="color:#d946ef;" id="fiat-trap-title"><i class="fas fa-brain" aria-hidden="true"></i> WHY MONEY DIES</span>
+                    <span style="color:#d946ef;" id="fiat-trap-title"><i class="fas fa-brain" aria-hidden="true"></i> PURCHASING POWER EXPLAINED</span>
                     <button class="bs-close" onclick="QS_Inflation.hideSteps()" aria-label="Close Explanation"><i class="fas fa-times" aria-hidden="true"></i></button>
                 </div>
                 <div class="bs-list" style="padding: 15px; color:#f8fafc; font-size: 0.85rem; line-height: 1.6;" id="inf-steps-content">
@@ -240,17 +285,16 @@
     </main>
 
     <script>
-        /* QUICKSOLVE PLATINUM - INFLATION TIME MACHINE (GOD MODE V2)
-           Features: 160+ Country Full Integration, Search Modal, Dynamic Decadal Math Engine.
+        /* QUICKSOLVE PLATINUM - INFLATION TIME MACHINE
+           Features: 160+ Country Full Integration, Search Modal, Dynamic Decadal Math Engine, Professional Tone.
         */
 
         (function() {
             window.QS_Inflation = {
                 
                 currentEcon: 'inr',
-                economies: {}, // Will be populated dynamically
+                economies: {}, 
 
-                // EXPANDED exact historical data for Major Economies
                 exactData: {
                     'inr': { avg: '~7.5%', rates: { 1960: 6.5, 1970: 7.2, 1980: 9.0, 1990: 9.5, 2000: 6.2, 2010: 6.0, 2020: 5.5 } },
                     'usd': { avg: '~3.8%', rates: { 1960: 2.3, 1970: 7.1, 1980: 5.5, 1990: 3.0, 2000: 2.5, 2010: 1.8, 2020: 4.5 } },
@@ -263,13 +307,11 @@
                     'chf': { avg: '~2.0%', rates: { 1960: 2.0, 1970: 4.5, 1980: 3.5, 1990: 2.0, 2000: 1.0, 2010: 0.2, 2020: 1.2 } }
                 },
 
-                // Mathematical Fallback for the remaining Countries
                 fallbackData: { 
                     avg: '~5.5%', 
                     rates: { 1960: 4.0, 1970: 8.5, 1980: 7.0, 1990: 6.0, 2000: 4.5, 2010: 3.5, 2020: 5.0 } 
                 },
 
-                // The Full 160+ Master List
                 fullList: [
                     {c:"USD", n:"US Dollar", f:"🇺🇸"}, {c:"EUR", n:"Euro", f:"🇪🇺"}, {c:"GBP", n:"British Pound", f:"🇬🇧"},
                     {c:"INR", n:"Indian Rupee", f:"🇮🇳"}, {c:"JPY", n:"Japanese Yen", f:"🇯🇵"}, {c:"CNY", n:"Chinese Yuan", f:"🇨🇳"},
@@ -325,14 +367,25 @@
                 ],
 
                 initListener: function() {
-                    // Build the dynamic economies dictionary on load
+                    // Enter key binding for main input
+                    const amtInput = document.getElementById("inf-amt");
+                    if(amtInput) {
+                        amtInput.addEventListener("keypress", function(event) {
+                            if (event.key === "Enter") { 
+                                event.preventDefault(); 
+                                window.QS_Inflation.calc();
+                                amtInput.blur();
+                            }
+                        });
+                    }
+
                     this.fullList.forEach(c => {
                         let code = c.c.toLowerCase();
                         let data = this.exactData[code] || this.fallbackData;
                         this.economies[code] = {
                             id: code,
                             name: c.n,
-                            sym: c.c, // Using code as symbol for consistency
+                            sym: c.c,
                             flag: c.f,
                             avg: data.avg,
                             rates: data.rates
@@ -345,7 +398,6 @@
                         }
                     });
 
-                    // Standalone Boot for direct load
                     if(document.readyState === 'complete' || document.readyState === 'interactive'){
                          setTimeout(() => this.updateUI(), 100);
                     } else {
@@ -365,14 +417,26 @@
                     );
 
                     if(filtered.length === 0) {
-                        list.innerHTML = `<div style="text-align:center; color:#64748b; padding:20px;">No country found.</div>`;
+                        list.innerHTML = `<div style="text-align:center; color:#64748b; padding:20px;">No economy found.</div>`;
                         return;
                     }
 
                     filtered.forEach(e => {
                         let div = document.createElement('div');
                         div.className = 'bs-item';
+                        div.setAttribute('role', 'option');
+                        div.setAttribute('tabindex', '0');
+                        
                         div.onclick = () => { this.currentEcon = e.id; this.updateUI(); this.closeModal(); };
+                        div.onkeydown = (event) => {
+                            if(event.key === 'Enter' || event.key === ' ') {
+                                event.preventDefault();
+                                this.currentEcon = e.id; 
+                                this.updateUI(); 
+                                this.closeModal(); 
+                            }
+                        };
+
                         div.innerHTML = `
                             <div class="ics-flag">${e.flag}</div>
                             <div class="ics-details">
@@ -387,7 +451,7 @@
                 openModal: function() {
                     let searchInp = document.getElementById('inf-search-inp');
                     if(searchInp) searchInp.value = "";
-                    this.filterModal(); // Render full list
+                    this.filterModal(); 
                     const modal = document.getElementById('inf-modal');
                     if(modal) {
                         modal.style.display = 'flex';
@@ -453,7 +517,7 @@
                         if(document.getElementById('res-val')) document.getElementById('res-val').innerText = `${econ.sym} ${amt.toLocaleString('en-US')}`;
                         if(document.getElementById('res-cum')) document.getElementById('res-cum').innerText = "+0.00%";
                         if(document.getElementById('res-loss')) document.getElementById('res-loss').innerText = "0.00%";
-                        if(document.getElementById('res-insight')) document.getElementById('res-insight').innerHTML = "Time travel canceled. You are in the same year.";
+                        if(document.getElementById('res-insight')) document.getElementById('res-insight').innerHTML = "Time shift inactive. Purchasing power is identical.";
                         return;
                     }
 
@@ -481,9 +545,9 @@
                     if(document.getElementById('res-val')) document.getElementById('res-val').innerText = `${econ.sym} ${fmt(finalValue)}`;
                     
                     if (isForward) {
-                        if(document.getElementById('res-sub')) document.getElementById('res-sub').innerText = `What you need in ${toYr} to match ${fromYr}'s lifestyle.`;
+                        if(document.getElementById('res-sub')) document.getElementById('res-sub').innerText = `Amount needed in ${toYr} to equal the purchasing power of ${fromYr}.`;
                     } else {
-                        if(document.getElementById('res-sub')) document.getElementById('res-sub').innerText = `What ${econ.sym} ${fmt(amt)} in ${fromYr} was worth back in ${toYr}.`;
+                        if(document.getElementById('res-sub')) document.getElementById('res-sub').innerText = `What ${econ.sym} ${fmt(amt)} in ${fromYr} was equivalent to in ${toYr}.`;
                     }
 
                     if(document.getElementById('res-cum')) document.getElementById('res-cum').innerText = `+${cumInflation.toFixed(1)}%`;
@@ -493,14 +557,14 @@
                     if(insightBox) {
                         if (isForward) {
                             insightBox.innerHTML = `
-                                <i class="fas fa-fire-alt" style="color:#d946ef;"></i> <b>Value Destroyed:</b><br>
-                                Because of inflation in ${econ.name}, the purchasing power of your money dropped by <span style="color:#ef4444;">${lossPct.toFixed(1)}%</span>. 
-                                <br><br>What cost ${econ.sym} ${fmt(amt)} in ${fromYr}, now costs <span style="color:#06b6d4;">${econ.sym} ${fmt(finalValue)}</span> in ${toYr}. 
+                                <i class="fas fa-chart-line" style="color:#d946ef;"></i> <b>Purchasing Power Adjusted:</b><br>
+                                Due to historical inflation rates in ${econ.name}, the currency's purchasing power decreased by approximately <span style="color:#ef4444;">${lossPct.toFixed(1)}%</span> over this period. 
+                                <br><br>Goods that cost ${econ.sym} ${fmt(amt)} in ${fromYr} would require roughly <span style="color:#06b6d4;">${econ.sym} ${fmt(finalValue)}</span> in ${toYr}. 
                             `;
                         } else {
                             insightBox.innerHTML = `
-                                <i class="fas fa-history" style="color:#06b6d4;"></i> <b>The Golden Days:</b><br>
-                                Back in ${toYr} (${econ.name}), everything was incredibly cheap! You only needed <span style="color:#06b6d4;">${econ.sym} ${fmt(finalValue)}</span> to buy what ${econ.sym} ${fmt(amt)} buys today in ${fromYr}.
+                                <i class="fas fa-history" style="color:#06b6d4;"></i> <b>Historical Valuation:</b><br>
+                                Looking back to ${toYr} (${econ.name}), equivalent goods were priced significantly lower. A purchase requiring ${econ.sym} ${fmt(amt)} in ${fromYr} would have cost approximately <span style="color:#06b6d4;">${econ.sym} ${fmt(finalValue)}</span> back then.
                             `;
                         }
                     }
@@ -512,21 +576,21 @@
 
                     let html = `
                         <div style="margin-bottom:15px; border-left:3px solid #d946ef; padding-left:10px;">
-                            <span style="color:#d946ef; font-weight:bold;">The Silent Tax:</span><br>
-                            Governments constantly print new money. When supply increases, the value of each individual note drops. This is why prices "go up" (it's actually the currency going down).
+                            <span style="color:#d946ef; font-weight:bold;">Understanding Inflation:</span><br>
+                            Inflation occurs when the general price level of goods and services rises, often influenced by changes in the money supply. As prices rise, the purchasing power of your currency decreases.
                         </div>
                         
                         <div style="background:#020617; border:1px solid #334155; border-radius:8px; padding:15px; margin-top:10px;">
                             <span style="color:#06b6d4; font-weight:bold; font-size:0.8rem; text-transform:uppercase;"><i class="fas fa-coins"></i> Cash vs Assets</span>
                             
                             <ul style="margin-top:10px; padding-left:15px; color:#94a3b8; font-size:0.8rem; line-height:1.5;">
-                                <li><span style="color:#ef4444; font-weight:bold;">Saving Cash:</span> A guaranteed loss. If inflation is 7% a year, your savings lose 50% of their purchasing power every 10 years!</li>
-                                <li style="margin-top:8px;"><span style="color:#10b981; font-weight:bold;">Investing (Stocks/Real Estate/Gold):</span> These are limited assets. As money printing increases, the price of limited assets shoots up, protecting you from inflation.</li>
+                                <li><span style="color:#ef4444; font-weight:bold;">Holding Cash:</span> Without interest outperforming inflation, cash reserves steadily lose purchasing power over time.</li>
+                                <li style="margin-top:8px;"><span style="color:#10b981; font-weight:bold;">Asset Allocation:</span> Investing in assets like equities, real estate, or commodities is historically used as a strategy to hedge against inflation.</li>
                             </ul>
                         </div>
 
                         <div style="margin-top:15px; font-size:0.75rem; color:#f8fafc; text-align:center; font-weight:bold; background:rgba(217, 70, 239, 0.1); padding:10px; border-radius:6px; border: 1px dashed #d946ef;">
-                            "Inflation is taxation without legislation." - Milton Friedman
+                            "Inflation is the gradual erosion of purchasing power."
                         </div>
                     `;
                     contentBox.innerHTML = html;

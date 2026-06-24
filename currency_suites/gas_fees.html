@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- FIX: Made the page fully zoomable for accessibility -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
 
@@ -11,11 +12,12 @@
     <meta name="description" content="Calculate real-time cryptocurrency gas fees across Ethereum, BNB Chain, Polygon, Arbitrum, Solana, and more. Avoid overpaying for smart contract swaps and NFT minting. 100% Offline.">
     <meta name="keywords" content="crypto gas estimator, ethereum gas calculator, gwei converter, solana transaction fee, web3 gas tracker, arbitrum fee calculator, smart contract cost, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/currency_suites/gas_fees.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Gas Pro">
     <meta name="format-detection" content="telephone=no">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#09090b">
@@ -24,8 +26,33 @@
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="Crypto Gas Estimator Pro - Avoid Hidden Network Fees">
     <meta property="og:description" content="Estimate exact network gas fees before you transfer or swap on any major blockchain.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/currency_suites/gas_fees.html">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Gas Estimator Logo">
     
+    <!-- ADDED: Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Crypto Gas Estimator Pro | QuickSolve Platinum">
+    <meta name="twitter:description" content="Calculate real-time cryptocurrency gas fees across Ethereum, Solana, and Layer 2 networks offline.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <!-- ADDED: JSON-LD Structured Data for Web3 Tools -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Crypto Gas Estimator Pro",
+      "url": "https://quicksolve-platinum.netlify.app/currency_suites/gas_fees.html",
+      "description": "Professional web3 tool to calculate and estimate network transaction fees (gas) across various blockchains including Ethereum, Solana, and Layer 2s.",
+      "applicationCategory": "FinancialApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
+
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
     <link rel="stylesheet" href="../style.css">
@@ -36,22 +63,30 @@
            CRYPTO GAS FEE ESTIMATOR (GOD MODE V2)
            Theme: Web3 Terminal (Purple / Cyan)
            ========================================= */
+        body { margin: 0; background-color: var(--bg-body, #09090b); color: #f8fafc; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
+
         #mod-gas-overlay {
             position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
             background-color: var(--bg-body, #09090b); z-index: 5000 !important;
             display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
-            font-family: sans-serif;
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* HEADER FIX: Absolute Centering & Cleanup */
         .gs-head {
-            display: flex; align-items: center; padding: 12px 15px; 
-            background: #121214; border-bottom: 1px solid #334155;
-            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+            display: flex; align-items: center; padding: 15px 20px; 
+            background: rgba(9, 9, 11, 0.9); backdrop-filter: blur(10px);
+            border-bottom: 1px solid #334155; position: sticky; top: 0; z-index: 100; flex-shrink: 0;
         }
-        .gs-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
-        .gs-tit { color: #c084fc; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+        .qs-back-btn { background: none; border: none; color: #f4f4f5; font-size: 1.3rem; cursor: pointer; text-decoration: none; z-index: 2; transition: 0.2s;}
+        .qs-back-btn:active { transform: scale(0.9); color: #c084fc; }
+        .gs-tit { 
+            position: absolute; left: 50%; transform: translateX(-50%);
+            color: #c084fc; font-weight: 900; font-size: 1.1rem; 
+            text-transform: uppercase; letter-spacing: 2px; white-space: nowrap; z-index: 1;
+            display: flex; align-items: center; gap: 8px;
+        }
 
         .gs-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
 
@@ -65,7 +100,7 @@
         .gs-lbl { font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; margin-bottom: 5px; }
         
         /* Custom Selectors (Replacing Native Select) */
-        .gs-custom-sel { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.6); border: 1px dashed #c084fc; padding: 12px 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .gs-custom-sel { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.6); border: 1px dashed #c084fc; padding: 12px 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; outline: none; width: 100%; text-align: left;}
         .gs-custom-sel:active { border-color: #c084fc; background: rgba(192, 132, 252, 0.1); }
         .gcs-icon { font-size: 1.2rem; display: flex; justify-content: center; align-items: center; width: 24px; }
         .gcs-details { flex: 1; display: flex; flex-direction: column; }
@@ -73,14 +108,15 @@
         .gcs-sub { font-size: 0.7rem; color: #94a3b8; margin-top: 2px; }
         .gcs-caret { color: #c084fc; font-size: 1rem; }
 
-        .gs-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; }
+        .gs-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid #334155; transition: 0.2s; }
+        .gs-inp-wrap:focus-within { border-color: #06b6d4; }
         .gs-tag { color: #94a3b8; font-weight: 900; font-size: 0.8rem; font-family: monospace; }
         .gs-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.2rem; font-weight: 900; outline: none; width: 100%; font-family: monospace; text-align: right; }
         .gs-inp::placeholder { color: #475569; }
 
         /* Speed Toggles */
         .speed-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 5px; }
-        .speed-btn { background: rgba(2, 6, 23, 0.5); border: 1px solid #334155; padding: 10px 5px; border-radius: 8px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 4px; }
+        .speed-btn { background: rgba(2, 6, 23, 0.5); border: 1px solid #334155; padding: 10px 5px; border-radius: 8px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 4px; outline: none;}
         .speed-btn:active { transform: scale(0.95); }
         .speed-btn.active { background: rgba(192, 132, 252, 0.15); border-color: #c084fc; box-shadow: inset 0 -3px 0 #c084fc; }
         
@@ -105,7 +141,7 @@
         .br-hl { color: #c084fc; font-weight: 900; }
 
         /* The "WHY" Button */
-        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #06b6d4; color: #06b6d4; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-why { flex-shrink: 0; background: transparent; border: 1px dashed #06b6d4; color: #06b6d4; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%;}
         .btn-why:active { background: rgba(6, 182, 212, 0.15); transform: scale(0.98); }
 
         /* CUSTOM BOTTOM SHEET MODALS */
@@ -117,8 +153,9 @@
         .bs-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
         
         .bs-list { flex: 1; overflow-y: auto; padding: 10px 0; }
-        .bs-item { display: flex; align-items: center; padding: 15px 20px; gap: 15px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); cursor: pointer; transition: 0.2s; }
+        .bs-item { display: flex; align-items: center; padding: 15px 20px; gap: 15px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); cursor: pointer; transition: 0.2s; outline: none;}
         .bs-item:active { background: rgba(192, 132, 252, 0.1); }
+        .bs-item:focus-visible { background: rgba(192, 132, 252, 0.1); border-left: 4px solid #c084fc; padding-left: 16px;}
         .bsi-icon { font-size: 1.5rem; width: 30px; text-align: center; }
         .bsi-details { flex: 1; display: flex; flex-direction: column; }
         .bsi-title { font-weight: 900; color: #f8fafc; font-size: 1rem; }
@@ -127,11 +164,22 @@
         /* STEPS MODAL (Why) */
         #gs-steps-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; }
         #gs-steps-box { background: #1e293b; border: 1px solid #06b6d4; border-radius: 12px; width: 95%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(6, 182, 212, 0.2); transform: translateY(20px); transition: 0.3s ease; }
+        .steps-head { padding: 15px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #06b6d4; font-weight: 800; }
+        .steps-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .steps-content { padding: 15px; overflow-y: auto; color: #f8fafc; font-size: 0.85rem; line-height: 1.6; }
+
+        /* ADDED: Keyboard Focus Accessibility Rules (Laptop Compatibility) */
+        *:focus-visible { outline: 2px solid #c084fc; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; outline-color: #c084fc; }
+        .gs-inp:focus-visible { outline: none; }
+        .btn-why:focus-visible { outline-color: #06b6d4; outline-offset: 4px; }
+        .gs-custom-sel:focus-visible { outline-color: #c084fc; outline-offset: 4px; }
+        .speed-btn:focus-visible { outline-color: #c084fc; outline-offset: 4px; z-index: 1;}
     </style>
 </head>
 <body>
     <main id="mod-gas-overlay" role="main" aria-label="Crypto Gas Estimator">
-        <header class="gs-head">
+        <header class="gs-head" role="banner">
             <a href="../currency.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
             <div class="gs-tit"><i class="fas fa-gas-pump" aria-hidden="true"></i> GAS ESTIMATOR PRO</div>
         </header>
@@ -140,7 +188,7 @@
             
             <div class="gs-card">
                 <div class="gs-lbl">Blockchain Network</div>
-                <button class="gs-custom-sel" id="sel-network" onclick="QS_Gas.openModal('network')" aria-label="Select Blockchain Network">
+                <button class="gs-custom-sel" id="sel-network" onclick="QS_Gas.openModal('network')" aria-label="Select Blockchain Network, currently Ethereum Mainnet">
                     <div class="gcs-icon" id="ui-net-icon" style="color:#627eea;" aria-hidden="true"><i class="fab fa-ethereum"></i></div>
                     <div class="gcs-details">
                         <span class="gcs-title" id="ui-net-title" style="color:#627eea;">Ethereum Mainnet</span>
@@ -150,7 +198,7 @@
                 </button>
 
                 <div class="gs-lbl" style="margin-top:15px;">Transaction Type</div>
-                <button class="gs-custom-sel" onclick="QS_Gas.openModal('action')" style="border-color:#475569;" aria-label="Select Transaction Type">
+                <button class="gs-custom-sel" onclick="QS_Gas.openModal('action')" style="border-color:#475569;" aria-label="Select Transaction Type, currently Native Transfer">
                     <div class="gcs-icon" style="color:#f8fafc;" aria-hidden="true"><i class="fas fa-exchange-alt" id="ui-act-icon"></i></div>
                     <div class="gcs-details">
                         <span class="gcs-title" id="ui-act-title">Native Transfer</span>
@@ -174,17 +222,17 @@
             <div class="gs-card">
                 <div class="gs-lbl">Network Congestion (Speed)</div>
                 <div class="speed-grid" role="group" aria-label="Select Transaction Speed">
-                    <button class="speed-btn" id="spd-slow" onclick="QS_Gas.setSpeed('slow')" aria-pressed="false">
+                    <button class="speed-btn" id="spd-slow" onclick="QS_Gas.setSpeed('slow')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Gas.setSpeed('slow');}" aria-pressed="false">
                         <span class="sb-tit">Slow</span>
                         <span class="sb-val" id="time-slow">~5 mins</span>
                         <span class="sb-gwei" id="gwei-slow">15 Gwei</span>
                     </button>
-                    <button class="speed-btn active" id="spd-std" onclick="QS_Gas.setSpeed('std')" aria-pressed="true">
+                    <button class="speed-btn active" id="spd-std" onclick="QS_Gas.setSpeed('std')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Gas.setSpeed('std');}" aria-pressed="true">
                         <span class="sb-tit">Standard</span>
                         <span class="sb-val" id="time-std">~45 secs</span>
                         <span class="sb-gwei" id="gwei-std">30 Gwei</span>
                     </button>
-                    <button class="speed-btn" id="spd-fast" onclick="QS_Gas.setSpeed('fast')" aria-pressed="false">
+                    <button class="speed-btn" id="spd-fast" onclick="QS_Gas.setSpeed('fast')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); QS_Gas.setSpeed('fast');}" aria-pressed="false">
                         <span class="sb-tit">Fast</span>
                         <span class="sb-val" id="time-fast">~15 secs</span>
                         <span class="sb-gwei" id="gwei-fast">50 Gwei</span>
@@ -229,7 +277,7 @@
                     <span>Select Blockchain</span>
                     <button class="bs-close" onclick="QS_Gas.closeModal('network')" aria-label="Close Network Selector"><i class="fas fa-times" aria-hidden="true"></i></button>
                 </div>
-                <div class="bs-list" id="list-network">
+                <div class="bs-list" id="list-network" role="listbox">
                     </div>
             </div>
         </div>
@@ -240,7 +288,7 @@
                     <span>Transaction Type</span>
                     <button class="bs-close" onclick="QS_Gas.closeModal('action')" aria-label="Close Action Selector"><i class="fas fa-times" aria-hidden="true"></i></button>
                 </div>
-                <div class="bs-list" id="list-action">
+                <div class="bs-list" id="list-action" role="listbox">
                     </div>
             </div>
         </div>
@@ -294,6 +342,17 @@
                 },
 
                 initListener: function() {
+                    // Global Input 'Enter' Key Binding
+                    const coinInput = document.getElementById("gs-coin-price");
+                    if(coinInput) {
+                        coinInput.addEventListener("keypress", function(event) {
+                            if (event.key === "Enter") { 
+                                event.preventDefault(); 
+                                window.QS_Gas.calc(); 
+                            }
+                        });
+                    }
+
                     window.addEventListener('qs-tool-opened', (e) => {
                         if(e.detail && e.detail.tool === 'currency_suites/gas_fees.js') {
                             this.populateModals();
@@ -318,7 +377,12 @@
                             let n = this.networks[key];
                             let div = document.createElement('div');
                             div.className = 'bs-item';
+                            div.setAttribute('role', 'option');
+                            div.setAttribute('tabindex', '0');
                             div.onclick = () => this.selectNetwork(key);
+                            div.onkeydown = (e) => {
+                                if(e.key==='Enter'||e.key===' '){ e.preventDefault(); this.selectNetwork(key); }
+                            };
                             div.innerHTML = `
                                 <div class="bsi-icon" style="color:${n.color};"><i class="${n.icon}"></i></div>
                                 <div class="bsi-details">
@@ -338,7 +402,12 @@
                             let a = this.actions[key];
                             let div = document.createElement('div');
                             div.className = 'bs-item';
+                            div.setAttribute('role', 'option');
+                            div.setAttribute('tabindex', '0');
                             div.onclick = () => this.selectAction(key);
+                            div.onkeydown = (e) => {
+                                if(e.key==='Enter'||e.key===' '){ e.preventDefault(); this.selectAction(key); }
+                            };
                             div.innerHTML = `
                                 <div class="bsi-icon" style="color:#94a3b8;"><i class="${a.icon}"></i></div>
                                 <div class="bsi-details">
