@@ -2,7 +2,7 @@
    0. LOCAL FONTS SETUP (JetBrains Mono)
    ========================================= */
 /* Regular */
-@font-face {
+@@font-face {
     font-family: 'JetBrains Mono';
     src: url('assets/fonts/JetBrainsMono-Regular.ttf') format('truetype');
     font-weight: 400;
@@ -19,14 +19,6 @@
     font-display: swap;
 }
 
-/* Extra Bold */
-@font-face {
-    font-family: 'JetBrains Mono';
-    src: url('assets/fonts/JetBrainsMono-ExtraBold.ttf') format('truetype');
-    font-weight: 800;
-    font-style: normal;
-    font-display: swap;
-}
 
 /* QUICKSOLVE PLATINUM - MAIN STYLESHEET
    Version: 12.0
@@ -141,7 +133,7 @@ body {
 }
 
 .brand {
-    font-weight: 800;
+    font-weight: 700;
     font-size: 1.2rem;
     color: var(--primary);
     cursor: pointer;
@@ -241,7 +233,7 @@ body {
     background: var(--primary);
     color: #fff;
     font-size: 0.6rem;
-    font-weight: 800;
+    font-weight: 700;
     padding: 2px 6px;
     border-radius: 4px;
     text-transform: uppercase;
@@ -302,7 +294,7 @@ body {
     font-size: 0.75rem;
     text-transform: uppercase;
     color: var(--primary);
-    font-weight: 800;
+    font-weight: 700;
     margin-bottom: 15px;
     letter-spacing: 1px;
 }

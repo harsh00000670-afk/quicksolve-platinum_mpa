@@ -1,77 +1,569 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-   
-   <!-- CORE GATEWAY -->
-   <url>
-      <loc>https://quicksolve-platinum.netlify.app/</loc>
-      <lastmod>2026-06-11</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>1.00</priority>
-   </url>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
-   <!-- TIER 1: FLAGSHIP CALCULATORS (High Priority) -->
-   <url>
-      <loc>https://quicksolve-platinum.netlify.app/scientific_suite/scientific.html</loc>
-      <changefreq>weekly</changefreq>
-      <priority>0.90</priority>
-   </url>
-   <url>
-      <loc>https://quicksolve-platinum.netlify.app/programmer.html</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.90</priority>
-   </url>
-   <url>
-      <loc>https://quicksolve-platinum.netlify.app/loan.html</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.90</priority>
-   </url>
-   <url>
-      <loc>https://quicksolve-platinum.netlify.app/gst.html</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.90</priority>
-   </url>
 
-   <!-- TIER 2: STANDARD SUITES -->
-   <url>
-      <loc>https://quicksolve-platinum.netlify.app/currency.html</loc>
-      <!-- Currency changes daily, so tell bots to check often -->
-      <changefreq>daily</changefreq>
-      <priority>0.85</priority>
-   </url>
-   <url>
-      <loc>https://quicksolve-platinum.netlify.app/graph.html</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.80</priority>
-   </url>
-   <url>
-      <loc>https://quicksolve-platinum.netlify.app/health.html</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.80</priority>
-   </url>
-   <url>
-      <loc>https://quicksolve-platinum.netlify.app/age.html</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.80</priority>
-   </url>
-   <url>
-      <loc>https://quicksolve-platinum.netlify.app/unit.html</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.80</priority>
-   </url>
-   <url>
-      <loc>https://quicksolve-platinum.netlify.app/time.html</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.80</priority>
-   </url>
-   <url>
-      <loc>https://quicksolve-platinum.netlify.app/percentage.html</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.80</priority>
-   </url>
-   <url>
-      <loc>https://quicksolve-platinum.netlify.app/discount.html</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.80</priority>
-   </url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/components/contact</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/components/about</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/scientific_suite/scientific</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/graph</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/currency</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/health</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/loan</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/gst</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/age</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/unit</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/time</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/percentage</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/discount</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/components/privacy</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/components/terms</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/scientific_suite/voice-help</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/base_calc</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/bitwise</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/bit_shift</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/signed_num</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/ieee754</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/endianness</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/ascii</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/base64</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/hash</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/json_fmt</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/string_escape</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/subnet</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/color_engine</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/epoch</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/programmer_suites/cron</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/chart_suites/equation_visualizer</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/chart_suites/trig_waves</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/chart_suites/compounding_curve</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/chart_suites/emi_amortization</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/chart_suites/breakeven_graph</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/chart_suites/depreciation_curve</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/currency_suites/fiat_converter</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/currency_suites/watchlist</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/currency_suites/hidden_fees</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/currency_suites/ppp_calc</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/currency_suites/volatility</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/currency_suites/crypto_converter</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/currency_suites/gas_fees</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/currency_suites/crypto_profit</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/currency_suites/arbitrage</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/currency_suites/inflation</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/currency_suites/global_tax</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/health_suites/visual_bmi</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/health_suites/smart_bmi</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/health_suites/child_bmi</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/health_suites/ideal_weight</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/health_suites/body_fat</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/health_suites/lbm_calc</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/health_suites/rfm_calc</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/health_suites/ponderal</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/health_suites/waist_hip</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/health_suites/waist_height</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/loan_suite/standard</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/loan_suite/prepay</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/loan_suite/moratorium</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/loan_suite/tax</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/loan_suite/compare</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/loan_suite/flat_reducing</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/loan_suite/eligibility</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/loan_suite/transfer</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/gst_suites/itc_adjuster</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/gst_suites/multi_bill</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/gst_suites/late_fee</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/gst_suites/profit_markup</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/gst_suites/scheme_compare</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/gst_suites/flat_rate</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/gst_suites/rcm_calc</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/gst_suites/state_splitter</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/gst_suites/refund_export</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/gst_suites/valuation</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/age_suites/life_pulse</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/age_suites/milestones</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/age_suites/cosmic_age</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/age_suites/bio_pet</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/age_suites/zodiac_trivia</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/age_suites/pro_legal</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/time_suites/sleep</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/time_suites/life</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/time_suites/dilatometer</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/time_suites/billing</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/time_suites/datemath</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/time_suites/overlap</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/time_suites/focus</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/time_suites/history</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/percent_suites/crash_recover</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/percent_suites/margin_markup</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/percent_suites/fake_appraisal</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/percent_suites/loan_rate_shock</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/percent_suites/time_waster</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/percent_suites/expense_ratio</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/percent_suites/impossible_target</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/discount_suites/stacked</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/discount_suites/bogo</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/discount_suites/capping</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/discount_suites/loyalty</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/discount_suites/bill_split</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/discount_suites/subscription</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/discount_suites/emi_vs_cash</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/discount_suites/hidden_cost</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/discount_suites/cashback</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/discount_suites/depreciation</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/discount_suites/seller_margin</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://quicksolve-platinum.netlify.app/discount_suites/wholesale</loc>
+  <lastmod>2026-06-25T06:25:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
 
 </urlset>

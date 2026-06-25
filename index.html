@@ -280,9 +280,10 @@
                 </a>
 
                 <div style="margin-top:15px">
-                    <button class="btn-main" style="background:rgba(239, 68, 68, 0.1); color:var(--danger); border:1px solid var(--danger); height:45px;" onclick="clearData()" aria-label="Reset all app data">
+<button class="btn-main" style="background:rgba(239, 68, 68, 0.05); color:#dc2626; border:1px solid #dc2626; height:45px;" onclick="clearData()" aria-label="Reset all app data">
                         <i class="fas fa-trash" style="margin-right:8px" aria-hidden="true"></i> Reset Everything
                     </button>
+
                 </div>
             </div>
 
@@ -301,7 +302,8 @@
         </div>
         <div id="hist-list" class="sb-content" style="font-family:'JetBrains Mono'; font-size:0.85rem;" aria-live="polite"></div>
         <div style="padding:15px; border-top:1px solid var(--border)">
-            <button class="btn-main" onclick="clearHistory()" aria-label="Clear all global history">Clear History</button>
+<button class="btn-main" onclick="clearHistory()" aria-label="Clear all global history" style="background: #0284c7; color: #ffffff;">Clear History</button>
+
         </div>
     </div>
 
@@ -346,9 +348,10 @@
         }
     }
 
-    /* Breathing Glow for "is live!" */
+
+/* Breathing Glow for "is live!" */
     .live-status {
-        color: #4ec9b0;
+        color: #2dd4bf;
         margin-left: 5px;
         text-transform: uppercase;
         font-size: 0.9em;
@@ -401,7 +404,8 @@
             <!-- Added aria-labels to all grid items -->
             <div class="grid" role="navigation" aria-label="Calculator Selection Menu">
                 <a href="scientific_suite/scientific.html" class="card" aria-label="Open Scientific and Voice Calculator">
-                    <span class="card-badge">VOICE CALC</span>
+                  <span class="card-badge" style="background: #0284c7; color: #ffffff;">VOICE CALC</span>
+
                     <i class="fas fa-calculator" aria-hidden="true"></i>
                     <h3>Scientific</h3>
                 </a>
@@ -534,7 +538,8 @@
                 <div class="tm-text">Light Mode <small>Clean and bright interface</small></div><div class="tm-radio"></div>
             </div>
             <div class="tm-opt" id="opt-theme-matrix" onclick="ThemeManager.setTheme('matrix', 'Matrix Hacker', this)" role="radio" aria-checked="false" tabindex="0">
-                <div class="tm-text" style="color: #22c55e;">Matrix Hacker <small style="color: #16a34a;">Terminal green aesthetic</small></div><div class="tm-radio"></div>
+                <div class="tm-text" style="color: #22c55e;">Matrix Hacker <small style="color: #15803d;">Terminal green aesthetic</small>
+                  </div><div class="tm-radio"></div>
             </div>
             <div class="tm-opt" id="opt-theme-oled" onclick="ThemeManager.setTheme('oled', 'OLED (True Black)', this)" role="radio" aria-checked="false" tabindex="0">
                 <div class="tm-text">OLED (True Black) <small>Battery saver pure black</small></div><div class="tm-radio"></div>
