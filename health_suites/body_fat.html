@@ -3,16 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
 
     <title>US Navy Body Fat Calculator | Precision Analytics | QuickSolve Platinum</title>
+    
     <meta name="description" content="Professional US Navy Body Fat Calculator. Calculate body fat percentage and lean mass using weight, neck, waist, and hip measurements. 100% Offline.">
     <meta name="keywords" content="body fat mass calculator, lean body mass, us navy body fat formula, fitness calculator, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/health_suites/body_fat.html">
+    
+    <meta property="og:title" content="US Navy Body Fat Calculator | QuickSolve Platinum">
+    <meta property="og:description" content="Calculate body fat percentage and lean mass using weight, neck, waist, and hip measurements. 100% Offline.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/health_suites/body_fat.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -34,15 +40,29 @@
             font-family: sans-serif;
         }
 
+        /* Laptop / Desktop Compatibility */
+        @media (min-width: 768px) {
+            #mod-bf-overlay {
+                max-width: 480px;
+                margin: 0 auto;
+                left: 50%;
+                transform: translateX(-50%);
+                border-left: 1px solid #1e293b;
+                border-right: 1px solid #1e293b;
+                box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            }
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Header centered modification */
         .bf-head {
-            display: flex; align-items: center; padding: 12px 15px; 
+            display: flex; align-items: center; justify-content: center; padding: 12px 15px; 
             background: #0f172a; border-bottom: 1px solid #1e293b;
             position: sticky; top: 0; z-index: 100; flex-shrink: 0;
         }
-        .bf-head .qs-back-btn { background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
-        .bf-tit { color: #f97316; font-weight: 900; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+        .bf-head .qs-back-btn { position: absolute; left: 15px; background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .bf-tit { color: #f97316; font-weight: 900; font-size: 1rem; margin-left: 0; text-transform: uppercase; letter-spacing: 2px;}
 
         .bf-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 80px; }
 
@@ -82,62 +102,62 @@
     <main id="mod-bf-overlay" role="main" aria-label="Body Fat Calculator">
         <header class="bf-head">
             <a href="../health.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left"></i></a>
-            <div class="bf-tit"><i class="fas fa-bullseye"></i> BODY FAT %</div>
+            <h1 class="bf-tit"><i class="fas fa-bullseye"></i> BODY FAT %</h1>
         </header>
 
         <section class="bf-body">
             
             <div class="bf-card">
-                <div class="bf-lbl">Biological Gender</div>
-                <div class="gen-toggle" role="radiogroup">
-                    <div id="btn-male" class="gen-btn active" onclick="QS_BodyFat.setGender('male')">MALE</div>
-                    <div id="btn-female" class="gen-btn" onclick="QS_BodyFat.setGender('female')">FEMALE</div>
+                <div class="bf-lbl" id="lbl-gender">Biological Gender</div>
+                <div class="gen-toggle" role="radiogroup" aria-labelledby="lbl-gender">
+                    <div id="btn-male" class="gen-btn active" role="radio" aria-checked="true" tabindex="0" onclick="QS_BodyFat.setGender('male')">MALE</div>
+                    <div id="btn-female" class="gen-btn" role="radio" aria-checked="false" tabindex="0" onclick="QS_BodyFat.setGender('female')">FEMALE</div>
                 </div>
 
-                <div class="bf-lbl">Total Body Weight</div>
+                <div class="bf-lbl" id="lbl-weight">Total Body Weight</div>
                 <div class="bf-inp-wrap">
                     <i class="fas fa-weight-hanging" style="color:#f97316;"></i>
-                    <input type="number" id="inp-weight-total" class="bf-inp" placeholder="e.g. 80" oninput="QS_BodyFat.calculate()">
+                    <input type="number" id="inp-weight-total" class="bf-inp" placeholder="e.g. 80" min="0" step="any" aria-labelledby="lbl-weight" oninput="QS_BodyFat.calculate()">
                     <span class="bf-unit">KG</span>
                 </div>
 
-                <div class="bf-lbl">Height (cm)</div>
+                <div class="bf-lbl" id="lbl-height">Height (cm)</div>
                 <div class="bf-inp-wrap">
                     <i class="fas fa-ruler-vertical" style="color:#38bdf8;"></i>
-                    <input type="number" id="inp-h" class="bf-inp" placeholder="e.g. 186" oninput="QS_BodyFat.calculate()">
+                    <input type="number" id="inp-h" class="bf-inp" placeholder="e.g. 186" min="0" step="any" aria-labelledby="lbl-height" oninput="QS_BodyFat.calculate()">
                     <span class="bf-unit">CM</span>
                 </div>
 
-                <div class="bf-lbl">Neck (cm)</div>
+                <div class="bf-lbl" id="lbl-neck">Neck (cm)</div>
                 <div class="bf-inp-wrap">
                     <i class="fas fa-user-tie" style="color:#a78bfa;"></i>
-                    <input type="number" id="inp-n" class="bf-inp" placeholder="e.g. 39" oninput="QS_BodyFat.calculate()">
+                    <input type="number" id="inp-n" class="bf-inp" placeholder="e.g. 39" min="0" step="any" aria-labelledby="lbl-neck" oninput="QS_BodyFat.calculate()">
                     <span class="bf-unit">CM</span>
                 </div>
 
-                <div class="bf-lbl">Waist (cm)</div>
+                <div class="bf-lbl" id="lbl-waist">Waist (cm)</div>
                 <div class="bf-inp-wrap">
                     <i class="fas fa-tape" style="color:#10b981;"></i>
-                    <input type="number" id="inp-w" class="bf-inp" placeholder="e.g. 89" oninput="QS_BodyFat.calculate()">
+                    <input type="number" id="inp-w" class="bf-inp" placeholder="e.g. 89" min="0" step="any" aria-labelledby="lbl-waist" oninput="QS_BodyFat.calculate()">
                     <span class="bf-unit">CM</span>
                 </div>
 
                 <div id="hip-field" class="hidden">
-                    <div class="bf-lbl">Hips (cm)</div>
+                    <div class="bf-lbl" id="lbl-hips">Hips (cm)</div>
                     <div class="bf-inp-wrap">
                         <i class="fas fa-arrows-alt-h" style="color:#ec4899;"></i>
-                        <input type="number" id="inp-hip" class="bf-inp" placeholder="e.g. 95" oninput="QS_BodyFat.calculate()">
+                        <input type="number" id="inp-hip" class="bf-inp" placeholder="e.g. 95" min="0" step="any" aria-labelledby="lbl-hips" oninput="QS_BodyFat.calculate()">
                         <span class="bf-unit">CM</span>
                     </div>
                 </div>
             </div>
 
-            <div id="empty-state" style="text-align:center; padding:30px 20px; color:#475569;">
+            <div id="empty-state" style="text-align:center; padding:30px 20px; color:#475569;" aria-hidden="false">
                 <i class="fas fa-id-card-alt fa-3x" style="opacity:0.3; margin-bottom:15px;"></i>
                 <div style="font-size:0.85rem; font-weight:bold;">Enter all measurements for precision body-composition mapping.</div>
             </div>
 
-            <div id="res-dashboard" class="res-panel hidden" aria-live="polite">
+            <div id="res-dashboard" class="res-panel hidden" aria-live="polite" aria-hidden="true">
                 <div class="fat-val" id="res-val">0.0%</div>
                 <div class="fat-cat" id="res-cat">--</div>
 
@@ -179,9 +199,17 @@
 
                 setGender: function(g) {
                     this.gender = g;
+                    
+                    // Update active classes
                     document.getElementById('btn-male').classList.toggle('active', g === 'male');
                     document.getElementById('btn-female').classList.toggle('active', g === 'female');
+                    
+                    // Update ARIA attributes for accessibility
+                    document.getElementById('btn-male').setAttribute('aria-checked', g === 'male');
+                    document.getElementById('btn-female').setAttribute('aria-checked', g === 'female');
+
                     document.getElementById('hip-field').classList.toggle('hidden', g === 'male');
+                    
                     this.calculate();
                     if(window.doHaptic) window.doHaptic();
                 },
@@ -196,12 +224,16 @@
                     // Basic Validation
                     if(!totalWeight || !h || !n || !w || (this.gender === 'female' && !hip)) {
                         document.getElementById('empty-state').classList.remove('hidden');
+                        document.getElementById('empty-state').setAttribute('aria-hidden', 'false');
                         document.getElementById('res-dashboard').classList.add('hidden');
+                        document.getElementById('res-dashboard').setAttribute('aria-hidden', 'true');
                         return;
                     }
 
                     document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('empty-state').setAttribute('aria-hidden', 'true');
                     document.getElementById('res-dashboard').classList.remove('hidden');
+                    document.getElementById('res-dashboard').setAttribute('aria-hidden', 'false');
 
                     let fatPct = 0;
                     

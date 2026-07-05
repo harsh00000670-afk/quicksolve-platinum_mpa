@@ -3,16 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
 
     <title>Child & Teen BMI Calculator | CDC Percentile | QuickSolve Platinum</title>
-    <meta name="description" content="Accurate BMI calculator for children and teens (ages 2-20). Uses CDC percentile growth charts for precise health assessment. 100% Offline.">
-    <meta name="keywords" content="child bmi calculator, teen bmi percentile, cdc growth chart calculator, kids health tracker, QuickSolve Platinum">
+    
+    <meta name="description" content="Accurate BMI calculator for children and teens (ages 2-20). Uses CDC percentile growth charts for precise health assessment and pediatric growth tracking. 100% Offline.">
+    <meta name="keywords" content="child bmi calculator, teen bmi percentile, cdc growth chart calculator, kids health tracker, pediatric bmi, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/health_suites/child_bmi.html">
+
+    <meta property="og:title" content="Child & Teen BMI Calculator | QuickSolve Platinum">
+    <meta property="og:description" content="Calculate accurate BMI percentiles for children and teens using CDC growth charts. Instant pediatric health insights.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/health_suites/child_bmi.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -34,15 +40,29 @@
             font-family: sans-serif;
         }
 
+        /* Laptop / Desktop Compatibility */
+        @media (min-width: 768px) {
+            #mod-cbmi-overlay {
+                max-width: 480px;
+                margin: 0 auto;
+                left: 50%;
+                transform: translateX(-50%);
+                border-left: 1px solid #1e293b;
+                border-right: 1px solid #1e293b;
+                box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            }
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Header centered modification */
         .cb-head {
-            display: flex; align-items: center; padding: 12px 15px; 
+            display: flex; align-items: center; justify-content: center; padding: 12px 15px; 
             background: #0f172a; border-bottom: 1px solid #1e293b;
             position: sticky; top: 0; z-index: 100; flex-shrink: 0;
         }
-        .cb-head .qs-back-btn { background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
-        .cb-tit { color: #f59e0b; font-weight: 900; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+        .cb-head .qs-back-btn { position: absolute; left: 15px; background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .cb-tit { color: #f59e0b; font-weight: 900; font-size: 1rem; margin-left: 0; text-transform: uppercase; letter-spacing: 2px;}
 
         .cb-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 80px; }
 
@@ -90,7 +110,7 @@
         .cm-open .cm-content { transform: translateY(0); }
         .cm-head { padding: 15px 20px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; }
         .cm-head span { color: #f59e0b; font-weight: 900; font-size: 1rem; text-transform: uppercase; }
-        .cm-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; }
+        .cm-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
         .cm-list { padding: 10px 0; }
         .cl-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); cursor: pointer; }
         .cl-name { font-weight: 900; color: #f8fafc; font-size: 0.95rem; }
@@ -107,66 +127,70 @@
             <a href="../health.html" class="qs-back-btn" aria-label="Go Back">
                 <i class="fas fa-arrow-left" aria-hidden="true"></i>
             </a>
-            <div class="cb-tit"><i class="fas fa-child" aria-hidden="true"></i> CHILD BMI (CDC)</div>
+            <h1 class="cb-tit"><i class="fas fa-child" aria-hidden="true"></i> CHILD BMI (CDC)</h1>
         </header>
 
         <section class="cb-body">
             
             <div class="cb-card">
-                <div class="cb-lbl">Gender</div>
-                <div class="cb-inp-wrap" onclick="QS_ChildBMI.openModal('gender')" style="cursor:pointer;">
-                    <i class="fas fa-venus-mars" style="color:#f59e0b;"></i>
+                <div class="cb-lbl" id="lbl-gender-title">Gender</div>
+                <div class="cb-inp-wrap" role="button" tabindex="0" aria-haspopup="dialog" aria-labelledby="lbl-gender-title sel-gender-txt" onclick="QS_ChildBMI.openModal('gender')" onkeypress="if(event.key==='Enter')QS_ChildBMI.openModal('gender')" style="cursor:pointer;">
+                    <i class="fas fa-venus-mars" style="color:#f59e0b;" aria-hidden="true"></i>
                     <div id="sel-gender-txt" style="flex:1; color:#fff; font-weight:900; font-size:0.95rem;">Select Gender</div>
-                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;" aria-hidden="true"></i>
                 </div>
 
-                <div class="cb-lbl" style="margin-top:5px;">Age (2 - 20 Years)</div>
+                <div class="cb-lbl" id="lbl-age-title" style="margin-top:5px;">Age (2 - 20 Years)</div>
                 <div class="cb-inp-wrap">
-                    <i class="fas fa-calendar-alt" style="color:#38bdf8;"></i>
-                    <input type="number" id="inp-age" class="cb-inp" placeholder="e.g. 12" min="2" max="20" oninput="QS_ChildBMI.calculate()">
+                    <i class="fas fa-calendar-alt" style="color:#38bdf8;" aria-hidden="true"></i>
+                    <input type="number" id="inp-age" class="cb-inp" placeholder="e.g. 12" min="2" max="20" step="any" aria-labelledby="lbl-age-title" oninput="QS_ChildBMI.calculate()">
                     <span style="color:#64748b; font-weight:bold; font-size:0.8rem;">yrs</span>
                 </div>
 
                 <div class="cb-lbl-row" style="margin-top:5px;">
-                    <div class="cb-lbl">Height</div>
-                    <div class="unit-badge" onclick="QS_ChildBMI.openModal('height')">
-                        <span id="lbl-unit-h">cm</span> <i class="fas fa-chevron-down"></i>
+                    <div class="cb-lbl" id="lbl-height-title">Height</div>
+                    <div class="unit-badge" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Change Height Unit" onclick="QS_ChildBMI.openModal('height')" onkeypress="if(event.key==='Enter')QS_ChildBMI.openModal('height')">
+                        <span id="lbl-unit-h">cm</span> <i class="fas fa-chevron-down" aria-hidden="true"></i>
                     </div>
                 </div>
                 <div id="inp-wrap-cm" class="cb-inp-wrap">
-                    <input type="number" id="inp-h-cm" class="cb-inp" placeholder="150" oninput="QS_ChildBMI.calculate()">
+                    <input type="number" id="inp-h-cm" class="cb-inp" placeholder="150" min="0" step="any" aria-labelledby="lbl-height-title lbl-unit-h" oninput="QS_ChildBMI.calculate()">
                 </div>
                 <div id="inp-wrap-ft" class="inp-grid-2 hidden">
-                    <div class="cb-inp-wrap"><input type="number" id="inp-h-ft" class="cb-inp" placeholder="Ft" oninput="QS_ChildBMI.calculate()"></div>
-                    <div class="cb-inp-wrap"><input type="number" id="inp-h-in" class="cb-inp" placeholder="In" oninput="QS_ChildBMI.calculate()"></div>
+                    <div class="cb-inp-wrap">
+                        <input type="number" id="inp-h-ft" class="cb-inp" placeholder="Ft" min="0" step="any" aria-label="Feet" oninput="QS_ChildBMI.calculate()">
+                    </div>
+                    <div class="cb-inp-wrap">
+                        <input type="number" id="inp-h-in" class="cb-inp" placeholder="In" min="0" max="11" step="any" aria-label="Inches" oninput="if(this.value>11)this.value=11; QS_ChildBMI.calculate();">
+                    </div>
                 </div>
 
                 <div class="cb-lbl-row" style="margin-top:5px;">
-                    <div class="cb-lbl">Weight</div>
-                    <div class="unit-badge" onclick="QS_ChildBMI.openModal('weight')">
-                        <span id="lbl-unit-w">kg</span> <i class="fas fa-chevron-down"></i>
+                    <div class="cb-lbl" id="lbl-weight-title">Weight</div>
+                    <div class="unit-badge" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Change Weight Unit" onclick="QS_ChildBMI.openModal('weight')" onkeypress="if(event.key==='Enter')QS_ChildBMI.openModal('weight')">
+                        <span id="lbl-unit-w">kg</span> <i class="fas fa-chevron-down" aria-hidden="true"></i>
                     </div>
                 </div>
                 <div class="cb-inp-wrap">
-                    <input type="number" id="inp-w" class="cb-inp" placeholder="40" oninput="QS_ChildBMI.calculate()">
+                    <input type="number" id="inp-w" class="cb-inp" placeholder="40" min="0" step="any" aria-labelledby="lbl-weight-title lbl-unit-w" oninput="QS_ChildBMI.calculate()">
                 </div>
             </div>
 
-            <div id="empty-state" style="text-align:center; padding: 20px; color:#475569;">
-                <i class="fas fa-baby-carriage fa-3x" style="margin-bottom:12px; opacity:0.5;"></i>
+            <div id="empty-state" style="text-align:center; padding: 20px; color:#475569;" aria-hidden="false">
+                <i class="fas fa-baby-carriage fa-3x" style="margin-bottom:12px; opacity:0.5;" aria-hidden="true"></i>
                 <div style="font-size:0.85rem; font-weight:bold;">Enter details to calculate CDC growth percentile.</div>
             </div>
 
-            <div id="res-dashboard" class="res-card hidden" aria-live="polite">
+            <div id="res-dashboard" class="res-card hidden" aria-live="polite" aria-hidden="true">
                 <div class="p-val" id="res-percentile">0th</div>
                 <div class="p-unit">CDC Percentile</div>
                 <div class="p-cat" id="res-cat">--</div>
 
-                <div class="bar-container">
+                <div class="bar-container" aria-hidden="true">
                     <div class="bar-fill"></div>
                     <div class="bar-marker" id="res-marker"></div>
                 </div>
-                <div class="bar-labels">
+                <div class="bar-labels" aria-hidden="true">
                     <span>5th (Under)</span>
                     <span>50th (Mean)</span>
                     <span>85th (Over)</span>
@@ -174,7 +198,7 @@
                 </div>
 
                 <div class="insight-box">
-                    <i class="fas fa-info-circle ins-icon"></i>
+                    <i class="fas fa-info-circle ins-icon" aria-hidden="true"></i>
                     <div class="ins-txt" id="ins-text">
                         Awaiting data for analysis.
                     </div>
@@ -184,16 +208,20 @@
         </section>
     </main>
 
-    <div id="cm-modal" class="cm-modal">
+    <div id="cm-modal" class="cm-modal" role="dialog" aria-modal="true" aria-labelledby="cm-title">
         <div class="cm-content">
-            <div class="cm-head"><span id="cm-title">Select</span><button class="cm-close" onclick="QS_ChildBMI.closeModal()"><i class="fas fa-times"></i></button></div>
-            <div class="cm-list" id="cm-list"></div>
+            <div class="cm-head">
+                <h2 id="cm-title" style="margin:0; font-size:1rem; color:#f59e0b; font-weight:900; text-transform:uppercase;">Select</h2>
+                <button class="cm-close" aria-label="Close Selector" onclick="QS_ChildBMI.closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="cm-list" id="cm-list" role="listbox"></div>
         </div>
     </div>
 
     <script>
         /* QUICKSOLVE PLATINUM - CHILD BMI ENGINE
            Features: CDC Percentile Estimation Logic, Custom Bottom Sheets.
+           BugFixes: Safe Parsing, UI Toggle Fix, Inches Cap, ARIA Attributes.
         */
         (function() {
             window.QS_ChildBMI = {
@@ -222,7 +250,11 @@
                         const active = (this.state[type === 'gender' ? 'gender' : (type === 'height' ? 'hUnit' : 'wUnit')] === o.v);
                         const div = document.createElement('div');
                         div.className = `cl-item ${active?'active':''}`;
+                        div.setAttribute('role', 'option');
+                        div.setAttribute('aria-selected', active);
+                        div.tabIndex = 0;
                         div.onclick = () => this.setVal(type, o.v, o.n);
+                        div.onkeypress = (e) => { if(e.key === 'Enter') this.setVal(type, o.v, o.n); };
                         div.innerHTML = `<span class="cl-name">${o.n}</span><i class="fas fa-check cl-check"></i>`;
                         list.appendChild(div);
                     });
@@ -259,20 +291,39 @@
                     const age = parseFloat(document.getElementById('inp-age').value);
                     let h = 0, w = 0;
 
-                    if(this.state.hUnit === 'cm') h = parseFloat(document.getElementById('inp-h-cm').value) / 100;
-                    else h = ((parseFloat(document.getElementById('inp-h-ft').value)||0)*12 + (parseFloat(document.getElementById('inp-h-in').value)||0)) * 0.0254;
+                    // Bug Fix: Added Safe Parsing
+                    try {
+                        if(this.state.hUnit === 'cm') {
+                            const cmVal = parseFloat(document.getElementById('inp-h-cm').value);
+                            if(!isNaN(cmVal)) h = cmVal / 100;
+                        } else {
+                            const ftVal = parseFloat(document.getElementById('inp-h-ft').value) || 0;
+                            let inVal = parseFloat(document.getElementById('inp-h-in').value) || 0;
+                            if(inVal > 11) inVal = 11;
+                            h = ((ftVal * 12) + inVal) * 0.0254;
+                        }
 
-                    w = parseFloat(document.getElementById('inp-w').value);
-                    if(this.state.wUnit === 'lbs') w *= 0.453592;
+                        const wVal = parseFloat(document.getElementById('inp-w').value);
+                        if(!isNaN(wVal)) {
+                            w = wVal;
+                            if(this.state.wUnit === 'lbs') w *= 0.453592;
+                        }
+                    } catch(e) {
+                        console.error('Child BMI Parse Error', e);
+                    }
 
-                    if(!age || !h || !w || !this.state.gender || age < 2 || age > 20) {
+                    if(!age || isNaN(age) || !h || !w || !this.state.gender || age < 2 || age > 20) {
                         document.getElementById('empty-state').classList.remove('hidden');
+                        document.getElementById('empty-state').setAttribute('aria-hidden', 'false');
                         document.getElementById('res-dashboard').classList.add('hidden');
+                        document.getElementById('res-dashboard').setAttribute('aria-hidden', 'true');
                         return;
                     }
 
                     document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('empty-state').setAttribute('aria-hidden', 'true');
                     document.getElementById('res-dashboard').classList.remove('hidden');
+                    document.getElementById('res-dashboard').setAttribute('aria-hidden', 'false');
 
                     const bmi = w / (h * h);
                     

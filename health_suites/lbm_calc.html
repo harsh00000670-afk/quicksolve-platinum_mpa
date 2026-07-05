@@ -3,16 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Made Zoomable by removing maximum-scale and user-scalable=no -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
 
     <title>Lean Body Mass (LBM) Calculator | Muscle Mass Tracker | QuickSolve Platinum</title>
+    
+    <!-- Enhanced SEO & Meta Tags -->
     <meta name="description" content="Calculate your precise Lean Body Mass (LBM) using Boer, James, and Hume formulas. Professional muscle mass tracking for athletes. 100% Offline.">
     <meta name="keywords" content="lean body mass calculator, lbm formula, muscle mass tracker, calculate muscle weight, fitness analytics, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/health_suites/lbm_calc.html">
+
+    <meta property="og:title" content="Lean Body Mass (LBM) Calculator | QuickSolve Platinum">
+    <meta property="og:description" content="Calculate your precise Lean Body Mass (LBM) using Boer, James, and Hume formulas. Professional muscle mass tracking.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/health_suites/lbm_calc.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -34,15 +42,29 @@
             font-family: sans-serif;
         }
 
+        /* Laptop / Desktop Compatibility */
+        @media (min-width: 768px) {
+            #mod-lbm-overlay {
+                max-width: 480px;
+                margin: 0 auto;
+                left: 50%;
+                transform: translateX(-50%);
+                border-left: 1px solid #1e293b;
+                border-right: 1px solid #1e293b;
+                box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            }
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Header centered modification */
         .lbm-head {
-            display: flex; align-items: center; padding: 12px 15px; 
+            display: flex; align-items: center; justify-content: center; padding: 12px 15px; 
             background: #0f172a; border-bottom: 1px solid #1e293b;
             position: sticky; top: 0; z-index: 100; flex-shrink: 0;
         }
-        .lbm-head .qs-back-btn { background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
-        .lbm-tit { color: #a78bfa; font-weight: 900; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+        .lbm-head .qs-back-btn { position: absolute; left: 15px; background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .lbm-tit { color: #a78bfa; font-weight: 900; font-size: 1rem; margin-left: 0; text-transform: uppercase; letter-spacing: 2px;}
 
         .lbm-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 80px; }
 
@@ -98,62 +120,68 @@
 <body>
     <main id="mod-lbm-overlay" role="main" aria-label="Lean Body Mass Calculator">
         <header class="lbm-head">
-            <a href="../health.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left"></i></a>
-            <div class="lbm-tit"><i class="fas fa-dumbbell"></i> LEAN BODY MASS</div>
+            <a href="../health.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+            <!-- Converted to H1 for SEO -->
+            <h1 class="lbm-tit"><i class="fas fa-dumbbell" aria-hidden="true"></i> LEAN BODY MASS</h1>
         </header>
 
         <section class="lbm-body">
             
             <div class="lbm-card">
-                <div class="lbm-lbl">Biological Gender</div>
-                <div class="lbm-inp-wrap" onclick="QS_LBM.openModal('gender')" aria-label="Select Gender">
+                <div class="lbm-lbl" id="lbl-gender-title">Biological Gender</div>
+                <div class="lbm-inp-wrap" role="button" tabindex="0" aria-haspopup="dialog" aria-labelledby="lbl-gender-title sel-gender-text" onclick="QS_LBM.openModal('gender')" onkeypress="if(event.key==='Enter')QS_LBM.openModal('gender')" aria-label="Select Gender">
                     <div id="sel-gender-text" class="lbm-select-text">
-                        <i class="fas fa-venus-mars" style="color:#a78bfa;"></i> Select Gender
+                        <i class="fas fa-venus-mars" style="color:#a78bfa;" aria-hidden="true"></i> Select Gender
                     </div>
-                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;" aria-hidden="true"></i>
                 </div>
 
-                <div class="lbm-lbl">Weight</div>
-                <div class="lbm-inp-wrap" onclick="QS_LBM.openModal('weight')">
+                <div class="lbm-lbl" id="lbl-weight-title">Weight</div>
+                <div class="lbm-inp-wrap" role="button" tabindex="0" aria-haspopup="dialog" aria-labelledby="lbl-weight-title sel-w-text" onclick="QS_LBM.openModal('weight')" onkeypress="if(event.key==='Enter')QS_LBM.openModal('weight')">
                     <div id="sel-w-text" class="lbm-select-text">
-                        <i class="fas fa-weight-hanging" style="color:#38bdf8;"></i> kg / lbs
+                        <i class="fas fa-weight-hanging" style="color:#38bdf8;" aria-hidden="true"></i> kg / lbs
                     </div>
-                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;" aria-hidden="true"></i>
                 </div>
                 <div class="lbm-inp-wrap" style="cursor: text;">
-                    <input type="number" id="inp-w" class="lbm-inp" placeholder="Enter Weight" oninput="QS_LBM.calculate()">
+                    <input type="number" id="inp-w" class="lbm-inp" placeholder="Enter Weight" min="0" step="any" aria-labelledby="lbl-weight-title" oninput="QS_LBM.calculate()">
                     <span id="lbl-w-unit" class="lbm-unit">KG</span>
                 </div>
 
-                <div class="lbm-lbl">Height</div>
-                <div class="lbm-inp-wrap" onclick="QS_LBM.openModal('height')">
+                <div class="lbm-lbl" id="lbl-height-title">Height</div>
+                <div class="lbm-inp-wrap" role="button" tabindex="0" aria-haspopup="dialog" aria-labelledby="lbl-height-title sel-h-text" onclick="QS_LBM.openModal('height')" onkeypress="if(event.key==='Enter')QS_LBM.openModal('height')">
                     <div id="sel-h-text" class="lbm-select-text">
-                        <i class="fas fa-ruler-vertical" style="color:#10b981;"></i> cm / ft
+                        <i class="fas fa-ruler-vertical" style="color:#10b981;" aria-hidden="true"></i> cm / ft
                     </div>
-                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;" aria-hidden="true"></i>
                 </div>
                 
                 <div id="inp-wrap-cm">
                     <div class="lbm-inp-wrap" style="cursor: text;">
-                        <input type="number" id="inp-h-cm" class="lbm-inp" placeholder="Height in cm" oninput="QS_LBM.calculate()">
+                        <input type="number" id="inp-h-cm" class="lbm-inp" placeholder="Height in cm" min="0" step="any" aria-labelledby="lbl-height-title" oninput="QS_LBM.calculate()">
                         <span class="lbm-unit">CM</span>
                     </div>
                 </div>
 
                 <div id="inp-wrap-ft" class="hidden">
                     <div class="inp-grid-2">
-                        <div class="lbm-inp-wrap" style="cursor: text;"><input type="number" id="inp-h-ft" class="lbm-inp" placeholder="Ft" oninput="QS_LBM.calculate()"></div>
-                        <div class="lbm-inp-wrap" style="cursor: text;"><input type="number" id="inp-h-in" class="lbm-inp" placeholder="In" oninput="QS_LBM.calculate()"></div>
+                        <div class="lbm-inp-wrap" style="cursor: text;">
+                            <input type="number" id="inp-h-ft" class="lbm-inp" placeholder="Ft" min="0" step="any" aria-label="Feet" oninput="QS_LBM.calculate()">
+                        </div>
+                        <div class="lbm-inp-wrap" style="cursor: text;">
+                            <!-- Bug Fix: Inches capped safely at 11 -->
+                            <input type="number" id="inp-h-in" class="lbm-inp" placeholder="In" min="0" max="11" step="any" aria-label="Inches" oninput="if(this.value>11)this.value=11; QS_LBM.calculate();">
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div id="empty-state" style="text-align:center; padding:30px 20px; color:#475569;">
-                <i class="fas fa-user-shield fa-3x" style="opacity:0.3; margin-bottom:15px;"></i>
+            <div id="empty-state" style="text-align:center; padding:30px 20px; color:#475569;" aria-hidden="false">
+                <i class="fas fa-user-shield fa-3x" style="opacity:0.3; margin-bottom:15px;" aria-hidden="true"></i>
                 <div style="font-size:0.85rem; font-weight:bold;">Enter metrics to isolate your true lean mass.</div>
             </div>
 
-            <div id="res-dashboard" class="res-panel hidden" aria-live="polite">
+            <div id="res-dashboard" class="res-panel hidden" aria-live="polite" aria-hidden="true">
                 <div class="lbm-val" id="res-val">0.0</div>
                 <div id="res-unit-label" style="color:#a78bfa; font-weight:900; font-family:monospace;">KG</div>
                 <div class="lbm-pct" id="res-pct">0.0% Lean Mass</div>
@@ -177,16 +205,21 @@
         </section>
     </main>
 
-    <div id="cm-modal" class="lm-modal">
+    <!-- ARIA Modal Enhancements -->
+    <div id="cm-modal" class="lm-modal" role="dialog" aria-modal="true" aria-labelledby="cm-title">
         <div class="lm-content">
-            <div class="lm-head"><span id="cm-title">Select</span><button class="lm-close" onclick="QS_LBM.closeModal()"><i class="fas fa-times"></i></button></div>
-            <div class="lm-list" id="cm-list"></div>
+            <div class="lm-head">
+                <h2 id="cm-title" style="margin:0; font-size:1rem; color:#a78bfa; font-weight:900; text-transform:uppercase;">Select</h2>
+                <button class="lm-close" aria-label="Close Selector" onclick="QS_LBM.closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="lm-list" id="cm-list" role="listbox"></div>
         </div>
     </div>
 
     <script>
         /* QUICKSOLVE PLATINUM - LBM ENGINE
            Features: Boer, James, and Hume Multi-formula math, Custom Bottom Sheets.
+           BugFixes: ARIA Updates, Safe Parsing, Inches Cap Limit.
         */
         (function() {
             window.QS_LBM = {
@@ -213,10 +246,15 @@
                     else opts = [{v:'kg', n:'Kilograms (kg)'}, {v:'lbs', n:'Pounds (lbs)'}];
 
                     opts.forEach(o => {
-                        const active = (this.state[type === 'gender' ? 'gender' : (type === 'height' ? 'hUnit' : 'wUnit')] === o.v);
+                        const currentVal = (type === 'gender' ? this.state.gender : (type === 'height' ? this.state.hUnit : this.state.wUnit));
+                        const active = currentVal === o.v;
                         const div = document.createElement('div');
-                        div.className = `ll-item ${active?'active':''}`;
+                        div.className = `ll-item ${active ? 'active' : ''}`;
+                        div.setAttribute('role', 'option');
+                        div.setAttribute('aria-selected', active);
+                        div.tabIndex = 0;
                         div.onclick = () => this.setVal(type, o.v, o.n);
+                        div.onkeypress = (e) => { if(e.key === 'Enter') this.setVal(type, o.v, o.n); };
                         div.innerHTML = `<span class="ll-name">${o.n}</span><i class="fas fa-check ll-check"></i>`;
                         list.appendChild(div);
                     });
@@ -243,10 +281,10 @@
                 },
 
                 updateSelectionText: function() {
-                    document.getElementById('sel-gender-text').innerHTML = `<i class="fas ${this.state.gender === 'male' ? 'fa-mars' : 'fa-venus'}" style="color:#a78bfa;"></i> ${this.state.gender.toUpperCase()}`;
-                    document.getElementById('sel-w-text').innerHTML = `<i class="fas fa-weight-hanging" style="color:#38bdf8;"></i> ${this.state.wUnit.toUpperCase()}`;
+                    document.getElementById('sel-gender-text').innerHTML = `<i class="fas ${this.state.gender === 'male' ? 'fa-mars' : 'fa-venus'}" style="color:#a78bfa;" aria-hidden="true"></i> ${this.state.gender.toUpperCase()}`;
+                    document.getElementById('sel-w-text').innerHTML = `<i class="fas fa-weight-hanging" style="color:#38bdf8;" aria-hidden="true"></i> ${this.state.wUnit.toUpperCase()}`;
                     document.getElementById('lbl-w-unit').innerText = this.state.wUnit.toUpperCase();
-                    document.getElementById('sel-h-text').innerHTML = `<i class="fas fa-ruler-vertical" style="color:#10b981;"></i> ${this.state.hUnit.toUpperCase()}`;
+                    document.getElementById('sel-h-text').innerHTML = `<i class="fas fa-ruler-vertical" style="color:#10b981;" aria-hidden="true"></i> ${this.state.hUnit.toUpperCase()}`;
                     
                     document.getElementById('inp-wrap-cm').className = this.state.hUnit === 'cm' ? '' : 'hidden';
                     document.getElementById('inp-wrap-ft').className = this.state.hUnit === 'ft' ? '' : 'hidden';
@@ -255,21 +293,33 @@
 
                 calculate: function() {
                     let h = 0, w = 0;
-                    const rawW = parseFloat(document.getElementById('inp-w').value);
-                    if(!rawW) return this.hide();
                     
-                    w = this.state.wUnit === 'lbs' ? rawW * 0.453592 : rawW;
+                    // Bug Fix: Added Safe Parsing
+                    try {
+                        const rawW = parseFloat(document.getElementById('inp-w').value);
+                        if(!rawW || isNaN(rawW) || rawW <= 0) return this.hide();
+                        
+                        w = this.state.wUnit === 'lbs' ? rawW * 0.453592 : rawW;
 
-                    if(this.state.hUnit === 'cm') {
-                        h = parseFloat(document.getElementById('inp-h-cm').value);
-                    } else {
-                        h = ((parseFloat(document.getElementById('inp-h-ft').value)||0)*12 + (parseFloat(document.getElementById('inp-h-in').value)||0)) * 2.54;
+                        if(this.state.hUnit === 'cm') {
+                            const cmVal = parseFloat(document.getElementById('inp-h-cm').value);
+                            if(!isNaN(cmVal) && cmVal > 0) h = cmVal;
+                        } else {
+                            const ftVal = parseFloat(document.getElementById('inp-h-ft').value) || 0;
+                            let inVal = parseFloat(document.getElementById('inp-h-in').value) || 0;
+                            if(inVal > 11) inVal = 11;
+                            h = ((ftVal * 12) + inVal) * 2.54;
+                        }
+                    } catch (e) {
+                        console.error('LBM Parse Error', e);
                     }
 
-                    if(!h || !w) return this.hide();
+                    if(!h || !w || h <= 0) return this.hide();
 
                     document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('empty-state').setAttribute('aria-hidden', 'true');
                     document.getElementById('res-dashboard').classList.remove('hidden');
+                    document.getElementById('res-dashboard').setAttribute('aria-hidden', 'false');
 
                     const isMale = this.state.gender === 'male';
                     
@@ -282,12 +332,20 @@
 
                     // Average for main result
                     let avgKg = (boer + james + hume) / 3;
+                    
+                    // Fallback to prevent negatives if user puts completely impossible specs
+                    if(avgKg < 0) avgKg = 0;
+
                     let displayLBM = this.state.wUnit === 'lbs' ? avgKg * 2.20462 : avgKg;
                     
                     document.getElementById('res-val').innerText = displayLBM.toFixed(1);
                     document.getElementById('res-pct').innerText = ((avgKg/w)*100).toFixed(1) + "% Lean Mass";
                     
-                    const unitConv = (val) => this.state.wUnit === 'lbs' ? (val * 2.20462).toFixed(1) : val.toFixed(1);
+                    const unitConv = (val) => {
+                        let safeVal = val < 0 ? 0 : val;
+                        return this.state.wUnit === 'lbs' ? (safeVal * 2.20462).toFixed(1) : safeVal.toFixed(1);
+                    };
+                    
                     document.getElementById('res-boer').innerText = unitConv(boer);
                     document.getElementById('res-james').innerText = unitConv(james);
                     document.getElementById('res-hume').innerText = unitConv(hume);
@@ -295,7 +353,9 @@
 
                 hide: function() {
                     document.getElementById('empty-state').classList.remove('hidden');
+                    document.getElementById('empty-state').setAttribute('aria-hidden', 'false');
                     document.getElementById('res-dashboard').classList.add('hidden');
+                    document.getElementById('res-dashboard').setAttribute('aria-hidden', 'true');
                 }
             };
             window.QS_LBM.initListener();

@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Made Zoomable by removing maximum-scale and user-scalable=no -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
 
     <title>Ponderal Index Calculator | Corpulence Index | QuickSolve Platinum</title>
+    
+    <!-- Enhanced SEO & Meta Tags -->
     <meta name="description" content="Calculate your Ponderal Index (Rohrer's Index). A 3D volumetric health metric more accurate than BMI for tall and short individuals. 100% Offline.">
     <meta name="keywords" content="ponderal index calculator, corpulence index, rohrer's index, 3d bmi calculator, volumetric body mass, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
@@ -20,9 +23,10 @@
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="QuickSolve Platinum">
-    <meta property="og:title" content="Ponderal Index - The 3D Body Metric">
-    <meta property="og:description" content="Stop using 2D BMI. Analyze your body mass in 3D space with the Ponderal Index.">
+    <meta property="og:title" content="Ponderal Index - The 3D Body Metric | QuickSolve Platinum">
+    <meta property="og:description" content="Stop using 2D BMI. Analyze your body mass in 3D space with the Ponderal Index. The most accurate volumetric health metric.">
     <meta property="og:image" content="../logo.png">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/health_suites/ponderal.html">
 
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
@@ -40,15 +44,29 @@
             font-family: sans-serif;
         }
 
+        /* Laptop / Desktop Compatibility */
+        @media (min-width: 768px) {
+            #mod-pi-overlay {
+                max-width: 480px;
+                margin: 0 auto;
+                left: 50%;
+                transform: translateX(-50%);
+                border-left: 1px solid #1e293b;
+                border-right: 1px solid #1e293b;
+                box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            }
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Header centered modification */
         .pi-head {
-            display: flex; align-items: center; padding: 12px 15px; 
+            display: flex; align-items: center; justify-content: center; padding: 12px 15px; 
             background: #0f172a; border-bottom: 1px solid #1e293b;
             position: sticky; top: 0; z-index: 100; flex-shrink: 0;
         }
-        .pi-head .qs-back-btn { background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
-        .pi-tit { color: #a855f7; font-weight: 900; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+        .pi-head .qs-back-btn { position: absolute; left: 15px; background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .pi-tit { color: #a855f7; font-weight: 900; font-size: 1rem; margin-left: 0; text-transform: uppercase; letter-spacing: 2px;}
 
         .pi-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 80px; }
 
@@ -103,45 +121,53 @@
 <body>
     <main id="mod-pi-overlay" role="main" aria-label="Ponderal Index Calculator">
         <header class="pi-head">
-            <a href="../health.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left"></i></a>
-            <div class="pi-tit"><i class="fas fa-cube"></i> PONDERAL INDEX</div>
+            <a href="../health.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+            <!-- Converted to H1 for SEO -->
+            <h1 class="pi-tit"><i class="fas fa-cube" aria-hidden="true"></i> PONDERAL INDEX</h1>
         </header>
 
         <section class="pi-body">
             
             <div class="pi-card">
-                <div class="pi-lbl">System of Units</div>
-                <div class="pi-inp-wrap" onclick="QS_PI.openModal('unit')">
+                <div class="pi-lbl" id="lbl-unit-title">System of Units</div>
+                <div class="pi-inp-wrap" role="button" tabindex="0" aria-haspopup="dialog" aria-labelledby="lbl-unit-title sel-unit-text" onclick="QS_PI.openModal('unit')" onkeypress="if(event.key==='Enter')QS_PI.openModal('unit')">
                     <div id="sel-unit-text" class="pi-select-text">
-                        <i class="fas fa-microchip" style="color:#a855f7;"></i> Metric (kg, cm)
+                        <i class="fas fa-microchip" style="color:#a855f7;" aria-hidden="true"></i> Metric (kg, cm)
                     </div>
-                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;" aria-hidden="true"></i>
                 </div>
 
                 <div class="pi-lbl">Weight</div>
                 <div class="pi-inp-wrap" style="cursor: text;">
-                    <input type="number" id="inp-w" class="pi-inp" placeholder="e.g. 70" oninput="QS_PI.calculate()">
+                    <input type="number" id="inp-w" class="pi-inp" placeholder="e.g. 70" min="0" step="any" aria-label="Weight" oninput="QS_PI.calculate()">
                     <span id="lbl-w-unit" class="pi-unit">KG</span>
                 </div>
 
                 <div class="pi-lbl">Height</div>
                 <div id="inp-wrap-cm" class="pi-inp-wrap" style="cursor: text;">
-                    <input type="number" id="inp-h-cm" class="pi-inp" placeholder="e.g. 175" oninput="QS_PI.calculate()">
+                    <input type="number" id="inp-h-cm" class="pi-inp" placeholder="e.g. 175" min="0" step="any" aria-label="Height in Centimeters" oninput="QS_PI.calculate()">
                     <span class="pi-unit">CM</span>
                 </div>
 
                 <div id="inp-wrap-ft" class="hidden" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                    <div class="pi-inp-wrap" style="cursor: text;"><input type="number" id="inp-h-ft" class="pi-inp" placeholder="Ft" oninput="QS_PI.calculate()"><span class="pi-unit">FT</span></div>
-                    <div class="pi-inp-wrap" style="cursor: text;"><input type="number" id="inp-h-in" class="pi-inp" placeholder="In" oninput="QS_PI.calculate()"><span class="pi-unit">IN</span></div>
+                    <div class="pi-inp-wrap" style="cursor: text;">
+                        <input type="number" id="inp-h-ft" class="pi-inp" placeholder="Ft" min="0" step="any" aria-label="Height in Feet" oninput="QS_PI.calculate()">
+                        <span class="pi-unit">FT</span>
+                    </div>
+                    <div class="pi-inp-wrap" style="cursor: text;">
+                        <!-- Bug Fix: Inches capped safely at 11 -->
+                        <input type="number" id="inp-h-in" class="pi-inp" placeholder="In" min="0" max="11" step="any" aria-label="Height in Inches" oninput="if(this.value>11)this.value=11; QS_PI.calculate();">
+                        <span class="pi-unit">IN</span>
+                    </div>
                 </div>
             </div>
 
-            <div id="empty-state" style="text-align:center; padding:30px 20px; color:#475569;">
-                <i class="fas fa-atom fa-3x" style="opacity:0.3; margin-bottom:15px;"></i>
+            <div id="empty-state" style="text-align:center; padding:30px 20px; color:#475569;" aria-hidden="false">
+                <i class="fas fa-atom fa-3x" style="opacity:0.3; margin-bottom:15px;" aria-hidden="true"></i>
                 <div style="font-size:0.85rem; font-weight:bold;">Input metrics for volumetric mass calculation.</div>
             </div>
 
-            <div id="res-dashboard" class="hidden" aria-live="polite">
+            <div id="res-dashboard" class="hidden" aria-live="polite" aria-hidden="true">
                 
                 <div class="res-panel">
                     <div class="pi-val" id="res-val">0.00</div>
@@ -165,7 +191,7 @@
                 </div>
 
                 <div style="background: rgba(168, 85, 247, 0.1); border: 1px solid #a855f7; border-radius: 8px; padding: 12px; font-size: 0.7rem; color: #cbd5e1; line-height: 1.4; text-align: center;">
-                    <i class="fas fa-brain" style="color:#a855f7;"></i> Ponderal Index is less influenced by height than BMI, making it a <span style="color:#fff; font-weight:bold;">superior metric</span> for extremely tall or short individuals.
+                    <i class="fas fa-brain" style="color:#a855f7;" aria-hidden="true"></i> Ponderal Index is less influenced by height than BMI, making it a <span style="color:#fff; font-weight:bold;">superior metric</span> for extremely tall or short individuals.
                 </div>
 
             </div>
@@ -173,16 +199,21 @@
         </section>
     </main>
 
-    <div id="cm-modal" class="pm-modal">
+    <!-- ARIA Modal Enhancements -->
+    <div id="cm-modal" class="pm-modal" role="dialog" aria-modal="true" aria-labelledby="pm-title">
         <div class="pm-content">
-            <div class="pm-head"><span>Units System</span><button class="pm-close" onclick="QS_PI.closeModal()"><i class="fas fa-times"></i></button></div>
-            <div class="pm-list" id="cm-list"></div>
+            <div class="pm-head">
+                <h2 id="pm-title" style="margin:0; font-size:1rem; color:#a855f7; font-weight:900; text-transform:uppercase;">Units System</h2>
+                <button class="pm-close" aria-label="Close Selector" onclick="QS_PI.closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="pm-list" id="cm-list" role="listbox"></div>
         </div>
     </div>
 
     <script>
         /* QUICKSOLVE PLATINUM - PONDERAL INDEX ENGINE
            Features: Volumetric Rohrer's Formula, Comparison Analytics.
+           BugFixes: ARIA Updates, Safe Parsing, Inches Cap Limit.
         */
         (function() {
             window.QS_PI = {
@@ -204,16 +235,29 @@
                     opts.forEach(o => {
                         const active = this.state.unit === o.v;
                         const div = document.createElement('div');
-                        div.className = `pl-item ${active?'active':''}`;
-                        div.onclick = () => {
+                        div.className = `pl-item ${active ? 'active' : ''}`;
+                        div.setAttribute('role', 'option');
+                        div.setAttribute('aria-selected', active);
+                        div.tabIndex = 0;
+                        
+                        const performSelect = () => {
                             this.state.unit = o.v;
-                            document.getElementById('sel-unit-text').innerHTML = `<i class="fas fa-microchip" style="color:#a855f7;"></i> ${o.n}`;
+                            document.getElementById('sel-unit-text').innerHTML = `<i class="fas fa-microchip" style="color:#a855f7;" aria-hidden="true"></i> ${o.n}`;
                             document.getElementById('lbl-w-unit').innerText = o.v === 'metric' ? 'KG' : 'LBS';
                             document.getElementById('inp-wrap-cm').className = o.v === 'metric' ? 'pi-inp-wrap' : 'hidden';
-                            document.getElementById('inp-wrap-ft').className = o.v === 'imperial' ? '' : 'hidden';
+                            document.getElementById('inp-wrap-ft').className = o.v === 'imperial' ? 'pi-inp-wrap' : 'hidden';
+                            if(o.v === 'imperial') {
+                                document.getElementById('inp-wrap-ft').style.display = 'grid';
+                            } else {
+                                document.getElementById('inp-wrap-ft').style.display = 'none';
+                            }
                             this.closeModal();
                             this.calculate();
                         };
+
+                        div.onclick = performSelect;
+                        div.onkeypress = (e) => { if(e.key === 'Enter') performSelect(); };
+                        
                         div.innerHTML = `<span class="pl-name">${o.n}</span><i class="fas fa-check pl-check"></i>`;
                         list.appendChild(div);
                     });
@@ -234,20 +278,34 @@
                 },
 
                 calculate: function() {
-                    let w = parseFloat(document.getElementById('inp-w').value);
+                    let w = 0;
                     let hM = 0;
 
-                    if(this.state.unit === 'metric') {
-                        hM = parseFloat(document.getElementById('inp-h-cm').value) / 100;
-                    } else {
-                        w = w * 0.453592; // lbs to kg
-                        hM = ((parseFloat(document.getElementById('inp-h-ft').value)||0)*12 + (parseFloat(document.getElementById('inp-h-in').value)||0)) * 0.0254;
+                    // Bug Fix: Added Safe Parsing
+                    try {
+                        let wVal = parseFloat(document.getElementById('inp-w').value);
+                        if(!isNaN(wVal) && wVal > 0) w = wVal;
+                        
+                        if(this.state.unit === 'metric') {
+                            let cmVal = parseFloat(document.getElementById('inp-h-cm').value);
+                            if(!isNaN(cmVal) && cmVal > 0) hM = cmVal / 100;
+                        } else {
+                            w = w * 0.453592; // lbs to kg
+                            let ftVal = parseFloat(document.getElementById('inp-h-ft').value) || 0;
+                            let inVal = parseFloat(document.getElementById('inp-h-in').value) || 0;
+                            if(inVal > 11) inVal = 11;
+                            hM = ((ftVal * 12) + inVal) * 0.0254;
+                        }
+                    } catch(e) {
+                        console.error('PI Parse Error', e);
                     }
 
                     if(!w || !hM || hM <= 0) return this.hide();
 
                     document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('empty-state').setAttribute('aria-hidden', 'true');
                     document.getElementById('res-dashboard').classList.remove('hidden');
+                    document.getElementById('res-dashboard').setAttribute('aria-hidden', 'false');
 
                     // Ponderal Index (PI) = weight (kg) / height (m)^3
                     const pi = w / Math.pow(hM, 3);
@@ -261,7 +319,7 @@
                     document.getElementById('res-val').innerText = pi.toFixed(2);
                     document.getElementById('res-raw').innerText = pi.toFixed(2);
                     document.getElementById('res-bmi').innerText = bmi.toFixed(1);
-                    document.getElementById('res-space').innerText = vol.toFixed(2);
+                    document.getElementById('res-space').innerText = vol.toFixed(2) + " m³";
 
                     let cat = "";
                     let col = "#a855f7";
@@ -277,7 +335,9 @@
 
                 hide: function() {
                     document.getElementById('empty-state').classList.remove('hidden');
+                    document.getElementById('empty-state').setAttribute('aria-hidden', 'false');
                     document.getElementById('res-dashboard').classList.add('hidden');
+                    document.getElementById('res-dashboard').setAttribute('aria-hidden', 'true');
                 }
             };
             window.QS_PI.initListener();

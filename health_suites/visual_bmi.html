@@ -3,14 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
 
     <title>Visual BMI Calculator V2 | Dynamic Body Silhouette | QuickSolve Platinum</title>
+    
     <meta name="description" content="Calculate your BMI visually. See your dynamic body silhouette, track ideal weight, and view your exact position on the health gauge. 100% Offline.">
+    <meta name="keywords" content="visual bmi calculator, bmi silhouette, ideal weight tracker, body mass index, QuickSolve Platinum">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/health_suites/visual_bmi.html">
+
+    <meta property="og:title" content="Visual BMI Calculator V2 | QuickSolve Platinum">
+    <meta property="og:description" content="Calculate your BMI visually. See your dynamic body silhouette, track ideal weight, and view your exact position on the health gauge.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/health_suites/visual_bmi.html">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -33,15 +40,29 @@
             font-family: sans-serif;
         }
 
+        /* Laptop / Desktop Compatibility */
+        @media (min-width: 768px) {
+            #mod-bmi-overlay {
+                max-width: 480px;
+                margin: 0 auto;
+                left: 50%;
+                transform: translateX(-50%);
+                border-left: 1px solid #1e293b;
+                border-right: 1px solid #1e293b;
+                box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            }
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Header centered modification */
         .vb-head {
-            display: flex; align-items: center; padding: 12px 15px; 
+            display: flex; align-items: center; justify-content: center; padding: 12px 15px; 
             background: #0f172a; border-bottom: 1px solid #1e293b;
             position: sticky; top: 0; z-index: 100; flex-shrink: 0;
         }
-        .vb-head .qs-back-btn { background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
-        .vb-tit { color: #10b981; font-weight: 900; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+        .vb-head .qs-back-btn { position: absolute; left: 15px; background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .vb-tit { color: #10b981; font-weight: 900; font-size: 1rem; margin-left: 0; text-transform: uppercase; letter-spacing: 2px;}
 
         .vb-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; }
 
@@ -110,22 +131,22 @@
             <a href="../health.html" class="qs-back-btn" aria-label="Go Back">
                 <i class="fas fa-arrow-left" aria-hidden="true"></i>
             </a>
-            <div class="vb-tit"><i class="fas fa-weight" aria-hidden="true"></i> VISUAL BMI V2</div>
+            <h1 class="vb-tit"><i class="fas fa-weight" aria-hidden="true"></i> VISUAL BMI V2</h1>
         </header>
 
         <section class="vb-body">
             
             <div class="vb-card">
                 <div class="vb-lbl-row">
-                    <div class="vb-lbl">Your Height</div>
-                    <div class="unit-badge" onclick="QS_BMI.openUnitModal('height')" aria-label="Change Height Unit">
+                    <div class="vb-lbl" id="lbl-height-title">Your Height</div>
+                    <div class="unit-badge" tabindex="0" role="button" aria-haspopup="dialog" onclick="QS_BMI.openUnitModal('h')" onkeypress="if(event.key==='Enter')QS_BMI.openUnitModal('h')" aria-label="Change Height Unit">
                         <span id="lbl-unit-h">Centimeters (cm)</span> <i class="fas fa-chevron-down"></i>
                     </div>
                 </div>
                 
                 <div id="inp-wrap-cm">
                     <div class="vb-inp-wrap">
-                        <input type="number" id="inp-h-cm" class="vb-inp" placeholder="e.g. 175" oninput="QS_BMI.calculate()">
+                        <input type="number" id="inp-h-cm" class="vb-inp" placeholder="e.g. 175" min="0" step="any" aria-labelledby="lbl-height-title lbl-unit-h" oninput="QS_BMI.calculate()">
                         <span style="color:#64748b; font-weight:bold; font-size:0.8rem;">cm</span>
                     </div>
                 </div>
@@ -133,35 +154,35 @@
                 <div id="inp-wrap-ft" class="hidden">
                     <div class="inp-grid-2">
                         <div class="vb-inp-wrap">
-                            <input type="number" id="inp-h-ft" class="vb-inp" placeholder="Ft" oninput="QS_BMI.calculate()">
+                            <input type="number" id="inp-h-ft" class="vb-inp" placeholder="Ft" min="0" step="any" aria-label="Feet" oninput="QS_BMI.calculate()">
                             <span style="color:#64748b; font-weight:bold; font-size:0.8rem;">ft</span>
                         </div>
                         <div class="vb-inp-wrap">
-                            <input type="number" id="inp-h-in" class="vb-inp" placeholder="In" oninput="QS_BMI.calculate()">
+                            <input type="number" id="inp-h-in" class="vb-inp" placeholder="In" min="0" max="11" step="any" aria-label="Inches" oninput="if(this.value>11)this.value=11; QS_BMI.calculate();">
                             <span style="color:#64748b; font-weight:bold; font-size:0.8rem;">in</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="vb-lbl-row" style="margin-top: 5px;">
-                    <div class="vb-lbl">Your Weight</div>
-                    <div class="unit-badge" onclick="QS_BMI.openUnitModal('weight')" aria-label="Change Weight Unit">
+                    <div class="vb-lbl" id="lbl-weight-title">Your Weight</div>
+                    <div class="unit-badge" tabindex="0" role="button" aria-haspopup="dialog" onclick="QS_BMI.openUnitModal('w')" onkeypress="if(event.key==='Enter')QS_BMI.openUnitModal('w')" aria-label="Change Weight Unit">
                         <span id="lbl-unit-w">Kilograms (kg)</span> <i class="fas fa-chevron-down"></i>
                     </div>
                 </div>
                 
                 <div class="vb-inp-wrap">
-                    <input type="number" id="inp-w" class="vb-inp" placeholder="e.g. 70" oninput="QS_BMI.calculate()">
+                    <input type="number" id="inp-w" class="vb-inp" placeholder="e.g. 70" min="0" step="any" aria-labelledby="lbl-weight-title lbl-unit-w" oninput="QS_BMI.calculate()">
                     <span id="lbl-inp-w" style="color:#64748b; font-weight:bold; font-size:0.8rem;">kg</span>
                 </div>
             </div>
 
-            <div id="empty-state" style="text-align:center; padding: 30px 20px; color:#475569;">
+            <div id="empty-state" style="text-align:center; padding: 30px 20px; color:#475569;" aria-hidden="false">
                 <i class="fas fa-chart-line fa-3x" style="margin-bottom:12px; opacity:0.5;"></i>
                 <div style="font-size:0.85rem; font-weight:bold;">Input your metrics to generate your digital silhouette.</div>
             </div>
 
-            <div id="res-dashboard" class="res-card hidden" aria-live="polite">
+            <div id="res-dashboard" class="res-card hidden" aria-live="polite" aria-hidden="true">
                 
                 <div class="bmi-val" id="res-bmi-val">0.0</div>
                 <div class="bmi-cat" id="res-bmi-cat">Enter Details</div>
@@ -194,13 +215,13 @@
         </section>
     </main>
 
-    <div id="um-modal" class="vm-modal">
+    <div id="um-modal" class="vm-modal" role="dialog" aria-modal="true" aria-labelledby="um-title">
         <div class="vm-content">
             <div class="vm-head">
-                <span id="um-title">Select Unit</span>
-                <button class="vm-close" onclick="QS_BMI.closeUnitModal()"><i class="fas fa-times"></i></button>
+                <h2 id="um-title" style="margin:0; font-size:1rem; color:#10b981; font-weight:900; text-transform:uppercase; letter-spacing:1px;">Select Unit</h2>
+                <button class="vm-close" onclick="QS_BMI.closeUnitModal()" aria-label="Close Unit Selector"><i class="fas fa-times"></i></button>
             </div>
-            <div class="vm-list" id="um-list">
+            <div class="vm-list" id="um-list" role="listbox">
                 </div>
         </div>
     </div>
@@ -208,6 +229,7 @@
     <script>
         /* QUICKSOLVE PLATINUM - VISUAL BMI ENGINE V2
            Features: Dynamic Silhouette Scaling V2, Gauge Mapping, Clipping Fixes.
+           BugFixes: State Parameter Mismatch Fix, Safe Parsing, UI Freeze Fix, Inches Cap.
         */
         (function() {
             window.QS_BMI = {
@@ -229,16 +251,17 @@
                 },
 
                 // --- MODAL LOGIC ---
+                // Fixed modal to accept 'h' and 'w' directly to match the state object
                 openUnitModal: function(type) {
                     this.activeModalType = type;
-                    const title = type === 'height' ? 'Height Format' : 'Weight Format';
+                    const title = type === 'h' ? 'Height Format' : 'Weight Format';
                     document.getElementById('um-title').innerText = title;
                     
                     const listObj = document.getElementById('um-list');
                     listObj.innerHTML = '';
 
                     let options = [];
-                    if (type === 'height') {
+                    if (type === 'h') {
                         options = [
                             { val: 'cm', name: 'Centimeters (cm)' },
                             { val: 'ft', name: 'Feet & Inches (ft/in)' }
@@ -254,7 +277,11 @@
                         let isActive = this.units[type] === opt.val;
                         let div = document.createElement('div');
                         div.className = `vl-item ${isActive ? 'active' : ''}`;
+                        div.setAttribute('role', 'option');
+                        div.setAttribute('aria-selected', isActive);
+                        div.tabIndex = 0;
                         div.onclick = () => this.setUnit(type, opt.val);
+                        div.onkeypress = (e) => { if(e.key === 'Enter') this.setUnit(type, opt.val); };
                         div.innerHTML = `
                             <span class="vl-name">${opt.name}</span>
                             <i class="fas fa-check vl-check"></i>
@@ -278,9 +305,9 @@
                 },
 
                 setUnit: function(type, val) {
-                    this.units[type] = val;
+                    this.units[type] = val; // Now perfectly maps to 'h' or 'w'
                     
-                    if (type === 'height') {
+                    if (type === 'h') {
                         document.getElementById('lbl-unit-h').innerText = val === 'cm' ? 'Centimeters (cm)' : 'Feet & Inches';
                         if (val === 'cm') {
                             document.getElementById('inp-wrap-cm').classList.remove('hidden');
@@ -303,29 +330,45 @@
                     let heightM = 0;
                     let weightKg = 0;
 
-                    if (this.units.h === 'cm') {
-                        const cm = parseFloat(document.getElementById('inp-h-cm').value);
-                        if (cm > 0) heightM = cm / 100;
-                    } else {
-                        const ft = parseFloat(document.getElementById('inp-h-ft').value) || 0;
-                        const inc = parseFloat(document.getElementById('inp-h-in').value) || 0;
-                        const totalInches = (ft * 12) + inc;
-                        if (totalInches > 0) heightM = totalInches * 0.0254;
+                    try {
+                        if (this.units.h === 'cm') {
+                            const cm = parseFloat(document.getElementById('inp-h-cm').value);
+                            if (!isNaN(cm) && cm > 0) heightM = cm / 100;
+                        } else {
+                            let ft = parseFloat(document.getElementById('inp-h-ft').value) || 0;
+                            let inc = parseFloat(document.getElementById('inp-h-in').value) || 0;
+                            
+                            // JS Fallback cap for inches just in case
+                            if(inc > 11) {
+                                inc = 11;
+                                document.getElementById('inp-h-in').value = 11;
+                            }
+                            
+                            const totalInches = (ft * 12) + inc;
+                            if (totalInches > 0) heightM = totalInches * 0.0254;
+                        }
+
+                        const rawW = parseFloat(document.getElementById('inp-w').value);
+                        if (!isNaN(rawW) && rawW > 0) {
+                            weightKg = this.units.w === 'kg' ? rawW : rawW * 0.453592;
+                        }
+                    } catch(e) {
+                        console.error('BMI Calculation Parsing Error:', e);
                     }
 
-                    const rawW = parseFloat(document.getElementById('inp-w').value);
-                    if (rawW > 0) {
-                        weightKg = this.units.w === 'kg' ? rawW : rawW * 0.453592;
-                    }
-
+                    // Robustly handle state change (Fixes the freeze bug)
                     if (heightM <= 0 || weightKg <= 0) {
                         document.getElementById('empty-state').classList.remove('hidden');
+                        document.getElementById('empty-state').setAttribute('aria-hidden', 'false');
                         document.getElementById('res-dashboard').classList.add('hidden');
+                        document.getElementById('res-dashboard').setAttribute('aria-hidden', 'true');
                         return;
                     }
 
                     document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('empty-state').setAttribute('aria-hidden', 'true');
                     document.getElementById('res-dashboard').classList.remove('hidden');
+                    document.getElementById('res-dashboard').setAttribute('aria-hidden', 'false');
 
                     const bmi = weightKg / (heightM * heightM);
                     const idealWeightKg = 22 * (heightM * heightM);
@@ -373,7 +416,7 @@
                     if (pct > 100) pct = 100;
                     needleEl.style.left = `${pct}%`;
 
-                    // 4. Weight Goal Insight
+                    // 4. Weight Goal Insight (Dynamically tracking active unit)
                     const diffKg = actualKg - idealKg;
                     const diffLbs = diffKg * 2.20462;
                     const wUnit = this.units.w;

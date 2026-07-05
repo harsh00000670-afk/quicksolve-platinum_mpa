@@ -3,16 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
 
     <title>Waist-to-Hip Ratio (WHR) Calculator | Body Shape Analysis | QuickSolve Platinum</title>
+    
     <meta name="description" content="Calculate your Waist-to-Hip ratio (WHR) to assess cardiovascular risk and body shape (Apple vs Pear). Accurate health tracking. 100% Offline.">
     <meta name="keywords" content="whr calculator, waist to hip ratio, apple vs pear body shape, belly fat calculator, cardiovascular risk, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/health_suites/waist_hip.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Waist-to-Hip Ratio (WHR) Calculator | QuickSolve Platinum">
+    <meta property="og:description" content="Calculate your Waist-to-Hip ratio (WHR) to assess cardiovascular risk and body shape (Apple vs Pear). Accurate health tracking.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/health_suites/waist_hip.html">
+    <meta property="og:image" content="../logo.png">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -34,15 +42,29 @@
             font-family: sans-serif;
         }
 
+        /* Laptop / Desktop Compatibility */
+        @media (min-width: 768px) {
+            #mod-whr-overlay {
+                max-width: 480px;
+                margin: 0 auto;
+                left: 50%;
+                transform: translateX(-50%);
+                border-left: 1px solid #1e293b;
+                border-right: 1px solid #1e293b;
+                box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            }
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Header centered modification */
         .wh-head {
-            display: flex; align-items: center; padding: 12px 15px; 
+            display: flex; align-items: center; justify-content: center; padding: 12px 15px; 
             background: #0f172a; border-bottom: 1px solid #1e293b;
             position: sticky; top: 0; z-index: 100; flex-shrink: 0;
         }
-        .wh-head .qs-back-btn { background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
-        .wh-tit { color: #f43f5e; font-weight: 900; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+        .wh-head .qs-back-btn { position: absolute; left: 15px; background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .wh-tit { color: #f43f5e; font-weight: 900; font-size: 1rem; margin-left: 0; text-transform: uppercase; letter-spacing: 2px;}
 
         .wh-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 80px; }
 
@@ -86,7 +108,7 @@
         .wm-content { background: #0f172a; border-top-left-radius: 20px; border-top-right-radius: 20px; display: flex; flex-direction: column; overflow: hidden; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
         .wm-open .wm-content { transform: translateY(0); }
         .wm-head { padding: 15px 20px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; }
-        .wm-head span { color: #f43f5e; font-weight: 900; font-size: 1rem; text-transform: uppercase; }
+        .wm-head span { color: #f43f5e; font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
         .wm-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
         .wm-list { padding: 10px 0; }
         .wl-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); cursor: pointer; }
@@ -101,48 +123,48 @@
 <body>
     <main id="mod-whr-overlay" role="main" aria-label="Waist to Hip Ratio Calculator">
         <header class="wh-head">
-            <a href="../health.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left"></i></a>
-            <div class="wh-tit"><i class="fas fa-ruler-horizontal"></i> WHR RATIO</div>
+            <a href="../health.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+            <h1 class="wh-tit"><i class="fas fa-ruler-horizontal" aria-hidden="true"></i> WHR RATIO</h1>
         </header>
 
         <section class="wh-body">
             
             <div class="wh-card">
-                <div class="wh-lbl">Biological Gender</div>
-                <div class="wh-inp-wrap" onclick="QS_WHR.openModal('gender')" aria-label="Select Gender">
+                <div class="wh-lbl" id="lbl-gender-title">Biological Gender</div>
+                <div class="wh-inp-wrap" role="button" tabindex="0" aria-haspopup="dialog" aria-labelledby="lbl-gender-title sel-gender-text" onclick="QS_WHR.openModal('gender')" onkeypress="if(event.key==='Enter')QS_WHR.openModal('gender')" aria-label="Select Gender">
                     <div id="sel-gender-text" class="wh-select-text">
-                        <i class="fas fa-venus-mars" style="color:#f43f5e;"></i> Select Gender
+                        <i class="fas fa-venus-mars" style="color:#f43f5e;" aria-hidden="true"></i> Select Gender
                     </div>
-                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;" aria-hidden="true"></i>
                 </div>
 
-                <div class="wh-lbl">Measurement Unit</div>
-                <div class="wh-inp-wrap" onclick="QS_WHR.openModal('unit')">
+                <div class="wh-lbl" id="lbl-unit-title">Measurement Unit</div>
+                <div class="wh-inp-wrap" role="button" tabindex="0" aria-haspopup="dialog" aria-labelledby="lbl-unit-title sel-unit-text" onclick="QS_WHR.openModal('unit')" onkeypress="if(event.key==='Enter')QS_WHR.openModal('unit')" aria-label="Select Unit">
                     <div id="sel-unit-text" class="wh-select-text">
-                        <i class="fas fa-tape" style="color:#38bdf8;"></i> cm / inches
+                        <i class="fas fa-tape" style="color:#38bdf8;" aria-hidden="true"></i> cm / inches
                     </div>
-                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;" aria-hidden="true"></i>
                 </div>
 
-                <div class="wh-lbl">Waist Circumference</div>
+                <div class="wh-lbl" id="lbl-waist-title">Waist Circumference</div>
                 <div class="wh-inp-wrap" style="cursor: text;">
-                    <input type="number" id="inp-waist" class="wh-inp" placeholder="At narrowest point" oninput="QS_WHR.calculate()">
+                    <input type="number" id="inp-waist" class="wh-inp" placeholder="At narrowest point" min="0" step="any" aria-labelledby="lbl-waist-title" oninput="QS_WHR.calculate()">
                     <span id="lbl-waist-unit" class="wh-unit">CM</span>
                 </div>
 
-                <div class="wh-lbl">Hip Circumference</div>
+                <div class="wh-lbl" id="lbl-hip-title">Hip Circumference</div>
                 <div class="wh-inp-wrap" style="cursor: text;">
-                    <input type="number" id="inp-hip" class="wh-inp" placeholder="At widest point" oninput="QS_WHR.calculate()">
+                    <input type="number" id="inp-hip" class="wh-inp" placeholder="At widest point" min="0" step="any" aria-labelledby="lbl-hip-title" oninput="QS_WHR.calculate()">
                     <span id="lbl-hip-unit" class="wh-unit">CM</span>
                 </div>
             </div>
 
-            <div id="empty-state" style="text-align:center; padding:30px 20px; color:#475569;">
-                <i class="fas fa-heartbeat fa-3x" style="opacity:0.3; margin-bottom:15px;"></i>
+            <div id="empty-state" style="text-align:center; padding:30px 20px; color:#475569;" aria-hidden="false">
+                <i class="fas fa-heartbeat fa-3x" style="opacity:0.3; margin-bottom:15px;" aria-hidden="true"></i>
                 <div style="font-size:0.85rem; font-weight:bold;">Input measurements to analyze body fat distribution.</div>
             </div>
 
-            <div id="res-dashboard" class="hidden" aria-live="polite">
+            <div id="res-dashboard" class="hidden" aria-live="polite" aria-hidden="true">
                 
                 <div class="res-panel">
                     <div class="ratio-val" id="res-ratio">0.00</div>
@@ -151,17 +173,17 @@
 
                 <div class="shape-grid">
                     <div id="shape-apple" class="shape-box">
-                        <i class="fas fa-apple-alt shape-icon" style="color:#ef4444;"></i>
+                        <i class="fas fa-apple-alt shape-icon" style="color:#ef4444;" aria-hidden="true"></i>
                         <span class="shape-name">Apple Shape</span>
                     </div>
                     <div id="shape-pear" class="shape-box">
-                        <i class="fas fa-lemon shape-icon" style="color:#facc15; transform: rotate(180deg);"></i>
+                        <i class="fas fa-lemon shape-icon" style="color:#facc15; transform: rotate(180deg);" aria-hidden="true"></i>
                         <span class="shape-name">Pear Shape</span>
                     </div>
                 </div>
 
                 <div class="risk-box">
-                    <i class="fas fa-exclamation-triangle risk-icon" id="res-icon"></i>
+                    <i class="fas fa-exclamation-triangle risk-icon" id="res-icon" aria-hidden="true"></i>
                     <div class="risk-txt" id="res-insight">
                         Awaiting data for health risk assessment.
                     </div>
@@ -172,16 +194,20 @@
         </section>
     </main>
 
-    <div id="cm-modal" class="wm-modal">
+    <div id="cm-modal" class="wm-modal" role="dialog" aria-modal="true" aria-labelledby="cm-title">
         <div class="wm-content">
-            <div class="wm-head"><span id="cm-title">Select</span><button class="wm-close" onclick="QS_WHR.closeModal()"><i class="fas fa-times"></i></button></div>
-            <div class="wm-list" id="cm-list"></div>
+            <div class="wm-head">
+                <h2 id="cm-title" style="margin:0; font-size:1rem; color:#f43f5e; font-weight:900; text-transform:uppercase; letter-spacing:1px;">Select</h2>
+                <button class="wm-close" aria-label="Close Selector" onclick="QS_WHR.closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="wm-list" id="cm-list" role="listbox"></div>
         </div>
     </div>
 
     <script>
         /* QUICKSOLVE PLATINUM - WHR ENGINE
            Features: WHO Cardiovascular Risk Logic, Body Shape Classification.
+           BugFixes: ARIA Updates, Safe Parsing.
         */
         (function() {
             window.QS_WHR = {
@@ -208,9 +234,20 @@
 
                     opts.forEach(o => {
                         const currentVal = (type === 'gender' ? this.state.gender : this.state.unit);
+                        const active = currentVal === o.v;
                         const div = document.createElement('div');
-                        div.className = `wl-item ${currentVal === o.v ? 'active' : ''}`;
-                        div.onclick = () => this.setVal(type, o.v);
+                        div.className = `wl-item ${active ? 'active' : ''}`;
+                        div.setAttribute('role', 'option');
+                        div.setAttribute('aria-selected', active);
+                        div.tabIndex = 0;
+                        
+                        const performSelect = () => {
+                            this.setVal(type, o.v);
+                        };
+
+                        div.onclick = performSelect;
+                        div.onkeypress = (e) => { if(e.key === 'Enter') performSelect(); };
+
                         div.innerHTML = `<span class="wl-name">${o.n}</span><i class="fas fa-check wl-check"></i>`;
                         list.appendChild(div);
                     });
@@ -240,20 +277,33 @@
                 },
 
                 updateSelectionText: function() {
-                    document.getElementById('sel-gender-text').innerHTML = `<i class="fas ${this.state.gender === 'male' ? 'fa-mars' : 'fa-venus'}" style="color:#f43f5e;"></i> ${this.state.gender.toUpperCase()}`;
-                    document.getElementById('sel-unit-text').innerHTML = `<i class="fas fa-tape" style="color:#38bdf8;"></i> ${this.state.unit === 'cm' ? 'CENTIMETERS' : 'INCHES'}`;
+                    document.getElementById('sel-gender-text').innerHTML = `<i class="fas ${this.state.gender === 'male' ? 'fa-mars' : 'fa-venus'}" style="color:#f43f5e;" aria-hidden="true"></i> ${this.state.gender.toUpperCase()}`;
+                    document.getElementById('sel-unit-text').innerHTML = `<i class="fas fa-tape" style="color:#38bdf8;" aria-hidden="true"></i> ${this.state.unit === 'cm' ? 'CENTIMETERS' : 'INCHES'}`;
                     document.getElementById('lbl-waist-unit').innerText = this.state.unit.toUpperCase();
                     document.getElementById('lbl-hip-unit').innerText = this.state.unit.toUpperCase();
                 },
 
                 calculate: function() {
-                    const waist = parseFloat(document.getElementById('inp-waist').value);
-                    const hip = parseFloat(document.getElementById('inp-hip').value);
+                    let waist = 0;
+                    let hip = 0;
+
+                    // Bug Fix: Added Safe Parsing
+                    try {
+                        const wVal = parseFloat(document.getElementById('inp-waist').value);
+                        const hVal = parseFloat(document.getElementById('inp-hip').value);
+                        
+                        if(!isNaN(wVal) && wVal > 0) waist = wVal;
+                        if(!isNaN(hVal) && hVal > 0) hip = hVal;
+                    } catch(e) {
+                        console.error('WHR Parse Error', e);
+                    }
 
                     if(!waist || !hip || waist <= 0 || hip <= 0) return this.hide();
 
                     document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('empty-state').setAttribute('aria-hidden', 'true');
                     document.getElementById('res-dashboard').classList.remove('hidden');
+                    document.getElementById('res-dashboard').setAttribute('aria-hidden', 'false');
 
                     const ratio = waist / hip;
                     this.render(ratio);
@@ -292,11 +342,12 @@
 
                 hide: function() {
                     document.getElementById('empty-state').classList.remove('hidden');
+                    document.getElementById('empty-state').setAttribute('aria-hidden', 'false');
                     document.getElementById('res-dashboard').classList.add('hidden');
+                    document.getElementById('res-dashboard').setAttribute('aria-hidden', 'true');
                 }
             };
             window.QS_WHR.initListener();
         })();
     </script>
 </body>
-</html>

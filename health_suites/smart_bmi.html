@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
 
     <title>Smart BMI Calculator | Oxford Formula | QuickSolve Platinum</title>
+    
     <meta name="description" content="Calculate your New Smart BMI using the Oxford University formula. Compare traditional BMI vs New BMI for a more accurate health assessment. 100% Offline.">
     <meta name="keywords" content="smart bmi calculator, new bmi formula, nick trefethen bmi, oxford bmi calculator, accurate bmi for tall people, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
@@ -17,6 +18,13 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#020617">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Smart BMI Calculator (Oxford Formula) | QuickSolve Platinum">
+    <meta property="og:description" content="Calculate your New Smart BMI using the Oxford University formula. Compare traditional BMI vs New BMI for a more accurate health assessment.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/health_suites/smart_bmi.html">
+    <meta property="og:image" content="../logo.png">
 
     <link rel="icon" type="image/png" href="../logo.png">
     <link rel="stylesheet" href="../assets/css/all.min.css">
@@ -34,15 +42,29 @@
             font-family: sans-serif;
         }
 
+        /* Laptop / Desktop Compatibility */
+        @media (min-width: 768px) {
+            #mod-sbmi-overlay {
+                max-width: 480px;
+                margin: 0 auto;
+                left: 50%;
+                transform: translateX(-50%);
+                border-left: 1px solid #1e293b;
+                border-right: 1px solid #1e293b;
+                box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            }
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Header centered modification */
         .sb-head {
-            display: flex; align-items: center; padding: 12px 15px; 
+            display: flex; align-items: center; justify-content: center; padding: 12px 15px; 
             background: #0f172a; border-bottom: 1px solid #1e293b;
             position: sticky; top: 0; z-index: 100; flex-shrink: 0;
         }
-        .sb-head .qs-back-btn { background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
-        .sb-tit { color: #38bdf8; font-weight: 900; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+        .sb-head .qs-back-btn { position: absolute; left: 15px; background: none; border: none; color: #f8fafc; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .sb-tit { color: #38bdf8; font-weight: 900; font-size: 1rem; margin-left: 0; text-transform: uppercase; letter-spacing: 2px;}
 
         .sb-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 80px; }
 
@@ -108,22 +130,22 @@
             <a href="../health.html" class="qs-back-btn" aria-label="Go Back">
                 <i class="fas fa-arrow-left" aria-hidden="true"></i>
             </a>
-            <div class="sb-tit"><i class="fas fa-brain" aria-hidden="true"></i> SMART BMI (OXFORD)</div>
+            <h1 class="sb-tit"><i class="fas fa-brain" aria-hidden="true"></i> SMART BMI (OXFORD)</h1>
         </header>
 
         <section class="sb-body">
             
             <div class="sb-card">
                 <div class="sb-lbl-row">
-                    <div class="sb-lbl">Your Height</div>
-                    <div class="unit-badge" onclick="QS_SmartBMI.openUnitModal('height')" aria-label="Change Height Unit">
-                        <span id="lbl-unit-h">Centimeters (cm)</span> <i class="fas fa-chevron-down"></i>
+                    <div class="sb-lbl" id="lbl-height-title">Your Height</div>
+                    <div class="unit-badge" role="button" tabindex="0" aria-haspopup="dialog" aria-labelledby="lbl-height-title lbl-unit-h" aria-label="Change Height Unit" onclick="QS_SmartBMI.openUnitModal('height')" onkeypress="if(event.key==='Enter')QS_SmartBMI.openUnitModal('height')">
+                        <span id="lbl-unit-h">Centimeters (cm)</span> <i class="fas fa-chevron-down" aria-hidden="true"></i>
                     </div>
                 </div>
                 
                 <div id="inp-wrap-cm">
                     <div class="sb-inp-wrap">
-                        <input type="number" id="inp-h-cm" class="sb-inp" placeholder="e.g. 175" oninput="QS_SmartBMI.calculate()">
+                        <input type="number" id="inp-h-cm" class="sb-inp" placeholder="e.g. 175" min="0" step="any" aria-labelledby="lbl-height-title lbl-unit-h" oninput="QS_SmartBMI.calculate()">
                         <span style="color:#64748b; font-weight:bold; font-size:0.8rem;">cm</span>
                     </div>
                 </div>
@@ -131,35 +153,35 @@
                 <div id="inp-wrap-ft" class="hidden">
                     <div class="inp-grid-2">
                         <div class="sb-inp-wrap">
-                            <input type="number" id="inp-h-ft" class="sb-inp" placeholder="Ft" oninput="QS_SmartBMI.calculate()">
+                            <input type="number" id="inp-h-ft" class="sb-inp" placeholder="Ft" min="0" step="any" aria-label="Feet" oninput="QS_SmartBMI.calculate()">
                             <span style="color:#64748b; font-weight:bold; font-size:0.8rem;">ft</span>
                         </div>
                         <div class="sb-inp-wrap">
-                            <input type="number" id="inp-h-in" class="sb-inp" placeholder="In" oninput="QS_SmartBMI.calculate()">
+                            <input type="number" id="inp-h-in" class="sb-inp" placeholder="In" min="0" max="11" step="any" aria-label="Inches" oninput="if(this.value>11)this.value=11; QS_SmartBMI.calculate();">
                             <span style="color:#64748b; font-weight:bold; font-size:0.8rem;">in</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="sb-lbl-row" style="margin-top: 5px;">
-                    <div class="sb-lbl">Your Weight</div>
-                    <div class="unit-badge" onclick="QS_SmartBMI.openUnitModal('weight')" aria-label="Change Weight Unit">
-                        <span id="lbl-unit-w">Kilograms (kg)</span> <i class="fas fa-chevron-down"></i>
+                    <div class="sb-lbl" id="lbl-weight-title">Your Weight</div>
+                    <div class="unit-badge" role="button" tabindex="0" aria-haspopup="dialog" aria-labelledby="lbl-weight-title lbl-unit-w" aria-label="Change Weight Unit" onclick="QS_SmartBMI.openUnitModal('weight')" onkeypress="if(event.key==='Enter')QS_SmartBMI.openUnitModal('weight')">
+                        <span id="lbl-unit-w">Kilograms (kg)</span> <i class="fas fa-chevron-down" aria-hidden="true"></i>
                     </div>
                 </div>
                 
                 <div class="sb-inp-wrap">
-                    <input type="number" id="inp-w" class="sb-inp" placeholder="e.g. 70" oninput="QS_SmartBMI.calculate()">
+                    <input type="number" id="inp-w" class="sb-inp" placeholder="e.g. 70" min="0" step="any" aria-labelledby="lbl-weight-title lbl-unit-w" oninput="QS_SmartBMI.calculate()">
                     <span id="lbl-inp-w" style="color:#64748b; font-weight:bold; font-size:0.8rem;">kg</span>
                 </div>
             </div>
 
-            <div id="empty-state" style="text-align:center; padding: 30px 20px; color:#475569;">
-                <i class="fas fa-balance-scale-right fa-3x" style="margin-bottom:12px; opacity:0.5;"></i>
+            <div id="empty-state" style="text-align:center; padding: 30px 20px; color:#475569;" aria-hidden="false">
+                <i class="fas fa-balance-scale-right fa-3x" style="margin-bottom:12px; opacity:0.5;" aria-hidden="true"></i>
                 <div style="font-size:0.85rem; font-weight:bold;">Input metrics to see how the New Oxford Formula changes your BMI.</div>
             </div>
 
-            <div id="res-dashboard" class="res-card hidden" aria-live="polite">
+            <div id="res-dashboard" class="res-card hidden" aria-live="polite" aria-hidden="true">
                 
                 <div class="comp-grid">
                     <div class="comp-box">
@@ -177,7 +199,7 @@
                 </div>
 
                 <div class="oxford-box">
-                    <i class="fas fa-graduation-cap ox-icon"></i>
+                    <i class="fas fa-graduation-cap ox-icon" aria-hidden="true"></i>
                     <div class="ox-txt" id="ox-text">
                         Awaiting data to provide Oxford University analysis.
                     </div>
@@ -188,20 +210,20 @@
         </section>
     </main>
 
-    <div id="um-modal" class="vm-modal">
+    <div id="um-modal" class="vm-modal" role="dialog" aria-modal="true" aria-labelledby="um-title">
         <div class="vm-content">
             <div class="vm-head">
-                <span id="um-title">Select Unit</span>
-                <button class="vm-close" onclick="QS_SmartBMI.closeUnitModal()"><i class="fas fa-times"></i></button>
+                <h2 id="um-title" style="margin:0; font-size:1rem; color:#38bdf8; font-weight:900; text-transform:uppercase; letter-spacing:1px;">Select Unit</h2>
+                <button class="vm-close" aria-label="Close Selector" onclick="QS_SmartBMI.closeUnitModal()"><i class="fas fa-times"></i></button>
             </div>
-            <div class="vm-list" id="um-list">
-                </div>
+            <div class="vm-list" id="um-list" role="listbox"></div>
         </div>
     </div>
 
     <script>
         /* QUICKSOLVE PLATINUM - SMART BMI ENGINE
            Features: Oxford Trefethen Formula math, Delta comparisons.
+           BugFixes: ARIA Updates, Safe Parsing, Inches Cap Limit.
         */
         (function() {
             window.QS_SmartBMI = {
@@ -247,7 +269,17 @@
                         let isActive = this.units[type] === opt.val;
                         let div = document.createElement('div');
                         div.className = `vl-item ${isActive ? 'active' : ''}`;
-                        div.onclick = () => this.setUnit(type, opt.val);
+                        div.setAttribute('role', 'option');
+                        div.setAttribute('aria-selected', isActive);
+                        div.tabIndex = 0;
+                        
+                        const performSelect = () => {
+                            this.setUnit(type, opt.val);
+                        };
+
+                        div.onclick = performSelect;
+                        div.onkeypress = (e) => { if(e.key === 'Enter') performSelect(); };
+                        
                         div.innerHTML = `
                             <span class="vl-name">${opt.name}</span>
                             <i class="fas fa-check vl-check"></i>
@@ -308,29 +340,39 @@
                     let heightM = 0;
                     let weightKg = 0;
 
-                    if (this.units.h === 'cm') {
-                        const cm = parseFloat(document.getElementById('inp-h-cm').value);
-                        if (cm > 0) heightM = cm / 100;
-                    } else {
-                        const ft = parseFloat(document.getElementById('inp-h-ft').value) || 0;
-                        const inc = parseFloat(document.getElementById('inp-h-in').value) || 0;
-                        const totalInches = (ft * 12) + inc;
-                        if (totalInches > 0) heightM = totalInches * 0.0254;
-                    }
+                    // Bug Fix: Added Safe Parsing
+                    try {
+                        if (this.units.h === 'cm') {
+                            const cmVal = parseFloat(document.getElementById('inp-h-cm').value);
+                            if (!isNaN(cmVal) && cmVal > 0) heightM = cmVal / 100;
+                        } else {
+                            const ftVal = parseFloat(document.getElementById('inp-h-ft').value) || 0;
+                            let inVal = parseFloat(document.getElementById('inp-h-in').value) || 0;
+                            if(inVal > 11) inVal = 11;
+                            const totalInches = (ftVal * 12) + inVal;
+                            if (totalInches > 0) heightM = totalInches * 0.0254;
+                        }
 
-                    const rawW = parseFloat(document.getElementById('inp-w').value);
-                    if (rawW > 0) {
-                        weightKg = this.units.w === 'kg' ? rawW : rawW * 0.453592;
+                        const rawW = parseFloat(document.getElementById('inp-w').value);
+                        if (!isNaN(rawW) && rawW > 0) {
+                            weightKg = this.units.w === 'kg' ? rawW : rawW * 0.453592;
+                        }
+                    } catch(e) {
+                        console.error('Smart BMI Parse Error', e);
                     }
 
                     if (heightM <= 0 || weightKg <= 0) {
                         document.getElementById('empty-state').classList.remove('hidden');
+                        document.getElementById('empty-state').setAttribute('aria-hidden', 'false');
                         document.getElementById('res-dashboard').classList.add('hidden');
+                        document.getElementById('res-dashboard').setAttribute('aria-hidden', 'true');
                         return;
                     }
 
                     document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('empty-state').setAttribute('aria-hidden', 'true');
                     document.getElementById('res-dashboard').classList.remove('hidden');
+                    document.getElementById('res-dashboard').setAttribute('aria-hidden', 'false');
 
                     // 1. Traditional BMI: kg / m^2
                     const oldBmi = weightKg / (heightM * heightM);
@@ -369,7 +411,7 @@
                         deltaEl.style.borderColor = "#ef4444";
                         oxText.innerHTML = `Because you are relatively <span class="ox-hl">shorter</span>, the old BMI formula underestimated your fat levels. The new formula corrected this, adding <span class="ox-hl">+${diff.toFixed(1)}</span> to your score.`;
                     } else {
-                        deltaEl.innerText = `▼ ${diff.toFixed(1)} LOWER`;
+                        deltaEl.innerText = `▼ ${Math.abs(diff).toFixed(1)} LOWER`;
                         deltaEl.style.color = "#10b981";
                         deltaEl.style.borderColor = "#10b981";
                         oxText.innerHTML = `Because you are <span class="ox-hl">taller</span>, the old BMI formula punished you by assuming your bone/muscle mass was fat. The new formula corrected this, dropping your score by <span class="ox-hl">${Math.abs(diff).toFixed(1)}</span>.`;
