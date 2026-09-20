@@ -1,14 +1,73 @@
-# Static CSS Config
+# ==========================================
+# STATIC ASSETS
+# ==========================================
+
 /assets/css/*
   Cache-Control: public, max-age=259200, must-revalidate
 
-# Fonts & Webfonts Configuration (Immutable)
 /assets/fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
 /assets/webfonts/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Root level images like logo
 /*.png
   Cache-Control: public, max-age=31536000, immutable
+
+
+# ==========================================
+# AGENT DISCOVERY
+# ==========================================
+
+/
+  Link: <https://quicksolve-platinum.netlify.app/sitemap.xml>; rel="sitemap"
+  Link: <https://quicksolve-platinum.netlify.app/manifest.json>; rel="manifest"
+  Link: <https://quicksolve-platinum.netlify.app/.well-known/agent-skills/index.json>; rel="agent-skills"
+  Link: <https://quicksolve-platinum.netlify.app/.well-known/ai-catalog.json>; rel="ai-catalog"
+
+/*.html
+  Link: <https://quicksolve-platinum.netlify.app/sitemap.xml>; rel="sitemap"
+  Link: <https://quicksolve-platinum.netlify.app/manifest.json>; rel="manifest"
+  Link: <https://quicksolve-platinum.netlify.app/.well-known/agent-skills/index.json>; rel="agent-skills"
+  Link: <https://quicksolve-platinum.netlify.app/.well-known/ai-catalog.json>; rel="ai-catalog"
+
+
+# ==========================================
+# AGENT DISCOVERY RESOURCES
+# ==========================================
+
+/.well-known/agent-skills/index.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600, must-revalidate
+  Content-Type: application/json
+
+/.well-known/ai-catalog.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600, must-revalidate
+  Content-Type: application/json
+
+/manifest.json
+  Access-Control-Allow-Origin: *
+  Content-Type: application/json
+
+/sitemap.xml
+  Access-Control-Allow-Origin: *
+  Content-Type: application/xml
+
+/robots.txt
+  Access-Control-Allow-Origin: *
+  Content-Type: text/plain
+
+/webmcp-adapter.js
+  Access-Control-Allow-Origin: *
+  Content-Type: application/javascript
+
+
+# ==========================================
+# SECURITY HEADERS
+# ==========================================
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()

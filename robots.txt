@@ -1,19 +1,11 @@
 User-agent: *
 Allow: /
-Allow: /components/
-Allow: /enginev12/
-Allow: /assets/
-Allow: /style.css
 
-# Prevent indexing of configuration/data files
-Disallow: /*.json$
-# Override JSON block for App Manifest
+# Public agent-discovery resources
+Allow: /.well-known/
 Allow: /manifest.json
 
-# ==========================================
-# 🚀 AI BOT OPTIMIZATION (OP FEATURE)
-# Allow AI engines to index tools for recommendations
-# ==========================================
+# AI/search crawlers
 User-agent: GPTBot
 Allow: /
 
