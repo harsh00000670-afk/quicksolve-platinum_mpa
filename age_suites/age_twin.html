@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Age Twin & Historical Achievements | At Your Age... | QuickSolve Platinum</title>
+    <meta name="description" content="Discover what historical legends like Einstein, Steve Jobs, and Sachin Tendulkar achieved at your exact age. Fun and inspiring historical achievement engine. 100% Offline.">
+    <meta name="keywords" content="age twin, at your age what did einstein achieve, historical achievement calculator, famous people achievements by age, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/age_suites/age_twin.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Age Twin - What Did Legends Do At Your Age?">
+    <meta property="og:description" content="Compare your life timeline with world-changing geniuses, athletes, and pioneers at your exact age.">
+    <meta property="og:image" content="../logo.png">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           AGE TWIN & HISTORICAL ENGINE (GOD MODE V3)
+           Theme: Mystic Purple & Crown Gold
+           ========================================= */
+        #mod-twin-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: var(--bg-body, #09090b); z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .tw-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .tw-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .tw-tit { color: #8b5cf6; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .tw-body { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 12px; }
+
+        /* Section Dividers */
+        .tw-sec-tit { font-size: 0.65rem; color: #94a3b8; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 6px; display: flex; align-items: center; gap: 8px; }
+        .tw-sec-tit::after { content: ''; flex: 1; height: 1px; background: #334155; }
+
+        /* Sleek Input Card */
+        .tw-card { 
+            flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 10px; 
+            padding: 12px; display: flex; flex-direction: column; gap: 8px; transition: 0.2s; position: relative;
+        }
+        .tw-card:focus-within { border-color: #8b5cf6; box-shadow: 0 0 12px rgba(139, 92, 246, 0.15); }
+
+        .tw-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; margin-bottom: 3px; }
+        
+        .tw-inp-wrap { display: flex; align-items: center; gap: 8px; background: rgba(2, 6, 23, 0.5); padding: 10px 10px; border-radius: 8px; border: 1px solid #334155; }
+        .tw-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1rem; font-weight: 900; outline: none; width: 100%; font-family: monospace; }
+        .tw-inp::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; color: #8b5cf6; }
+
+        #twin-dashboard { display: flex; flex-direction: column; gap: 12px; }
+
+        /* User Age Summary Banner */
+        .tw-banner {
+            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+            border: 1px solid #8b5cf6; border-radius: 10px; padding: 14px 12px; text-align: center;
+            position: relative; overflow: hidden; box-shadow: inset 0 0 15px rgba(139, 92, 246, 0.1);
+        }
+        .tb-tag { font-size: 0.62rem; font-weight: 900; color: #a855f7; text-transform: uppercase; letter-spacing: 2px; }
+        .tb-age { font-size: 1.6rem; font-weight: 900; color: #f8fafc; font-family: monospace; margin-top: 4px; }
+        .tb-sub { font-size: 0.7rem; color: #94a3b8; font-weight: bold; margin-top: 2px; }
+
+        /* Historical Twin Cards Grid */
+        .twins-grid { display: flex; flex-direction: column; gap: 10px; }
+        
+        .twin-card {
+            background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 14px;
+            display: flex; gap: 12px; align-items: flex-start; position: relative; overflow: hidden;
+            transition: 0.2s;
+        }
+        .twin-card:active { border-color: #8b5cf6; }
+        
+        .tc-avatar-wrap {
+            width: 44px; height: 44px; border-radius: 10px; background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.4); display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; color: #a855f7; flex-shrink: 0;
+        }
+        
+        .tc-content { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .tc-top { display: flex; justify-content: space-between; align-items: center; }
+        .tc-name { font-size: 0.95rem; font-weight: 900; color: #f8fafc; }
+        .tc-age-badge {
+            font-size: 0.58rem; font-weight: 900; background: rgba(245, 158, 11, 0.15); color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 6px; border-radius: 4px; font-family: monospace;
+        }
+        .tc-field { font-size: 0.62rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .tc-desc { font-size: 0.78rem; color: #cbd5e1; font-weight: 500; line-height: 1.4; margin-top: 2px; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <main id="mod-twin-overlay" role="main" aria-label="Age Twin and Historical Achievements Engine">
+        <header class="tw-head">
+            <a href="../age.html" class="qs-back-btn" aria-label="Go Back">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            </a>
+            <div class="tw-tit"><i class="fas fa-crown" aria-hidden="true"></i> AGE TWIN: "AT YOUR AGE..."</div>
+        </header>
+
+        <section class="tw-body">
+            
+            <!-- INPUT CARD -->
+            <div class="tw-card">
+                <div class="tw-lbl">
+                    <label for="inp-dob">Your Exact Date of Birth</label>
+                </div>
+                <div class="tw-inp-wrap" style="cursor: text;">
+                    <i class="fas fa-calendar-alt" style="color:#8b5cf6;" aria-hidden="true"></i>
+                    <input type="date" id="inp-dob" class="tw-inp" onchange="QS_Twin.calculate()" aria-label="Enter Date of Birth">
+                </div>
+            </div>
+
+            <!-- EMPTY STATE -->
+            <div id="empty-state" style="text-align:center; padding: 40px 20px; color:#64748b;">
+                <i class="fas fa-landmark fa-3x" style="margin-bottom:12px; opacity:0.5;"></i>
+                <div style="font-size:0.85rem; font-weight:bold;">Enter your birth date to meet your historical age twins.</div>
+            </div>
+
+            <!-- DASHBOARD -->
+            <div id="twin-dashboard" class="hidden" aria-live="polite">
+                
+                <div class="tw-banner">
+                    <div class="tb-tag"><i class="fas fa-user-check"></i> Your Exact Chronological Age</div>
+                    <div class="tb-age" id="res-user-age">25 Years, 0 Months</div>
+                    <div class="tb-sub" id="res-user-days">Matching against historical records...</div>
+                </div>
+
+                <div class="tw-sec-tit">Historical Age Twins & Milestones</div>
+                <div class="twins-grid" id="twins-container">
+                    <!-- Dynamically populated achievement cards -->
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - AGE TWIN & HISTORICAL ENGINE V3
+           Features: Dynamic age comparison database across geniuses, athletes, and pioneers.
+        */
+        (function() {
+            window.QS_Twin = {
+                
+                // Comprehensive Historical Achievement Database indexed by age milestones
+                historyDb: [
+                    {
+                        name: "Wolfgang Amadeus Mozart",
+                        icon: "fa-music",
+                        field: "Classical Composer & Prodigy",
+                        ageAtEvent: 5,
+                        event: "Composed his very first published musical pieces (Minuet and Trio) and was already performing across European royal courts."
+                    },
+                    {
+                        name: "Louis Braille",
+                        icon: "fa-braille",
+                        field: "Inventor & Educator",
+                        ageAtEvent: 15,
+                        event: "Invented the revolutionary Braille reading and writing system for blind and visually impaired individuals while studying at the Royal Institute in Paris."
+                    },
+                    {
+                        name: "Sachin Tendulkar",
+                        icon: "fa-cricket",
+                        field: "Cricket Legend",
+                        ageAtEvent: 16,
+                        event: "Made his international Test cricket debut for India against Pakistan in Karachi, facing elite fast bowlers like Wasim Akram."
+                    },
+                    {
+                        name: "Pelé (Edson Arantes do Nascimento)",
+                        icon: "fa-futbol",
+                        field: "Global Football Icon",
+                        ageAtEvent: 17,
+                        event: "Scored two goals in the FIFA World Cup Final to help Brazil win their first-ever World Cup trophy in Sweden (1958)."
+                    },
+                    {
+                        name: "Malala Yousafzai",
+                        icon: "fa-book-open",
+                        field: "Nobel Peace Prize Laureate",
+                        ageAtEvent: 17,
+                        event: "Became the youngest-ever recipient of the Nobel Peace Prize in history for her passionate global advocacy of female education."
+                    },
+                    {
+                        name: "Mark Zuckerberg",
+                        icon: "fa-laptop-code",
+                        field: "Tech Entrepreneur",
+                        ageAtEvent: 20,
+                        event: "Launched Facebook from his Harvard University dorm room, scaling it rapidly across Ivy League campuses."
+                    },
+                    {
+                        name: "Alexander the Great",
+                        icon: "fa-chess-king",
+                        field: "Military Strategist & King",
+                        ageAtEvent: 20,
+                        event: "Ascended to the throne of Macedonia following the assassination of King Philip II and quickly secured his Greek coalition."
+                    },
+                    {
+                        name: "Steve Jobs",
+                        icon: "fa-apple",
+                        field: "Apple Inc. Co-Founder",
+                        ageAtEvent: 21,
+                        event: "Co-founded Apple Computer in a suburban California garage with Steve Wozniak and released the historic Apple I."
+                    },
+                    {
+                        name: "Albert Einstein",
+                        icon: "fa-atom",
+                        field: "Theoretical Physicist",
+                        ageAtEvent: 26,
+                        event: "Published his four groundbreaking 'Annus Mirabilis' papers in physics, including Special Relativity and the mass-energy equivalence formula ($E=mc^2$)."
+                    },
+                    {
+                        name: "Sir Isaac Newton",
+                        icon: "fa-globe",
+                        field: "Mathematician & Physicist",
+                        ageAtEvent: 23,
+                        event: "Formulated the foundational theories of calculus, optics (analyzing sunlight with prisms), and the early concepts of universal gravitation during the plague years."
+                    },
+                    {
+                        name: "Amelia Earhart",
+                        icon: "fa-plane",
+                        field: "Aviation Pioneer",
+                        ageAtEvent: 31,
+                        event: "Became the first woman to successfully fly solo across the North American continent and back, setting transcontinental aviation records."
+                    },
+                    {
+                        name: "Mahatma Gandhi",
+                        icon: "fa-hands-helping",
+                        field: "Leader of Independence",
+                        ageAtEvent: 37,
+                        event: "Organized his first major mass civil disobedience campaign ('Satyagraha') in South Africa against oppressive discriminatory registration laws."
+                    },
+                    {
+                        name: "J.R.R. Tolkien",
+                        icon: "fa-book",
+                        field: "Author & Philologist",
+                        ageAtEvent: 45,
+                        event: "Published *The Hobbit*, creating the enchanting realm of Middle-earth which later led to the creation of *The Lord of the Rings*."
+                    },
+                    {
+                        name: "Stan Lee",
+                        icon: "fa-mask",
+                        field: "Comic Book Legend",
+                        ageAtEvent: 39,
+                        event: "Co-created the Fantastic Four for Marvel Comics, sparking the Silver Age of comic books and creating Spider-Man, X-Men, and The Avengers shortly after."
+                    },
+                    {
+                        name: "Colonel Harland Sanders",
+                        icon: "fa-utensils",
+                        field: "Entrepreneur (KFC)",
+                        ageAtEvent: 62,
+                        event: "Franchised his secret recipe Kentucky Fried Chicken concept across the United States after years of hardship, building a global food empire."
+                    },
+                    {
+                        name: "Noah Webster",
+                        icon: "fa-feather-alt",
+                        field: "Lexicographer",
+                        ageAtEvent: 70,
+                        event: "Published the monumental *American Dictionary of the English Language* after over two decades of meticulous linguistic research."
+                    }
+                ],
+
+                initListener: function() {
+                    const dobInp = document.getElementById('inp-dob');
+                    if(dobInp && !dobInp.value) {
+                        let d = new Date();
+                        d.setFullYear(d.getFullYear() - 24); // Default to 24 years old
+                        dobInp.value = d.toISOString().split('T')[0];
+                    }
+
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'age_suites/age_twin.js') {
+                            this.calculate();
+                        }
+                    });
+
+                    if(document.readyState === 'complete' || document.readyState === 'interactive'){
+                         setTimeout(() => this.calculate(), 100);
+                    } else {
+                         document.addEventListener('DOMContentLoaded', () => this.calculate());
+                    }
+                },
+
+                calculate: function() {
+                    const dobVal = document.getElementById('inp-dob').value;
+                    if (!dobVal) return;
+
+                    const dob = new Date(dobVal);
+                    const now = new Date();
+                    if (dob > now) return;
+
+                    document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('twin-dashboard').classList.remove('hidden');
+
+                    // 1. Calculate Exact Age in Years and Months
+                    let ageY = now.getFullYear() - dob.getFullYear();
+                    let ageM = now.getMonth() - dob.getMonth();
+                    let ageD = now.getDate() - dob.getDate();
+
+                    if (ageD < 0) {
+                        ageM--;
+                    }
+                    if (ageM < 0) {
+                        ageY--;
+                        ageM += 12;
+                    }
+
+                    const diffMs = now - dob;
+                    const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+                    document.getElementById('res-user-age').innerText = `${ageY} Years, ${ageM} Months`;
+                    document.getElementById('res-user-days').innerText = `Total existence: ${totalDays.toLocaleString('en-US')} days alive`;
+
+                    // 2. Filter / Sort historical figures near user's exact age (or show most inspiring ones close to user's age)
+                    const container = document.getElementById('twins-container');
+                    container.innerHTML = '';
+
+                    // Sort database items by proximity to user's ageY
+                    const sortedTwins = [...this.historyDb].sort((a, b) => {
+                        return Math.abs(a.ageAtEvent - ageY) - Math.abs(b.ageAtEvent - ageY);
+                    });
+
+                    // Render top matching historical twins
+                    sortedTwins.forEach(twin => {
+                        let ageDiff = twin.ageAtEvent - ageY;
+                        let diffText = "";
+                        if (ageDiff === 0) diffText = "🎯 Exact Age Match!";
+                        else if (ageDiff > 0) diffText = `🔮 In ${ageDiff} year${ageDiff > 1 ? 's' : ''}`;
+                        else diffText = `⚡ ${Math.abs(ageDiff)} year${Math.abs(ageDiff) > 1 ? 's' : ''} younger than you are now`;
+
+                        let div = document.createElement('div');
+                        div.className = "twin-card";
+                        div.innerHTML = `
+                            <div class="tc-avatar-wrap">
+                                <i class="fas ${twin.icon}"></i>
+                            </div>
+                            <div class="tc-content">
+                                <div class="tc-top">
+                                    <span class="tc-name">${twin.name}</span>
+                                    <span class="tc-age-badge">Age ${twin.ageAtEvent}</span>
+                                </div>
+                                <span class="tc-field">${twin.field}</span>
+                                <div class="tc-desc">${twin.event}</div>
+                                <div style="font-size:0.58rem; color:#8b5cf6; font-weight:bold; margin-top:3px; font-family:monospace;">${diffText}</div>
+                            </div>
+                        `;
+                        container.appendChild(div);
+                    });
+                }
+            };
+
+            window.QS_Twin.initListener();
+        })();
+    </script>
+</body>
+</html>

@@ -7,9 +7,9 @@
     
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
 
-    <title>The Life Pulse | Real-Time Age & Biological Tracker | QuickSolve Platinum</title>
-    <meta name="description" content="Calculate your exact age down to the second. Track total heartbeats, breaths taken, and view your life progress bar in real-time. 100% Offline.">
-    <meta name="keywords" content="real time age calculator, exact age in seconds, life progress bar, total heartbeats calculator, next birthday countdown, QuickSolve Platinum">
+    <title>The Life Pulse & Milestones | Exact Life Metrics | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate your exact age down to the second. Track total heartbeats, breaths, sleep hours, weekends lived, life progress bar, and 1 Billion Seconds milestone. 100% Offline.">
+    <meta name="keywords" content="real time age calculator, exact age in seconds, life progress bar, total heartbeats calculator, weekends lived, 1 billion seconds club, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/age_suites/life_pulse.html">
@@ -22,8 +22,8 @@
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="QuickSolve Platinum">
-    <meta property="og:title" content="The Life Pulse - Real-Time Existence Tracker">
-    <meta property="og:description" content="Watch your age tick in seconds. See your total heartbeats and life progress bar live.">
+    <meta property="og:title" content="The Life Pulse - Exact Life Metrics & Milestones">
+    <meta property="og:description" content="Watch your age tick in seconds. Track heartbeats, sleep hours, weekends lived, and your 1 Billion Seconds milestone live.">
     <meta property="og:image" content="../logo.png">
 
     <link rel="icon" type="image/png" href="../logo.png">
@@ -32,8 +32,8 @@
 
     <style>
         /* =========================================
-           THE LIFE PULSE (PLATINUM GOD MODE V2)
-           Theme: Chronos Pink/Purple (Compact)
+           THE LIFE PULSE & METRICS (PLATINUM V3)
+           Theme: Chronos Pink/Purple (Preserved)
            ========================================= */
         #mod-pulse-overlay {
             position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
@@ -54,6 +54,10 @@
 
         .lp-body { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 12px; }
 
+        /* Section Dividers */
+        .lp-sec-tit { font-size: 0.65rem; color: #94a3b8; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 6px; display: flex; align-items: center; gap: 8px; }
+        .lp-sec-tit::after { content: ''; flex: 1; height: 1px; background: #334155; }
+
         /* Sleek Cards */
         .lp-card { 
             flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 10px; 
@@ -71,43 +75,76 @@
         /* Custom Select Trigger */
         .lp-select-text { flex: 1; color: #fff; font-size: 0.95rem; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 10px; }
 
-        /* Dashboard Hero - Ticking Seconds */
+        /* Dashboard Container */
+        #pulse-dashboard { display: flex; flex-direction: column; gap: 12px; }
+
+        /* Dashboard Hero - Ticking Seconds & Exact Breakdown */
         .dash-hero { background: #0f172a; border: 1px solid #ec4899; border-radius: 10px; padding: 15px 12px; text-align: center; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(236, 72, 153, 0.05); }
         .dash-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #ec4899, #8b5cf6); }
         
-        .dh-title { font-size: 0.7rem; color: #f8fafc; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+        .dh-title { font-size: 0.7rem; color: #f8fafc; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
         .dh-val { font-size: 2.2rem; font-weight: 900; color: #ec4899; font-family: monospace; letter-spacing: -1px; text-shadow: 0 0 12px rgba(236, 72, 153, 0.4); line-height: 1.1; }
-        .dh-sub { font-size: 0.75rem; color: #94a3b8; font-weight: bold; margin-top: 4px; }
+        .dh-sub { font-size: 0.85rem; color: #f8fafc; font-weight: 900; margin-top: 8px; font-family: monospace; }
+        .dh-clock { font-size: 0.72rem; color: #94a3b8; font-weight: bold; margin-top: 3px; font-family: monospace; letter-spacing: 1px; }
 
         /* Stats Grid */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
         .stat-box { background: rgba(2, 6, 23, 0.6); border: 1px solid #334155; padding: 10px 5px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; gap: 4px; }
         .st-lbl { font-size: 0.55rem; color: #94a3b8; text-transform: uppercase; font-weight: 900; }
-        .st-val { font-size: 1rem; color: #f8fafc; font-weight: bold; font-family: monospace; }
+        .st-val { font-size: 0.95rem; color: #f8fafc; font-weight: bold; font-family: monospace; }
         .st-hl { color: #8b5cf6; }
 
-        /* Biological Tracker */
+        /* Progress Bar (Lifespan) */
+        .prog-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 14px 12px; }
+        .prog-head { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; font-weight: 900; color: #f8fafc; text-transform: uppercase; margin-bottom: 8px; }
+        .prog-track { height: 12px; background: #1e293b; border-radius: 6px; overflow: hidden; position: relative; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); border: 1px solid #334155; }
+        .prog-fill { height: 100%; background: linear-gradient(90deg, #ec4899, #8b5cf6, #f59e0b); width: 0%; border-radius: 6px; transition: width 0.8s cubic-bezier(0.1, 0.9, 0.2, 1); box-shadow: 0 0 10px rgba(236, 72, 153, 0.5); }
+        .prog-meta { display: flex; justify-content: space-between; font-size: 0.62rem; color: #94a3b8; font-weight: bold; margin-top: 8px; font-family: monospace; }
+        .prog-desc { font-size: 0.65rem; color: #cbd5e1; margin-top: 6px; text-align: center; font-weight: 700; }
+
+        /* Next Birthday Countdown */
+        .bday-box { background: rgba(16, 185, 129, 0.08); border: 1px solid #10b981; border-radius: 10px; padding: 12px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .bday-lbl { font-size: 0.7rem; color: #10b981; font-weight: 900; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 1px; }
+        .bday-timer { font-size: 1.25rem; font-weight: 900; color: #f8fafc; font-family: monospace; letter-spacing: 1px; }
+
+        /* Biological & Life Rhythm Tracker (2x2 Grid) */
         .bio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .bio-box { background: #1e293b; border: 1px dashed #334155; border-radius: 8px; padding: 12px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .bio-icon { font-size: 1.5rem; margin-bottom: 6px; }
+        .bio-box { background: #1e293b; border: 1px dashed #475569; border-radius: 10px; padding: 12px 8px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .bio-icon { font-size: 1.4rem; margin-bottom: 6px; }
         .bio-icon.heart { color: #ef4444; animation: heartbeat 1s infinite; }
         .bio-icon.breath { color: #0ea5e9; animation: breathe 3s infinite; }
-        .bio-val { font-size: 1.2rem; font-weight: 900; color: #f8fafc; font-family: monospace; }
+        .bio-icon.sleep { color: #a855f7; }
+        .bio-icon.weekend { color: #f59e0b; }
+        .bio-val { font-size: 1.15rem; font-weight: 900; color: #f8fafc; font-family: monospace; }
+        .bio-sub { font-size: 0.58rem; color: #64748b; font-weight: bold; margin-top: 3px; }
         
         @keyframes heartbeat { 0% { transform: scale(1); } 20% { transform: scale(1.15); } 40% { transform: scale(1); } 60% { transform: scale(1.15); } 80% { transform: scale(1); } 100% { transform: scale(1); } }
         @keyframes breathe { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
 
-        /* Progress Bar */
-        .prog-card { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px; }
-        .prog-head { display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 900; color: #f8fafc; text-transform: uppercase; margin-bottom: 6px; }
-        .prog-track { height: 10px; background: #1e293b; border-radius: 5px; overflow: hidden; position: relative; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
-        .prog-fill { height: 100%; background: linear-gradient(90deg, #ec4899, #f59e0b); width: 0%; border-radius: 5px; transition: width 1s cubic-bezier(0.1, 0.9, 0.2, 1); box-shadow: 0 0 10px rgba(236, 72, 153, 0.5); }
-        .prog-desc { font-size: 0.6rem; color: #94a3b8; margin-top: 6px; text-align: center; }
+        /* Merged Milestone Boxes (From milestones.html) */
+        .milestone-grid { display: flex; flex-direction: column; gap: 10px; }
+        .m-box { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 14px; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 6px; }
+        .m-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+        .m-box.gold::before { background: #f59e0b; }
+        .m-box.purple::before { background: #8b5cf6; }
+        .m-box.emerald::before { background: #10b981; }
+        .m-box.blue::before { background: #38bdf8; }
 
-        /* Next Birthday Countdown */
-        .bday-box { background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 8px; padding: 12px; text-align: center; display: flex; flex-direction: column; align-items: center; }
-        .bday-lbl { font-size: 0.7rem; color: #10b981; font-weight: 900; text-transform: uppercase; margin-bottom: 4px; }
-        .bday-timer { font-size: 1.2rem; font-weight: 900; color: #f8fafc; font-family: monospace; letter-spacing: 1px; }
+        .m-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .m-title { font-size: 0.85rem; font-weight: 900; color: #f8fafc; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+        .m-badge { font-size: 0.55rem; font-weight: 900; padding: 3px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .badge-past { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
+        .badge-future { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid #f59e0b; }
+
+        .m-date { font-size: 1.25rem; font-weight: 900; font-family: monospace; letter-spacing: -0.5px; }
+        .m-time { font-size: 0.75rem; color: #94a3b8; font-weight: bold; font-family: monospace; }
+        .m-desc { font-size: 0.68rem; color: #64748b; font-weight: bold; line-height: 1.35; border-top: 1px dashed #334155; padding-top: 6px; margin-top: 2px; }
+
+        .m-box.gold .m-date { color: #f59e0b; }
+        .m-box.purple .m-date { color: #8b5cf6; }
+        .m-box.emerald .m-date { color: #10b981; }
+        .m-box.blue .m-date { color: #38bdf8; }
 
         /* Custom Bottom Sheet Modal (Platinum) */
         #em-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
@@ -134,16 +171,17 @@
     </style>
 </head>
 <body>
-    <main id="mod-pulse-overlay" role="main" aria-label="Life Pulse Age Calculator">
+    <main id="mod-pulse-overlay" role="main" aria-label="Life Pulse and Exact Metrics Calculator">
         <header class="lp-head">
             <a href="../age.html" class="qs-back-btn" aria-label="Go Back">
                 <i class="fas fa-arrow-left" aria-hidden="true"></i>
             </a>
-            <div class="lp-tit"><i class="fas fa-fingerprint" aria-hidden="true"></i> THE LIFE PULSE</div>
+            <div class="lp-tit"><i class="fas fa-heartbeat" aria-hidden="true"></i> LIFE PULSE & METRICS</div>
         </header>
 
         <section class="lp-body">
             
+            <!-- INPUT CARD -->
             <div class="lp-card">
                 <div class="lp-lbl">
                     <label for="inp-dob">Date & Time of Birth</label>
@@ -154,7 +192,7 @@
                 </div>
 
                 <div class="lp-lbl" style="margin-top:8px;">
-                    <label>Life Expectancy (For Progress Bar)</label>
+                    <label>Baseline Lifespan (For Progress Bar)</label>
                 </div>
                 <div class="lp-inp-wrap" onclick="QS_Pulse.openModal()" aria-label="Select Region Life Expectancy">
                     <div id="sel-exp-text" class="lp-select-text">
@@ -164,17 +202,21 @@
                 </div>
             </div>
 
+            <!-- EMPTY STATE -->
             <div id="empty-state" style="text-align:center; padding: 30px 20px; color:#64748b;">
                 <i class="fas fa-hourglass-start fa-3x" style="margin-bottom:12px; opacity:0.5;"></i>
                 <div style="font-size:0.85rem; font-weight:bold;">Enter your birth details to awaken Chronos.</div>
             </div>
 
+            <!-- LIVE DASHBOARD -->
             <div id="pulse-dashboard" class="hidden" aria-live="polite">
                 
+                <!-- 1. EXACT AGE & TICKING HERO -->
                 <div class="dash-hero">
-                    <div class="dh-title">Total Ticking Seconds</div>
+                    <div class="dh-title">Total Ticking Seconds Lived</div>
                     <div class="dh-val" id="res-seconds">0</div>
                     <div class="dh-sub" id="res-exact-age">0 Yrs, 0 Mos, 0 Days</div>
+                    <div class="dh-clock" id="res-exact-clock">00 Hours : 00 Mins : 00 Secs</div>
                     
                     <div class="stats-grid">
                         <div class="stat-box">
@@ -192,33 +234,109 @@
                     </div>
                 </div>
 
+                <!-- 2. VISUAL LIFESPAN PROGRESS BAR -->
+                <div class="prog-card">
+                    <div class="prog-head">
+                        <span><i class="fas fa-chart-line" style="color:#ec4899; margin-right:5px;"></i> Lifespan Progress</span>
+                        <span id="res-prog-pct" style="color:#ec4899; font-family:monospace; font-size:0.85rem;">0.00%</span>
+                    </div>
+                    <div class="prog-track" aria-hidden="true">
+                        <div class="prog-fill" id="prog-bar"></div>
+                    </div>
+                    <div class="prog-desc" id="res-prog-text">You have lived 0.00% of the average human lifespan.</div>
+                    <div class="prog-meta">
+                        <span id="res-days-lived">Lived: 0d</span>
+                        <span id="res-days-left">Est. Left: 0d</span>
+                    </div>
+                </div>
+
+                <!-- 3. NEXT BIRTHDAY COUNTDOWN -->
+                <div class="bday-box">
+                    <span class="bday-lbl"><i class="fas fa-birthday-cake" aria-hidden="true"></i> Next Birthday Countdown</span>
+                    <div class="bday-timer" id="res-bday">000d : 00h : 00m : 00s</div>
+                </div>
+
+                <!-- 4. BIOLOGICAL & LIFESTYLE RHYTHM (HEART, BREATH, SLEEP, WEEKENDS) -->
+                <div class="lp-sec-tit">Biological & Lifestyle Pulse</div>
                 <div class="bio-grid">
                     <div class="bio-box">
                         <i class="fas fa-heart bio-icon heart" aria-hidden="true"></i>
-                        <span class="st-lbl" style="margin-bottom:4px;">Heartbeats (Approx)</span>
+                        <span class="st-lbl" style="margin-bottom:4px;">Heartbeats</span>
                         <span class="bio-val" id="res-heart">0</span>
+                        <span class="bio-sub">~80 BPM Average</span>
                     </div>
                     <div class="bio-box">
                         <i class="fas fa-wind bio-icon breath" aria-hidden="true"></i>
                         <span class="st-lbl" style="margin-bottom:4px;">Breaths Taken</span>
                         <span class="bio-val" id="res-breath">0</span>
+                        <span class="bio-sub">~16 Per Minute</span>
+                    </div>
+                    <div class="bio-box">
+                        <i class="fas fa-bed bio-icon sleep" aria-hidden="true"></i>
+                        <span class="st-lbl" style="margin-bottom:4px;">Sleep Hours Lived</span>
+                        <span class="bio-val" id="res-sleep">0</span>
+                        <span class="bio-sub" id="res-sleep-yrs">~0.0 Years Slept</span>
+                    </div>
+                    <div class="bio-box">
+                        <i class="fas fa-glass-cheers bio-icon weekend" aria-hidden="true"></i>
+                        <span class="st-lbl" style="margin-bottom:4px;">Weekends Lived</span>
+                        <span class="bio-val" id="res-weekends">0</span>
+                        <span class="bio-sub" id="res-wknd-days">0 Sat & Sun Days</span>
                     </div>
                 </div>
 
-                <div class="prog-card">
-                    <div class="prog-head">
-                        <span>Life Progress</span>
-                        <span id="res-prog-pct" style="color:#ec4899;">0.00%</span>
+                <!-- 5. MERGED EPIC CHRONO MILESTONES -->
+                <div class="lp-sec-tit">Epic Timeline Milestones</div>
+                <div class="milestone-grid">
+                    
+                    <div class="m-box gold">
+                        <div class="m-header">
+                            <div class="m-title"><i class="fas fa-crown" style="color:#f59e0b;" aria-hidden="true"></i> 1 Billion Seconds Club</div>
+                            <div class="m-badge" id="badge-1b">--</div>
+                        </div>
+                        <div>
+                            <div class="m-date" id="date-1b">--</div>
+                            <div class="m-time" id="time-1b">--</div>
+                        </div>
+                        <div class="m-desc">You reach 1,000,000,000 seconds of existence at this exact moment (~31 years & 8 months old).</div>
                     </div>
-                    <div class="prog-track" aria-hidden="true">
-                        <div class="prog-fill" id="prog-bar"></div>
-                    </div>
-                    <div class="prog-desc">Based on selected life expectancy. Make every second count.</div>
-                </div>
 
-                <div class="bday-box">
-                    <span class="bday-lbl"><i class="fas fa-birthday-cake" aria-hidden="true"></i> Next Birthday In</span>
-                    <div class="bday-timer" id="res-bday">00d : 00h : 00m : 00s</div>
+                    <div class="m-box purple">
+                        <div class="m-header">
+                            <div class="m-title"><i class="fas fa-calendar-check" style="color:#8b5cf6;" aria-hidden="true"></i> 10,000 Days Old</div>
+                            <div class="m-badge" id="badge-10k">--</div>
+                        </div>
+                        <div>
+                            <div class="m-date" id="date-10k">--</div>
+                            <div class="m-time" id="time-10k">--</div>
+                        </div>
+                        <div class="m-desc">A major four-zeros day milestone, falling right around age 27.3.</div>
+                    </div>
+
+                    <div class="m-box blue">
+                        <div class="m-header">
+                            <div class="m-title"><i class="fas fa-hourglass-half" style="color:#38bdf8;" aria-hidden="true"></i> 100,000 Hours Old</div>
+                            <div class="m-badge" id="badge-100k">--</div>
+                        </div>
+                        <div>
+                            <div class="m-date" id="date-100k">--</div>
+                            <div class="m-time" id="time-100k">--</div>
+                        </div>
+                        <div class="m-desc">100,000 hours of living, unlocked at ~11 years and 5 months of age.</div>
+                    </div>
+
+                    <div class="m-box emerald">
+                        <div class="m-header">
+                            <div class="m-title"><i class="fas fa-star-half-alt" style="color:#10b981;" aria-hidden="true"></i> Next Half-Birthday</div>
+                            <div class="m-badge badge-future">Upcoming</div>
+                        </div>
+                        <div>
+                            <div class="m-date" id="date-half">--</div>
+                            <div class="m-time" id="time-half">--</div>
+                        </div>
+                        <div class="m-desc">The exact 6-month midpoint before or after your actual birthday.</div>
+                    </div>
+
                 </div>
 
             </div>
@@ -226,6 +344,7 @@
         </section>
     </main>
 
+    <!-- REGION EXPECTANCY MODAL -->
     <div id="em-modal">
         <div class="em-content">
             <div class="em-head">
@@ -235,23 +354,21 @@
             <div class="em-search">
                 <input type="text" id="em-search-inp" class="em-search-inp" placeholder="Search Countries..." onkeyup="QS_Pulse.filterExpectancy()">
             </div>
-            <div class="em-list" id="expectancy-list">
-                </div>
+            <div class="em-list" id="expectancy-list"></div>
         </div>
     </div>
 
     <script>
-        /* QUICKSOLVE PLATINUM - THE LIFE PULSE ENGINE V2
-           Features: Custom Bottom Sheet, 20+ Regions, Live Ticking Engine
+        /* QUICKSOLVE PLATINUM - THE LIFE PULSE & MILESTONES ENGINE V3
+           Features: Live Ticking Breakdown, Sleep & Weekend Math, Lifespan Progress, 1B Secs Club
         */
-
         (function() {
             window.QS_Pulse = {
                 
                 timerId: null,
-                currentExpectancy: 73, // Default global
+                currentExpectancy: 73,
+                currentRegionName: 'Global Average',
 
-                // Platinum Database for Life Expectancy
                 expectancyDb: {
                     'global': { n: 'Global Average', f: '🌍', y: 73 },
                     'in': { n: 'India', f: '🇮🇳', y: 70 },
@@ -277,19 +394,17 @@
                 },
                 
                 initListener: function() {
-                    // Pre-fill DOB to 20 years ago for visual testing if empty
                     const dobInp = document.getElementById('inp-dob');
                     if(dobInp && !dobInp.value) {
                         let d = new Date();
-                        d.setFullYear(d.getFullYear() - 20);
-                        let iso = d.toISOString();
-                        dobInp.value = iso.substring(0, 16);
+                        d.setFullYear(d.getFullYear() - 22);
+                        dobInp.value = d.toISOString().substring(0, 16);
                     }
 
                     this.populateModal();
 
                     window.addEventListener('qs-tool-opened', (e) => {
-                        if(e.detail && e.detail.tool === 'age_suites/life_pulse.js') {
+                        if(e.detail && (e.detail.tool === 'age_suites/life_pulse.js' || e.detail.tool === 'age_suites/milestones.js')) {
                             this.startEngine();
                         }
                     });
@@ -355,9 +470,45 @@
                 selectExpectancy: function(code) {
                     const data = this.expectancyDb[code];
                     this.currentExpectancy = data.y;
+                    this.currentRegionName = data.n;
                     document.getElementById('sel-exp-text').innerHTML = `${data.f} ${data.n} (~${data.y} Years)`;
                     this.closeModal();
                     this.startEngine();
+                },
+
+                formatDateOutput: function(dateObj) {
+                    const optionsDate = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+                    const optionsTime = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                    return {
+                        dateStr: dateObj.toLocaleDateString('en-US', optionsDate),
+                        timeStr: dateObj.toLocaleTimeString('en-US', optionsTime)
+                    };
+                },
+
+                setBadge: function(badgeId, targetDate, now) {
+                    const el = document.getElementById(badgeId);
+                    if (!el) return;
+                    if (targetDate <= now) {
+                        el.className = "m-badge badge-past";
+                        el.innerText = "Achieved ✓";
+                    } else {
+                        el.className = "m-badge badge-future";
+                        el.innerText = "Upcoming";
+                    }
+                },
+
+                countWeekendDays: function(startDate, endDate) {
+                    const totalDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
+                    if (totalDays <= 0) return 0;
+                    const fullWeeks = Math.floor(totalDays / 7);
+                    let weekendDays = fullWeeks * 2;
+                    const remDays = totalDays % 7;
+                    let startDay = startDate.getDay();
+                    for (let i = 0; i < remDays; i++) {
+                        let d = (startDay + i) % 7;
+                        if (d === 0 || d === 6) weekendDays++;
+                    }
+                    return weekendDays;
                 },
 
                 startEngine: function() {
@@ -370,6 +521,7 @@
                     if (this.timerId) clearInterval(this.timerId);
                     
                     this.calculate();
+                    this.calculateMilestones();
                     
                     this.timerId = setInterval(() => {
                         this.calculate();
@@ -384,23 +536,30 @@
                     const now = new Date();
                     
                     if (dob > now) {
-                        if(document.getElementById('res-seconds')) document.getElementById('res-seconds').innerText = "ERROR";
-                        if(document.getElementById('res-exact-age')) document.getElementById('res-exact-age').innerText = "Time traveler detected!";
+                        document.getElementById('res-seconds').innerText = "ERROR";
+                        document.getElementById('res-exact-age').innerText = "Time traveler detected!";
+                        document.getElementById('res-exact-clock').innerText = "Future DOB not allowed";
                         return;
                     }
 
-                    // Time Diff Math
+                    // 1. Total Time Diff Math
                     const diffMs = now - dob;
                     const diffSec = Math.floor(diffMs / 1000);
                     const diffMin = Math.floor(diffSec / 60);
                     const diffHrs = Math.floor(diffMin / 60);
                     const diffDays = Math.floor(diffHrs / 24);
 
-                    // Exact Age
+                    // 2. Exact Age Breakdown (Y, M, D + H, M, S)
                     let ageY = now.getFullYear() - dob.getFullYear();
                     let ageM = now.getMonth() - dob.getMonth();
                     let ageD = now.getDate() - dob.getDate();
+                    let ageH = now.getHours() - dob.getHours();
+                    let ageMin = now.getMinutes() - dob.getMinutes();
+                    let ageSec = now.getSeconds() - dob.getSeconds();
 
+                    if (ageSec < 0) { ageSec += 60; ageMin--; }
+                    if (ageMin < 0) { ageMin += 60; ageH--; }
+                    if (ageH < 0) { ageH += 24; ageD--; }
                     if (ageD < 0) {
                         ageM--;
                         let prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
@@ -411,21 +570,29 @@
                         ageM += 12;
                     }
 
-                    // Biological Math
-                    const totalHeartbeats = diffMin * 80;
-                    const totalBreaths = diffMin * 16;
+                    const pad = (num) => num.toString().padStart(2, '0');
+                    const fmt = (n) => n.toLocaleString('en-US');
 
-                    // Progress Bar
+                    // 3. Biological & Lifestyle Metrics
+                    const totalHeartbeats = Math.floor(diffSec * (80 / 60)); // ~1.33 beats/sec
+                    const totalBreaths = Math.floor(diffSec * (16 / 60));    // ~0.266 breaths/sec
+                    const sleepHours = Math.floor(diffHrs / 3);              // ~8 hrs/day (33.3%)
+                    const sleepYears = (sleepHours / (24 * 365.25)).toFixed(1);
+                    const weekendDays = this.countWeekendDays(dob, now);
+                    const fullWeekends = Math.floor(weekendDays / 2);
+
+                    // 4. Lifespan Progress Bar
                     const expectYears = this.currentExpectancy;
-                    const expectedDays = expectYears * 365.25; 
+                    const expectedDays = Math.floor(expectYears * 365.25); 
                     let progPct = (diffDays / expectedDays) * 100;
                     if (progPct > 100) progPct = 100;
                     if (progPct < 0) progPct = 0;
+                    const daysLeft = Math.max(0, expectedDays - diffDays);
 
-                    // Next Birthday
+                    // 5. Next Birthday Countdown
                     let nextBday = new Date(dob);
                     nextBday.setFullYear(now.getFullYear());
-                    if (now > nextBday) {
+                    if (now >= nextBday) {
                         nextBday.setFullYear(now.getFullYear() + 1);
                     }
                     
@@ -435,23 +602,72 @@
                     let bHr = Math.floor((bdayDiffMs / (1000 * 60 * 60)) % 24);
                     let bDays = Math.floor(bdayDiffMs / (1000 * 60 * 60 * 24));
 
-                    const pad = (num) => num.toString().padStart(2, '0');
-                    const fmt = (n) => n.toLocaleString('en-US');
+                    // Render DOM Updates
+                    document.getElementById('res-seconds').innerText = fmt(diffSec);
+                    document.getElementById('res-exact-age').innerText = `${ageY} Yrs, ${ageM} Mos, ${ageD} Days`;
+                    document.getElementById('res-exact-clock').innerText = `${pad(ageH)} Hours : ${pad(ageMin)} Mins : ${pad(ageSec)} Secs`;
                     
-                    if(document.getElementById('res-seconds')) document.getElementById('res-seconds').innerText = fmt(diffSec);
-                    if(document.getElementById('res-exact-age')) document.getElementById('res-exact-age').innerText = `${ageY} Yrs, ${ageM} Mos, ${ageD} Days`;
+                    document.getElementById('res-days').innerText = fmt(diffDays);
+                    document.getElementById('res-hours').innerText = fmt(diffHrs);
+                    document.getElementById('res-mins').innerText = fmt(diffMin);
                     
-                    if(document.getElementById('res-days')) document.getElementById('res-days').innerText = fmt(diffDays);
-                    if(document.getElementById('res-hours')) document.getElementById('res-hours').innerText = fmt(diffHrs);
-                    if(document.getElementById('res-mins')) document.getElementById('res-mins').innerText = fmt(diffMin);
+                    document.getElementById('res-heart').innerText = fmt(totalHeartbeats);
+                    document.getElementById('res-breath').innerText = fmt(totalBreaths);
+                    document.getElementById('res-sleep').innerText = fmt(sleepHours);
+                    document.getElementById('res-sleep-yrs').innerText = `~${sleepYears} Years Slept`;
+                    document.getElementById('res-weekends').innerText = fmt(fullWeekends);
+                    document.getElementById('res-wknd-days').innerText = `${fmt(weekendDays)} Sat & Sun Days`;
                     
-                    if(document.getElementById('res-heart')) document.getElementById('res-heart').innerText = fmt(totalHeartbeats);
-                    if(document.getElementById('res-breath')) document.getElementById('res-breath').innerText = fmt(totalBreaths);
+                    document.getElementById('res-prog-pct').innerText = progPct.toFixed(2) + '%';
+                    document.getElementById('prog-bar').style.width = progPct + '%';
+                    document.getElementById('res-prog-text').innerText = `You have lived ${progPct.toFixed(2)}% of ${this.currentRegionName} lifespan (${expectYears} Yrs).`;
+                    document.getElementById('res-days-lived').innerText = `Lived: ${fmt(diffDays)}d`;
+                    document.getElementById('res-days-left').innerText = `Est. Left: ${fmt(daysLeft)}d`;
                     
-                    if(document.getElementById('res-prog-pct')) document.getElementById('res-prog-pct').innerText = progPct.toFixed(2) + '%';
-                    if(document.getElementById('prog-bar')) document.getElementById('prog-bar').style.width = progPct + '%';
-                    
-                    if(document.getElementById('res-bday')) document.getElementById('res-bday').innerText = `${pad(bDays)}d : ${pad(bHr)}h : ${pad(bMin)}m : ${pad(bSec)}s`;
+                    document.getElementById('res-bday').innerText = `${pad(bDays)}d : ${pad(bHr)}h : ${pad(bMin)}m : ${pad(bSec)}s`;
+                },
+
+                calculateMilestones: function() {
+                    const dobVal = document.getElementById('inp-dob').value;
+                    if (!dobVal) return;
+
+                    const dob = new Date(dobVal);
+                    const now = new Date();
+                    if (dob > now) return;
+
+                    const dobMs = dob.getTime();
+
+                    // 1. 1 Billion Seconds
+                    const date1B = new Date(dobMs + (1000000000 * 1000));
+                    const fmt1B = this.formatDateOutput(date1B);
+                    document.getElementById('date-1b').innerText = fmt1B.dateStr;
+                    document.getElementById('time-1b').innerText = fmt1B.timeStr;
+                    this.setBadge('badge-1b', date1B, now);
+
+                    // 2. 10,000 Days
+                    const date10k = new Date(dobMs + (10000 * 24 * 60 * 60 * 1000));
+                    const fmt10k = this.formatDateOutput(date10k);
+                    document.getElementById('date-10k').innerText = fmt10k.dateStr;
+                    document.getElementById('time-10k').innerText = fmt10k.timeStr;
+                    this.setBadge('badge-10k', date10k, now);
+
+                    // 3. 100,000 Hours
+                    const date100k = new Date(dobMs + (100000 * 60 * 60 * 1000));
+                    const fmt100k = this.formatDateOutput(date100k);
+                    document.getElementById('date-100k').innerText = fmt100k.dateStr;
+                    document.getElementById('time-100k').innerText = fmt100k.timeStr;
+                    this.setBadge('badge-100k', date100k, now);
+
+                    // 4. Next Half-Birthday
+                    let nextHalf = new Date(dob);
+                    nextHalf.setFullYear(now.getFullYear());
+                    nextHalf.setMonth(nextHalf.getMonth() + 6);
+                    if (nextHalf < now) {
+                        nextHalf.setFullYear(nextHalf.getFullYear() + 1);
+                    }
+                    const fmtHalf = this.formatDateOutput(nextHalf);
+                    document.getElementById('date-half').innerText = fmtHalf.dateStr;
+                    document.getElementById('time-half').innerText = fmtHalf.timeStr;
                 }
             };
 

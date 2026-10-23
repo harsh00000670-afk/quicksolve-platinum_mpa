@@ -8,9 +8,9 @@
     <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
     <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
 
-    <title>Chronos Age Suite | Life Pulse & Milestones | QuickSolve Platinum</title>
-    <meta name="description" content="Advanced age calculators, real-time life pulse, cosmic planet age, biological pet years, and retirement countdowns. Master your time with QuickSolve Platinum.">
-    <meta name="keywords" content="age calculator, life pulse, 1 billion seconds old, exact age calculator, planet age calculator, retirement countdown, QuickSolve Platinum">
+    <title>Chronos Age Suite | Life Pulse, Cosmic & Age Twin | QuickSolve Platinum</title>
+    <meta name="description" content="Master your timeline with 4 super-modules: Exact Life Pulse, Interstellar Space Age, Historical Age Twin, and Legal/Bio-Age Planner. 100% Offline.">
+    <meta name="keywords" content="age calculator, life pulse, time dilation calculator, historical age twin, planet age calculator, biological age, QuickSolve Platinum">
     <meta name="author" content="Harsh - QuickSolve Team">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://quicksolve-platinum.netlify.app/age.html">
@@ -24,7 +24,7 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="QuickSolve Platinum">
     <meta property="og:title" content="Chronos Age Suite - Decode Your Timeline">
-    <meta property="og:description" content="Track your exact life progress, cosmic age, and ultimate milestones in real-time.">
+    <meta property="og:description" content="Track your exact life progress, interstellar age, historical achievements at your age, and biological health.">
     <meta property="og:image" content="logo.png">
     
     <link rel="icon" type="image/png" href="logo.png">
@@ -60,7 +60,7 @@
         .d-1 { animation-delay: 0.05s; } .d-2 { animation-delay: 0.1s; }
         .d-3 { animation-delay: 0.15s; } .d-4 { animation-delay: 0.2s; }
         .d-5 { animation-delay: 0.25s; } .d-6 { animation-delay: 0.3s; }
-        .d-7 { animation-delay: 0.35s; }
+        .d-7 { animation-delay: 0.35s; } .d-8 { animation-delay: 0.4s; }
 
         /* PLATINUM HORIZONTAL CARDS */
         .tools-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 15px; }
@@ -120,6 +120,40 @@
             letter-spacing: 2px; margin: 30px 0 10px 5px; display: flex; align-items: center; gap: 8px;
         }
         .section-divider div { flex: 1; height: 1px; background: var(--border-subtle); opacity: 0.5; }
+
+        /* =========================================
+           FUN TRIVIA SUB-TAB / VAULT DRAWER
+           ========================================= */
+        .trivia-toggle-btn {
+            width: 100%; background: rgba(30, 41, 59, 0.6); border: 1px dashed var(--border-subtle);
+            border-radius: 12px; padding: 14px 18px; color: var(--text-sub); font-family: inherit;
+            font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px;
+            display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+            margin-top: 25px; transition: 0.25s;
+        }
+        .trivia-toggle-btn:active { transform: scale(0.98); border-color: var(--accent-gold); color: var(--text-main); }
+        .trivia-toggle-btn .tt-left { display: flex; align-items: center; gap: 10px; }
+        .trivia-toggle-btn .tt-chevron { transition: transform 0.3s ease; }
+        .trivia-toggle-btn.open { border-style: solid; border-color: var(--accent-gold); background: rgba(245, 158, 11, 0.05); color: var(--text-main); }
+        .trivia-toggle-btn.open .tt-chevron { transform: rotate(180deg); color: var(--accent-gold); }
+
+        .trivia-sub-drawer {
+            display: none; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;
+            animation: slideDown 0.25s ease-out;
+        }
+        .trivia-sub-drawer.show { display: grid; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+        .mini-tool-card {
+            background: #131b2e; border: 1px solid var(--border-subtle); border-radius: 12px;
+            padding: 14px; text-decoration: none; color: inherit; display: flex; flex-direction: column;
+            gap: 8px; transition: 0.2s; position: relative;
+        }
+        .mini-tool-card:active { transform: scale(0.96); border-color: var(--accent-gold); }
+        .mtc-head { display: flex; align-items: center; justify-content: space-between; }
+        .mtc-icon { font-size: 1.2rem; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .mtc-title { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
+        .mtc-desc { font-size: 0.7rem; color: var(--text-sub); line-height: 1.3; }
     </style>
 </head>
 <body>
@@ -129,7 +163,7 @@
                 <i class="fas fa-arrow-left" aria-hidden="true"></i>
             </a>
             <div class="brand" style="margin-right: auto; color: var(--accent-purple); font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px;">
-                <i class="fas fa-hourglass-half" aria-hidden="true"></i> Age Suite
+                <i class="fas fa-hourglass-half" aria-hidden="true"></i> Chronos Suite
             </div>
         </header>
 
@@ -137,85 +171,101 @@
             
             <div class="hero anim-card d-1" style="text-align: center; margin-bottom: 25px;">
                 <h2 style="margin: 0; font-size: 2rem; background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;">Age & Timeline</h2>
-                <p style="color: var(--text-sub); font-size: 0.85rem; margin-top: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">> decode --life_pulse --realtime</p>
+                <p style="color: var(--text-sub); font-size: 0.85rem; margin-top: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 600;">> chronos --v3.0 --4_core_engines</p>
             </div>
             
             <div class="section-divider anim-card d-2">
-                <i class="fas fa-heartbeat" style="color:var(--accent-pink);"></i> Core Timeline
+                <i class="fas fa-layer-group" style="color:var(--accent-pink);"></i> 4 Super Modules
                 <div></div>
             </div>
             
-            <nav class="tools-grid" aria-label="Core Timeline Tools">
+            <nav class="tools-grid" aria-label="Primary Chronos Modules">
+                <!-- MODULE 1: Exact Life Metrics & Life Pulse -->
                 <a href="age_suites/life_pulse.html" class="tool-card c-pink anim-card d-3">
-                    <div class="tc-icon-wrap"><i class="fas fa-fingerprint"></i></div>
+                    <div class="tc-icon-wrap"><i class="fas fa-heartbeat"></i></div>
                     <div class="tc-info">
-                        <div class="tc-title">The Life Pulse <span class="badge">LIVE</span></div>
-                        <div class="tc-desc">Track your exact age in years, breaths, and heartbeats in real-time.</div>
+                        <div class="tc-title">Life Pulse & Metrics <span class="badge">CORE LIVE</span></div>
+                        <div class="tc-desc">Exact ticking age, heartbeats, sleep hours, weekends lived, 1B seconds club & lifespan progress bar.</div>
                     </div>
                     <i class="fas fa-chevron-right tc-arrow"></i>
                 </a>
                 
-                <a href="age_suites/milestones.html" class="tool-card c-purple anim-card d-4">
-                    <div class="tc-icon-wrap"><i class="fas fa-trophy"></i></div>
+                <!-- MODULE 2: Space & Interstellar Age -->
+                <a href="age_suites/cosmic_age.html" class="tool-card c-blue anim-card d-4">
+                    <div class="tc-icon-wrap"><i class="fas fa-user-astronaut"></i></div>
                     <div class="tc-info">
-                        <div class="tc-title">Milestone Tracker <span class="badge">GOAL</span></div>
-                        <div class="tc-desc">Countdowns to your 10,000th day, 1 billion seconds, and epic milestones.</div>
+                        <div class="tc-title">Space & Interstellar Age <span class="badge">COSMIC</span></div>
+                        <div class="tc-desc">Interactive solar system visualizer, planetary birthdays, and Einstein's Relativity Time Dilation engine.</div>
                     </div>
                     <i class="fas fa-chevron-right tc-arrow"></i>
                 </a>
-                
-                <a href="age_suites/cosmic_age.html" class="tool-card c-blue anim-card d-5">
-                    <div class="tc-icon-wrap"><i class="fas fa-meteor"></i></div>
+
+                <!-- MODULE 3: Age Twin / Historical Achievement Engine (NEW) -->
+                <a href="age_suites/age_twin.html" class="tool-card c-purple anim-card d-5">
+                    <div class="tc-icon-wrap"><i class="fas fa-crown"></i></div>
                     <div class="tc-info">
-                        <div class="tc-title">Cosmic Planet Age <span class="badge">SPACE</span></div>
-                        <div class="tc-desc">Find out your exact age and next birthday on Mars, Jupiter, and beyond.</div>
+                        <div class="tc-title">Age Twin: "At Your Age..." <span class="badge">NEW</span></div>
+                        <div class="tc-desc">Discover what legends like Einstein, Steve Jobs, or Sachin Tendulkar achieved at your exact age.</div>
+                    </div>
+                    <i class="fas fa-chevron-right tc-arrow"></i>
+                </a>
+
+                <!-- MODULE 4: Legal Milestones & Biological Age -->
+                <a href="age_suites/pro_legal.html" class="tool-card c-orange anim-card d-6">
+                    <div class="tc-icon-wrap"><i class="fas fa-balance-scale"></i></div>
+                    <div class="tc-info">
+                        <div class="tc-title">Legal & Biological Age <span class="badge">BIO + PRO</span></div>
+                        <div class="tc-desc">Global driving/voting/retirement tracker paired with a clinical lifestyle Biological vs Real Age estimator.</div>
                     </div>
                     <i class="fas fa-chevron-right tc-arrow"></i>
                 </a>
             </nav>
 
-            <div class="section-divider anim-card d-6">
-                <i class="fas fa-dna" style="color:var(--accent-green);"></i> Biology & Trivia
-                <div></div>
-            </div>
-            
-            <nav class="tools-grid" aria-label="Biology and Trivia Tools">
-                <a href="age_suites/bio_pet.html" class="tool-card c-green anim-card d-7">
-                    <div class="tc-icon-wrap"><i class="fas fa-paw"></i></div>
-                    <div class="tc-info">
-                        <div class="tc-title">Pet & Heart Age <span class="badge">BIO</span></div>
-                        <div class="tc-desc">Convert your age to dog/cat years and calculate biological aging.</div>
-                    </div>
-                    <i class="fas fa-chevron-right tc-arrow"></i>
-                </a>
-                
-                <a href="age_suites/zodiac_trivia.html" class="tool-card c-gold anim-card d-8">
-                    <div class="tc-icon-wrap"><i class="fas fa-star-and-crescent"></i></div>
-                    <div class="tc-info">
-                        <div class="tc-title">Zodiac & Trivia <span class="badge">FUN</span></div>
-                        <div class="tc-desc">Discover your generation, birthstone, Chinese zodiac, and birth phase.</div>
-                    </div>
-                    <i class="fas fa-chevron-right tc-arrow"></i>
-                </a>
-            </nav>
+            <!-- CLEAN SUB-TAB: Fun Trivia Vault (Pet Age & Zodiac Trivia) -->
+            <button type="button" class="trivia-toggle-btn anim-card d-7" id="trivia-btn" onclick="toggleTriviaVault()" aria-expanded="false">
+                <span class="tt-left">
+                    <i class="fas fa-sparkles" style="color: var(--accent-gold);"></i>
+                    Fun Trivia & Side Quests (Pet & Zodiac)
+                </span>
+                <i class="fas fa-chevron-down tt-chevron"></i>
+            </button>
 
-            <div class="section-divider anim-card d-9">
-                <i class="fas fa-briefcase" style="color:var(--accent-orange);"></i> Life Planner
-                <div></div>
-            </div>
-            
-            <nav class="tools-grid" aria-label="Life Planning Tools">
-                <a href="age_suites/pro_legal.html" class="tool-card c-orange anim-card d-10">
-                    <div class="tc-icon-wrap"><i class="fas fa-user-tie"></i></div>
-                    <div class="tc-info">
-                        <div class="tc-title">Pro / Legal Limits <span class="badge">PRO</span></div>
-                        <div class="tc-desc">Check worldwide legal ages for driving, voting, and retirement countdown.</div>
+            <div class="trivia-sub-drawer" id="trivia-vault" aria-label="Fun Trivia Sub-Tools">
+                <a href="age_suites/bio_pet.html" class="mini-tool-card">
+                    <div class="mtc-head">
+                        <div class="mtc-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-green);">
+                            <i class="fas fa-paw"></i>
+                        </div>
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-green);">30+ PETS</span>
                     </div>
-                    <i class="fas fa-chevron-right tc-arrow"></i>
+                    <div class="mtc-title">Pet Age Converter</div>
+                    <div class="mtc-desc">Convert human years to dog, cat & animal years.</div>
                 </a>
-            </nav>
+
+                <a href="age_suites/zodiac_trivia.html" class="mini-tool-card">
+                    <div class="mtc-head">
+                        <div class="mtc-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-gold);">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                        <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: var(--accent-gold);">ASTRO</span>
+                    </div>
+                    <div class="mtc-title">Zodiac & Lunar</div>
+                    <div class="mtc-desc">Birth moon phase, Chinese element & birthstones.</div>
+                </a>
+            </div>
 
         </section>
     </main>
+
+    <script>
+        function toggleTriviaVault() {
+            const btn = document.getElementById('trivia-btn');
+            const vault = document.getElementById('trivia-vault');
+            const isOpen = vault.classList.toggle('show');
+            btn.classList.toggle('open', isOpen);
+            btn.setAttribute('aria-expanded', isOpen);
+            if (window.doHaptic) window.doHaptic();
+        }
+    </script>
 </body>
 </html>
