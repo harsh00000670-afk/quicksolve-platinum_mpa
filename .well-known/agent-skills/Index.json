@@ -1,0 +1,441 @@
+{
+  "version": "1.0",
+  "site": "https://quicksolve-platinum.netlify.app",
+  "skills": [
+    {
+      "id": "scientific-calculate",
+      "name": "Scientific Calculation",
+      "type": "function",
+      "description": "Evaluate mathematical expressions with trigonometry, logarithms, constants, combinatorics, and supported physics constants. Supports voice input in the web interface.",
+      "url": "https://quicksolve-platinum.netlify.app/scientific_suite/scientific.html",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Mathematical expression to evaluate."
+          },
+          "angleMode": {
+            "type": "string",
+            "enum": ["deg", "rad"],
+            "default": "deg"
+          }
+        },
+        "required": ["expression"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "number"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "tags": ["math", "science", "education", "voice"],
+      "authentication": "none"
+    },
+    {
+      "id": "programmer-base-convert",
+      "name": "Base Conversion",
+      "type": "function",
+      "description": "Convert values between binary, octal, decimal, and hexadecimal representations.",
+      "url": "https://quicksolve-platinum.netlify.app/programmer_suites/base_calc.html",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "fromBase": {
+            "type": "integer",
+            "enum": [2, 8, 10, 16]
+          },
+          "toBase": {
+            "type": "integer",
+            "enum": [2, 8, 10, 16]
+          }
+        },
+        "required": ["value", "fromBase", "toBase"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string"
+          }
+        }
+      },
+      "tags": ["developer", "programming", "binary", "hex"],
+      "authentication": "none"
+    },
+    {
+      "id": "programmer-json-format",
+      "name": "JSON Format & Validate",
+      "type": "function",
+      "description": "Prettify, minify, and validate JSON data locally in the browser.",
+      "url": "https://quicksolve-platinum.netlify.app/programmer_suites/json_fmt.html",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "json": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string",
+            "enum": ["prettify", "minify", "validate"]
+          }
+        },
+        "required": ["json"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string"
+          },
+          "valid": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "tags": ["developer", "json", "debugging"],
+      "authentication": "none"
+    },
+    {
+      "id": "unit-convert",
+      "name": "Unit Conversion",
+      "type": "function",
+      "description": "Convert values across supported physical dimensions and units, including linear and non-linear conversions such as temperature and fuel economy.",
+      "url": "https://quicksolve-platinum.netlify.app/unit.html",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "fromUnit": {
+            "type": "string"
+          },
+          "toUnit": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          }
+        },
+        "required": ["value", "fromUnit", "toUnit"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "dimension": {
+            "type": "string"
+          }
+        }
+      },
+      "tags": ["physics", "engineering", "conversion", "science"],
+      "authentication": "none"
+    },
+    {
+      "id": "gst-calculate",
+      "name": "GST Calculation (India)",
+      "type": "function",
+      "description": "Calculate GST-related values including ITC adjustment, multi-item bills, late fees, RCM, scheme comparison, and export refund calculations.",
+      "url": "https://quicksolve-platinum.netlify.app/gst.html",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string",
+            "enum": [
+              "itc",
+              "multi-bill",
+              "late-fee",
+              "rcm",
+              "scheme-compare",
+              "refund"
+            ]
+          },
+          "params": {
+            "type": "object"
+          }
+        },
+        "required": ["tool"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object"
+          }
+        }
+      },
+      "tags": ["finance", "tax", "india", "gst", "business"],
+      "authentication": "none"
+    },
+    {
+      "id": "loan-emi",
+      "name": "Loan EMI & Finance",
+      "type": "function",
+      "description": "Calculate loan EMI and perform supported loan, prepayment, moratorium, rate, eligibility, transfer, and tax-benefit calculations.",
+      "url": "https://quicksolve-platinum.netlify.app/loan.html",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string",
+            "enum": [
+              "emi",
+              "prepay",
+              "moratorium",
+              "apr",
+              "flat-to-reducing",
+              "compare",
+              "eligibility",
+              "transfer"
+            ]
+          },
+          "params": {
+            "type": "object"
+          }
+        },
+        "required": ["tool"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object"
+          }
+        }
+      },
+      "tags": ["finance", "loan", "emi", "personal-finance", "banking"],
+      "authentication": "none"
+    },
+    {
+      "id": "currency-convert",
+      "name": "Currency Conversion",
+      "type": "function",
+      "description": "Convert supported fiat currencies using live exchange-rate data retrieved from a third-party service. Network access is required.",
+      "url": "https://quicksolve-platinum.netlify.app/currency_suites/fiat_converter.html",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          }
+        },
+        "required": ["amount", "from", "to"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "number"
+          },
+          "rate": {
+            "type": "number"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      },
+      "tags": ["finance", "forex", "currency", "live-data"],
+      "authentication": "none",
+      "networkRequired": true
+    },
+    {
+      "id": "percentage-analyze",
+      "name": "Percentage Analysis",
+      "type": "function",
+      "description": "Perform percentage-based calculations including crash recovery, margin versus markup, inflation effects, rate shocks, successive changes, expense ratios, and target calculations.",
+      "url": "https://quicksolve-platinum.netlify.app/percentage.html",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "params": {
+            "type": "object"
+          }
+        },
+        "required": ["tool"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object"
+          }
+        }
+      },
+      "tags": ["finance", "math", "percentage"],
+      "authentication": "none"
+    },
+    {
+      "id": "discount-analyze",
+      "name": "Discount & Deal Analysis",
+      "type": "function",
+      "description": "Calculate and compare discounts, BOGO offers, card caps, loyalty benefits, bill splitting, EMI versus cash, cashback, additional costs, depreciation, seller margins, and wholesale pricing.",
+      "url": "https://quicksolve-platinum.netlify.app/discount.html",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "params": {
+            "type": "object"
+          }
+        },
+        "required": ["tool"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object"
+          }
+        }
+      },
+      "tags": ["shopping", "ecommerce", "finance", "consumer"],
+      "authentication": "none"
+    },
+    {
+      "id": "health-metrics",
+      "name": "Health & Body Metrics",
+      "type": "function",
+      "description": "Calculate body metrics including BMI, body-fat estimates, lean body mass, relative fat mass, ponderal index, waist-to-hip ratio, waist-to-height ratio, and ideal-weight estimates.",
+      "url": "https://quicksolve-platinum.netlify.app/health.html",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "params": {
+            "type": "object"
+          }
+        },
+        "required": ["tool"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object"
+          }
+        }
+      },
+      "tags": ["health", "fitness", "body-composition"],
+      "authentication": "none"
+    },
+    {
+      "id": "time-calculate",
+      "name": "Time & Date Calculations",
+      "type": "function",
+      "description": "Perform supported time and date calculations including sleep cycles, date arithmetic, work billing, timezone overlap, focus timing, and relativistic time calculations.",
+      "url": "https://quicksolve-platinum.netlify.app/time.html",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "params": {
+            "type": "object"
+          }
+        },
+        "required": ["tool"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object"
+          }
+        }
+      },
+      "tags": ["productivity", "time", "scheduling", "date"],
+      "authentication": "none"
+    },
+    {
+      "id": "age-calculate",
+      "name": "Age & Timeline Calculations",
+      "type": "function",
+      "description": "Perform age and timeline calculations including milestone dates, planetary age conversions, pet-age estimates, and other supported age-related calculations.",
+      "url": "https://quicksolve-platinum.netlify.app/age.html",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "params": {
+            "type": "object"
+          }
+        },
+        "required": ["tool"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object"
+          }
+        }
+      },
+      "tags": ["life", "age", "astronomy", "biology"],
+      "authentication": "none"
+    },
+    {
+      "id": "graph-visualize",
+      "name": "Equation & Financial Charting",
+      "type": "function",
+      "description": "Generate supported equation and financial visualizations, including algebraic and trigonometric plots, compounding curves, EMI amortization, break-even analysis, and depreciation curves.",
+      "url": "https://quicksolve-platinum.netlify.app/graph.html",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "params": {
+            "type": "object"
+          }
+        },
+        "required": ["tool"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "dataPoints": {
+            "type": "array"
+          }
+        }
+      },
+      "tags": ["math", "visualization", "finance", "education", "charts"],
+      "authentication": "none"
+    }
+  ]
+}
