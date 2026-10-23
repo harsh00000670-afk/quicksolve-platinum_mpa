@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Life Progress | Memento Mori | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           LIFE PROGRESS - PLATINUM DRUM UI (FIXED)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-gold: #fbbd23;
+            --accent-gold-glow: rgba(251, 189, 35, 0.2);
+            --accent-purple: #a855f7;
+            --accent-purple-glow: rgba(168, 85, 247, 0.2);
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Ambient Glowing Background Orbs */
+        .bg-glow {
+            position: fixed; border-radius: 50%; filter: blur(60px); opacity: 0.4; z-index: -1;
+        }
+        .glow-1 { top: 10%; left: 10%; width: 150px; height: 150px; background: var(--accent-gold); }
+        .glow-2 { top: 30%; right: -50px; width: 200px; height: 200px; background: var(--accent-purple); }
+        .glow-3 { bottom: 10%; left: -50px; width: 180px; height: 180px; background: #3b82f6; }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.8); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .head-left { display: flex; align-items: center; gap: 12px; }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-gold); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+        .current-date { font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; }
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #fbbd23, #f87171); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--accent-gold); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* MAIN INPUT CARD */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(251, 189, 35, 0.3); border-radius: 16px; 
+            padding: 15px; margin-bottom: 20px; box-shadow: 0 10px 40px var(--accent-gold-glow);
+        }
+        .sec-lbl { font-size: 0.8rem; color: var(--text-main); font-weight: 600; margin-bottom: 10px; display: block; }
+
+        /* DRUM SCROLLER ENGINE - COMPACTED */
+        .drum-wrapper { display: flex; justify-content: space-around; align-items: center; position: relative; margin-bottom: 15px; padding: 5px 0;}
+        .drum-col { display: flex; flex-direction: column; align-items: center; width: 30%; position: relative; z-index: 2; }
+        
+        .drum-btn { background: transparent; border: none; color: var(--accent-gold); font-size: 1.3rem; padding: 2px 0; cursor: pointer; transition: 0.2s; }
+        .drum-btn:active { transform: scale(0.8); }
+        
+        .d-list { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; margin: 5px 0; }
+        .d-item { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 600; color: var(--text-dim); transition: 0.3s; }
+        .d-item.active { font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
+        .d-item.near { color: var(--text-sub); }
+
+        /* The Purple Highlight Box - THINNER */
+        .drum-highlight {
+            position: absolute; top: 50%; left: 0; width: 100%; height: 36px; transform: translateY(-50%);
+            border: 2px solid var(--accent-purple); border-radius: 10px; background: rgba(168, 85, 247, 0.05);
+            z-index: 1; pointer-events: none; box-shadow: inset 0 0 10px var(--accent-purple-glow);
+        }
+
+        /* INPUT FIELD */
+        .inp-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 10px 15px; border-radius: 10px; font-size: 0.95rem; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box; margin-bottom: 15px;
+        }
+        .inp-field:focus { border-color: var(--accent-purple); }
+
+        /* GRADIENT BUTTON */
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #8b5cf6, #fbbd23);
+            color: #000; border: none; padding: 12px; border-radius: 10px; font-size: 0.9rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(251, 189, 35, 0.3); display: flex; justify-content: center; gap: 8px; align-items: center;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD */
+        .res-card {
+            background: var(--card-bg); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 16px; 
+            padding: 15px; margin-bottom: 30px; box-shadow: 0 10px 40px var(--accent-purple-glow);
+            display: none;
+        }
+        
+        .prog-header { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-sub); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800;}
+        
+        /* PROGRESS BAR */
+        .prog-track {
+            width: 100%; height: 16px; background: #000; border-radius: 20px;
+            border: 1px solid rgba(251, 189, 35, 0.5); position: relative; overflow: hidden; margin-bottom: 20px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+        .prog-fill {
+            height: 100%; background: linear-gradient(90deg, #fbbd23, #ef4444);
+            width: 0%; border-radius: 20px; transition: width 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; align-items: center; justify-content: center; color: #000; font-weight: 900; font-size: 0.7rem;
+        }
+
+        /* LIVE TICKER AGE - RESPONSIVE FIX */
+        .age-head { display: flex; justify-content: space-between; color: var(--text-sub); font-size: 0.75rem; margin-bottom: 5px; font-weight: 700; text-transform: uppercase;}
+        .age-ticker {
+            font-family: 'JetBrains Mono', monospace; font-size: 1.3rem; font-weight: 800; color: var(--text-main);
+            display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 20px;
+        }
+        .age-ticker span { font-size: 0.8rem; color: var(--text-sub); font-weight: 600; margin-left: 2px; }
+
+        /* STATS GRID - VERTICAL STACK FIX */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        
+        .stat-box {
+            background: rgba(26, 24, 41, 0.8); border: 1px solid; border-radius: 12px; padding: 15px 10px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center;
+        }
+        .sb-red { border-color: rgba(239, 68, 68, 0.4); }
+        .sb-blue { border-color: rgba(59, 130, 246, 0.4); }
+        .sb-gold { border-color: rgba(251, 189, 35, 0.4); }
+        .sb-green { border-color: rgba(16, 185, 129, 0.4); }
+
+        .stat-icon {
+            width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+        }
+        .sb-red .stat-icon { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); }
+        .sb-blue .stat-icon { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
+        .sb-gold .stat-icon { background: rgba(251, 189, 35, 0.15); color: var(--accent-gold); }
+        .sb-green .stat-icon { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
+
+        .stat-lbl { font-size: 0.65rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
+        /* PREVENT OVERFLOW ON BIG NUMBERS */
+        .stat-val { font-size: 0.95rem; color: var(--text-main); font-weight: 800; font-family: 'JetBrains Mono', monospace; word-break: break-word; }
+
+        /* 🚀 STAGGERED FLY-IN */
+        .anim-slide { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="bg-glow glow-3"></div>
+
+    <header class="app-header">
+        <div class="head-left">
+            <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+            <div class="brand"><i class="fas fa-hourglass-half"></i> LIFE PROGRESS</div>
+        </div>
+        <div class="current-date" id="head-date">April 9, 2026</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto;">
+        
+        <div class="hero anim-slide" style="animation-delay: 0.1s;">
+            <h1>Memento Mori</h1>
+            <p>know_your_time</p>
+        </div>
+
+        <div class="config-card anim-slide" style="animation-delay: 0.2s;">
+            <span class="sec-lbl">Date of Birth (Custom Scroller)</span>
+            
+            <div class="drum-wrapper">
+                <div class="drum-highlight"></div>
+                
+                <div class="drum-col">
+                    <button class="drum-btn" onclick="SSJ4_Drum.move('d', -1)"><i class="fas fa-chevron-up"></i></button>
+                    <div class="d-list" id="drum-days"></div>
+                    <button class="drum-btn" onclick="SSJ4_Drum.move('d', 1)"><i class="fas fa-chevron-down"></i></button>
+                </div>
+
+                <div class="drum-col">
+                    <button class="drum-btn" onclick="SSJ4_Drum.move('m', -1)"><i class="fas fa-chevron-up"></i></button>
+                    <div class="d-list" id="drum-months"></div>
+                    <button class="drum-btn" onclick="SSJ4_Drum.move('m', 1)"><i class="fas fa-chevron-down"></i></button>
+                </div>
+
+                <div class="drum-col">
+                    <button class="drum-btn" onclick="SSJ4_Drum.move('y', -1)"><i class="fas fa-chevron-up"></i></button>
+                    <div class="d-list" id="drum-years"></div>
+                    <button class="drum-btn" onclick="SSJ4_Drum.move('y', 1)"><i class="fas fa-chevron-down"></i></button>
+                </div>
+            </div>
+
+            <span class="sec-lbl" style="margin-bottom: 8px;">Expected Lifespan (Years)</span>
+            <input type="number" id="life-exp" class="inp-field" value="80" />
+
+            <button class="calc-btn" onclick="SSJ4_Life.initCalc()">
+                CALCULATE MY TIMELINE <i class="fas fa-pen"></i>
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container">
+            <div class="prog-header">
+                <span>Results Container</span>
+            </div>
+            <div class="prog-track">
+                <div class="prog-fill" id="prog-bar">0%</div>
+            </div>
+
+            <div class="age-head">
+                <span>Age (Live Ticking)</span>
+                <span>Y/D/H/M/S</span>
+            </div>
+            
+            <div class="age-ticker" id="live-age">
+                --y --d --h --m --s
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box sb-red">
+                    <div class="stat-icon"><i class="fas fa-heartbeat"></i></div>
+                    <span class="stat-lbl">Heartbeats</span>
+                    <span class="stat-val" id="stat-heart">0</span>
+                </div>
+                <div class="stat-box sb-blue">
+                    <div class="stat-icon"><i class="fas fa-wind"></i></div>
+                    <span class="stat-lbl">Breaths Taken</span>
+                    <span class="stat-val" id="stat-breath">0</span>
+                </div>
+                <div class="stat-box sb-gold">
+                    <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <span class="stat-lbl">Days Lived</span>
+                    <span class="stat-val" id="stat-days">0</span>
+                </div>
+                <div class="stat-box sb-green">
+                    <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                    <span class="stat-lbl">Weeks Left</span>
+                    <span class="stat-val" id="stat-weeks">0</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - DRUM SCROLLER & LIFE PROGRESS ENGINE */
+        
+        const today = new Date();
+        const options = { month: 'short', day: 'numeric', year: 'numeric' };
+        document.getElementById('head-date').innerText = today.toLocaleDateString('en-US', options);
+
+        // --- THE CUSTOM DRUM UI ENGINE ---
+        window.SSJ4_Drum = {
+            months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            days: Array.from({length: 31}, (_, i) => String(i + 1).padStart(2, '0')),
+            years: Array.from({length: 130}, (_, i) => String(1900 + i)),
+            
+            // State
+            c_d: 8,  // Index for Day (09)
+            c_m: 3,  // Index for Month (Apr)
+            c_y: 100,// Index for Year (2000)
+
+            init: function() {
+                this.render();
+            },
+
+            haptic: function() {
+                if(window.navigator && window.navigator.vibrate) { try { navigator.vibrate(15); } catch(e){} }
+            },
+
+            move: function(type, dir) {
+                this.haptic();
+                if(type === 'd') {
+                    this.c_d = (this.c_d + dir + this.days.length) % this.days.length;
+                } else if(type === 'm') {
+                    this.c_m = (this.c_m + dir + this.months.length) % this.months.length;
+                } else if(type === 'y') {
+                    this.c_y = (this.c_y + dir + this.years.length) % this.years.length;
+                }
+                this.render();
+            },
+
+            // COMPACT RENDERER: Now only renders 3 items (-1, 0, 1) instead of 5
+            renderCol: function(arr, centerIdx, elementId) {
+                const el = document.getElementById(elementId);
+                let html = '';
+                for(let i = -1; i <= 1; i++) {
+                    let idx = (centerIdx + i + arr.length) % arr.length;
+                    let val = arr[idx];
+                    let cls = 'd-item';
+                    if(i === 0) cls += ' active';
+                    else cls += ' near';
+                    
+                    html += `<div class="${cls}">${val}</div>`;
+                }
+                el.innerHTML = html;
+            },
+
+            render: function() {
+                this.renderCol(this.days, this.c_d, 'drum-days');
+                this.renderCol(this.months, this.c_m, 'drum-months');
+                this.renderCol(this.years, this.c_y, 'drum-years');
+            },
+
+            getSelectedDate: function() {
+                return new Date(this.years[this.c_y], this.c_m, this.days[this.c_d]);
+            }
+        };
+
+        // --- THE CALCULATION ENGINE ---
+        window.SSJ4_Life = {
+            timer: null,
+
+            initCalc: function() {
+                if(window.navigator && window.navigator.vibrate) { try { navigator.vibrate(40); } catch(e){} }
+                
+                const expYears = parseFloat(document.getElementById('life-exp').value);
+                const dob = SSJ4_Drum.getSelectedDate();
+                
+                if(isNaN(expYears) || expYears <= 0) {
+                    alert("Please enter a valid lifespan!"); return;
+                }
+
+                const resCard = document.getElementById('results-container');
+                resCard.style.display = 'block';
+                resCard.classList.add('anim-slide');
+
+                if(this.timer) clearInterval(this.timer);
+                
+                this.tick(dob, expYears);
+                this.timer = setInterval(() => this.tick(dob, expYears), 1000);
+
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'end' }); }, 100);
+            },
+
+            tick: function(dob, expYears) {
+                const now = new Date();
+                
+                if(now < dob) {
+                    document.getElementById('live-age').innerHTML = "Not Born Yet!";
+                    return;
+                }
+
+                // EXACT AGE MATH
+                let y = now.getFullYear() - dob.getFullYear();
+                let m = now.getMonth() - dob.getMonth();
+                let d = now.getDate() - dob.getDate();
+                
+                if (d < 0) {
+                    m--;
+                    const tempDate = new Date(now.getFullYear(), now.getMonth(), 0);
+                    d += tempDate.getDate();
+                }
+                if (m < 0) {
+                    y--;
+                    m += 12;
+                }
+
+                const h = now.getHours();
+                const min = now.getMinutes();
+                const s = now.getSeconds();
+
+                // Automatically wraps due to flex-wrap
+                document.getElementById('live-age').innerHTML = `
+                    <div>${y}<span>y</span></div> 
+                    <div>${m}<span>m</span></div> 
+                    <div>${d}<span>d</span></div> 
+                    <div>${String(h).padStart(2,'0')}<span>h</span></div> 
+                    <div>${String(min).padStart(2,'0')}<span>m</span></div> 
+                    <div>${String(s).padStart(2,'0')}<span>s</span></div>
+                `;
+
+                // PERCENTAGE MATH
+                const diffMs = now - dob;
+                const msPerYear = 1000 * 60 * 60 * 24 * 365.25;
+                const expectedTotalMs = expYears * msPerYear;
+                
+                let percent = (diffMs / expectedTotalMs) * 100;
+                if(percent > 100) percent = 100;
+
+                const progBar = document.getElementById('prog-bar');
+                progBar.style.width = `${percent}%`;
+                progBar.innerText = `${percent.toFixed(1)}%`;
+
+                // BIOLOGICAL STATS
+                const msPerDay = 1000 * 60 * 60 * 24;
+                const daysLived = Math.floor(diffMs / msPerDay);
+                
+                const heartbeats = daysLived * 100000;
+                const breaths = daysLived * 22000;
+                
+                const weeksLived = Math.floor(daysLived / 7);
+                const expectedTotalWeeks = Math.floor(expYears * 52.1775);
+                let weeksLeft = expectedTotalWeeks - weeksLived;
+                if(weeksLeft < 0) weeksLeft = 0;
+
+                document.getElementById('stat-days').innerText = daysLived.toLocaleString('en-US');
+                document.getElementById('stat-heart').innerText = heartbeats.toLocaleString('en-US');
+                document.getElementById('stat-breath').innerText = breaths.toLocaleString('en-US');
+                document.getElementById('stat-weeks').innerText = weeksLeft.toLocaleString('en-US');
+            }
+        };
+
+        // Initialize UI
+        document.addEventListener('DOMContentLoaded', () => {
+            SSJ4_Drum.init();
+        });
+
+    </script>
+</body>
+</html>

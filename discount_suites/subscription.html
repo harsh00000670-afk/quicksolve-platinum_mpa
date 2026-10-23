@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Subscription Break-Even | Deal Hacker | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           SUBSCRIPTION ENGINE - PLATINUM (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-red: #ef4444;
+            --accent-red-glow: rgba(239, 68, 68, 0.3);
+            --accent-gold: #fbbd23;
+            --accent-gold-glow: rgba(251, 189, 35, 0.3);
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.25; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 250px; height: 250px; background: var(--accent-purple); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-blue); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-blue); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #3b82f6, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--text-sub); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CARDS & INPUTS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(59, 130, 246, 0.15);
+        }
+        .inp-group { margin-bottom: 18px; position: relative; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        
+        .inp-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.1rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .inp-field:focus { border-color: var(--accent-blue); box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+        .inp-field::placeholder { color: var(--text-dim); font-weight: 500; }
+
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #3b82f6, #a855f7);
+            color: #fff; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px rgba(168, 85, 247, 0.3); display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 10px;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 20px; 
+            padding: 25px 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(168, 85, 247, 0.2); display: none; text-align: center;
+        }
+        
+        .res-lbl { font-size: 0.75rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; margin-bottom: 5px; }
+        .res-main-val { font-size: 2.5rem; color: var(--accent-purple); font-weight: 900; font-family: 'JetBrains Mono', monospace; margin-bottom: 5px; line-height: 1.1; text-shadow: 0 0 20px rgba(168, 85, 247, 0.4);}
+        .res-sub-val { font-size: 0.9rem; color: var(--text-sub); margin-bottom: 20px; font-weight: 600;}
+        
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;}
+        .res-box { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px 10px; }
+        .res-box-lbl { font-size: 0.65rem; color: var(--text-sub); text-transform: uppercase; font-weight: 800; margin-bottom: 5px; letter-spacing: 0.5px;}
+        .res-box-val { font-size: 1.2rem; color: var(--text-main); font-weight: 900; font-family: 'JetBrains Mono', monospace; }
+
+        /* TRAP ALERT BANNER */
+        .trap-alert {
+            background: rgba(239, 68, 68, 0.1); border: 1px solid var(--accent-red); border-radius: 12px;
+            padding: 15px; text-align: left; display: none; align-items: flex-start; gap: 12px;
+            box-shadow: 0 0 15px var(--accent-red-glow); animation: shake 0.5s ease-in-out; margin-top: 15px;
+        }
+        .trap-icon { font-size: 1.5rem; color: var(--accent-red); margin-top: 2px;}
+        .trap-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.5; font-weight: 600;}
+        .trap-text b { color: var(--accent-red); font-weight: 900; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;}
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+
+        /* CUSTOM TOAST */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px var(--accent-red-glow); display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .toast.show { bottom: 30px; }
+
+        /* ANIMATIONS */
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-sync-alt"></i> SUB BREAK-EVEN</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>The Commitment Trap</h1>
+            <p>> math --vasool --monthly_vs_annual</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">1. Monthly Price (₹)</label>
+                    <input type="number" id="inp-monthly" class="inp-field" placeholder="e.g. 999" min="0">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">2. Annual Price (₹)</label>
+                    <input type="number" id="inp-annual" class="inp-field" placeholder="e.g. 8000" min="0">
+                </div>
+            </div>
+
+            <div class="inp-group">
+                <label class="inp-lbl">3. Planned Usage (Months)</label>
+                <input type="number" id="inp-usage" class="inp-field" placeholder="e.g. 5" min="1" max="60">
+            </div>
+
+            <button class="calc-btn" onclick="SubEngine.calculate()">
+                <i class="fas fa-search-dollar"></i> Calculate Break-Even
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container">
+            <div class="res-lbl" style="color: var(--accent-purple);">Paisa Vasool Point</div>
+            <div class="res-main-val" id="res-breakeven">-- Months</div>
+            <div class="res-sub-val" id="res-breakeven-msg">--</div>
+            
+            <div class="res-grid">
+                <div class="res-box">
+                    <div class="res-box-lbl">Annual Discount</div>
+                    <div class="res-box-val" id="res-pct-disc" style="color:var(--accent-green);">--%</div>
+                </div>
+                <div class="res-box">
+                    <div class="res-box-lbl">Eff. Monthly Cost</div>
+                    <div class="res-box-val" id="res-eff-cost" style="color:var(--accent-blue);">₹--</div>
+                </div>
+            </div>
+
+            <div class="res-grid" style="margin-bottom: 0;">
+                <div class="res-box">
+                    <div class="res-box-lbl">12M Cost (Monthly)</div>
+                    <div class="res-box-val" id="res-12m-cost" style="color:var(--text-main);">₹--</div>
+                </div>
+                <div class="res-box">
+                    <div class="res-box-lbl">12M Total Savings</div>
+                    <div class="res-box-val" id="res-12m-save" style="color:var(--accent-gold);">₹--</div>
+                </div>
+            </div>
+
+            <div class="trap-alert" id="scam-trap">
+                <div class="trap-icon"><i class="fas fa-skull-crossbones"></i></div>
+                <div class="trap-text">
+                    <b>SCAM DETECTED!</b><br>
+                    Bhai, inka Annual plan to Monthly se bhi mehenga pad raha hai! Chup chap Monthly le lo.
+                </div>
+            </div>
+
+            <div class="trap-alert" id="usage-trap" style="background: rgba(251, 189, 35, 0.1); border-color: var(--accent-gold); box-shadow: 0 0 15px var(--accent-gold-glow);">
+                <div class="trap-icon" style="color: var(--accent-gold);"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="trap-text" style="color: var(--text-main);">
+                    <b>THE USAGE GAP WARNING!</b><br>
+                    Tu sirf <span id="trap-months" style="color:var(--accent-gold); font-weight:800;"></span> mahine use karne ka soch raha hai. Monthly lene pe tera <b>₹<span id="trap-monthly-cost"></span></b> kharch hoga, jabki Annual <b>₹<span id="trap-annual-cost"></span></b> ka hai. <b style="color:var(--accent-green);">₹<span id="trap-save-amt"></span></b> bachao aur monthly hi lo!
+                </div>
+            </div>
+
+            <div class="trap-alert" id="deal-good" style="background: rgba(16, 185, 129, 0.1); border-color: var(--accent-green); box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);">
+                <div class="trap-icon" style="color: var(--accent-green);"><i class="fas fa-check-circle"></i></div>
+                <div class="trap-text" style="color: var(--text-main);">
+                    <b>GREEN FLAG!</b><br>
+                    Tera usage break-even cross kar chuka hai. Aankh band karke Annual plan le le, pura saal fayde mein rahega!
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - SUB BREAK-EVEN ENGINE */
+        
+        window.SubEngine = {
+            haptic: function() { if(navigator.vibrate) navigator.vibrate(20); },
+
+            showToast: function(msg) {
+                const toast = document.getElementById('custom-toast');
+                document.getElementById('toast-msg').innerText = msg;
+                if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            },
+
+            calculate: function() {
+                this.haptic();
+
+                // Get Inputs
+                const monthly = parseFloat(document.getElementById('inp-monthly').value);
+                const annual = parseFloat(document.getElementById('inp-annual').value);
+                const plannedUsage = parseFloat(document.getElementById('inp-usage').value);
+
+                if(isNaN(monthly) || monthly <= 0) {
+                    this.showToast("Monthly Price daal bhai!"); return;
+                }
+                if(isNaN(annual) || annual <= 0) {
+                    this.showToast("Annual Price daal!"); return;
+                }
+                if(isNaN(plannedUsage) || plannedUsage <= 0) {
+                    this.showToast("Planned Usage toh bata!"); return;
+                }
+
+                // 1. Break Even Calculation
+                let breakEvenRaw = annual / monthly;
+                let breakEvenMonth = Math.ceil(breakEvenRaw);
+                let isScam = breakEvenRaw > 12;
+
+                // 2. Core Stats
+                let totalMonthly12M = monthly * 12;
+                let savings12M = isScam ? 0 : totalMonthly12M - annual;
+                let pctDiscount = isScam ? 0 : (savings12M / totalMonthly12M) * 100;
+                let effectiveMonthly = annual / 12;
+
+                // Update UI Texts
+                document.getElementById('res-breakeven').innerText = isScam ? "NEVER" : `${breakEvenMonth} Months`;
+                
+                if (isScam) {
+                    document.getElementById('res-breakeven-msg').innerText = "Ye plan kabhi vasool nahi hoga!";
+                } else {
+                    document.getElementById('res-breakeven-msg').innerText = `Bhai, agar tu ${breakEvenMonth}th month tak tik gaya, toh tera Annual plan ka paisa vasool ho jayega.`;
+                }
+
+                document.getElementById('res-pct-disc').innerText = isScam ? "0%" : `${pctDiscount.toFixed(1)}%`;
+                document.getElementById('res-eff-cost').innerText = `₹${effectiveMonthly.toLocaleString('en-IN', {maximumFractionDigits: 0})}/m`;
+                document.getElementById('res-12m-cost').innerText = `₹${totalMonthly12M.toLocaleString('en-IN')}`;
+                document.getElementById('res-12m-save').innerText = `₹${savings12M.toLocaleString('en-IN')}`;
+
+                // --- TRAP LOGIC ALERTS ---
+                const scamTrap = document.getElementById('scam-trap');
+                const usageTrap = document.getElementById('usage-trap');
+                const dealGood = document.getElementById('deal-good');
+                
+                scamTrap.style.display = 'none';
+                usageTrap.style.display = 'none';
+                dealGood.style.display = 'none';
+
+                if (isScam) {
+                    // Outright Scam
+                    scamTrap.style.display = 'flex';
+                } else {
+                    let costIfMonthly = monthly * plannedUsage;
+                    
+                    if (costIfMonthly < annual) {
+                        // User will save money by sticking to monthly for their short usage
+                        let moneySaved = annual - costIfMonthly;
+                        
+                        document.getElementById('trap-months').innerText = plannedUsage;
+                        document.getElementById('trap-monthly-cost').innerText = costIfMonthly.toLocaleString('en-IN');
+                        document.getElementById('trap-annual-cost').innerText = annual.toLocaleString('en-IN');
+                        document.getElementById('trap-save-amt').innerText = moneySaved.toLocaleString('en-IN');
+                        
+                        usageTrap.style.display = 'flex';
+                    } else {
+                        // User's planned usage is long enough to justify Annual
+                        dealGood.style.display = 'flex';
+                    }
+                }
+
+                // Trigger UI Reveal
+                const resCard = document.getElementById('results-container');
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-up');
+                void resCard.offsetWidth; // trigger reflow
+                resCard.classList.add('anim-up');
+                
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+        };
+    </script>
+</body>
+</html>

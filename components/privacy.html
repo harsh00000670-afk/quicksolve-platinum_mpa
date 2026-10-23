@@ -1,0 +1,440 @@
+<style>
+    /* =========================================
+       PRIVACY GOD - SSJ4 LEGAL UI
+       Theme: Deep Void / Law Firm Neon
+       ========================================= */
+    #privacy-god-overlay {
+        position: fixed !important; top: 0; left: 0; 
+        width: 100vw; height: 100dvh; 
+        background-color: #020617; /* Deepest Void */
+        z-index: 2147483647 !important;
+        display: flex; flex-direction: column;
+        font-family: 'Inter', sans-serif;
+        overflow: hidden; /* Lock main scroll */
+    }
+
+    /* 1. HEADER */
+    .pv-head {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 15px 20px; background: #0f172a; border-bottom: 1px solid #1e293b;
+        flex-shrink: 0;
+    }
+    .pv-back { background: none; border: none; color: #94a3b8; font-size: 1.4rem; cursor: pointer; }
+    .pv-tit { 
+        color: #10b981; font-weight: 800; font-size: 1.1rem; 
+        font-family: 'JetBrains Mono'; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;
+    }
+    .shield-icon { color: #10b981; animation: pulse 3s infinite; }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+
+    /* 2. BODY (Scrollable) */
+    .pv-body {
+        flex: 1; overflow-y: auto; padding: 20px; 
+        display: flex; flex-direction: column; gap: 20px;
+        scroll-behavior: smooth;
+    }
+    .pv-body::-webkit-scrollbar { width: 5px; }
+    .pv-body::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+    /* 3. POLICY CARDS */
+    .pol-card {
+        background: #1e293b; border-radius: 12px; padding: 15px;
+        border-left: 4px solid #334155; transition: 0.2s;
+    }
+    .pol-card:hover { border-left-color: #f59e0b; background: #253045; }
+    
+    .pol-tit { 
+        color: #fff; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px;
+        display: flex; justify-content: space-between;
+    }
+    .pol-txt { color: #94a3b8; font-size: 0.8rem; line-height: 1.5; }
+    
+    /* Highlight keywords */
+    .hi { color: #f59e0b; font-weight: 600; }
+    .secure { color: #10b981; font-weight: 600; }
+    .warn { color: #ef4444; font-weight: 600; }
+
+    /* 4. FOOTER */
+    .pv-foot {
+        text-align: center; padding: 20px; color: #64748b; font-size: 0.7rem;
+        border-top: 1px solid #1e293b; background: #0b1121; flex-shrink: 0;
+    }
+
+</style>
+
+<div id="privacy-god-overlay">
+    
+    <div class="pv-head">
+        <button class="pv-back qs-back-btn" onclick="window.history.back()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="pv-tit">
+            <svg class="shield-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            PRIVACY CORE
+        </div>
+        <div style="width:24px"></div>
+    </div>
+
+    <div class="pv-body">
+        
+        <div style="padding:10px; background:rgba(16,185,129,0.1); border:1px solid #10b981; border-radius:8px; color:#10b981; font-size:0.8rem; text-align:center;">
+            <b>STATUS:</b> Your Data Stays on Your Device.
+        </div>
+
+        <div class="pol-card" style="border-left-color: #10b981;">
+            <div class="pol-tit">1. Zero Server Architecture</div>
+            <div class="pol-txt">
+                QuickSolve Platinum operates on a <span class="secure">Client-Side Architecture</span>. We do not have a backend database. All calculations (Loan, Currency, Programmer) happen locally on your device's processor. No data leaves your phone to reach our servers.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">2. Use of Local Storage</div>
+            <div class="pol-txt">
+                We use your browser's <span class="hi">LocalStorage</span> database to save preferences, currency cache, and history. This data is strictly sandboxed to your browser and cannot be accessed by other apps. Clearing your browser cache will reset the app.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">3. Financial Calculations</div>
+            <div class="pol-txt">
+                Data entered in Loan/EMI/GST calculators is processed using standard mathematical formulas. This data is <span class="secure">volatile</span> (deleted when you close the tab) unless explicitly saved by you. We do not track your loan amounts or income.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">4. Third-Party Services (Currency)</div>
+            <div class="pol-txt">
+                For live currency rates, we fetch data from <span class="hi">ExchangeRate-API</span>. Your IP address may be visible to these providers during the request, which is standard internet protocol. We do not send your personal amounts to them, only the base currency code.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">5. Sensitive Code/Binary Data</div>
+            <div class="pol-txt">
+                Inputs in the Programmer Calculator (Hex, Bin, ASCII) are processed via <span class="hi">BigInt JavaScript Engine</span> locally. We do not log, store, or transmit your code snippets or binary data.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">6. Clipboard Permissions</div>
+            <div class="pol-txt">
+                The app may request access to your clipboard ONLY when you explicitly click a "Copy" or "Paste" button. We do not background-read your clipboard history.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">7. Service Workers & Caching</div>
+            <div class="pol-txt">
+                This app installs a <span class="hi">Service Worker</span> to function offline. It caches the app's core files (HTML/CSS/JS) on your device. This allows the app to load instantly without internet.
+            </div>
+        </div>
+
+        <div class="pol-card" style="border-left-color: #ef4444;">
+            <div class="pol-tit">8. Accuracy Disclaimer</div>
+            <div class="pol-txt">
+                While our engines (SSJ4) use high-precision logic (IEEE-754 & BigInt), <span class="warn">QuickSolve is a tool, not a financial advisor</span>. We are not liable for financial losses incurred due to decisions based on our Loan, EMI, or Investment projections. Always consult a bank.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">9. No Tracking Cookies</div>
+            <div class="pol-txt">
+                We do not use invasive tracking cookies or sell your behavioral data to ad networks. The app is ad-free and tracker-free.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">10. Policy Updates</div>
+            <div class="pol-txt">
+                As we add new "God Mode" features, this policy may evolve. Continued use of the app implies acceptance of the latest security protocols.
+            </div>
+        </div>
+        
+        <div class="pol-card">
+            <div class="pol-tit">11. Intellectual Property</div>
+            <div class="pol-txt">
+                The "SSJ4" Engine logic, UI design, and code structure are proprietary. Reverse engineering or cloning the core logic is prohibited.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">12. Data Deletion</div>
+            <div class="pol-txt">
+                Since we do not store your data on our servers, there is nothing for us to delete. To wipe your local data, simply clear your browser's "Site Data" for this app.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">13. Children's Privacy</div>
+            <div class="pol-txt">
+                This app is safe for all ages. We do not knowingly collect any personal information from children under 13 (or any age).
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">14. Security Protocols</div>
+            <div class="pol-txt">
+                The app is served via <span class="secure">HTTPS</span> (SSL/TLS), ensuring that the code delivered to your device is authentic and has not been tampered with in transit.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">15. Contact Developer</div>
+            <div class="pol-txt">
+                For bugs, security vulnerabilities, or feature requests, contact the development team directly through the provided support channels in the app.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">16. Governing Law & Jurisdiction</div>
+            <div class="pol-txt">
+                This Privacy Policy shall be governed by and interpreted in accordance with the laws of <span class="hi">India</span>. Any disputes shall fall under the exclusive jurisdiction of Indian courts.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">17. No Warranty</div>
+            <div class="pol-txt">
+                All features and calculations are provided on an <span class="hi">"as-is"</span> and <span class="hi">"as-available"</span> basis. No guarantees are made regarding accuracy, uptime, or suitability.
+            </div>
+        </div>
+
+        <div class="pol-card" style="border-left-color: #ef4444;">
+            <div class="pol-tit">18. Limitation of Liability</div>
+            <div class="pol-txt">
+                Under no circumstances shall QuickSolve Platinum or its developers be liable for any direct, indirect, incidental, or consequential losses arising from the use of this application.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">19. Service Commencement</div>
+            <div class="pol-txt">
+                QuickSolve Platinum was officially launched on <span class="hi">16 January 2026</span>. Privacy terms apply from the date of public release.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">20. User Consent</div>
+            <div class="pol-txt">
+                By continuing to use this application, you acknowledge that you have read, understood, and agreed to this Privacy Policy.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">21. Affiliate Links & External Websites</div>
+            <div class="pol-txt">
+                QuickSolve may contain links to external platforms or <span class="hi">affiliate links</span> (e.g., in the Discount Suite). While we might earn a commission from affiliate links, it does not affect our mathematical calculations. Our logic remains completely neutral.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">22. Device CPU & Battery Consumption</div>
+            <div class="pol-txt">
+                Since QuickSolve operates 100% Client-Side, intensive calculations (like BigInt loops) utilize your device's processor. This is a privacy feature, not a bug, but it may temporarily <span class="warn">impact battery life</span> during heavy <span class="hi">God Mode</span> usage.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">23. PWA (Home Screen) Installation Sandbox</div>
+            <div class="pol-txt">
+                Adding QuickSolve to your home screen creates a Progressive Web App shortcut. It operates strictly within your browser's <span class="secure">secure sandbox</span> and has zero access to your OS system files, contacts, or hardware cameras.
+            </div>
+        </div>
+
+        <div class="pol-card" style="border-left-color: #ef4444;">
+            <div class="pol-tit">24. Bot, Scraping & Automated Access</div>
+            <div class="pol-txt">
+                Automated scraping, use of bots, or programmatically hitting our client-side engines to extract our proprietary formulas or UI structure is <span class="warn">strictly prohibited</span>.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">25. Experimental / Beta Suites</div>
+            <div class="pol-txt">
+                Newly added suites marked as <span class="hi">"Beta"</span> or <span class="hi">"God Mode"</span> are experimental. While we strive for accuracy, algorithms in these suites are still being fine-tuned. Use them at your own discretion.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">26. Open Source Licenses & Assets</div>
+            <div class="pol-txt">
+                QuickSolve utilizes standard open-source fonts and visual assets. All respective copyrights and licenses belong to their original creators.
+            </div>
+        </div>
+
+        <div class="pol-card" style="border-left-color: #ef4444;">
+            <div class="pol-tit">27. Data Integrity & Tamper Resistance</div>
+            <div class="pol-txt">
+                QuickSolve Platinum ensures that all client-side calculations are executed in a controlled JavaScript environment. Any attempt to modify or inject malicious scripts into the application may result in <span class="warn">undefined behavior</span>. We are not responsible for altered results due to tampering.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">28. Offline Mode Limitations</div>
+            <div class="pol-txt">
+                While the app supports offline functionality via <span class="hi">Service Workers</span>, certain features (e.g., live currency exchange rates) require an active internet connection. Offline results may use cached or outdated data.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">29. Browser Compatibility Disclaimer</div>
+            <div class="pol-txt">
+                QuickSolve Platinum is optimized for modern browsers supporting <span class="hi">ES6+, Web Workers, and LocalStorage</span>. Performance or functionality may degrade on outdated or unsupported browsers.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">30. Precision & Rounding Behavior</div>
+            <div class="pol-txt">
+                All numerical calculations follow JavaScript’s <span class="hi">IEEE-754 floating-point</span> standard and BigInt logic where applicable. Minor rounding differences may occur in edge cases, especially in financial computations involving decimals.
+            </div>
+        </div>
+
+        <div class="pol-card" style="border-left-color: #ef4444;">
+            <div class="pol-tit">31. User Input Responsibility</div>
+            <div class="pol-txt">
+                Users are solely responsible for verifying the accuracy and validity of the data entered into the application. Incorrect inputs will yield <span class="warn">incorrect outputs</span>.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">32. Session Volatility</div>
+            <div class="pol-txt">
+                Certain calculations and temporary states exist only during the active session. Closing or refreshing the application may result in <span class="warn">loss of unsaved data</span>.
+            </div>
+        </div>
+
+        <div class="pol-card" style="border-left-color: #10b981;">
+            <div class="pol-tit">33. No Cloud Synchronization</div>
+            <div class="pol-txt">
+                QuickSolve does not offer cloud sync or account-based storage. All user data remains strictly <span class="secure">on-device</span> and is not recoverable across devices.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">34. Device Performance Dependency</div>
+            <div class="pol-txt">
+                Application performance is directly dependent on the user’s device capabilities. High-complexity calculations may vary in execution speed across devices.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">35. Security Best Practices</div>
+            <div class="pol-txt">
+                Users are advised to keep their browsers updated and avoid using the application on <span class="warn">compromised or rooted/jailbroken devices</span> for optimal security.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">36. Third-Party Library Usage</div>
+            <div class="pol-txt">
+                QuickSolve utilizes trusted third-party JavaScript libraries (e.g., math engines, chart rendering tools). While we ensure integrity, we are not liable for vulnerabilities originating from external libraries.
+            </div>
+        </div>
+
+        <div class="pol-card" style="border-left-color: #10b981;">
+            <div class="pol-tit">37. No Background Execution</div>
+            <div class="pol-txt">
+                QuickSolve does not execute any processes in the background when the app is not actively in use. <span class="secure">No hidden computations or tracking occur</span>.
+            </div>
+        </div>
+
+        <div class="pol-card" style="border-left-color: #10b981;">
+            <div class="pol-tit">38. Network Request Transparency</div>
+            <div class="pol-txt">
+                All external API calls (e.g., currency exchange) are initiated only upon user interaction. <span class="secure">No silent or hidden network requests</span> are performed.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">39. UI/UX Behavior Disclaimer</div>
+            <div class="pol-txt">
+                Visual outputs such as graphs, charts, and projections are representations based on mathematical models and may not reflect real-world uncertainties.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">40. Feature Deprecation Policy</div>
+            <div class="pol-txt">
+                Certain features or tools may be modified, deprecated, or removed over time as part of continuous improvement. No prior notice is guaranteed.
+            </div>
+        </div>
+
+        <div class="pol-card" style="border-left-color: #10b981;">
+            <div class="pol-tit">41. No Data Monetization</div>
+            <div class="pol-txt">
+                QuickSolve does not monetize user data in any form. There are <span class="secure">no hidden analytics pipelines</span>, behavioral tracking, or data resale mechanisms.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">42. Legal Compliance</div>
+            <div class="pol-txt">
+                The application is designed to comply with general data protection principles. However, it is the user’s responsibility to ensure compliance with local laws when using financial tools.
+            </div>
+        </div>
+
+        <div class="pol-card" style="border-left-color: #ef4444;">
+            <div class="pol-tit">43. Reverse Engineering Safeguards</div>
+            <div class="pol-txt">
+                Any attempt to decompile, reverse engineer, or replicate proprietary algorithms may <span class="warn">violate applicable intellectual property laws</span>.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">44. API Dependency Disclaimer</div>
+            <div class="pol-txt">
+                In case third-party APIs (like currency providers) become unavailable or change their structure, related features may temporarily stop functioning.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">45. Error Handling & Fail-Safe Mechanisms</div>
+            <div class="pol-txt">
+                The application includes basic error handling systems. However, unexpected edge cases may still produce undefined or null outputs.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">46. User Environment Variables</div>
+            <div class="pol-txt">
+                Certain behaviors (like performance, rendering, or caching) may vary depending on browser settings, extensions, or device-level restrictions.
+            </div>
+        </div>
+
+        <div class="pol-card" style="border-left-color: #ef4444;">
+            <div class="pol-tit">47. No Real-Time Financial Advice</div>
+            <div class="pol-txt">
+                All outputs, projections, and calculators are purely mathematical and <span class="warn">should not be interpreted as professional financial, legal, or investment advice</span>.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">48. Experimental Engine Naming (SSJ4)</div>
+            <div class="pol-txt">
+                The term <span class="hi">"SSJ4 Engine"</span> is a conceptual naming convention representing enhanced calculation logic and does not imply any certified financial or scientific standard.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">49. Load & Stress Handling</div>
+            <div class="pol-txt">
+                Under extreme computational load (e.g., large BigInt operations or dense graph plotting), the application may <span class="warn">temporarily freeze or slow down</span>. This is expected behavior in client-side systems.
+            </div>
+        </div>
+
+        <div class="pol-card">
+            <div class="pol-tit">50. Final Acknowledgment</div>
+            <div class="pol-txt">
+                By continuing to use QuickSolve Platinum, you acknowledge that you understand the limitations of a <span class="hi">fully client-side system</span> and accept all associated risks and behaviors.
+            </div>
+        </div>
+
+    </div>
+
+    <div class="pv-foot">
+        &copy; 2026 QuickSolve Platinum. All Rights Reserved.<br>
+        SSJ4 Architecture • Secure Client-Side Engine
+    </div>
+</div>

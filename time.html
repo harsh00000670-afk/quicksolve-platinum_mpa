@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Time Suite | QuickSolve Platinum</title>
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           TIME GOD - DASHBOARD UI
+           Theme: Obsidian Void / Platinum Accents
+           ========================================= */
+        
+        :root {
+            --void: #020617;
+            --card-bg: #0f172a;
+            --border-subtle: #1e293b;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-gold: #f59e0b;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-red: #ef4444;
+        }
+
+        body, html { margin: 0; padding: 0; height: 100%; background-color: var(--void); font-family: 'Inter', sans-serif; color: var(--text-main); }
+
+        #time-god-overlay { display: flex; flex-direction: column; height: 100dvh; width: 100vw; background-color: var(--void); }
+
+        /* 🛡️ HEADER */
+        .t-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 15px 20px; background: rgba(2, 6, 23, 0.9); 
+            border-bottom: 1px solid var(--border-subtle);
+            flex-shrink: 0; position: sticky; top: 0; z-index: 100;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        }
+        .t-back { background: none; border: none; color: var(--accent-blue); font-size: 1.4rem; cursor: pointer; transition: 0.2s; }
+        .t-back:active { transform: scale(0.9) translateX(-5px); }
+        .t-tit { color: var(--text-main); font-weight: 900; font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* 🧱 BODY */
+        .t-body {
+            flex: 1; overflow-y: auto; padding: 20px; 
+            display: flex; flex-direction: column; gap: 15px;
+            padding-bottom: 60px; scroll-behavior: smooth;
+        }
+        .t-body::-webkit-scrollbar { width: 0px; display: none; }
+
+        /* 🚀 STAGGERED FLY-IN ENGINE */
+        .anim-card {
+            opacity: 0; transform: scale(0.9) translateY(30px);
+            animation: flyIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            will-change: transform, opacity;
+        }
+        @keyframes flyIn { to { opacity: 1; transform: scale(1) translateY(0); } }
+
+        .d-1 { animation-delay: 0.05s; } .d-2 { animation-delay: 0.1s; }
+        .d-3 { animation-delay: 0.15s; } .d-4 { animation-delay: 0.2s; }
+        .d-5 { animation-delay: 0.25s; } .d-6 { animation-delay: 0.3s; }
+        .d-7 { animation-delay: 0.35s; } .d-8 { animation-delay: 0.4s; }
+        .d-9 { animation-delay: 0.45s; }
+
+        /* HERO SECTION */
+        .hero-sec { text-align: center; padding: 10px 0 20px; }
+        .hero-icon {
+            width: 70px; height: 70px; margin: 0 auto 15px;
+            background: linear-gradient(135deg, #38bdf8, #a855f7);
+            border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; color: #fff; box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .hero-name { font-size: 1.8rem; font-weight: 900; letter-spacing: -0.5px; }
+        .hero-tag { color: var(--accent-purple); font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; }
+
+        /* GRID & CARDS */
+        .tools-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        
+        .tool-card {
+            background: var(--card-bg); border-radius: 16px; padding: 20px;
+            border: 1px solid var(--border-subtle); display: flex; align-items: flex-start; gap: 15px;
+            text-decoration: none; color: inherit; transition: 0.3s; position: relative; overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .tool-card:active { transform: scale(0.96); background: #1e293b; border-color: var(--accent-blue); }
+        
+        .tc-icon-wrap {
+            width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; flex-shrink: 0; background: rgba(255,255,255,0.03);
+        }
+        
+        .tc-info { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+        .tc-title { font-size: 1.05rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .tc-desc { font-size: 0.8rem; color: var(--text-sub); line-height: 1.4; font-weight: 500; }
+        
+        .badge {
+            font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 900; letter-spacing: 0.5px;
+            font-family: 'JetBrains Mono', monospace; text-transform: uppercase;
+        }
+        
+        /* Thematic Card Styles */
+        .c-dev .tc-icon-wrap { color: var(--accent-blue); background: rgba(56, 189, 248, 0.1); }
+        .c-dev .badge { background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); }
+
+        .c-bio .tc-icon-wrap { color: var(--accent-green); background: rgba(16, 185, 129, 0.1); }
+        .c-bio .badge { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+
+        .c-mind .tc-icon-wrap { color: var(--accent-gold); background: rgba(245, 158, 11, 0.1); }
+        .c-mind .badge { background: rgba(245, 158, 11, 0.2); color: var(--accent-gold); }
+
+        .c-sci .tc-icon-wrap { color: var(--accent-purple); background: rgba(168, 85, 247, 0.1); }
+        .c-sci .badge { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
+
+        .c-pro .tc-icon-wrap { color: var(--accent-red); background: rgba(239, 68, 68, 0.1); }
+        .c-pro .badge { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+
+        .tc-arrow { color: var(--border-subtle); font-size: 1rem; align-self: center; transition: 0.3s; }
+        .tool-card:active .tc-arrow { color: var(--text-main); transform: translateX(3px); }
+
+    </style>
+</head>
+<body>
+
+<div id="time-god-overlay">
+    
+    <header class="t-head">
+        <button class="t-back qs-back-btn" onclick="window.history.back();" aria-label="Go Back">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="t-tit">TIME SUITE</div>
+        <div style="width:24px"></div> </header>
+
+    <div class="t-body">
+        
+        <div class="hero-sec anim-card d-1">
+            <div class="hero-icon"><i class="fas fa-hourglass-half"></i></div>
+            <div class="hero-name">Master Time</div>
+            <div class="hero-tag">SSJ4 CHRONOS ENGINE</div>
+        </div>
+
+        <div class="tools-grid">
+            
+            <a href="time_suites/sleep.html" class="tool-card c-bio anim-card d-2">
+                <div class="tc-icon-wrap"><i class="fas fa-bed"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Sleep Cycle <span class="badge">BIO</span></div>
+                    <div class="tc-desc">Calculate perfect REM cycles to wake up fresh.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+
+            <a href="time_suites/life.html" class="tool-card c-mind anim-card d-3">
+                <div class="tc-icon-wrap"><i class="fas fa-battery-three-quarters"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Life Progress <span class="badge">MIND</span></div>
+                    <div class="tc-desc">Perspective tracker. See your life in percentages.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+
+            <a href="time_suites/dilatometer.html" class="tool-card c-sci anim-card d-4">
+                <div class="tc-icon-wrap"><i class="fas fa-rocket"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Dilatometer <span class="badge">GEEK</span></div>
+                    <div class="tc-desc">Einstein's relativity. Age on different planets.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+
+            <a href="time_suites/billing.html" class="tool-card c-pro anim-card d-5">
+                <div class="tc-icon-wrap"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Work Billing <span class="badge">PRO</span></div>
+                    <div class="tc-desc">Track shifts, minus breaks, generate payouts.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+
+            <a href="time_suites/datemath.html" class="tool-card c-dev anim-card d-6">
+                <div class="tc-icon-wrap"><i class="fas fa-calendar-alt"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Date Math <span class="badge">PRO</span></div>
+                    <div class="tc-desc">Add/sub days, exclude weekends, find gaps.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+
+            <a href="time_suites/overlap.html" class="tool-card c-pro anim-card d-7">
+                <div class="tc-icon-wrap"><i class="fas fa-globe"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Meeting Sync <span class="badge">PRO</span></div>
+                    <div class="tc-desc">Find overlapping awake hours across timezones.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+            
+            <a href="time_suites/focus.html" class="tool-card c-mind anim-card d-8">
+                <div class="tc-icon-wrap"><i class="fas fa-fire-alt"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Focus Engine <span class="badge">PRO</span></div>
+                    <div class="tc-desc">Pomodoro hustler with deep work tracking.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+            
+            <a href="time_suites/history.html" class="tool-card c-sci anim-card d-9">
+                <div class="tc-icon-wrap"><i class="fas fa-landmark"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Time Traveler <span class="badge">FUN</span></div>
+                    <div class="tc-desc">Discover past/future day facts and exact timelines.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

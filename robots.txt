@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Public agent-discovery resources
+Allow: /.well-known/
+Allow: /manifest.json
+
+# AI/search crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://quicksolve-platinum.netlify.app/sitemap.xml

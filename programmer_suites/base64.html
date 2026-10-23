@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Base64 & URL Encoder / Decoder | QuickSolve Platinum</title>
+    <meta name="description" content="Professional Base64 and URL encoding/decoding tool. Safely convert text, emojis, and URI components offline with zero data tracking.">
+    <meta name="keywords" content="base64 encoder, base64 decoder, url encoder, url decode, uri component converter, string encoder offline, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/programmer_suites/base64.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Base64 Engine">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Base64 & URL Encoding Engine">
+    <meta property="og:description" content="Safely encode and decode Base64 strings and URL components instantly. 100% Offline.">
+    <meta property="og:url" content="https://quicksolve-platinum.netlify.app/programmer_suites/base64.html">
+    <meta property="og:image" content="../logo.png">
+    <meta property="og:image:alt" content="QuickSolve Platinum Base64 Engine Logo">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Base64 & URL Encoding Engine | QuickSolve Platinum">
+    <meta name="twitter:description" content="Safely encode and decode Base64 strings and URL components instantly. 100% Offline.">
+    <meta name="twitter:image" content="../logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Base64 & URL Encoding Engine",
+      "url": "https://quicksolve-platinum.netlify.app/programmer_suites/base64.html",
+      "description": "Professional developer tool to safely encode and decode Base64 strings and URL-safe URI components offline.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Harsh"
+      }
+    }
+    </script>
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - PLATINUM DESIGN PRESERVED */
+        body { margin: 0; background-color: var(--bg-body, #09090b); }
+
+        #mod-b64-overlay {
+            width: 100vw; min-height: 100vh;
+            background-color: var(--bg-body, #09090b); 
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: monospace;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .b64-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: var(--surface, #18181b); border-bottom: 1px solid var(--border, #27272a);
+            position: sticky; top: 0; z-index: 10;
+        }
+        .b64-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; transition: 0.2s; }
+        
+        .b64-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Text Areas */
+        .b64-grp { background: var(--surface, #18181b); border: 1px solid var(--border, #27272a); border-radius: 10px; padding: 12px; transition: 0.2s; display: flex; flex-direction: column; }
+        .b64-grp:focus-within { border-color: #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.1); }
+        .b64-grp.error { border-color: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.1); }
+        
+        .b64-lbl-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px dashed #3f3f46; padding-bottom: 8px;}
+        .b64-lbl { color: var(--text-muted, #a1a1aa); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+        
+        .action-btns { display: flex; gap: 10px; }
+        .icon-btn { background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); color: #a855f7; border-radius: 6px; padding: 5px 10px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; font-family: monospace; text-transform: uppercase; font-weight: bold;}
+        .icon-btn:hover, .icon-btn:focus-visible { background: #a855f7; color: #fff; }
+        .icon-btn:active { transform: scale(0.95); }
+
+        .icon-btn.clear { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
+        .icon-btn.clear:hover, .icon-btn.clear:focus-visible { background: #ef4444; color: #fff; }
+
+        .b64-inp { background: transparent; border: none; color: #fff; font-size: 1rem; width: 100%; outline: none; font-family: monospace; resize: vertical; min-height: 120px; line-height: 1.5; }
+        .b64-inp::placeholder { color: #52525b; }
+
+        .err-msg { color: #ef4444; font-size: 0.75rem; display: none; margin-top: 10px; text-transform: uppercase; font-weight: bold; background: rgba(239,68,68,0.1); padding: 8px; border-radius: 6px;}
+
+        /* Logic Buttons Grid */
+        .engine-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
+        .engine-btn { background: #1e1e24; border: 1px solid #3f3f46; color: #f4f4f5; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; font-family: monospace; cursor: pointer; text-transform: uppercase; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .engine-btn i { font-size: 1.2rem; }
+        .engine-btn.encode { border-color: #a855f7; color: #a855f7; }
+        .engine-btn.decode { border-color: #10b981; color: #10b981; }
+        .engine-btn:active { transform: scale(0.97); }
+        
+        *:focus-visible { outline: 2px solid #a855f7; outline-offset: 2px; border-radius: 4px; }
+        .qs-back-btn:focus-visible { border-radius: 8px; }
+        .b64-inp:focus-visible { outline: none; }
+    </style>
+</head>
+
+<body>
+
+<main id="mod-b64-overlay" role="main">
+    <header class="b64-head" role="banner">
+        <a href="../programmer.html" class="qs-back-btn" aria-label="Go back to Programmer Suite">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </a>
+        <h1 style="position: absolute; left: 50%; transform: translateX(-50%); margin: 0; color: #a855f7; font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; text-shadow: 0 0 15px rgba(168, 85, 247, 0.4);">
+            <i class="fas fa-link" aria-hidden="true"></i> B64 / URL
+        </h1>
+    </header>
+
+    <div class="b64-body">
+        
+        <section aria-label="Input Area">
+            <div class="b64-grp" id="grp-top">
+                <div class="b64-lbl-row">
+                    <label for="inp-source" class="b64-lbl"><i class="fas fa-terminal"></i> Source Data</label>
+                    <div class="action-btns">
+                        <button class="icon-btn" onclick="QS_B64.copy('inp-source')" aria-label="Copy source data"><i class="far fa-copy"></i> Copy</button>
+                        <button class="icon-btn clear" onclick="QS_B64.clearAll()" aria-label="Clear all fields"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <textarea id="inp-source" class="b64-inp" placeholder="Paste your plain text, encoded Base64, or URL string here..." aria-describedby="err-source"></textarea>
+                <div class="err-msg" id="err-source" role="alert" aria-live="assertive"><i class="fas fa-exclamation-circle"></i> Invalid string format for decoding.</div>
+            </div>
+        </section>
+
+        <section class="engine-controls" aria-label="Encoding Controls">
+            <button class="engine-btn encode" onclick="QS_B64.process('base64', 'encode')" aria-label="Encode to Base64">
+                <i class="fas fa-lock"></i> Encode B64
+            </button>
+            <button class="engine-btn decode" onclick="QS_B64.process('base64', 'decode')" aria-label="Decode from Base64">
+                <i class="fas fa-lock-open"></i> Decode B64
+            </button>
+            <button class="engine-btn encode" style="border-color: #3b82f6; color: #3b82f6;" onclick="QS_B64.process('url', 'encode')" aria-label="Encode URL">
+                <i class="fas fa-globe"></i> Encode URL
+            </button>
+            <button class="engine-btn decode" style="border-color: #10b981; color: #10b981;" onclick="QS_B64.process('url', 'decode')" aria-label="Decode URL">
+                <i class="fas fa-globe-americas"></i> Decode URL
+            </button>
+        </section>
+
+        <section aria-label="Output Area">
+            <div class="b64-grp" style="border-color: #a855f7;">
+                <div class="b64-lbl-row">
+                    <label for="inp-result" class="b64-lbl" style="color: #a855f7;"><i class="fas fa-check-circle"></i> Result Output</label>
+                    <div class="action-btns">
+                        <button class="icon-btn" onclick="QS_B64.copy('inp-result')" aria-label="Copy result data"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                </div>
+                <textarea id="inp-result" class="b64-inp" placeholder="Your processed string will appear here..." readonly style="color: #a855f7;"></textarea>
+            </div>
+        </section>
+
+    </div>
+</main>
+
+<script>
+    /* QUICKSOLVE PLATINUM - BASE64 & URL ENGINE (MPA STANDALONE)
+       Features: Unicode/Emoji Safe Base64, URI Component Encoding, Robust Error Handling
+    */
+    const QS_B64 = {
+        
+        process: function(type, action) {
+            const sourceEl = document.getElementById('inp-source');
+            const resultEl = document.getElementById('inp-result');
+            const grpSource = document.getElementById('grp-top');
+            const errSource = document.getElementById('err-source');
+
+            const text = sourceEl.value;
+
+            // Reset Errors
+            grpSource.classList.remove('error');
+            errSource.style.display = 'none';
+            resultEl.value = '';
+
+            if (!text.trim()) {
+                this.triggerHaptic();
+                return; // Do nothing if empty
+            }
+
+            try {
+                let output = "";
+
+                if (type === 'base64') {
+                    if (action === 'encode') {
+                        // Unicode Safe BTOA
+                        output = btoa(unescape(encodeURIComponent(text)));
+                    } else if (action === 'decode') {
+                        // Unicode Safe ATOB
+                        // Fix padding if missing before decoding
+                        let sanitizedText = text.replace(/\s/g, ''); 
+                        output = decodeURIComponent(escape(atob(sanitizedText)));
+                    }
+                } 
+                else if (type === 'url') {
+                    if (action === 'encode') {
+                        output = encodeURIComponent(text);
+                    } else if (action === 'decode') {
+                        output = decodeURIComponent(text);
+                    }
+                }
+
+                resultEl.value = output;
+                this.triggerHaptic();
+
+            } catch (err) {
+                console.error("Encoding/Decoding Error:", err);
+                grpSource.classList.add('error');
+                errSource.innerText = `Error: Invalid ${type.toUpperCase()} string for ${action}ing.`;
+                errSource.style.display = 'block';
+                this.triggerHaptic(true); // Error haptic
+            }
+        },
+
+        copy: async function(id) {
+            const el = document.getElementById(id);
+            if(!el.value) return;
+
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(el.value);
+                } else {
+                    el.select();
+                    document.execCommand('copy');
+                }
+            } catch (err) {
+                el.select();
+                document.execCommand('copy');
+            }
+            
+            this.triggerHaptic();
+        },
+
+        clearAll: function() {
+            document.getElementById('inp-source').value = '';
+            document.getElementById('inp-result').value = '';
+            document.getElementById('grp-top').classList.remove('error');
+            document.getElementById('err-source').style.display = 'none';
+            this.triggerHaptic();
+        },
+
+        triggerHaptic: function(isError = false) {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(isError ? [50, 50, 50] : 10);
+            }
+        }
+    };
+</script>
+</body>
+</html>

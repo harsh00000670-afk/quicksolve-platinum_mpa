@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+
+
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Loan Moratorium & EMI Pause Calculator | Financial Impact | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate the exact financial impact of pausing your EMI (Loan Moratorium). Understand interest capitalization, tenure extensions, and total interest burden instantly. 100% Secure & Offline.">
+    <meta name="keywords" content="loan moratorium calculator, emi holiday calculator, pause loan emi, interest capitalization formula, loan crisis mode, emi deferment cost, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/loan_suite/moratorium.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0f172a">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="EMI Pause Engine - Calculate the Cost of Moratorium">
+    <meta property="og:description" content="Is pausing your EMI worth it? Check the extra interest burden before you decide.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - DESIGN RETAINED */
+        /* =========================================
+           CRISIS MODE (MORATORIUM) ENGINE - SSJ4 Independent
+           Theme: Deep Slate / Crimson Danger / Warning Amber
+           ========================================= */
+        body { 
+            margin: 0; 
+            background-color: var(--bg-body, #0f172a); 
+            /* Using Local JetBrains Mono */
+            font-family: var(--font-main, sans-serif);
+        }
+
+        #mod-moratorium-overlay {
+            width: 100vw; min-height: 100vh; 
+            background-color: var(--bg-body, #0f172a); 
+            display: flex; flex-direction: column;
+            font-family: var(--font-main, sans-serif);
+            overflow: hidden; animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* HEADER */
+        .s-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 15px; background: var(--surface, #1e293b); border-bottom: 1px solid var(--border, #334155);
+            flex-shrink: 0; position: sticky; top: 0; z-index: 10;
+        }
+        .s-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f1f5f9); font-size: 1.2rem; cursor: pointer; padding: 5px; text-decoration: none;}
+        .s-head .s-tit { 
+            color: #ef4444; 
+            font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* BODY */
+        .s-body {
+            flex: 1; overflow-y: auto; padding: 15px;
+            padding-bottom: 80px; 
+            display: flex; flex-direction: column; gap: 12px;
+        }
+
+        /* INPUT COMPONENTS */
+        .lbl { color: var(--text-muted, #94a3b8); font-size: 0.7rem; font-weight: 700; margin-bottom: 5px; display: block; text-transform: uppercase; }
+        
+        .inp-box {
+            background: var(--surface, #1e293b); border: 1px solid var(--border, #334155); border-radius: 8px;
+            padding: 10px 12px; transition: border-color 0.2s;
+        }
+        .inp-box:focus-within { border-color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.1); }
+        
+        .inp-flex { display: flex; align-items: center; gap: 8px; }
+        .inp-unit { color: #ef4444; font-weight: 800; font-size: 1rem; }
+        .inp-main {
+            flex: 1; background: transparent; border: none; color: var(--text-main, #fff); 
+            font-size: 1.15rem; font-family: var(--font-main); outline: none; width: 100%; min-width: 0;
+        }
+        .inp-main:focus { color: #ef4444; }
+        .inp-main::placeholder { color: #475569; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        .cust-select {
+            background: rgba(2, 6, 23, 0.5); color: #ef4444; border: 1px solid var(--border);
+            border-radius: 6px; padding: 6px 24px 6px 10px; font-weight: 700; font-size: 0.8rem;
+            appearance: none; -webkit-appearance: none; cursor: pointer; outline: none;
+            min-width: 70px; text-align: left;
+        }
+
+        /* Custom Radio Toggle (Interest Treatment) */
+        .tog-row { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; align-items: stretch; }
+        .tog-item { flex: 1; position: relative; display: flex; }
+        .tog-item input { position: absolute; opacity: 0; cursor: pointer; width: 0; height: 0; }
+        .tog-lbl {
+            flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 12px 4px; color: var(--text-muted); font-size: 0.75rem; font-weight: 700;
+            cursor: pointer; transition: 0.2s; line-height: 1.2; text-align: center;
+        }
+        .tog-lbl small { font-size: 0.6rem; margin-top: 4px; font-weight: 600; opacity: 0.8; }
+        .tog-item input:checked + .tog-lbl { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .tog-item input:checked + .tog-lbl small { opacity: 1; }
+
+        /* RESULTS CARD */
+        .res-card {
+            background: rgba(15, 23, 42, 0.5); 
+            border: 2px solid; border-image: linear-gradient(45deg, #ef4444, #f59e0b) 1; 
+            border-radius: 12px; padding: 15px; display: flex; flex-direction: column; gap: 12px;
+            margin-top: 5px; text-align: center;
+        }
+        
+        .danger-box { background: rgba(239, 68, 68, 0.05); border: 1px dashed #ef4444; border-radius: 8px; padding: 15px; }
+        .danger-lbl { font-size: 0.75rem; text-transform: uppercase; color: #ef4444; font-weight: 800; letter-spacing: 1px; }
+        .danger-val { font-size: 1.8rem; font-weight: 800; color: #ef4444; margin-top: 5px; }
+        
+        .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
+        .imp-item { background: rgba(2, 6, 23, 0.5); padding: 10px; border-radius: 8px; border: 1px solid var(--border); }
+        .imp-lbl { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; }
+        .imp-val { font-size: 1.1rem; font-weight: 800; margin-top: 3px; color: var(--text-main); }
+        .imp-val.old { color: var(--text-muted); text-decoration: line-through; font-size: 0.9rem; }
+        .imp-val.new { color: #f59e0b; }
+
+        /* STICKY BOTTOM */
+        .sticky-bottom {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            background: var(--surface); border-top: 1px solid #ef4444;
+            padding: 10px 15px; display: flex; gap: 10px; z-index: 20;
+            box-sizing: border-box;
+        }
+        .btn-sch {
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 14px; background: rgba(239, 68, 68, 0.1); color: #ef4444; 
+            border: none; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 0.95rem;
+        }
+        .btn-sch:active { transform: scale(0.98); background: rgba(239, 68, 68, 0.2); }
+
+        /* SCHEDULE MODAL */
+        #sch-modal-mor { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg-body); z-index:50; flex-direction:column; animation:slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        #sch-body-mor td { padding:12px 4px; border-bottom:1px solid var(--border); color: var(--text-main); }
+        #sch-body-mor tr:nth-child(even) { background: rgba(30, 41, 59, 0.4); }
+    </style>
+</head>
+
+<body>
+
+<main id="mod-moratorium-overlay" role="main">
+    
+    <header class="s-head" role="banner">
+        <a href="../loan.html" class="qs-back-btn" aria-label="Go back to Loan Menu">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </a>
+        <h1 class="s-tit"><i class="fas fa-pause-circle" aria-hidden="true"></i> CRISIS MODE</h1>
+        <div style="width:24px;"></div> 
+    </header>
+
+    <div class="s-body">
+
+        <section aria-labelledby="loan-params-heading">
+            <h2 id="loan-params-heading" class="sr-only" style="display:none;">Original Loan Details</h2>
+            <div class="grid-2">
+                <div class="inp-box">
+                    <label for="mor-amt" class="lbl">Loan Amount</label>
+                    <div class="inp-flex">
+                        <span class="inp-unit" aria-hidden="true">₹</span>
+                        <input type="number" id="mor-amt" class="inp-main" placeholder="5,00,000" aria-label="Enter loan amount" oninput="QS_Moratorium.calc()">
+                    </div>
+                </div>
+                <div class="inp-box">
+                    <label for="mor-rate" class="lbl">Interest Rate (R)</label>
+                    <div class="inp-flex">
+                        <span class="inp-unit" aria-hidden="true">%</span>
+                        <input type="number" id="mor-rate" class="inp-main" placeholder="8.5" step="0.1" aria-label="Enter interest rate" oninput="QS_Moratorium.calc()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="inp-box">
+                <label for="mor-tenure" class="lbl">Original Tenure</label>
+                <div class="inp-flex">
+                    <input type="number" id="mor-tenure" class="inp-main" placeholder="60" aria-label="Enter original tenure value" oninput="QS_Moratorium.calc()">
+                    <div style="position:relative;">
+                        <select id="mor-tenure-type" class="cust-select" aria-label="Select tenure type" onchange="QS_Moratorium.calc()">
+                            <option value="M" selected>Months</option>
+                            <option value="Y">Years</option>
+                            <option value="W">Weeks</option>
+                        </select>
+                        <i class="fas fa-chevron-down" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); color:#ef4444; font-size:0.6rem; pointer-events:none;" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section aria-labelledby="pause-params-heading">
+            <h2 id="pause-params-heading" class="sr-only" style="display:none;">Moratorium Details</h2>
+            <div class="grid-2">
+                <div class="inp-box" style="border-color: #f59e0b;">
+                    <label for="mor-period" class="lbl" style="color: #f59e0b;">Pause For (Period)</label>
+                    <div class="inp-flex">
+                        <input type="number" id="mor-period" class="inp-main" placeholder="6" aria-label="Enter pause period length" oninput="QS_Moratorium.calc()">
+                        <div style="position:relative;">
+                            <select id="mor-period-type" class="cust-select" style="color:#f59e0b; border-color:#f59e0b;" aria-label="Select pause period type" onchange="QS_Moratorium.calc()">
+                                <option value="M" selected>Mo</option>
+                                <option value="Y">Yr</option>
+                            </select>
+                            <i class="fas fa-chevron-down" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); color:#f59e0b; font-size:0.6rem; pointer-events:none;" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="inp-box">
+                    <label for="mor-start" class="lbl">Start After Month</label>
+                    <div class="inp-flex">
+                        <span class="inp-unit" aria-hidden="true"><i class="far fa-calendar-alt"></i></span>
+                        <input type="number" id="mor-start" class="inp-main" placeholder="1" value="1" aria-label="Enter starting month of pause" oninput="QS_Moratorium.calc()">
+                    </div>
+                </div>
+            </div>
+
+            <fieldset style="border:none; padding:0; margin:0;">
+                <legend class="lbl" style="margin-top:2px; margin-bottom:0px;">Interest Treatment During Pause</legend>
+                <div class="tog-row">
+                    <div class="tog-item">
+                        <input type="radio" name="mor-treat" id="mor-treat-cap" value="cap" checked aria-labelledby="lbl-cap" onchange="QS_Moratorium.calc()">
+                        <label for="mor-treat-cap" class="tog-lbl" id="lbl-cap">
+                            <span>Add to Principal</span>
+                            <small>(Capitalize)</small>
+                        </label>
+                    </div>
+                    <div class="tog-item">
+                        <input type="radio" name="mor-treat" id="mor-treat-pay" value="pay" aria-labelledby="lbl-pay" onchange="QS_Moratorium.calc()">
+                        <label for="mor-treat-pay" class="tog-lbl" id="lbl-pay">
+                            <span>Pay Only Interest</span>
+                            <small>(No compounding)</small>
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+        </section>
+
+        <section class="res-card" aria-labelledby="impact-heading" aria-live="polite">
+            <h2 id="impact-heading" class="sr-only" style="display:none;">Financial Impact Results</h2>
+            <div class="danger-box">
+                <div class="danger-lbl" id="extra-int-label">Extra Interest Burden</div>
+                <div id="res-extra-int" class="danger-val" aria-labelledby="extra-int-label">+ ₹ --</div>
+            </div>
+
+            <div class="impact-grid">
+                <div class="imp-item">
+                    <div class="imp-lbl" id="emi-change-label">Old EMI -> New EMI</div>
+                    <div id="res-old-emi" class="imp-val old" aria-hidden="true">₹ --</div>
+                    <div id="res-new-emi" class="imp-val new" aria-labelledby="emi-change-label">₹ --</div>
+                </div>
+                <div class="imp-item">
+                    <div class="imp-lbl" id="time-change-label">Total Time (Extended)</div>
+                    <div id="res-old-time" class="imp-val old" aria-hidden="true">-- Months</div>
+                    <div id="res-new-time" class="imp-val new" aria-labelledby="time-change-label">-- Months</div>
+                </div>
+            </div>
+        </section>
+
+    </div> 
+    
+    <div class="sticky-bottom">
+        <button class="btn-sch" aria-label="View Detailed Impact Schedule" onclick="QS_Moratorium.openSchedule()">
+            <i class="fas fa-calendar-times" aria-hidden="true"></i> View Impact Schedule
+        </button>
+    </div>
+
+    <div id="sch-modal-mor" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <header class="s-head">
+            <button class="qs-back-btn" aria-label="Close Schedule Modal" onclick="QS_Moratorium.closeSchedule()">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+            <h2 id="modal-title" class="s-tit" style="margin:0;"><i class="fas fa-calendar-times" aria-hidden="true"></i> IMPACT SCHEDULE</h2>
+            <div style="width:24px;"></div>
+        </header>
+        <div style="flex:1; overflow-y:auto; padding:10px; padding-bottom:50px;">
+            <table style="width:100%; text-align:right; border-collapse:collapse; font-size:0.75rem; font-family:var(--font-mono, monospace);">
+                <caption class="sr-only">Detailed Repayment Schedule showing Moratorium Impact</caption>
+                <thead style="position:sticky; top:0; background:var(--surface); color:var(--text-muted); box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                    <tr>
+                        <th scope="col" style="padding:10px 4px; text-align:center;">Mo.</th>
+                        <th scope="col" style="padding:10px 4px;">Status</th>
+                        <th scope="col" style="padding:10px 4px; color:#ef4444;">Pay</th>
+                        <th scope="col" style="padding:10px 4px; color:#38bdf8;">Prin.</th>
+                        <th scope="col" style="padding:10px 4px;">Bal.</th>
+                    </tr>
+                </thead>
+                <tbody id="sch-body-mor">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    /* QUICKSOLVE PLATINUM - MORATORIUM (CRISIS) ENGINE (MPA STANDALONE)
+       Features: Interest Treatment Toggles, Delayed Start, Full Loop Simulation.
+    */
+    const QS_Moratorium = {
+        
+        init: function() {
+            console.log("Crisis Mode: Engine Activated 🔴");
+            this.clearResults();
+        },
+
+        calc: function() {
+            try {
+                // 1. Fetch Inputs
+                const P = parseFloat(document.getElementById('mor-amt').value);
+                const rInp = parseFloat(document.getElementById('mor-rate').value);
+                const tInp = parseFloat(document.getElementById('mor-tenure').value);
+                const tType = document.getElementById('mor-tenure-type').value;
+                
+                const pInp = parseFloat(document.getElementById('mor-period').value) || 0;
+                const pType = document.getElementById('mor-period-type').value;
+                const startInp = parseFloat(document.getElementById('mor-start').value) || 1;
+                
+                const treatCap = document.getElementById('mor-treat-cap').checked; // true = Capitalize, false = Pay Interest
+
+                // Validation
+                if (!P || !rInp || !tInp || P <= 0 || rInp <= 0 || tInp <= 0) {
+                    this.clearResults();
+                    return;
+                }
+
+                // 2. Standardization
+                const r = (rInp / 12) / 100;
+                let n = tType === 'Y' ? tInp * 12 : (tType === 'W' ? tInp / 4.33 : tInp);
+                n = Math.max(1, Math.round(n));
+
+                let morMonths = pType === 'Y' ? pInp * 12 : pInp;
+                morMonths = Math.max(0, Math.round(morMonths));
+                let startMonth = Math.max(1, Math.round(startInp));
+
+                // 3. Base Calculation (No Moratorium)
+                let baseEmi = 0;
+                let baseTotalInt = 0;
+                
+                if (r > 0) {
+                    const xBase = Math.pow(1 + r, n);
+                    baseEmi = (P * r * xBase) / (xBase - 1);
+                } else {
+                    baseEmi = P / n;
+                }
+                baseTotalInt = (baseEmi * n) - P;
+
+                // 4. Moratorium Simulation
+                let balance = P;
+                let totalIntWithMor = 0;
+                let newEmi = baseEmi;
+                let totalMonths = n + morMonths;
+
+                // Phase 1: Before Moratorium
+                for (let i = 1; i < startMonth; i++) {
+                    if (i > n) break; // Safety
+                    let interest = balance * r;
+                    let principal = baseEmi - interest;
+                    balance -= principal;
+                    totalIntWithMor += interest;
+                }
+
+                // Phase 2: During Moratorium
+                for (let i = startMonth; i < startMonth + morMonths; i++) {
+                    let interest = balance * r;
+                    totalIntWithMor += interest;
+                    if (treatCap) {
+                        // Add interest to principal
+                        balance += interest;
+                    } 
+                    // If pay simple interest, balance stays same, user pays 'interest' out of pocket (accounted in totalInt)
+                }
+
+                // Phase 3: Post Moratorium
+                let remainingMonths = n - (startMonth - 1); // We keep the remaining paying tenure the same
+                if (remainingMonths > 0 && balance > 0) {
+                    if(r > 0) {
+                        const xNew = Math.pow(1 + r, remainingMonths);
+                        newEmi = (balance * r * xNew) / (xNew - 1);
+                    } else {
+                        newEmi = balance / remainingMonths;
+                    }
+                    
+                    // Add remaining interest
+                    totalIntWithMor += (newEmi * remainingMonths) - balance;
+                }
+
+                // 5. Impact Math
+                let extraInterest = Math.max(0, totalIntWithMor - baseTotalInt);
+
+                // 6. UI Update
+                document.getElementById('res-extra-int').innerText = "+ " + this.fmt(extraInterest);
+                
+                document.getElementById('res-old-emi').innerText = this.fmt(baseEmi);
+                document.getElementById('res-new-emi').innerText = this.fmt(newEmi);
+                
+                document.getElementById('res-old-time').innerText = this.yrs(n);
+                document.getElementById('res-new-time').innerText = this.yrs(totalMonths);
+
+            } catch (e) {
+                console.error("Moratorium Error:", e);
+                this.clearResults();
+            }
+        },
+
+        triggerHaptic: function() {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        },
+
+        openSchedule: function() {
+            this.triggerHaptic();
+            
+            // Re-fetch everything safely for loop
+            const P = parseFloat(document.getElementById('mor-amt').value);
+            const rInp = parseFloat(document.getElementById('mor-rate').value);
+            const tInp = parseFloat(document.getElementById('mor-tenure').value);
+            const tType = document.getElementById('mor-tenure-type').value;
+            const pInp = parseFloat(document.getElementById('mor-period').value) || 0;
+            const pType = document.getElementById('mor-period-type').value;
+            const startMonth = Math.max(1, Math.round(parseFloat(document.getElementById('mor-start').value) || 1));
+            const treatCap = document.getElementById('mor-treat-cap').checked;
+
+            if (!P || !tInp) { alert("Please enter loan details first."); return; }
+
+            const r = (rInp / 12) / 100;
+            let n = tType === 'Y' ? tInp * 12 : (tType === 'W' ? tInp / 4.33 : tInp);
+            n = Math.max(1, Math.round(n));
+            let morMonths = Math.max(0, Math.round(pType === 'Y' ? pInp * 12 : pInp));
+
+            let balance = P;
+            let currentEmi = 0;
+            if(r > 0) {
+                let xBase = Math.pow(1 + r, n);
+                currentEmi = (P * r * xBase) / (xBase - 1);
+            } else {
+                currentEmi = P / n;
+            }
+            
+            let html = "";
+            let remainingMonths = n;
+
+            for (let i = 1; i <= n + morMonths; i++) {
+                if (balance <= 0.5 && i > startMonth + morMonths) break;
+
+                let interest = balance * r;
+                let principal = 0;
+                let payment = 0;
+                let status = "Paying";
+                let statColor = "var(--text-muted)";
+
+                let isMoratorium = (i >= startMonth && i < startMonth + morMonths);
+
+                if (isMoratorium) {
+                    status = "PAUSED";
+                    statColor = "#ef4444";
+                    if (treatCap) {
+                        balance += interest;
+                        payment = 0;
+                        principal = 0; // Added to balance
+                    } else {
+                        payment = interest; // Paying interest out of pocket
+                        principal = 0;
+                    }
+                } else {
+                    // Recalculate EMI after moratorium ends
+                    if (i === startMonth + morMonths && remainingMonths > 0) {
+                        if(r > 0) {
+                            let xNew = Math.pow(1 + r, remainingMonths);
+                            currentEmi = (balance * r * xNew) / (xNew - 1);
+                        } else {
+                            currentEmi = balance / remainingMonths;
+                        }
+                    }
+
+                    payment = currentEmi;
+                    principal = payment - interest;
+                    
+                    if (principal > balance) {
+                        principal = balance;
+                        payment = balance + interest;
+                    }
+                    balance -= principal;
+                    remainingMonths--;
+                }
+
+                html += `<tr>
+                    <td style="text-align:center; color:var(--text-muted);">${i}</td>
+                    <td style="color:${statColor}; font-size:0.65rem; font-weight:800;">${status}</td>
+                    <td style="color:#ef4444;">${this.fmt(payment).replace('₹ ','')}</td>
+                    <td style="color:#38bdf8;">${this.fmt(principal).replace('₹ ','')}</td>
+                    <td>${this.fmt(Math.max(0, balance)).replace('₹ ','')}</td>
+                </tr>`;
+            }
+
+            document.getElementById('sch-body-mor').innerHTML = html;
+            document.getElementById('sch-modal-mor').style.display = 'flex';
+        },
+
+        closeSchedule: function() {
+            this.triggerHaptic();
+            document.getElementById('sch-modal-mor').style.display = 'none';
+        },
+
+        fmt: function(n) { 
+            if(isNaN(n) || !isFinite(n)) return "₹ 0";
+            return "₹ " + Math.round(n).toLocaleString('en-IN'); 
+        },
+
+        yrs: function(m) {
+            if(isNaN(m) || !isFinite(m)) return "0 Mo";
+            if(m < 12) return m + " Mo";
+            const y = Math.floor(m/12);
+            const r = m%12;
+            return r > 0 ? `${y}y ${r}mo` : `${y} Yrs`;
+        },
+
+        clearResults: function() {
+            document.getElementById('res-extra-int').innerText = "+ ₹ --";
+            document.getElementById('res-old-emi').innerText = "₹ --";
+            document.getElementById('res-new-emi').innerText = "₹ --";
+            document.getElementById('res-old-time').innerText = "-- Months";
+            document.getElementById('res-new-time').innerText = "-- Months";
+        }
+    };
+
+    // Auto-Init on Load
+    window.onload = function() {
+        QS_Moratorium.init();
+    };
+</script>
+</body>
+</html>

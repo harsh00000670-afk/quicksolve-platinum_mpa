@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Margin vs Markup Illusion | Reality Check Suite | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           MARGIN ILLUSION ENGINE - PLATINUM (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800;900&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-red: #ef4444;
+            --accent-red-glow: rgba(239, 68, 68, 0.3);
+            --accent-gold: #fbbd23;
+            --accent-gold-glow: rgba(251, 189, 35, 0.3);
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-cyan: #06b6d4;
+            --accent-cyan-glow: rgba(6, 182, 212, 0.3);
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.25; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 250px; height: 250px; background: var(--accent-gold); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-cyan); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-gold); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #fbbd23, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--text-sub); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CARDS & INPUTS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(251, 189, 35, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(251, 189, 35, 0.15);
+        }
+        .inp-group { margin-bottom: 18px; position: relative; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        
+        .inp-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .inp-field:focus { border-color: var(--accent-gold); box-shadow: 0 0 10px var(--accent-gold-glow); }
+        .inp-field::placeholder { color: var(--text-dim); font-weight: 500; }
+
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #fbbd23, #06b6d4);
+            color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px var(--accent-cyan-glow); display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 10px;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD & GRID */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(6, 182, 212, 0.4); border-radius: 20px; 
+            padding: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(6, 182, 212, 0.15); display: none; text-align: center;
+        }
+
+        .output-row { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
+        .res-box { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 18px 15px; text-align: left;}
+        
+        .res-box-lbl { font-size: 0.7rem; color: var(--text-sub); text-transform: uppercase; font-weight: 800; margin-bottom: 8px; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;}
+        .res-box-val { font-size: 1.6rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; line-height: 1.1; margin-bottom: 8px; word-break: break-word;}
+        .res-box-desc { font-size: 0.85rem; color: var(--text-dim); font-weight: 600; line-height: 1.5; }
+
+        .res-box.main-val { border-color: rgba(6, 182, 212, 0.4); background: rgba(6, 182, 212, 0.05); box-shadow: inset 0 0 20px rgba(6, 182, 212, 0.1); }
+        .res-box.main-val .res-box-val { color: var(--accent-cyan); font-size: 2.2rem; }
+
+        .res-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .res-grid-2 .res-box-val { font-size: 1.4rem; }
+
+        /* THEMATIC COLORS */
+        .color-green { color: var(--accent-green) !important; }
+        .color-gold { color: var(--accent-gold) !important; }
+        .color-red { color: var(--accent-red) !important; }
+        .color-cyan { color: var(--accent-cyan) !important; }
+
+        /* LIST STYLES */
+        .psy-list { list-style: none; padding: 0; margin: 0; }
+        .psy-list li { font-size: 0.85rem; color: var(--text-main); font-weight: 600; margin-bottom: 8px; display: flex; gap: 8px; align-items: flex-start;}
+        .psy-list li i { color: var(--accent-cyan); margin-top: 3px; font-size: 0.75rem;}
+
+        /* ALERTS */
+        .trap-alert {
+            background: rgba(239, 68, 68, 0.1); border: 1px solid var(--accent-red); border-radius: 12px;
+            padding: 15px; text-align: left; display: none; align-items: flex-start; gap: 12px;
+            box-shadow: 0 0 15px var(--accent-red-glow); margin-top: 15px;
+        }
+        .trap-icon { font-size: 1.5rem; color: var(--accent-red); margin-top: 2px;}
+        .trap-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.5; font-weight: 600;}
+        .trap-text b { color: var(--accent-red); font-weight: 900; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;}
+
+        .info-alert {
+            background: rgba(251, 189, 35, 0.1); border: 1px solid var(--accent-gold); border-radius: 12px;
+            padding: 15px; text-align: left; display: none; align-items: flex-start; gap: 12px; margin-top: 15px;
+        }
+        .info-icon { font-size: 1.5rem; color: var(--accent-gold); margin-top: 2px;}
+        .info-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.5; font-weight: 600;}
+
+        /* SAVAGE QUOTE VERDICT */
+        .savage-quote {
+            background: rgba(6, 182, 212, 0.1); border-left: 4px solid var(--accent-cyan);
+            padding: 18px 15px; margin-top: 20px; border-radius: 0 12px 12px 0;
+            font-size: 0.9rem; color: var(--text-main); font-weight: 600; text-align: left;
+            line-height: 1.6;
+        }
+        .savage-quote b { color: var(--accent-cyan); font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
+
+        /* CUSTOM TOAST */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px var(--accent-red-glow); display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .toast.show { bottom: 30px; }
+
+        /* ANIMATIONS */
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-store"></i> MARGIN ILLUSION</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>Founder Survival Engine</h1>
+            <p>> pricing --expose_markup --profit</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">1. Cost Price (COGS)</label>
+                    <input type="number" id="inp-cp" class="inp-field" placeholder="e.g. 200" min="0">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">2. Selling Price</label>
+                    <input type="number" id="inp-sp" class="inp-field" placeholder="e.g. 300" min="0">
+                </div>
+            </div>
+
+            <div class="inp-group">
+                <label class="inp-lbl">3. Proposed Discount (%) <span style="text-transform:none; color:var(--text-dim);">(Opt)</span></label>
+                <input type="number" id="inp-disc" class="inp-field" placeholder="e.g. 20" min="0" max="100">
+            </div>
+
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">4. Target Margin (%) <span style="text-transform:none; color:var(--text-dim);">(Opt)</span></label>
+                    <input type="number" id="inp-target-margin" class="inp-field" placeholder="e.g. 40" min="0" max="99">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">5. GST / Tax (%) <span style="text-transform:none; color:var(--text-dim);">(Opt)</span></label>
+                    <input type="number" id="inp-gst" class="inp-field" placeholder="e.g. 18" min="0" max="100">
+                </div>
+            </div>
+
+            <button class="calc-btn" onclick="MarginEngine.calculate()">
+                <i class="fas fa-search-dollar"></i> Execute Reality Check
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container">
+            
+            <div class="output-row">
+                
+                <div class="res-box main-val">
+                    <div class="res-box-lbl"><i class="fas fa-wallet"></i> 1. Absolute Base Profit</div>
+                    <div class="res-box-val" id="out-profit">₹0</div>
+                    <hr style="border-color: rgba(6, 182, 212, 0.2); margin: 12px 0;">
+                    <div class="res-box-lbl" style="color: var(--accent-cyan);"><i class="fas fa-chart-pie"></i> 3. Actual Profit Margin</div>
+                    <div class="res-box-val" id="out-margin" style="font-size: 1.8rem;">0%</div>
+                    <div class="res-box-desc" style="color:var(--text-main); font-weight:700;">
+                        This is your true gross margin. It is always calculated against your selling price, not your cost.
+                    </div>
+                </div>
+
+                <div class="res-grid-2">
+                    <div class="res-box">
+                        <div class="res-box-lbl" style="color:var(--accent-gold);">2. Markup Percentage</div>
+                        <div class="res-box-val color-gold" id="out-markup">0%</div>
+                        <div class="res-box-desc" style="font-size: 0.75rem;">You applied this markup on your cost price. Do not confuse this with your margin.</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-box-lbl" style="color:var(--accent-red);">7. Break-Even Disc Limit</div>
+                        <div class="res-box-val color-red" id="out-breakeven">0%</div>
+                        <div class="res-box-desc" style="font-size: 0.75rem;">Exceeding this discount percentage will immediately push your transaction into a net loss.</div>
+                    </div>
+                </div>
+
+                <div class="trap-alert" id="disc-trap" style="display: none;">
+                    <div class="trap-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="trap-text">
+                        <b>4. DISCOUNT IMPACT ANALYZER</b>
+                        <div id="disc-impact-text" style="margin-top:5px; margin-bottom:5px;"></div>
+                        <div id="disc-loss-warn" style="color:var(--accent-red); font-weight:800; font-family:'JetBrains Mono', monospace; font-size:1rem;"></div>
+                    </div>
+                </div>
+
+                <div class="info-alert" id="target-info" style="display: none;">
+                    <div class="info-icon"><i class="fas fa-bullseye"></i></div>
+                    <div class="info-text">
+                        <b style="color:var(--accent-gold); font-size:0.9rem; font-weight:900;">5. TARGET MARGIN STRATEGY</b><br>
+                        To achieve your desired net margin of <span id="out-target-pct"></span>, your required selling price must be strictly adjusted to <b id="out-target-sp" style="color:var(--accent-gold); font-family:'JetBrains Mono', monospace; font-size:1.1rem;">₹0</b>.
+                    </div>
+                </div>
+
+                <div class="info-alert" id="tax-info" style="display: none; background: rgba(168, 85, 247, 0.1); border-color: var(--accent-purple);">
+                    <div class="info-icon" style="color:var(--accent-purple);"><i class="fas fa-file-invoice-dollar"></i></div>
+                    <div class="info-text">
+                        <b style="color:var(--accent-purple); font-size:0.9rem; font-weight:900;">6. TAXATION REALITY CHECK</b><br>
+                        Factoring in a <span id="out-tax-pct"></span> inclusive tax load, your net operational profit compresses to <b id="out-tax-profit" style="color:var(--accent-purple); font-family:'JetBrains Mono', monospace; font-size:1rem;">₹0</b>. Your true post-tax margin collapses to <b id="out-tax-margin" style="color:var(--accent-purple); font-weight:900;">0%</b>.
+                    </div>
+                </div>
+
+                <div class="res-box">
+                    <div class="res-box-lbl" style="color: var(--accent-green);"><i class="fas fa-brain"></i> 8. Pricing Psychology Insights</div>
+                    <ul class="psy-list">
+                        <li><i class="fas fa-chevron-right"></i> Founders formulate in markups; the market penalizes in margins.</li>
+                        <li><i class="fas fa-chevron-right"></i> Deploying a discount is effortless; recovering the lost profit margin requires exponentially higher sales.</li>
+                        <li><i class="fas fa-chevron-right"></i> Gross sales volume is a vanity metric; operational margin is sanity.</li>
+                    </ul>
+                    <hr style="border-color: rgba(255,255,255,0.05); margin: 12px 0;">
+                    <div class="res-box-lbl" style="color: var(--accent-gold);"><i class="fas fa-boxes"></i> 9. Volume vs Profit Reality</div>
+                    <div class="res-box-desc" style="color:var(--text-main); font-weight:600;">
+                        Operating on depleted margins demands a relentless, high-volume inventory turnover. Without extreme volume, your overheads will cannibalize your capital.
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="savage-quote">
+                <b><i class="fas fa-skull"></i> 10. THE FINAL REALITY CHECK</b>
+                "Do not celebrate your markup. Margin is your only authentic indicator of profitability. Blind discounting driven by markup-delusion will evaporate your liquidity entirely. A disciplined founder defends the margin aggressively and never chases unprofitable volume."
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - MARGIN VS MARKUP ENGINE */
+        
+        window.MarginEngine = {
+            haptic: function() { if(navigator.vibrate) navigator.vibrate(20); },
+
+            showToast: function(msg) {
+                const toast = document.getElementById('custom-toast');
+                document.getElementById('toast-msg').innerText = msg;
+                if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            },
+
+            formatCurrency: function(val) {
+                return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(val).replace('₹', '₹');
+            },
+
+            calculate: function() {
+                this.haptic();
+
+                // 1. Get Inputs
+                const cp = parseFloat(document.getElementById('inp-cp').value);
+                const sp = parseFloat(document.getElementById('inp-sp').value);
+                const disc = parseFloat(document.getElementById('inp-disc').value) || 0;
+                const target = parseFloat(document.getElementById('inp-target-margin').value) || 0;
+                const gst = parseFloat(document.getElementById('inp-gst').value) || 0;
+
+                // Validations
+                if(isNaN(cp) || cp <= 0) { this.showToast("Invalid Input: Cost Price is required."); return; }
+                if(isNaN(sp) || sp <= 0) { this.showToast("Invalid Input: Selling Price is required."); return; }
+                if(sp <= cp && disc > 0) { this.showToast("Warning: You are already pricing at or below cost."); }
+
+                // 2. Base Math
+                let profit = sp - cp;
+                let markupPct = (profit / cp) * 100;
+                let marginPct = (profit / sp) * 100;
+                
+                // If selling below cost without discount
+                if (sp <= cp) {
+                    marginPct = (profit / sp) * 100; // Will be negative or zero
+                }
+
+                // Output 1, 2, 3
+                document.getElementById('out-profit').innerText = this.formatCurrency(profit);
+                document.getElementById('out-markup').innerText = `${markupPct.toFixed(2)}%`;
+                document.getElementById('out-margin').innerText = `${marginPct.toFixed(2)}%`;
+
+                // Output 7: Break-Even Discount Limit
+                // Max discount before loss is essentially the Gross Margin %
+                let breakEvenLimit = marginPct > 0 ? marginPct : 0;
+                document.getElementById('out-breakeven').innerText = `${breakEvenLimit.toFixed(2)}%`;
+
+                // Output 4: Discount Impact Analyzer
+                const discTrap = document.getElementById('disc-trap');
+                if (disc > 0) {
+                    let discSP = sp * (1 - (disc / 100));
+                    let discProfit = discSP - cp;
+                    let discMargin = (discProfit / discSP) * 100;
+
+                    let impactHtml = `Applying a ${disc}% discount drops your selling price to <b>${this.formatCurrency(discSP)}</b>.<br>`;
+                    
+                    if (discProfit <= 0) {
+                        impactHtml += `Your profit is eradicated. You are operating at a net loss of <b>${this.formatCurrency(Math.abs(discProfit))}</b> per unit.`;
+                        document.getElementById('disc-loss-warn').innerText = "SYSTEM ALERT: CRITICAL LOSS ZONE";
+                        discTrap.style.borderColor = "var(--accent-red)";
+                        discTrap.style.background = "rgba(239, 68, 68, 0.1)";
+                    } else {
+                        impactHtml += `Your profit compresses to <b>${this.formatCurrency(discProfit)}</b>. Your actual margin crashes to <b>${discMargin.toFixed(2)}%</b>.`;
+                        document.getElementById('disc-loss-warn').innerText = "";
+                        discTrap.style.borderColor = "var(--accent-gold)";
+                        discTrap.style.background = "rgba(251, 189, 35, 0.1)";
+                    }
+                    
+                    document.getElementById('disc-impact-text').innerHTML = impactHtml;
+                    discTrap.style.display = 'flex';
+                } else {
+                    discTrap.style.display = 'none';
+                }
+
+                // Output 5: Target Margin Calculator
+                const targetInfo = document.getElementById('target-info');
+                if (target > 0 && target < 100) {
+                    // SP = CP / (1 - Margin)
+                    let targetSP = cp / (1 - (target / 100));
+                    document.getElementById('out-target-pct').innerText = `${target}%`;
+                    document.getElementById('out-target-sp').innerText = this.formatCurrency(targetSP);
+                    targetInfo.style.display = 'flex';
+                } else if (target >= 100) {
+                    this.showToast("Mathematically impossible: Margin cannot be 100% or greater unless cost is 0.");
+                    targetInfo.style.display = 'none';
+                } else {
+                    targetInfo.style.display = 'none';
+                }
+
+                // Output 6: Tax Reality Check
+                const taxInfo = document.getElementById('tax-info');
+                if (gst > 0) {
+                    // Assuming SP is inclusive of GST. Net Revenue = SP / (1 + GST%)
+                    let netSP = sp / (1 + (gst / 100));
+                    let netProfit = netSP - cp;
+                    let netMargin = (netProfit / netSP) * 100;
+
+                    document.getElementById('out-tax-pct').innerText = `${gst}%`;
+                    document.getElementById('out-tax-profit').innerText = this.formatCurrency(netProfit);
+                    document.getElementById('out-tax-margin').innerText = `${netMargin.toFixed(2)}%`;
+                    taxInfo.style.display = 'flex';
+                } else {
+                    taxInfo.style.display = 'none';
+                }
+
+                // Reveal UI
+                const resCard = document.getElementById('results-container');
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-up');
+                void resCard.offsetWidth; // trigger reflow
+                resCard.classList.add('anim-up');
+                
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+        };
+    </script>
+</body>
+</html>

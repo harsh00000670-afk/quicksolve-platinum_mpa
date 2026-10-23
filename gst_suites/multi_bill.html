@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Multi-Item GST Billing Master | Inventory Tax Tracker | QuickSolve Platinum</title>
+    <meta name="description" content="Professional Multi-Item GST Bill Generator with persistent storage. Add multiple products with different GST slabs and generate a complete tax invoice summary. 100% Offline.">
+    <meta name="keywords" content="multi item gst calculator, gst billing tool, inventory tax calculator, digital gst invoice, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/gst_suites/multi_bill.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#020617">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           MULTI-ITEM GST BILLING (PLATINUM GOD MODE)
+           Theme: Obsidian / Cyber Cyan
+           ========================================= */
+        #mod-bill-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: #020617; z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .mb-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #0f172a; border-bottom: 1px solid #1e293b;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .mb-head .qs-back-btn { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .mb-tit { color: #38bdf8; font-weight: 900; font-size: 0.95rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .mb-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 100px; }
+
+        /* Input Form Card */
+        .mb-form-card { 
+            background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; 
+            padding: 15px; display: flex; flex-direction: column; gap: 10px;
+        }
+        
+        .mb-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .mb-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 10px 12px; border-radius: 8px; border: 1px solid #1e293b; transition: 0.2s; }
+        .mb-inp-wrap:focus-within { border-color: #38bdf8; box-shadow: 0 0 10px rgba(56, 189, 248, 0.1); }
+        .mb-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1rem; font-weight: 900; outline: none; width: 100%; font-family: sans-serif;}
+        
+        .mb-select-trigger { flex: 1; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: #fff; font-weight: 900; font-size: 0.9rem; }
+
+        /* Buttons */
+        .mb-btn-add { background: #38bdf8; color: #020617; border: none; padding: 12px; border-radius: 8px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
+        .mb-btn-add:active { transform: scale(0.95); }
+
+        .mb-btn-clear { background: rgba(244, 63, 94, 0.1); color: #f43f5e; border: 1px solid #f43f5e; padding: 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 900; cursor: pointer; }
+
+        /* List Styling */
+        .mb-list-sec { margin-top: 10px; }
+        .item-row { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 5px; position: relative; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+        .ir-top { display: flex; justify-content: space-between; align-items: flex-start; }
+        .ir-name { font-weight: 900; color: #f8fafc; font-size: 0.95rem; }
+        .ir-del { color: #f43f5e; cursor: pointer; font-size: 1rem; padding: 5px; }
+
+        .ir-details { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; font-size: 0.75rem; color: #94a3b8; font-weight: bold; margin-top: 5px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px; }
+        .ir-taxable { color: #38bdf8; font-family: monospace; }
+        .ir-tax { color: #f59e0b; font-family: monospace; }
+        .ir-total { color: #10b981; font-family: monospace; font-size: 0.85rem; }
+
+        /* Summary Panel (Floating Bottom) */
+        .mb-summary { 
+            position: fixed; bottom: 0; left: 0; width: 100vw; background: #0f172a; 
+            border-top: 2px solid #38bdf8; padding: 15px; box-sizing: border-box; 
+            display: flex; flex-direction: column; gap: 8px; z-index: 200;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+        }
+
+        .summ-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; font-weight: bold; color: #cbd5e1; }
+        .summ-total { font-size: 1.4rem; color: #38bdf8; font-weight: 900; font-family: monospace; }
+
+        /* Modal Sheets */
+        .mb-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .mb-content { background: #0f172a; border-top-left-radius: 20px; border-top-right-radius: 20px; display: flex; flex-direction: column; overflow: hidden; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .mb-open .mb-content { transform: translateY(0); }
+        .mb-modal-head { padding: 15px 20px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; }
+        .mb-modal-head span { color: #38bdf8; font-weight: 900; font-size: 1rem; text-transform: uppercase; }
+        .mb-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .mb-list { padding: 10px 0; max-height: 50vh; overflow-y: auto; }
+        .ml-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); cursor: pointer; }
+        .ml-name { font-weight: 900; color: #f8fafc; font-size: 0.95rem; }
+        .ml-check { color: #38bdf8; display: none; }
+        .ml-item.active .ml-check { display: block; }
+        .ml-item.active .ml-name { color: #38bdf8; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <main id="mod-bill-overlay" role="main" aria-label="Multi-Item GST Billing">
+        <header class="mb-head">
+            <a href="../gst.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left"></i></a>
+            <div class="mb-tit"><i class="fas fa-file-invoice"></i> BILLING MASTER PRO</div>
+        </header>
+
+        <section class="mb-body">
+            
+            <div class="mb-form-card">
+                <div>
+                    <div class="mb-lbl">Product / Service Name</div>
+                    <div class="mb-inp-wrap">
+                        <input type="text" id="inp-item-name" class="mb-inp" placeholder="e.g. Consulting, Hardware">
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1.2fr 0.8fr; gap:10px;">
+                    <div>
+                        <div class="mb-lbl">Rate per Unit (Excl. GST)</div>
+                        <div class="mb-inp-wrap">
+                            <input type="number" id="inp-item-price" class="mb-inp" placeholder="0.00">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="mb-lbl">Quantity</div>
+                        <div class="mb-inp-wrap">
+                            <input type="number" id="inp-item-qty" class="mb-inp" value="1">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div>
+                        <div class="mb-lbl">GST Slab</div>
+                        <div class="mb-inp-wrap" onclick="QS_MultiBill.openModal('slab')">
+                            <div class="mb-select-trigger">
+                                <span id="lbl-slab">18% GST</span> <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="mb-lbl">Supply Type</div>
+                        <div class="mb-inp-wrap" onclick="QS_MultiBill.openModal('type')">
+                            <div class="mb-select-trigger">
+                                <span id="lbl-type">Intra-State</span> <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="mb-btn-add" onclick="QS_MultiBill.addItem()">
+                    <i class="fas fa-plus-circle"></i> Add to Invoice
+                </button>
+            </div>
+
+            <div class="mb-list-sec">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <div class="mb-lbl">Invoice Items</div>
+                    <button class="mb-btn-clear" onclick="QS_MultiBill.clearAll()">Clear Bill</button>
+                </div>
+                <div id="items-container">
+                    </div>
+            </div>
+
+        </section>
+
+        <footer class="mb-summary" id="summary-panel">
+            <div class="summ-row">
+                <span>Items: <b id="sum-count">0</b></span>
+                <span>Taxable Value: <b id="sum-taxable">₹0.00</b></span>
+            </div>
+            <div class="summ-row">
+                <span id="sum-tax-label">Total GST:</span>
+                <b id="sum-tax-total">₹0.00</b>
+            </div>
+            <div class="summ-row" style="border-top:1px dashed #334155; padding-top:8px;">
+                <span style="font-weight:900; color:#f8fafc;">GRAND TOTAL</span>
+                <span class="summ-total" id="sum-grand">₹0.00</span>
+            </div>
+        </footer>
+    </main>
+
+    <div id="mb-modal" class="mb-modal">
+        <div class="mb-content">
+            <div class="mb-modal-head"><span id="mb-title">Select</span><button class="mb-close" onclick="QS_MultiBill.closeModal()"><i class="fas fa-times"></i></button></div>
+            <div class="mb-list" id="mb-list"></div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - MULTI-ITEM BILLING ENGINE
+           Features: LocalStorage Persistence, Itemized GST Breakup, Round-off Logic.
+        */
+        (function() {
+            window.QS_MultiBill = {
+                state: {
+                    currentSlab: 18,
+                    currentType: 'intra', // intra = CGST+SGST, inter = IGST
+                    items: []
+                },
+
+                init: function() {
+                    // Load from localStorage
+                    const saved = localStorage.getItem('qs_platinum_bill');
+                    if(saved) {
+                        this.state.items = JSON.parse(saved);
+                        this.renderItems();
+                    }
+
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'gst_suites/multi_bill.js') this.renderItems();
+                    });
+                },
+
+                openModal: function(target) {
+                    const title = target === 'slab' ? 'Select GST Slab' : 'Supply Type';
+                    document.getElementById('mb-title').innerText = title;
+                    const list = document.getElementById('mb-list');
+                    list.innerHTML = '';
+
+                    let opts = [];
+                    if(target === 'slab') {
+                        opts = [0, 0.1, 0.25, 3, 5, 12, 18, 28].map(v => ({ v, n: v + '% GST' }));
+                    } else {
+                        opts = [{ v: 'intra', n: 'Intra-State (CGST/SGST)' }, { v: 'inter', n: 'Inter-State (IGST)' }];
+                    }
+
+                    opts.forEach(o => {
+                        const active = target === 'slab' ? (this.state.currentSlab == o.v) : (this.state.currentType == o.v);
+                        const div = document.createElement('div');
+                        div.className = `ml-item ${active?'active':''}`;
+                        div.onclick = () => {
+                            if(target === 'slab') {
+                                this.state.currentSlab = o.v;
+                                document.getElementById('lbl-slab').innerText = o.n;
+                            } else {
+                                this.state.currentType = o.v;
+                                document.getElementById('lbl-type').innerText = o.v === 'intra' ? 'Intra-State' : 'Inter-State';
+                            }
+                            this.closeModal();
+                        };
+                        div.innerHTML = `<span class="ml-name">${o.n}</span><i class="fas fa-check ml-check"></i>`;
+                        list.appendChild(div);
+                    });
+
+                    const m = document.getElementById('mb-modal');
+                    m.style.display = 'flex';
+                    setTimeout(() => m.classList.add('mb-open'), 10);
+                },
+
+                closeModal: function() {
+                    const m = document.getElementById('mb-modal');
+                    m.classList.remove('mb-open');
+                    setTimeout(() => m.style.display = 'none', 300);
+                },
+
+                addItem: function() {
+                    const name = document.getElementById('inp-item-name').value || 'General Item';
+                    const price = parseFloat(document.getElementById('inp-item-price').value);
+                    const qty = parseFloat(document.getElementById('inp-item-qty').value) || 1;
+
+                    if(!price || price <= 0) {
+                        alert("Please enter a valid price!");
+                        return;
+                    }
+
+                    const taxable = price * qty;
+                    const taxRate = this.state.currentSlab;
+                    const taxTotal = taxable * (taxRate / 100);
+                    const grand = taxable + taxTotal;
+
+                    const newItem = {
+                        id: Date.now(),
+                        name: name,
+                        price: price,
+                        qty: qty,
+                        slab: taxRate,
+                        type: this.state.currentType,
+                        taxable: taxable,
+                        taxTotal: taxTotal,
+                        grand: grand
+                    };
+
+                    this.state.items.push(newItem);
+                    this.saveAndRender();
+                    
+                    // Reset fields
+                    document.getElementById('inp-item-name').value = '';
+                    document.getElementById('inp-item-price').value = '';
+                    document.getElementById('inp-item-qty').value = '1';
+                },
+
+                deleteItem: function(id) {
+                    this.state.items = this.state.items.filter(i => i.id !== id);
+                    this.saveAndRender();
+                },
+
+                clearAll: function() {
+                    if(confirm("Wipe entire invoice data?")) {
+                        this.state.items = [];
+                        this.saveAndRender();
+                    }
+                },
+
+                saveAndRender: function() {
+                    localStorage.setItem('qs_platinum_bill', JSON.stringify(this.state.items));
+                    this.renderItems();
+                },
+
+                renderItems: function() {
+                    const container = document.getElementById('items-container');
+                    container.innerHTML = '';
+                    
+                    let totalTaxable = 0;
+                    let totalTax = 0;
+                    let totalGrand = 0;
+
+                    this.state.items.forEach(item => {
+                        totalTaxable += item.taxable;
+                        totalTax += item.taxTotal;
+                        totalGrand += item.grand;
+
+                        const div = document.createElement('div');
+                        div.className = 'item-row';
+                        const fmt = (n) => n.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+                        
+                        div.innerHTML = `
+                            <div class="ir-top">
+                                <span class="ir-name">${item.name} (${item.slab}%)</span>
+                                <i class="fas fa-trash-alt ir-del" onclick="QS_MultiBill.deleteItem(${item.id})"></i>
+                            </div>
+                            <div style="font-size:0.65rem; color:#64748b;">${item.qty} Unit x ₹${fmt(item.price)}</div>
+                            <div class="ir-details">
+                                <div>Taxable<br><span class="ir-taxable">₹${fmt(item.taxable)}</span></div>
+                                <div>Tax Amt<br><span class="ir-tax">₹${fmt(item.taxTotal)}</span></div>
+                                <div>Total<br><span class="ir-total">₹${fmt(item.grand)}</span></div>
+                            </div>
+                        `;
+                        container.prepend(div);
+                    });
+
+                    // Summary Logic
+                    const fmt = (n) => '₹' + n.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+                    document.getElementById('sum-count').innerText = this.state.items.length;
+                    document.getElementById('sum-taxable').innerText = fmt(totalTaxable);
+                    document.getElementById('sum-tax-total').innerText = fmt(totalTax);
+                    
+                    // ISRO Level Rounding Logic
+                    const roundedGrand = Math.round(totalGrand);
+                    document.getElementById('sum-grand').innerText = fmt(roundedGrand);
+
+                    // Handle empty visibility
+                    const panel = document.getElementById('summary-panel');
+                    if(this.state.items.length === 0) {
+                        panel.style.display = 'none';
+                        container.innerHTML = '<div style="text-align:center; padding:40px; color:#475569; font-size:0.8rem;">Invoice is empty. Add items to begin.</div>';
+                    } else {
+                        panel.style.display = 'flex';
+                    }
+                }
+            };
+
+            QS_MultiBill.init();
+        })();
+    </script>
+</body>
+</html>

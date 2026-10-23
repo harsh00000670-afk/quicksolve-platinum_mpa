@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Loan APR & Tax Benefits Calculator | Sec 24b & 80C Savings | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate the true cost of your loan (Real APR) including hidden fees. Estimate your yearly income tax deductions under Section 24b and 80C instantly. Accurate and 100% offline.">
+    <meta name="keywords" content="Real APR calculator, home loan tax benefit, section 24b interest deduction, section 80c principal deduction, loan true cost calculator, hidden processing fees, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/loan_suite/tax.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0f172a">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Loan Tax & APR Engine - Discover Your Real Savings">
+    <meta property="og:description" content="Don't just calculate EMI. Know your real interest rate and how much income tax you can save.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - DESIGN RETAINED EXACTLY */
+        /* =========================================
+           TAX & APR ENGINE - SSJ4 Independent
+           Theme: Deep Slate / Amber Warning / Tax Green
+           ========================================= */
+        body { 
+            margin: 0; 
+            background-color: var(--bg-body, #0f172a); 
+            /* Integrated Local JetBrains Mono font */
+            font-family: var(--font-main, sans-serif);
+        }
+
+        #mod-tax-overlay {
+            width: 100vw; min-height: 100vh; 
+            background-color: var(--bg-body, #0f172a); 
+            display: flex; flex-direction: column;
+            font-family: var(--font-main, sans-serif);
+            overflow: hidden; animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 1. HEADER */
+        .s-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 15px; background: var(--surface, #1e293b); border-bottom: 1px solid var(--border, #334155);
+            flex-shrink: 0; position: sticky; top: 0; z-index: 10;
+        }
+        .s-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f1f5f9); font-size: 1.2rem; cursor: pointer; padding: 5px; text-decoration: none; }
+        .s-head .s-tit { 
+            color: #f59e0b; /* Amber */
+            font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* 2. BODY */
+        .s-body {
+            flex: 1; overflow-y: auto; padding: 15px;
+            padding-bottom: 30px; 
+            display: flex; flex-direction: column; gap: 12px;
+        }
+
+        /* 3. INPUT COMPONENTS */
+        .lbl { color: var(--text-muted, #94a3b8); font-size: 0.7rem; font-weight: 700; margin-bottom: 5px; display: block; text-transform: uppercase; }
+        
+        .inp-box {
+            background: var(--surface, #1e293b); border: 1px solid var(--border, #334155); border-radius: 8px;
+            padding: 10px 12px; transition: border-color 0.2s;
+        }
+        .inp-box:focus-within { border-color: #f59e0b; box-shadow: 0 0 10px rgba(245, 158, 11, 0.1); }
+        
+        .inp-flex { display: flex; align-items: center; gap: 8px; }
+        .inp-unit { color: #f59e0b; font-weight: 800; font-size: 1rem; }
+        .inp-main {
+            flex: 1; background: transparent; border: none; color: var(--text-main, #fff); 
+            font-size: 1.15rem; font-family: var(--font-main); outline: none; width: 100%; min-width: 0;
+        }
+        .inp-main:focus { color: #f59e0b; }
+        .inp-main::placeholder { color: #475569; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        .cust-select {
+            background: rgba(2, 6, 23, 0.5); color: #f59e0b; border: 1px solid var(--border);
+            border-radius: 6px; padding: 6px 24px 6px 10px; font-weight: 700; font-size: 0.8rem;
+            appearance: none; -webkit-appearance: none; cursor: pointer; outline: none;
+            min-width: 60px; text-align: left;
+        }
+        
+        .sec-title { color: #f1f5f9; font-size: 0.8rem; font-weight: 800; margin-top: 5px; margin-bottom: -5px; display: flex; align-items: center; gap: 5px; }
+
+        /* 4. RESULTS CARDS */
+        .res-card-apr {
+            background: rgba(15, 23, 42, 0.5); 
+            border: 2px solid; border-image: linear-gradient(45deg, #ef4444, #f59e0b) 1; 
+            border-radius: 12px; padding: 15px; display: flex; flex-direction: column; gap: 15px;
+            margin-top: 10px; text-align: center;
+        }
+        
+        .apr-box { background: rgba(239, 68, 68, 0.1); border: 1px dashed #ef4444; border-radius: 8px; padding: 15px; }
+        .apr-lbl { font-size: 0.8rem; text-transform: uppercase; color: #ef4444; font-weight: 800; letter-spacing: 1px; }
+        .apr-val { font-size: 2.2rem; font-weight: 800; color: #ef4444; margin-top: 5px; text-shadow: 0 0 10px rgba(239, 68, 68, 0.3); }
+        .apr-sub { font-size: 0.65rem; color: var(--text-muted); margin-top: 5px; }
+
+        .cost-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .cost-item { background: rgba(2, 6, 23, 0.5); padding: 10px; border-radius: 8px; border: 1px solid var(--border); text-align: left; }
+        .cost-lbl { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; }
+        .cost-val { font-size: 1.1rem; font-weight: 800; color: #f59e0b; margin-top: 3px; }
+
+        /* Tax Card (India Specific - OP Level) */
+        .res-card-tax {
+            background: rgba(16, 185, 129, 0.05); 
+            border: 1px solid #10b981; 
+            border-radius: 12px; padding: 15px;
+            margin-top: 10px;
+        }
+        .tax-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-bottom: 8px; border-bottom: 1px dashed rgba(16, 185, 129, 0.2); }
+        .tax-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .tax-lbl { font-size: 0.8rem; color: var(--text-main); font-weight: 600; }
+        .tax-val { font-size: 1rem; color: #10b981; font-weight: 800; }
+
+    </style>
+</head>
+
+<body>
+
+<main id="mod-tax-overlay" role="main">
+    
+    <header class="s-head" role="banner">
+        <a href="../loan.html" class="qs-back-btn" aria-label="Go back to Loan Dashboard">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </a>
+        <h1 class="s-tit"><i class="fas fa-file-invoice-dollar" aria-hidden="true"></i> TAX & APR</h1>
+        <div style="width:24px;"></div> 
+    </header>
+
+    <div class="s-body">
+
+        <section aria-labelledby="basic-loan-heading">
+            <h2 id="basic-loan-heading" class="sr-only" style="display:none;">Basic Loan Parameters</h2>
+            <div class="grid-2">
+                <div class="inp-box">
+                    <label for="tax-amt" class="lbl">Loan Amount (P)</label>
+                    <div class="inp-flex">
+                        <span class="inp-unit" aria-hidden="true">₹</span>
+                        <input type="number" id="tax-amt" class="inp-main" placeholder="5,00,000" aria-label="Enter loan principal amount" oninput="QS_Tax.calc()">
+                    </div>
+                </div>
+                <div class="inp-box">
+                    <label for="tax-tenure" class="lbl">Tenure (T)</label>
+                    <div class="inp-flex">
+                        <input type="number" id="tax-tenure" class="inp-main" placeholder="60" aria-label="Enter loan tenure" oninput="QS_Tax.calc()">
+                        <div style="position:relative;">
+                            <select id="tax-tenure-type" class="cust-select" aria-label="Select tenure format" onchange="QS_Tax.calc()">
+                                <option value="M" selected>Mo</option>
+                                <option value="Y">Yr</option>
+                            </select>
+                            <i class="fas fa-chevron-down" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); color:#f59e0b; font-size:0.6rem; pointer-events:none;" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inp-box">
+                <label for="tax-rate" class="lbl">Nominal Interest Rate (R)</label>
+                <div class="inp-flex">
+                    <span class="inp-unit" aria-hidden="true">%</span>
+                    <input type="number" id="tax-rate" class="inp-main" placeholder="8.5" step="0.1" aria-label="Enter nominal annual interest rate" oninput="QS_Tax.calc()">
+                </div>
+            </div>
+        </section>
+
+        <section aria-labelledby="hidden-costs-heading">
+            <h2 id="hidden-costs-heading" class="sec-title"><i class="fas fa-search-dollar" style="color:#ef4444;" aria-hidden="true"></i> HIDDEN COSTS & FEES</h2>
+
+            <div class="inp-box" style="border-color: #ef4444;">
+                <label for="tax-fee" class="lbl" style="color: #ef4444;">Processing Fees</label>
+                <div class="inp-flex">
+                    <div style="position:relative;">
+                        <select id="tax-fee-type" class="cust-select" style="color:#ef4444; border-color:#ef4444;" aria-label="Select fee type percentage or flat amount" onchange="QS_Tax.calc()">
+                            <option value="perc" selected>%</option>
+                            <option value="flat">₹</option>
+                        </select>
+                        <i class="fas fa-chevron-down" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); color:#ef4444; font-size:0.6rem; pointer-events:none;" aria-hidden="true"></i>
+                    </div>
+                    <input type="number" id="tax-fee" class="inp-main" placeholder="1.5" aria-label="Enter processing fee" oninput="QS_Tax.calc()">
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="inp-box">
+                    <label for="tax-doc" class="lbl">Doc Charges</label>
+                    <div class="inp-flex">
+                        <span class="inp-unit" aria-hidden="true">₹</span>
+                        <input type="number" id="tax-doc" class="inp-main" placeholder="200" aria-label="Enter document charges" oninput="QS_Tax.calc()">
+                    </div>
+                </div>
+                <div class="inp-box">
+                    <label for="tax-ins" class="lbl">Insurance / Others</label>
+                    <div class="inp-flex">
+                        <span class="inp-unit" aria-hidden="true">₹</span>
+                        <input type="number" id="tax-ins" class="inp-main" placeholder="1000" aria-label="Enter insurance or other charges" oninput="QS_Tax.calc()">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="res-card-apr" aria-labelledby="apr-results-heading" aria-live="polite">
+            <h2 id="apr-results-heading" class="sr-only" style="display:none;">True APR and Borrowing Costs</h2>
+            
+            <div class="apr-box">
+                <div class="apr-lbl" id="real-apr-lbl">REAL APR (True Cost)</div>
+                <div id="res-apr" class="apr-val" aria-labelledby="real-apr-lbl">-- %</div>
+                <div class="apr-sub">Includes all upfront fees & charges</div>
+            </div>
+
+            <div class="cost-grid">
+                <div class="cost-item">
+                    <div class="cost-lbl" id="upfront-cost-lbl">Upfront Deductions</div>
+                    <div id="res-upfront" class="cost-val" style="color:#ef4444;" aria-labelledby="upfront-cost-lbl">₹ --</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-lbl" id="tcob-lbl">Total Cost of Borrowing</div>
+                    <div id="res-tcob" class="cost-val" aria-labelledby="tcob-lbl">₹ --</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="res-card-tax" aria-labelledby="tax-benefits-heading" aria-live="polite">
+            <h2 id="tax-benefits-heading" class="sr-only" style="display:none;">Estimated Tax Deductions</h2>
+            
+            <div style="color:#10b981; font-weight:800; font-size:0.75rem; letter-spacing:1px; margin-bottom:5px;">
+                <i class="fas fa-leaf" aria-hidden="true"></i> YEAR 1 TAX DEDUCTIONS (EST.)
+            </div>
+            
+            <div class="tax-row">
+                <span class="tax-lbl" id="sec-24b-lbl">Sec 24(b) - Interest</span>
+                <span id="tax-24b" class="tax-val" aria-labelledby="sec-24b-lbl">₹ --</span>
+            </div>
+            <div class="tax-row">
+                <span class="tax-lbl" id="sec-80c-lbl">Sec 80C - Principal</span>
+                <span id="tax-80c" class="tax-val" aria-labelledby="sec-80c-lbl">₹ --</span>
+            </div>
+            
+            <div style="font-size:0.6rem; color:var(--text-muted); margin-top:8px; text-align:right;" aria-hidden="true">*Assumes Home Loan standard caps</div>
+        </section>
+
+    </div> 
+</main>
+
+<script>
+    /* QUICKSOLVE PLATINUM - TAX & APR ENGINE (MPA STANDALONE)
+       Features: Binary Search IRR Solver for precise APR, Sec 80C/24b India Tax logic.
+       Status: Devon Larratt Mode Active 💪
+    */
+    const QS_Tax = {
+        
+        init: function() {
+            console.log("Tax & APR Engine: Devon Larratt Mode Active 💪");
+            this.clearResults();
+        },
+
+        calc: function() {
+            try {
+                // 1. Fetch Inputs
+                const P = parseFloat(document.getElementById('tax-amt').value);
+                const rInp = parseFloat(document.getElementById('tax-rate').value);
+                const tInp = parseFloat(document.getElementById('tax-tenure').value);
+                const tType = document.getElementById('tax-tenure-type').value;
+                
+                const feeVal = parseFloat(document.getElementById('tax-fee').value) || 0;
+                const feeType = document.getElementById('tax-fee-type').value;
+                const docCharge = parseFloat(document.getElementById('tax-doc').value) || 0;
+                const insCharge = parseFloat(document.getElementById('tax-ins').value) || 0;
+
+                // Validation
+                if (!P || !rInp || !tInp || P <= 0 || rInp <= 0 || tInp <= 0) {
+                    this.clearResults();
+                    return;
+                }
+
+                // 2. Standardize Time & Rate
+                let n = tType === 'Y' ? tInp * 12 : tInp;
+                n = Math.max(1, Math.round(n));
+                const rMonthly = (rInp / 12) / 100;
+
+                // 3. Base EMI Calculation
+                const x = Math.pow(1 + rMonthly, n);
+                const emi = (P * rMonthly * x) / (x - 1);
+
+                // 4. Calculate Total Hidden Costs
+                let processingFee = 0;
+                if (feeType === 'perc') {
+                    processingFee = P * (feeVal / 100);
+                } else {
+                    processingFee = feeVal;
+                }
+                
+                // Add 18% GST to Processing Fees & Doc Charges (Standard Indian Banking)
+                const gstOnFees = (processingFee + docCharge) * 0.18;
+                const totalUpfrontCosts = processingFee + docCharge + insCharge + gstOnFees;
+
+                // 5. Total Cost of Borrowing
+                const totalPaidToBank = emi * n;
+                const totalInterest = totalPaidToBank - P;
+                const tcob = totalInterest + totalUpfrontCosts;
+
+                // 6. REAL APR CALCULATION (OP LOGIC - Binary Search IRR)
+                // Net Disbursed = P - UpfrontCosts. Find the rate that makes PV of EMIs = Net Disbursed.
+                const netDisbursed = P - totalUpfrontCosts;
+                let realApr = rInp; // Fallback
+                
+                if (netDisbursed > 0 && netDisbursed < P) {
+                    let minR = 0;
+                    let maxR = 100; // 100% per month absolute upper bound
+                    let midR = 0;
+                    
+                    for (let i = 0; i < 50; i++) { // 50 iterations = extreme precision
+                        midR = (minR + maxR) / 2;
+                        let rTest = midR / 100;
+                        let pv = emi * (1 - Math.pow(1 + rTest, -n)) / rTest;
+                        if (pv > netDisbursed) minR = midR;
+                        else maxR = midR;
+                    }
+                    realApr = midR * 12; // Annualize the monthly rate
+                }
+
+                // 7. TAX BENEFITS ESTIMATOR (Year 1 Approximation)
+                let year1Int = 0;
+                let year1Prin = 0;
+                let balance = P;
+                
+                for(let i=1; i<=Math.min(12, n); i++) {
+                    let interest = balance * rMonthly;
+                    let principal = emi - interest;
+                    balance -= principal;
+                    year1Int += interest;
+                    year1Prin += principal;
+                }
+                
+                // Tax Caps (India)
+                const max24b = 200000; // Rs 2 Lakh limit
+                const max80c = 150000; // Rs 1.5 Lakh limit
+                
+                let ded24b = Math.min(year1Int, max24b);
+                let ded80c = Math.min(year1Prin, max80c);
+
+                // 8. UPDATE UI
+                document.getElementById('res-apr').innerText = realApr.toFixed(2) + " %";
+                document.getElementById('res-upfront').innerText = this.fmt(totalUpfrontCosts);
+                document.getElementById('res-tcob').innerText = this.fmt(tcob);
+                
+                document.getElementById('tax-24b').innerText = this.fmt(ded24b);
+                document.getElementById('tax-80c').innerText = this.fmt(ded80c);
+
+            } catch (e) {
+                console.error("Tax Engine Error:", e);
+                this.clearResults();
+            }
+        },
+
+        fmt: function(n) { 
+            if(isNaN(n) || !isFinite(n)) return "₹ 0";
+            return "₹ " + Math.round(n).toLocaleString('en-IN'); 
+        },
+
+        clearResults: function() {
+            document.getElementById('res-apr').innerText = "-- %";
+            document.getElementById('res-upfront').innerText = "₹ --";
+            document.getElementById('res-tcob').innerText = "₹ --";
+            document.getElementById('tax-24b').innerText = "₹ --";
+            document.getElementById('tax-80c').innerText = "₹ --";
+        }
+    };
+
+    // Auto-Init on Load
+    window.onload = function() {
+        QS_Tax.init();
+    };
+</script>
+</body>
+</html>

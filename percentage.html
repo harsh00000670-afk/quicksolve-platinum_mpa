@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Percentage Master | Reality Check Suite | QuickSolve Platinum</title>
+    <meta name="description" content="Ultimate percentage calculators. Expose inflation, margin illusions, stock recovery traps, and time-waster metrics.">
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* =========================================
+           PERCENTAGE SUITE - PLATINUM ENGINE (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent-gold: #fbbd23;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-purple: #a855f7;
+            --accent-pink: #ec4899;
+            --accent-cyan: #06b6d4;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+        }
+
+        /* 🚀 STAGGERED FLY-IN ENGINE */
+        .anim-card {
+            opacity: 0; transform: scale(0.95) translateY(20px);
+            animation: flyIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            will-change: transform, opacity;
+        }
+        @keyframes flyIn { to { opacity: 1; transform: scale(1) translateY(0); } }
+
+        .d-1 { animation-delay: 0.05s; } .d-2 { animation-delay: 0.1s; }
+        .d-3 { animation-delay: 0.15s; } .d-4 { animation-delay: 0.2s; }
+        .d-5 { animation-delay: 0.25s; } .d-6 { animation-delay: 0.3s; }
+        .d-7 { animation-delay: 0.35s; } .d-8 { animation-delay: 0.4s; }
+        .d-9 { animation-delay: 0.45s; } .d-10 { animation-delay: 0.5s; }
+        .d-11 { animation-delay: 0.55s; } .d-12 { animation-delay: 0.6s; }
+        .d-13 { animation-delay: 0.65s; } .d-14 { animation-delay: 0.7s; }
+        .d-15 { animation-delay: 0.75s; } .d-16 { animation-delay: 0.8s; }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px 20px; display: flex; align-items: center;
+        }
+        .qs-back-btn { color: var(--text-main); margin-right: 15px; text-decoration: none; font-size: 1.4rem; transition: 0.2s; cursor: pointer;}
+        .qs-back-btn:active { transform: scale(0.9); color: var(--accent-cyan); }
+        .brand { flex: 1; text-align: center; color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; margin-right: 30px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 25px; padding-top: 10px; }
+        .hero h1 { margin: 0; font-size: 2.2rem; background: linear-gradient(135deg, #06b6d4, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--text-sub); font-size: 0.85rem; margin-top: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 600;}
+
+        /* PLATINUM HORIZONTAL CARDS */
+        .tools-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 15px; }
+        
+        .tool-card {
+            background: var(--card-bg); border-radius: 16px; padding: 20px;
+            border: 1px solid var(--border-subtle); display: flex; align-items: flex-start; gap: 15px;
+            text-decoration: none; color: inherit; transition: 0.3s; position: relative; overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .tool-card:active { transform: scale(0.96); background: var(--bg-deep); }
+        
+        .tc-icon-wrap {
+            width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; flex-shrink: 0; background: rgba(255,255,255,0.03);
+        }
+        
+        .tc-info { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+        .tc-title { font-size: 1.05rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .tc-desc { font-size: 0.8rem; color: var(--text-sub); line-height: 1.4; font-weight: 500; }
+        
+        .badge {
+            font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 900; letter-spacing: 0.5px;
+            font-family: 'JetBrains Mono', monospace; text-transform: uppercase;
+        }
+
+        /* Thematic Card Styles */
+        .c-red .tc-icon-wrap { color: var(--accent-red); background: rgba(239, 68, 68, 0.1); }
+        .c-red .badge { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+        .c-red:active { border-color: var(--accent-red); }
+
+        .c-gold .tc-icon-wrap { color: var(--accent-gold); background: rgba(251, 191, 36, 0.1); }
+        .c-gold .badge { background: rgba(251, 191, 36, 0.2); color: var(--accent-gold); }
+        .c-gold:active { border-color: var(--accent-gold); }
+
+        .c-green .tc-icon-wrap { color: var(--accent-green); background: rgba(16, 185, 129, 0.1); }
+        .c-green .badge { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .c-green:active { border-color: var(--accent-green); }
+
+        .c-cyan .tc-icon-wrap { color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); }
+        .c-cyan .badge { background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); }
+        .c-cyan:active { border-color: var(--accent-cyan); }
+
+        .c-purple .tc-icon-wrap { color: var(--accent-purple); background: rgba(168, 85, 247, 0.1); }
+        .c-purple .badge { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
+        .c-purple:active { border-color: var(--accent-purple); }
+
+        .tc-arrow { color: var(--border-subtle); font-size: 1rem; align-self: center; transition: 0.3s; }
+        .tool-card:active .tc-arrow { color: var(--text-main); transform: translateX(3px); }
+        
+        .section-divider {
+            color: var(--text-sub); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; 
+            letter-spacing: 2px; margin: 30px 0 10px 5px; display: flex; align-items: center; gap: 8px;
+        }
+        .section-divider div { flex: 1; height: 1px; background: var(--border-subtle); opacity: 0.5; }
+
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <a href="index.html" class="qs-back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="brand"><i class="fas fa-percentage"></i> PERCENTAGE MASTER</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;" role="main">
+        
+        <div class="hero anim-card d-1">
+            <h1>Reality Check Suite</h1>
+            <p>> math --expose_illusions --no_bs</p>
+        </div>
+
+        <div class="section-divider anim-card d-2">
+            <i class="fas fa-chart-line" style="color:var(--accent-red);"></i> Market & Business
+            <div></div>
+        </div>
+        
+        <nav class="tools-grid">
+            <a href="percent_suites/crash_recover.html" class="tool-card c-red anim-card d-3">
+                <div class="tc-icon-wrap"><i class="fas fa-heartbeat"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">The "Crash & Recover" Trap <span class="badge">INVEST</span></div>
+                    <div class="tc-desc">A 50% drop needs a 100% gain to recover. Calculate the exponential effort required to bounce back.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+
+            <a href="percent_suites/margin_markup.html" class="tool-card c-gold anim-card d-4">
+                <div class="tc-icon-wrap"><i class="fas fa-store"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Margin vs. Markup Illusion <span class="badge">FOUNDER</span></div>
+                    <div class="tc-desc">Selling a ₹100 item for ₹150 is a 50% markup, but only a 33% profit margin. Don't go bankrupt giving discounts!</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+        </nav>
+
+        <div class="section-divider anim-card d-5">
+            <i class="fas fa-money-check-alt" style="color:var(--accent-green);"></i> Salary & Inflation
+            <div></div>
+        </div>
+
+        <nav class="tools-grid">
+            <a href="percent_suites/fake_appraisal.html" class="tool-card c-green anim-card d-6">
+                <div class="tc-icon-wrap"><i class="fas fa-level-up-alt"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">The "Fake Appraisal" <span class="badge">SALARY</span></div>
+                    <div class="tc-desc">Got a 10% hike but inflation is at 7%? Expose your real wealth growth and purchasing power.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+
+            <a href="percent_suites/loan_rate_shock.html" class="tool-card c-red anim-card d-7">
+                <div class="tc-icon-wrap"><i class="fas fa-bolt"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">The Loan Rate Shock <span class="badge">DEBT</span></div>
+                    <div class="tc-desc">Bank increased the rate by "just 1%"? See how a 7% to 8% jump is actually a 14.2% increase in your burden.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+        </nav>
+
+        <div class="section-divider anim-card d-8">
+            <i class="fas fa-brain" style="color:var(--accent-cyan);"></i> Logic & Life
+            <div></div>
+        </div>
+
+        <nav class="tools-grid">
+            <a href="percent_suites/successive_glitch.html" class="tool-card c-cyan anim-card d-9">
+                <div class="tc-icon-wrap"><i class="fas fa-sync-alt"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">Successive Change Glitch <span class="badge">MATH</span></div>
+                    <div class="tc-desc">+20% gain followed by -20% loss doesn't bring you back to zero. Expose the YoY math glitch.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+
+            <a href="percent_suites/time_waster.html" class="tool-card c-purple anim-card d-10">
+                <div class="tc-icon-wrap"><i class="fas fa-hourglass-half"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">The "Time Waster" Percent <span class="badge">LIFE</span></div>
+                    <div class="tc-desc">"I only watch reels for 3 hours." Calculate what percentage of your active waking life is actually burning away.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+        </nav>
+
+        <div class="section-divider anim-card d-11">
+            <i class="fas fa-bullseye" style="color:var(--accent-purple);"></i> Wealth & Targets
+            <div></div>
+        </div>
+
+        <nav class="tools-grid">
+            <a href="percent_suites/expense_ratio.html" class="tool-card c-gold anim-card d-12">
+                <div class="tc-icon-wrap"><i class="fas fa-chart-pie"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">The 1% Expense Ratio Trap <span class="badge">WEALTH</span></div>
+                    <div class="tc-desc">"It's just a 1% commission." See how a regular mutual fund broker eats 20%+ of your total wealth over 20 years.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+
+            <a href="percent_suites/impossible_target.html" class="tool-card c-cyan anim-card d-13">
+                <div class="tc-icon-wrap"><i class="fas fa-tachometer-alt"></i></div>
+                <div class="tc-info">
+                    <div class="tc-title">The Impossible Target <span class="badge">GOAL</span></div>
+                    <div class="tc-desc">Scored 60% till now and targeting 80%? Find out if you mathematically need an impossible 110% to pass.</div>
+                </div>
+                <i class="fas fa-chevron-right tc-arrow"></i>
+            </a>
+        </nav>
+
+    </main>
+</body>
+</html>

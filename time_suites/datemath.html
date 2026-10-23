@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Date Math Pro | The Time Traveler | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           DATE MATH PRO - CUSTOM DRUM ENGINE (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-blue: #38bdf8;
+            --accent-blue-glow: rgba(56, 189, 248, 0.2);
+            --accent-purple: #a855f7;
+            --accent-purple-glow: rgba(168, 85, 247, 0.2);
+            --accent-teal: #2dd4bf;
+            --accent-red: #ef4444;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.35; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 200px; height: 200px; background: var(--accent-blue); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-purple); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-blue); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #38bdf8, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--accent-blue); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* TAB CONTROLLER */
+        .tab-container {
+            display: flex; background: var(--card-bg); border: 1px solid rgba(56, 189, 248, 0.3); 
+            border-radius: 12px; padding: 5px; margin-bottom: 20px; box-shadow: 0 5px 20px var(--accent-blue-glow);
+        }
+        .tab-btn {
+            flex: 1; padding: 12px 5px; background: transparent; border: none; color: var(--text-sub);
+            font-size: 0.8rem; font-weight: 800; border-radius: 8px; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .tab-btn.active { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); }
+
+        /* CARDS & INPUTS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; 
+            padding: 20px; margin-bottom: 20px;
+        }
+        .inp-group { margin-bottom: 18px; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        
+        /* THE FAUX DATE FIELD (Triggers our Custom Modal) */
+        .faux-date {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 10px; font-size: 1rem; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; box-sizing: border-box;
+        }
+        .faux-date:active { border-color: var(--accent-blue); background: rgba(56, 189, 248, 0.05); transform: scale(0.98);}
+        .faux-date i { color: var(--accent-blue); }
+
+        /* NORMAL INPUTS */
+        .inp-field, .sel-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 10px; font-size: 1rem; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .inp-field:focus, .sel-field:focus { border-color: var(--accent-blue); box-shadow: 0 0 10px var(--accent-blue-glow); }
+
+        .math-row { display: flex; gap: 10px; align-items: center; }
+        .math-row .sel-op { width: 30%; font-size: 1.2rem; font-weight: 900; text-align: center; }
+        .math-row .inp-num { width: 30%; text-align: center; }
+        .math-row .sel-unit { width: 40%; }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #38bdf8, #a855f7);
+            color: #000; border: none; padding: 14px; border-radius: 10px; font-size: 0.95rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px var(--accent-blue-glow); display: flex; justify-content: center; gap: 8px; align-items: center;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 16px; 
+            padding: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px var(--accent-blue-glow); display: none; text-align: center;
+        }
+        .res-lbl { font-size: 0.75rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; margin-bottom: 10px; }
+        .res-main-val { font-size: 1.6rem; color: var(--accent-blue); font-weight: 900; font-family: 'JetBrains Mono', monospace; margin-bottom: 20px; line-height: 1.2;}
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .res-box { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 15px 10px; }
+        .res-box-lbl { font-size: 0.65rem; color: var(--text-sub); text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
+        .res-box-val { font-size: 1.1rem; color: var(--text-main); font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+
+        /* =========================================
+           FAADU DRUM MODAL (BOTTOM SHEET)
+           ========================================= */
+        .drum-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7);
+            z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s; backdrop-filter: blur(5px);
+        }
+        .drum-sheet {
+            position: fixed; bottom: -100%; left: 0; width: 100%; background: #151322;
+            border-top-left-radius: 24px; border-top-right-radius: 24px; border-top: 1px solid var(--accent-blue);
+            z-index: 1001; padding: 20px; box-sizing: border-box; box-shadow: 0 -10px 40px var(--accent-blue-glow);
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; gap: 15px;
+        }
+        .drum-overlay.show { display: block; opacity: 1; }
+        .drum-sheet.show { bottom: 0; }
+
+        .ds-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .ds-title { color: var(--text-main); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .drum-wrapper { display: flex; justify-content: space-around; align-items: center; position: relative; padding: 5px 0;}
+        .drum-col { display: flex; flex-direction: column; align-items: center; width: 30%; position: relative; z-index: 2; }
+        .drum-btn { background: transparent; border: none; color: var(--accent-blue); font-size: 1.3rem; padding: 2px 0; cursor: pointer; transition: 0.2s; }
+        .drum-btn:active { transform: scale(0.8); }
+        
+        .d-list { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; margin: 5px 0; }
+        .d-item { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 600; color: var(--text-dim); transition: 0.3s; }
+        .d-item.active { font-size: 1.3rem; font-weight: 800; color: var(--text-main); }
+        .d-item.near { color: var(--text-sub); }
+
+        .drum-highlight {
+            position: absolute; top: 50%; left: 0; width: 100%; height: 40px; transform: translateY(-50%);
+            border: 2px solid var(--accent-blue); border-radius: 10px; background: rgba(56, 189, 248, 0.05);
+            z-index: 1; pointer-events: none;
+        }
+
+        .ds-actions { display: flex; gap: 15px; margin-top: 10px; }
+        .ds-btn {
+            flex: 1; padding: 14px; border-radius: 10px; font-weight: 800; text-transform: uppercase; font-size: 0.9rem; cursor: pointer;
+        }
+        .ds-cancel { background: transparent; border: 1px solid var(--text-dim); color: var(--text-sub); }
+        .ds-cancel:active { background: rgba(255,255,255,0.05); }
+        .ds-set { background: var(--accent-blue); border: none; color: #000; box-shadow: 0 0 15px var(--accent-blue-glow); }
+        .ds-set:active { transform: scale(0.98); }
+
+        /* ANIMATIONS */
+        .anim-slide { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+
+    <header class="app-header">
+        <div class="head-left">
+            <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+            <div class="brand"><i class="fas fa-calendar-alt"></i> DATE MATH PRO</div>
+        </div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto;">
+        
+        <div class="hero anim-slide" style="animation-delay: 0.1s;">
+            <h1>The Time Traveler</h1>
+            <p>> calc_date --precision</p>
+        </div>
+
+        <div class="tab-container anim-slide" style="animation-delay: 0.15s;">
+            <button class="tab-btn active" data-mode="shift" onclick="SSJ4_DateMath.switchMode('shift')"><i class="fas fa-fast-forward"></i> Time Travel</button>
+            <button class="tab-btn" data-mode="gap" onclick="SSJ4_DateMath.switchMode('gap')"><i class="fas fa-arrows-alt-h"></i> Time Gap</button>
+        </div>
+
+        <div id="mode-shift" class="config-card anim-slide" style="animation-delay: 0.2s;">
+            <div class="inp-group">
+                <label class="inp-lbl">Start Date</label>
+                <div class="faux-date" onclick="SSJ4_Picker.open('sm-date')" id="sm-date-disp">
+                    <span id="sm-date-val">Select Date</span>
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+            </div>
+            <div class="inp-group">
+                <label class="inp-lbl">Modification</label>
+                <div class="math-row">
+                    <select id="sm-op" class="sel-field sel-op">
+                        <option value="add">+</option>
+                        <option value="sub">-</option>
+                    </select>
+                    <input type="number" id="sm-num" class="inp-field inp-num" value="30" min="1">
+                    <select id="sm-unit" class="sel-field sel-unit">
+                        <option value="days">Days</option>
+                        <option value="weeks">Weeks</option>
+                        <option value="months">Months</option>
+                        <option value="years">Years</option>
+                    </select>
+                </div>
+            </div>
+            <button class="calc-btn" onclick="SSJ4_DateMath.calcShift()">
+                <i class="fas fa-bolt"></i> Calculate New Date
+            </button>
+        </div>
+
+        <div id="mode-gap" class="config-card" style="display: none;">
+            <div class="inp-group">
+                <label class="inp-lbl">Start Date</label>
+                <div class="faux-date" onclick="SSJ4_Picker.open('gm-start')" id="gm-start-disp">
+                    <span id="gm-start-val">Select Date</span>
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+            </div>
+            <div class="inp-group">
+                <label class="inp-lbl">End Date</label>
+                <div class="faux-date" onclick="SSJ4_Picker.open('gm-end')" id="gm-end-disp">
+                    <span id="gm-end-val">Select Date</span>
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+            </div>
+            <button class="calc-btn" onclick="SSJ4_DateMath.calcGap()">
+                <i class="fas fa-search"></i> Find Difference
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container"></div>
+
+    </main>
+
+    <div class="drum-overlay" id="drum-overlay" onclick="SSJ4_Picker.close()"></div>
+    <div class="drum-sheet" id="drum-sheet">
+        <div class="ds-header">
+            <span class="ds-title">Select Date</span>
+            <i class="fas fa-times" style="color:var(--text-sub); cursor:pointer; font-size: 1.2rem;" onclick="SSJ4_Picker.close()"></i>
+        </div>
+        
+        <div class="drum-wrapper">
+            <div class="drum-highlight"></div>
+            
+            <div class="drum-col">
+                <button class="drum-btn" onclick="SSJ4_Picker.move('m', -1)"><i class="fas fa-chevron-up"></i></button>
+                <div class="d-list" id="p-months"></div>
+                <button class="drum-btn" onclick="SSJ4_Picker.move('m', 1)"><i class="fas fa-chevron-down"></i></button>
+            </div>
+
+            <div class="drum-col">
+                <button class="drum-btn" onclick="SSJ4_Picker.move('d', -1)"><i class="fas fa-chevron-up"></i></button>
+                <div class="d-list" id="p-days"></div>
+                <button class="drum-btn" onclick="SSJ4_Picker.move('d', 1)"><i class="fas fa-chevron-down"></i></button>
+            </div>
+
+            <div class="drum-col">
+                <button class="drum-btn" onclick="SSJ4_Picker.move('y', -1)"><i class="fas fa-chevron-up"></i></button>
+                <div class="d-list" id="p-years"></div>
+                <button class="drum-btn" onclick="SSJ4_Picker.move('y', 1)"><i class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+
+        <div class="ds-actions">
+            <button class="ds-btn ds-cancel" onclick="SSJ4_Picker.close()">Cancel</button>
+            <button class="ds-btn ds-set" onclick="SSJ4_Picker.set()">Set Date</button>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - DATE MATH PRO WITH UNIVERSAL DRUM PICKER */
+
+        // Data Storage for the 3 Virtual Inputs
+        const datesState = {
+            'sm-date': new Date(),
+            'gm-start': new Date(),
+            'gm-end': (() => { let d = new Date(); d.setDate(d.getDate() + 1); return d; })()
+        };
+
+        const formatStr = (d) => {
+            const opts = { month: 'short', day: '2-digit', year: 'numeric' };
+            return d.toLocaleDateString('en-US', opts);
+        };
+
+        // --- CUSTOM BOTTOM-SHEET DRUM PICKER ENGINE ---
+        window.SSJ4_Picker = {
+            months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            days: Array.from({length: 31}, (_, i) => String(i + 1).padStart(2, '0')),
+            years: Array.from({length: 130}, (_, i) => String(1970 + i)),
+            
+            c_d: 0, c_m: 0, c_y: 0,
+            activeTarget: null,
+
+            init: function() {
+                // Pre-fill labels
+                document.getElementById('sm-date-val').innerText = formatStr(datesState['sm-date']);
+                document.getElementById('gm-start-val').innerText = formatStr(datesState['gm-start']);
+                document.getElementById('gm-end-val').innerText = formatStr(datesState['gm-end']);
+            },
+
+            haptic: function() {
+                if(window.navigator && window.navigator.vibrate) { try { navigator.vibrate(15); } catch(e){} }
+            },
+
+            open: function(targetId) {
+                this.haptic();
+                this.activeTarget = targetId;
+                
+                // Parse current date of the target
+                const currDate = datesState[targetId];
+                this.c_d = currDate.getDate() - 1;
+                this.c_m = currDate.getMonth();
+                // Find year index
+                const yStr = String(currDate.getFullYear());
+                this.c_y = this.years.indexOf(yStr) !== -1 ? this.years.indexOf(yStr) : 56; // Fallback to 2026 if not found
+
+                this.render();
+                
+                document.getElementById('drum-overlay').classList.add('show');
+                setTimeout(() => { document.getElementById('drum-sheet').classList.add('show'); }, 10);
+            },
+
+            close: function() {
+                this.haptic();
+                document.getElementById('drum-sheet').classList.remove('show');
+                setTimeout(() => { document.getElementById('drum-overlay').classList.remove('show'); }, 300);
+            },
+
+            set: function() {
+                this.haptic();
+                const selectedDate = new Date(parseInt(this.years[this.c_y]), this.c_m, parseInt(this.days[this.c_d]));
+                
+                // Validate if it's a real date (e.g. not Feb 31)
+                if (selectedDate.getMonth() !== this.c_m) {
+                    alert("Invalid Date! Please adjust days."); return;
+                }
+
+                // Save to state and update UI
+                datesState[this.activeTarget] = selectedDate;
+                document.getElementById(`${this.activeTarget}-val`).innerText = formatStr(selectedDate);
+                
+                this.close();
+            },
+
+            move: function(type, dir) {
+                this.haptic();
+                if(type === 'd') this.c_d = (this.c_d + dir + this.days.length) % this.days.length;
+                else if(type === 'm') this.c_m = (this.c_m + dir + this.months.length) % this.months.length;
+                else if(type === 'y') this.c_y = (this.c_y + dir + this.years.length) % this.years.length;
+                this.render();
+            },
+
+            renderCol: function(arr, centerIdx, elementId) {
+                const el = document.getElementById(elementId);
+                let html = '';
+                // Render 3 items (-1, 0, 1) for compact look
+                for(let i = -1; i <= 1; i++) {
+                    let idx = (centerIdx + i + arr.length) % arr.length;
+                    let cls = i === 0 ? 'd-item active' : 'd-item near';
+                    html += `<div class="${cls}">${arr[idx]}</div>`;
+                }
+                el.innerHTML = html;
+            },
+
+            render: function() {
+                this.renderCol(this.days, this.c_d, 'p-days');
+                this.renderCol(this.months, this.c_m, 'p-months');
+                this.renderCol(this.years, this.c_y, 'p-years');
+            }
+        };
+
+        // --- MATH ENGINE ---
+        window.SSJ4_DateMath = {
+            haptic: function() { if(window.navigator && window.navigator.vibrate) navigator.vibrate(30); },
+
+            switchMode: function(mode) {
+                this.haptic();
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+                
+                document.getElementById('mode-shift').style.display = (mode === 'shift') ? 'block' : 'none';
+                document.getElementById('mode-gap').style.display = (mode === 'gap') ? 'block' : 'none';
+                
+                document.getElementById(`mode-${mode}`).classList.remove('anim-slide');
+                void document.getElementById(`mode-${mode}`).offsetWidth; 
+                document.getElementById(`mode-${mode}`).classList.add('anim-slide');
+                document.getElementById('results-container').style.display = 'none';
+            },
+
+            // --- MODE 1: SHIFT DATE ---
+            calcShift: function() {
+                this.haptic();
+                const startDate = new Date(datesState['sm-date']);
+                const op = document.getElementById('sm-op').value;
+                const num = parseInt(document.getElementById('sm-num').value);
+                const unit = document.getElementById('sm-unit').value;
+
+                if(isNaN(num)) { alert("Enter a valid number."); return; }
+
+                let multiplier = (op === 'add') ? 1 : -1;
+                let val = num * multiplier;
+
+                if (unit === 'days') startDate.setDate(startDate.getDate() + val);
+                else if (unit === 'weeks') startDate.setDate(startDate.getDate() + (val * 7));
+                else if (unit === 'months') startDate.setMonth(startDate.getMonth() + val);
+                else if (unit === 'years') startDate.setFullYear(startDate.getFullYear() + val);
+
+                const opText = op === 'add' ? 'Added' : 'Subtracted';
+                const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                
+                const resCard = document.getElementById('results-container');
+                resCard.innerHTML = `
+                    <div class="res-lbl">Target Date</div>
+                    <div class="res-main-val">${startDate.toLocaleDateString('en-US', opts)}</div>
+                    <div class="res-grid">
+                        <div class="res-box">
+                            <div class="res-box-lbl">Operation</div>
+                            <div class="res-box-val" style="color:var(--accent-teal);">${opText} ${num} ${unit}</div>
+                        </div>
+                        <div class="res-box">
+                            <div class="res-box-lbl">Day of Week</div>
+                            <div class="res-box-val" style="color:var(--accent-purple);">${startDate.toLocaleDateString('en-US', {weekday: 'long'})}</div>
+                        </div>
+                    </div>
+                `;
+                this.showRes(resCard);
+            },
+
+            // --- MODE 2: GAP (DIFFERENCE) ---
+            calcGap: function() {
+                this.haptic();
+                const d1 = new Date(datesState['gm-start']);
+                const d2 = new Date(datesState['gm-end']);
+                
+                d1.setHours(0,0,0,0); d2.setHours(0,0,0,0);
+
+                const diffMs = Math.abs(d2 - d1);
+                const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                
+                let businessDays = 0;
+                let current = new Date(Math.min(d1, d2));
+                let end = new Date(Math.max(d1, d2));
+                
+                while(current < end) {
+                    const dayOfWeek = current.getDay();
+                    if(dayOfWeek !== 0 && dayOfWeek !== 6) businessDays++; 
+                    current.setDate(current.getDate() + 1);
+                }
+
+                let y = 0, m = 0, d = 0;
+                let start = new Date(Math.min(d1, d2));
+                let end2 = new Date(Math.max(d1, d2));
+                
+                y = end2.getFullYear() - start.getFullYear();
+                m = end2.getMonth() - start.getMonth();
+                d = end2.getDate() - start.getDate();
+                
+                if (d < 0) {
+                    m--;
+                    const temp = new Date(end2.getFullYear(), end2.getMonth(), 0);
+                    d += temp.getDate();
+                }
+                if (m < 0) { y--; m += 12; }
+                
+                let exactStr = `${y}y, ${m}m, ${d}d`;
+                if(y===0 && m===0 && d===0) exactStr = "Same Date";
+
+                const relation = d2 >= d1 ? 'Apart' : 'Apart (Reversed)';
+                
+                const resCard = document.getElementById('results-container');
+                resCard.innerHTML = `
+                    <div class="res-lbl">Total Difference</div>
+                    <div class="res-main-val">${totalDays.toLocaleString('en-US')} Days <br><span style="font-size:0.9rem; color:var(--text-dim);">${relation}</span></div>
+                    <div class="res-grid">
+                        <div class="res-box">
+                            <div class="res-box-lbl">Business Days</div>
+                            <div class="res-box-val" style="color:var(--accent-teal);">${businessDays.toLocaleString('en-US')} Days</div>
+                        </div>
+                        <div class="res-box">
+                            <div class="res-box-lbl">Exact Breakdown</div>
+                            <div class="res-box-val" style="color:var(--accent-purple);">${exactStr}</div>
+                        </div>
+                    </div>
+                `;
+                this.showRes(resCard);
+            },
+
+            showRes: function(resCard) {
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-slide');
+                void resCard.offsetWidth;
+                resCard.classList.add('anim-slide');
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'end' }); }, 100);
+            }
+        };
+
+        // Initialize UI
+        document.addEventListener('DOMContentLoaded', () => {
+            SSJ4_Picker.init();
+        });
+
+    </script>
+</body>
+</html>

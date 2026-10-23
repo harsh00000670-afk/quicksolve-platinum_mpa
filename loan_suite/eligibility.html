@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+
+
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+    
+    <title>Loan Eligibility Calculator | Check Max Borrowing Capacity | QuickSolve Platinum</title>
+    <meta name="description" content="Check your home, personal, or car loan eligibility instantly. Calculate maximum loan amount based on income, age, and existing EMIs. Accurate, fast, and 100% offline.">
+    <meta name="keywords" content="loan eligibility calculator, maximum loan amount check, home loan eligibility, salary based loan calculator, FOIR calculator, finance tools, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/loan_suite/eligibility.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0f172a">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Loan Eligibility Engine - How much can you borrow?">
+    <meta property="og:description" content="Instant loan eligibility check based on professional banking standards. Private and secure.">
+    <meta property="og:image" content="../logo.png">
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* MANTRA: NO PADDING/MARGIN CHANGES - DESIGN PRESERVED EXACTLY */
+        /* =========================================
+           ELIGIBILITY ENGINE OP (Platinum Version)
+           Theme: Trust/Green (Approval Theme)
+           ========================================= */
+        body { 
+            margin: 0; 
+            background-color: var(--bg-body, #0f172a); 
+            /* Using your new Local JetBrains Mono font */
+            font-family: var(--font-main, sans-serif);
+        }
+
+        #mod-eligibility-overlay {
+            width: 100vw; min-height: 100vh;
+            background-color: var(--bg-body, #0f172a); 
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: var(--font-main, sans-serif);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .el-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: var(--surface, #1e293b); border-bottom: 1px solid var(--border, #334155);
+            position: sticky; top: 0; z-index: 10;
+        }
+        .el-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f1f5f9); font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 5px; }
+        .el-tit { color: #10b981; font-weight: 800; font-size: 0.95rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 1px;}
+
+        .el-body { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* Input Styling */
+        .el-inp-group { 
+            background: var(--surface); padding: 12px; border-radius: 10px; 
+            border: 1px solid var(--border); transition: 0.2s;
+        }
+        .el-inp-group:focus-within { border-color: #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.1); }
+        
+        .el-lbl { color: var(--text-muted); font-size: 0.7rem; font-weight: 700; margin-bottom: 8px; display: block; text-transform: uppercase; }
+        .el-inp-flex { display: flex; align-items: center; gap: 10px; }
+        .el-main-inp { 
+            background: transparent; border: none; color: #fff; 
+            font-size: 1.15rem; font-family: var(--font-main); width: 100%; outline: none; min-width: 0;
+        }
+        .el-main-inp::placeholder { color: #475569; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        .cust-select {
+            background: rgba(2, 6, 23, 0.5); color: #10b981; border: 1px solid var(--border);
+            border-radius: 6px; padding: 6px 24px 6px 10px; font-weight: 700; font-size: 0.8rem;
+            appearance: none; cursor: pointer; outline: none; text-align: left;
+        }
+
+        /* Range Slider for FOIR */
+        .slider-container { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
+        .range-slider { flex: 1; accent-color: #10b981; }
+        .foir-val { font-weight: 800; color: #10b981; font-size: 0.9rem; min-width: 40px; text-align: right; }
+
+        /* Result Card */
+        .el-res-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+            border: 1px solid #10b981; border-radius: 12px; padding: 15px; text-align: center;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1); margin-top: 5px;
+        }
+        .el-res-amt { font-size: 2.2rem; font-weight: 800; color: #10b981; margin: 5px 0; text-shadow: 0 0 15px rgba(16,185,129,0.3); }
+        
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .res-box { background: rgba(2,6,23,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 10px; }
+        .res-lbl { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; }
+        .res-val { font-size: 1rem; font-weight: 800; color: #f1f5f9; margin-top: 3px; }
+
+        .badge-op { background: rgba(16, 185, 129, 0.2); color: #10b981; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; margin-left: 5px; }
+    </style>
+</head>
+
+<body>
+
+<div id="mod-eligibility-overlay">
+    <div class="el-head">
+        <a href="../loan.html" class="qs-back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="el-tit"><i class="fas fa-user-check"></i> ADVANCED ELIGIBILITY</div>
+    </div>
+
+    <div class="el-body">
+        
+        <div class="grid-2">
+            <div class="el-inp-group">
+                <span class="el-lbl">Your Monthly Income</span>
+                <div class="el-inp-flex">
+                    <span style="color:#10b981; font-weight:bold;">₹</span>
+                    <input type="number" id="el-salary" class="el-main-inp" placeholder="50000" oninput="QS_Elig.calc()">
+                </div>
+            </div>
+
+            <div class="el-inp-group">
+                <span class="el-lbl">Co-Applicant Income <span class="badge-op">OPTIONAL</span></span>
+                <div class="el-inp-flex">
+                    <span style="color:#10b981; font-weight:bold;">₹</span>
+                    <input type="number" id="el-co-salary" class="el-main-inp" placeholder="0" oninput="QS_Elig.calc()">
+                </div>
+            </div>
+        </div>
+
+        <div class="el-inp-group">
+            <span class="el-lbl">Total Existing EMIs (You + Co-Applicant)</span>
+            <div class="el-inp-flex">
+                <span style="color:#ef4444; font-weight:bold;">₹</span>
+                <input type="number" id="el-existing" class="el-main-inp" placeholder="0" oninput="QS_Elig.calc()">
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="el-inp-group">
+                <span class="el-lbl">Interest Rate</span>
+                <div class="el-inp-flex">
+                    <span style="color:#f59e0b; font-weight:bold;">%</span>
+                    <input type="number" id="el-rate" class="el-main-inp" value="9.5" step="0.1" oninput="QS_Elig.calc()">
+                </div>
+            </div>
+            
+            <div class="el-inp-group">
+                <span class="el-lbl">Loan Tenure</span>
+                <div class="el-inp-flex">
+                    <input type="number" id="el-tenure" class="el-main-inp" value="20" oninput="QS_Elig.calc()">
+                    <div style="position:relative;">
+                        <select id="el-tenure-type" class="cust-select" onchange="QS_Elig.calc()">
+                            <option value="Y" selected>Yrs</option>
+                            <option value="M">Mos</option>
+                        </select>
+                        <i class="fas fa-chevron-down" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); color:#10b981; font-size:0.6rem; pointer-events:none;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="el-inp-group">
+            <div style="display:flex; justify-content:space-between;">
+                <span class="el-lbl">Bank FOIR Limit <span class="badge-op">CRITICAL</span></span>
+                <i class="fas fa-info-circle" style="color:var(--text-muted); font-size:0.8rem; cursor:pointer;" onclick="QS_Elig.showInfo()"></i>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="el-foir" class="range-slider" min="30" max="80" value="50" step="5" oninput="document.getElementById('foir-show').innerText = this.value + '%'; QS_Elig.calc();">
+                <span id="foir-show" class="foir-val">50%</span>
+            </div>
+        </div>
+
+        <div class="el-res-card">
+            <span class="el-lbl" style="color:#10b981; font-size:0.8rem;">Maximum Eligible Loan</span>
+            <div id="el-res-loan" class="el-res-amt">₹ 0</div>
+            
+            <div class="res-grid">
+                <div class="res-box">
+                    <div class="res-lbl">Max Allowed EMI</div>
+                    <div id="el-res-emi" class="res-val" style="color:#38bdf8;">₹ 0</div>
+                </div>
+                <div class="res-box">
+                    <div class="res-lbl">Est. Total Interest</div>
+                    <div id="el-res-int" class="res-val" style="color:#f59e0b;">₹ 0</div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<div id="el-info-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100dvh; background:rgba(2, 6, 23, 0.8); backdrop-filter:blur(4px); z-index:9999; justify-content:center; align-items:center; opacity:0; transition:0.3s ease;">
+    <div style="background:var(--surface, #1e293b); border:1px solid #10b981; border-radius:15px; width:85%; max-width:350px; padding:20px; text-align:center; box-shadow:0 10px 30px rgba(16,185,129,0.2); transform:scale(0.9); transition:0.3s ease;" id="el-info-box">
+        
+        <div style="width:50px; height:50px; background:rgba(16,185,129,0.1); border-radius:50%; display:flex; justify-content:center; align-items:center; margin:0 auto 15px;">
+            <i class="fas fa-landmark" style="color:#10b981; font-size:1.5rem;"></i>
+        </div>
+        
+        <h3 style="color:#f1f5f9; font-size:1.1rem; margin-bottom:10px; font-weight:800;">What is FOIR?</h3>
+        
+        <p style="color:var(--text-muted); font-size:0.85rem; line-height:1.5; margin-bottom:20px; text-align:left;">
+            <b>Fixed Obligation to Income Ratio</b> is the maximum % of your salary a bank allows for <span style="color:#10b981; font-weight:bold;">ALL your EMIs combined.</span><br><br>
+            If you earn ₹50k and FOIR is 50%, banks will only allow your total EMIs (new + old) to reach ₹25k. Higher income gets a higher FOIR limit!
+        </p>
+        
+        <button onclick="QS_Elig.hideInfo()" style="background:#10b981; color:#0f172a; width:100%; padding:12px; border:none; border-radius:8px; font-weight:800; font-size:0.9rem; cursor:pointer;">GOT IT</button>
+    </div>
+</div>
+
+<script>
+    /* QUICKSOLVE PLATINUM - ADVANCED ELIGIBILITY ENGINE (MPA STANDALONE)
+       Features: Co-Applicant, Dynamic FOIR Slider, Years/Months support, Reverse NPV Math.
+    */
+    const QS_Elig = {
+        
+        init: function() {
+            console.log("Advanced Eligibility Engine Ready 🚀");
+            this.calc();
+        },
+
+        calc: function() {
+            try {
+                // Fetch Inputs
+                const sal1 = parseFloat(document.getElementById('el-salary').value) || 0;
+                const sal2 = parseFloat(document.getElementById('el-co-salary').value) || 0;
+                const existingEmi = parseFloat(document.getElementById('el-existing').value) || 0;
+                
+                const rateYearly = parseFloat(document.getElementById('el-rate').value) || 0;
+                const tenureInp = parseFloat(document.getElementById('el-tenure').value) || 0;
+                const tType = document.getElementById('el-tenure-type').value;
+                const foirPercent = parseFloat(document.getElementById('el-foir').value) || 50;
+
+                // Total Family Income
+                const totalIncome = sal1 + sal2;
+
+                if (totalIncome <= 0 || tenureInp <= 0 || rateYearly <= 0) {
+                    this.clearResults();
+                    return;
+                }
+
+                // Standardize Months
+                const months = (tType === 'Y') ? Math.round(tenureInp * 12) : Math.round(tenureInp);
+                const rateMonthly = rateYearly / 12 / 100;
+
+                // 1. Calculate Max EMI Capacity (FOIR Logic)
+                const maxTotalEmiAllowed = totalIncome * (foirPercent / 100);
+                
+                // 2. Subtract Existing Obligations
+                const availableNewEmi = maxTotalEmiAllowed - existingEmi;
+
+                if (availableNewEmi <= 0) {
+                    this.clearResults();
+                    document.getElementById('el-res-loan').innerText = "NOT ELIGIBLE";
+                    document.getElementById('el-res-loan').style.color = "#ef4444";
+                    return;
+                }
+
+                // 3. Reverse EMI Formula to find Max Present Value (Loan Amount)
+                // Formula: PV = EMI * [ (1 - (1+r)^-n) / r ]
+                const maxLoan = availableNewEmi * (1 - Math.pow(1 + rateMonthly, -months)) / rateMonthly;
+
+                // 4. Calculate Total Interest on this Max Loan
+                const totalPayment = availableNewEmi * months;
+                const totalInterest = totalPayment - maxLoan;
+
+                // Update UI
+                document.getElementById('el-res-loan').innerText = this.fmt(maxLoan);
+                document.getElementById('el-res-loan').style.color = "#10b981"; // Reset color
+                document.getElementById('el-res-emi').innerText = this.fmt(availableNewEmi);
+                document.getElementById('el-res-int').innerText = this.fmt(totalInterest);
+
+            } catch (e) {
+                console.error("Eligibility Engine Error:", e);
+                this.clearResults();
+            }
+        },
+
+        fmt: function(n) { 
+            if(isNaN(n) || !isFinite(n) || n < 0) return "₹ 0";
+            return "₹ " + Math.round(n).toLocaleString('en-IN'); 
+        },
+
+        clearResults: function() {
+            document.getElementById('el-res-loan').innerText = "₹ 0";
+            document.getElementById('el-res-loan').style.color = "#10b981";
+            document.getElementById('el-res-emi').innerText = "₹ 0";
+            document.getElementById('el-res-int').innerText = "₹ 0";
+        },
+
+        triggerHaptic: function() {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        },
+
+        showInfo: function() {
+            this.triggerHaptic();
+            const modal = document.getElementById('el-info-modal');
+            const box = document.getElementById('el-info-box');
+            modal.style.display = 'flex';
+            
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                box.style.transform = 'scale(1)';
+            }, 10);
+        },
+
+        hideInfo: function() {
+            this.triggerHaptic();
+            const modal = document.getElementById('el-info-modal');
+            const box = document.getElementById('el-info-box');
+            modal.style.opacity = '0';
+            box.style.transform = 'scale(0.9)';
+            
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+    };
+
+    // Auto-Start on load
+    window.onload = function() {
+        QS_Elig.init();
+    };
+</script>
+</body>
+</html>

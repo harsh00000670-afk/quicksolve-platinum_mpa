@@ -1,0 +1,132 @@
+# QuickSolve Platinum
+
+> QuickSolve Platinum is a client-side calculator platform containing 70+ calculators across finance, health, programming, science, mathematics, time, age, units, discounts, GST, currency and data visualization.
+
+## Website
+
+- Home: https://quicksolve-platinum.netlify.app/
+- Scientific Calculator: https://quicksolve-platinum.netlify.app/scientific_suite/scientific.html
+- Programmer Toolkit: https://quicksolve-platinum.netlify.app/programmer.html
+- Graph & Visualization: https://quicksolve-platinum.netlify.app/graph.html
+- Currency Suite: https://quicksolve-platinum.netlify.app/currency.html
+- Health Suite: https://quicksolve-platinum.netlify.app/health.html
+- Loan & EMI Suite: https://quicksolve-platinum.netlify.app/loan.html
+- GST Suite: https://quicksolve-platinum.netlify.app/gst.html
+- Age Suite: https://quicksolve-platinum.netlify.app/age.html
+- Unit Converter: https://quicksolve-platinum.netlify.app/unit.html
+- Time Suite: https://quicksolve-platinum.netlify.app/time.html
+- Percentage Suite: https://quicksolve-platinum.netlify.app/percentage.html
+- Discount Suite: https://quicksolve-platinum.netlify.app/discount.html
+
+## Calculator Categories
+
+### Scientific & Mathematics
+- Scientific calculations
+- Trigonometry
+- Logarithms
+- Mathematical expressions
+- Equation and graph visualization
+
+### Programming
+- Number base conversion
+- Bitwise operations
+- Bit shifting
+- Signed number calculations
+- IEEE-754
+- Endianness
+- ASCII
+- Base64
+- Hashing
+- JSON formatting
+- String escaping
+- Subnet calculations
+- Color calculations
+- Unix epoch
+- Cron calculations
+
+### Finance
+- Loan EMI
+- Loan prepayment
+- Loan comparison
+- Loan eligibility
+- Balance transfer
+- Flat/reducing rate calculations
+- GST calculations
+- Input tax credit
+- GST late fees
+- Reverse charge
+- GST scheme comparisons
+- Percentage and margin calculations
+- Discount calculations
+- Currency conversion
+
+### Health
+- BMI
+- Smart BMI
+- Child BMI
+- Ideal weight
+- Body fat
+- Lean body mass
+- Relative fat mass
+- Ponderal index
+- Waist-to-hip ratio
+- Waist-to-height ratio
+
+### Time & Age
+- Age calculations
+- Date calculations
+- Sleep cycles
+- Time overlap
+- Life/time calculations
+- Billing time
+- Focus/Pomodoro calculations
+- Timeline and milestone calculations
+
+### Discounts & Shopping
+- Stacked discounts
+- BOGO
+- Loyalty discounts
+- Bill splitting
+- Subscription costs
+- EMI vs cash
+- Hidden costs
+- Cashback
+- Seller margin
+- Wholesale calculations
+
+### Visualization
+- Equation visualization
+- Trigonometric waves
+- Compounding curves
+- EMI amortization
+- Break-even graphs
+- Depreciation curves
+
+## Technical Information
+
+QuickSolve is primarily a static, client-side web application.
+
+Calculator computations are performed in the browser using JavaScript. The project contains shared calculation utilities and suite-specific calculator logic.
+
+QuickSolve does not expose a QuickSolve-owned backend API, database, authentication system, or server-side calculator API.
+
+The Currency suite may make user-triggered requests to external currency-data services for current exchange-rate information.
+
+## Agent Resources
+
+- Agent Skills: https://quicksolve-platinum.netlify.app/.well-known/agent-skills/index.json
+- AI Catalog: https://quicksolve-platinum.netlify.app/.well-known/ai-catalog.json
+- Sitemap: https://quicksolve-platinum.netlify.app/sitemap.xml
+
+## Important Notes
+
+- Calculator results should be treated as computational outputs from the corresponding calculator and its inputs.
+- Health calculators are informational tools and are not a substitute for professional medical advice.
+- Financial and tax calculations are informational and should be verified against applicable official rules, rates, and terms when used for real-world decisions.
+- Currency results may depend on external exchange-rate data and its update time.
+
+## Full Site Index
+
+See the XML sitemap for the complete list of public calculator and suite pages:
+
+https://quicksolve-platinum.netlify.app/sitemap.xml

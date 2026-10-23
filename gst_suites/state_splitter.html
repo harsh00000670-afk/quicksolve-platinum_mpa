@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>GST State Splitter Pro | Intra vs Inter-State Logic | QuickSolve Platinum</title>
+    <meta name="description" content="Professional GST State Splitter. Automatically determine IGST vs CGST/SGST/UTGST based on origin and destination states. Includes SEZ logic. 100% Offline.">
+    <meta name="keywords" content="gst state splitter, igst vs cgst sgst, local vs outstation gst, sez gst calculator, utgst calculator, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/gst_suites/state_splitter.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#020617">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           STATE SPLITTER (PLATINUM GOD MODE)
+           Theme: Obsidian / Deep Azure / Sky Blue
+           ========================================= */
+        #mod-split-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: #020617; z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .ss-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #0f172a; border-bottom: 1px solid #1e293b;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .ss-head .qs-back-btn { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .ss-tit { color: #38bdf8; font-weight: 900; font-size: 0.95rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .ss-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 100px; }
+
+        /* Sleek Cards */
+        .ss-card { 
+            background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; 
+            padding: 15px; display: flex; flex-direction: column; gap: 12px;
+        }
+        
+        .ss-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; }
+        .ss-lbl span { color: #38bdf8; }
+
+        .ss-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 12px; border-radius: 8px; border: 1px solid #1e293b; transition: 0.2s; cursor: pointer; }
+        .ss-inp-wrap:focus-within { border-color: #38bdf8; }
+        .ss-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.1rem; font-weight: 900; outline: none; width: 100%; text-align: right; font-family: monospace; }
+        .ss-pre { color: #475569; font-weight: 900; font-size: 0.8rem; }
+
+        .ss-select-text { flex: 1; color: #fff; font-size: 0.95rem; font-weight: 900; display: flex; align-items: center; gap: 10px; }
+
+        /* SEZ Checkbox Styling */
+        .sez-toggle { display: flex; align-items: center; justify-content: space-between; background: rgba(56, 189, 248, 0.05); border: 1px dashed #38bdf8; border-radius: 8px; padding: 12px; margin-top: 5px; cursor: pointer; }
+        .sez-lbl-wrap { display: flex; flex-direction: column; }
+        .sez-title { font-size: 0.8rem; font-weight: 900; color: #38bdf8; }
+        .sez-sub { font-size: 0.6rem; color: #64748b; font-weight: bold; margin-top: 2px; }
+        
+        .toggle-switch { position: relative; width: 45px; height: 24px; background: #1e293b; border-radius: 20px; transition: 0.3s; border: 1px solid #334155; }
+        .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: #64748b; border-radius: 50%; transition: 0.3s; }
+        .sez-active .toggle-switch { background: #38bdf8; border-color: #38bdf8; }
+        .sez-active .toggle-switch::after { transform: translateX(21px); background: #020617; }
+
+        /* Results Dashboard */
+        .res-hero { background: #020617; border: 1px solid #38bdf8; border-radius: 12px; padding: 25px 15px; position: relative; text-align: center; box-shadow: inset 0 0 30px rgba(56, 189, 248, 0.05); }
+        .res-hero::before { content: 'TAX DETERMINATION'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #38bdf8; color: #020617; font-size: 0.6rem; font-weight: 900; padding: 2px 10px; border-radius: 4px; letter-spacing: 1px; }
+        
+        .main-type { font-size: 1.8rem; font-weight: 900; color: #38bdf8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .main-total { font-size: 2.5rem; font-weight: 900; color: #fff; font-family: monospace; line-height: 1; }
+
+        /* Split Table */
+        .split-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #0f172a; border-radius: 10px; overflow: hidden; border: 1px solid #1e293b; }
+        .split-table td { padding: 12px; font-size: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: bold; color: #cbd5e1; }
+        .split-table td:last-child { text-align: right; font-family: monospace; color: #fff; font-size: 0.9rem; }
+        .t-dim { color: #64748b; font-weight: 800; text-transform: uppercase; font-size: 0.6rem; }
+        .val-highlight { color: #38bdf8 !important; }
+
+        /* Bottom Sheet Modal */
+        .sm-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .sm-content { background: #0f172a; border-top-left-radius: 20px; border-top-right-radius: 20px; max-height: 80vh; display: flex; flex-direction: column; overflow: hidden; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .sm-open .sm-content { transform: translateY(0); }
+        .sm-head { padding: 15px 20px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; }
+        .sm-head span { color: #38bdf8; font-weight: 900; font-size: 1rem; text-transform: uppercase; }
+        .sm-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        
+        .sm-search { padding: 10px 15px; border-bottom: 1px solid #1e293b; background: #020617; }
+        .sm-search-inp { width: 100%; background: #1e293b; border: 1px solid #334155; padding: 10px; border-radius: 8px; color: #fff; outline: none; font-size: 0.9rem; }
+
+        .sm-list { padding: 10px 0; overflow-y: auto; flex: 1; }
+        .sl-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); cursor: pointer; }
+        .sl-name { font-weight: 900; color: #f8fafc; font-size: 0.9rem; }
+        .sl-ut { font-size: 0.6rem; background: #38bdf8; color: #020617; padding: 1px 5px; border-radius: 4px; margin-left: 10px; }
+        .sl-check { color: #38bdf8; display: none; }
+        .sl-item.active .sl-check { display: block; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <main id="mod-split-overlay" role="main" aria-label="GST State Splitter">
+        <header class="ss-head">
+            <a href="../gst.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left"></i></a>
+            <div class="ss-tit"><i class="fas fa-map-marked-alt"></i> STATE TAX SPLITTER</div>
+        </header>
+
+        <section class="ss-body">
+            
+            <div class="ss-card">
+                <div class="ss-lbl">Place of Origin <span>DISPATCH FROM</span></div>
+                <div class="ss-inp-wrap" onclick="QS_Splitter.openModal('origin')">
+                    <div id="sel-origin-text" class="ss-select-text">
+                        <i class="fas fa-map-pin" style="color:#f43f5e;"></i> Select State
+                    </div>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.7rem;"></i>
+                </div>
+
+                <div class="ss-lbl">Place of Supply <span>DESTINATION</span></div>
+                <div class="ss-inp-wrap" onclick="QS_Splitter.openModal('dest')">
+                    <div id="sel-dest-text" class="ss-select-text">
+                        <i class="fas fa-truck-loading" style="color:#10b981;"></i> Select State
+                    </div>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.7rem;"></i>
+                </div>
+
+                <div id="sez-toggle" class="sez-toggle" onclick="QS_Splitter.toggleSEZ()">
+                    <div class="sez-lbl-wrap">
+                        <span class="sez-title">SEZ Developer / Unit</span>
+                        <span class="sez-sub">Always Inter-State (IGST) per Section 7(5)(b)</span>
+                    </div>
+                    <div class="toggle-switch"></div>
+                </div>
+            </div>
+
+            <div class="ss-card">
+                <div class="ss-lbl">Taxable Value</div>
+                <div class="ss-inp-wrap" style="cursor: text;">
+                    <span class="ss-pre">₹</span>
+                    <input type="number" id="inp-value" class="ss-inp" placeholder="0.00" oninput="QS_Splitter.calculate()">
+                </div>
+
+                <div class="ss-lbl">GST Slab</div>
+                <div class="ss-inp-wrap" onclick="QS_Splitter.openModal('slab')">
+                    <div id="sel-slab-text" class="ss-select-text">
+                        <i class="fas fa-percent" style="color:#eab308;"></i> 18% GST
+                    </div>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.7rem;"></i>
+                </div>
+            </div>
+
+            <div id="empty-state" style="text-align:center; padding: 30px; color:#475569;">
+                <i class="fas fa-atlas fa-4x" style="margin-bottom:15px; opacity:0.2;"></i>
+                <div style="font-size:0.85rem; font-weight:bold;">Select origin and supply destination to map tax split.</div>
+            </div>
+
+            <div id="res-dashboard" class="hidden" aria-live="polite">
+                <div class="res-hero">
+                    <div class="main-type" id="res-type">INTRA-STATE</div>
+                    <div class="main-total" id="res-total">₹0.00</div>
+                    <div style="font-size:0.7rem; color:#94a3b8; font-weight:900; text-transform:uppercase; margin-top:5px;">Grand Invoice Total</div>
+                </div>
+
+                <table class="split-table">
+                    <tr><td class="t-dim">Taxable Amount</td><td id="res-taxable">₹0.00</td></tr>
+                    <tr id="row-igst" class="hidden"><td class="t-dim">IGST (Integrated)</td><td id="res-igst" class="val-highlight">₹0.00</td></tr>
+                    <tr id="row-cgst"><td class="t-dim">CGST (Central)</td><td id="res-cgst" class="val-highlight">₹0.00</td></tr>
+                    <tr id="row-sgst"><td class="t-dim" id="lbl-sgst">SGST (State)</td><td id="res-sgst" class="val-highlight">₹0.00</td></tr>
+                    <tr style="border-top:1.5px solid #334155;"><td class="t-dim" style="color:#fff;">Total Tax Component</td><td id="res-tax-sum">₹0.00</td></tr>
+                </table>
+
+                <div id="legal-note" style="margin-top:15px; background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 10px; padding: 15px; font-size: 0.65rem; color: #94a3b8; line-height: 1.5;">
+                    <i class="fas fa-info-circle" style="color:#38bdf8;"></i> <b>ISRO Standard Mapping:</b> Supply from <span id="note-origin" style="color:#fff;">--</span> to <span id="note-dest" style="color:#fff;">--</span> determined as <span id="note-legal" style="color:#fff;">--</span>.
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <div id="ss-modal" class="sm-modal">
+        <div class="sm-content">
+            <div class="sm-head"><span id="sm-title">Select</span><button class="sm-close" onclick="QS_Splitter.closeModal()"><i class="fas fa-times"></i></button></div>
+            <div class="sm-search" id="sm-search-container">
+                <input type="text" id="sm-search-inp" class="sm-search-inp" placeholder="Search State/UT..." onkeyup="QS_Splitter.filterStates()">
+            </div>
+            <div class="sm-list" id="sm-list"></div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - STATE SPLITTER ENGINE
+           Features: Full Indian States/UT Matrix, SEZ Rule Compliance, Dynamic UTGST labelling.
+        */
+        (function() {
+            window.QS_Splitter = {
+                state: {
+                    origin: null,
+                    dest: null,
+                    isSEZ: false,
+                    slab: 18
+                },
+
+                // Full Database of States & UTs
+                // UTs identified for UTGST logic
+                locations: [
+                    { id: 'AN', n: 'Andaman & Nicobar Islands', ut: true },
+                    { id: 'AP', n: 'Andhra Pradesh', ut: false },
+                    { id: 'AR', n: 'Arunachal Pradesh', ut: false },
+                    { id: 'AS', n: 'Assam', ut: false },
+                    { id: 'BR', n: 'Bihar', ut: false },
+                    { id: 'CH', n: 'Chandigarh', ut: true },
+                    { id: 'CG', n: 'Chhattisgarh', ut: false },
+                    { id: 'DN', n: 'Dadra and Nagar Haveli', ut: true },
+                    { id: 'DL', n: 'Delhi', ut: false }, // Delhi has its own legislature (SGST)
+                    { id: 'GA', n: 'Goa', ut: false },
+                    { id: 'GJ', n: 'Gujarat', ut: false },
+                    { id: 'HR', n: 'Haryana', ut: false },
+                    { id: 'HP', n: 'Himachal Pradesh', ut: false },
+                    { id: 'JK', n: 'Jammu and Kashmir', ut: false }, // Has legislature
+                    { id: 'JH', n: 'Jharkhand', ut: false },
+                    { id: 'KA', n: 'Karnataka', ut: false },
+                    { id: 'KL', n: 'Kerala', ut: false },
+                    { id: 'LA', n: 'Ladakh', ut: true },
+                    { id: 'LD', n: 'Lakshadweep', ut: true },
+                    { id: 'MP', n: 'Madhya Pradesh', ut: false },
+                    { id: 'MH', n: 'Maharashtra', ut: false },
+                    { id: 'MN', n: 'Manipur', ut: false },
+                    { id: 'ML', n: 'Meghalaya', ut: false },
+                    { id: 'MZ', n: 'Mizoram', ut: false },
+                    { id: 'NL', n: 'Nagaland', ut: false },
+                    { id: 'OR', n: 'Odisha', ut: false },
+                    { id: 'PY', n: 'Puducherry', ut: false }, // Has legislature
+                    { id: 'PB', n: 'Punjab', ut: false },
+                    { id: 'RJ', n: 'Rajasthan', ut: false },
+                    { id: 'SK', n: 'Sikkim', ut: false },
+                    { id: 'TN', n: 'Tamil Nadu', ut: false },
+                    { id: 'TS', n: 'Telangana', ut: false },
+                    { id: 'TR', n: 'Tripura', ut: false },
+                    { id: 'UP', n: 'Uttar Pradesh', ut: false },
+                    { id: 'UK', n: 'Uttarakhand', ut: false },
+                    { id: 'WB', n: 'West Bengal', ut: false }
+                ],
+
+                init: function() {
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'gst_suites/state_splitter.js') this.calculate();
+                    });
+                    if(document.readyState === 'complete') this.calculate();
+                    else document.addEventListener('DOMContentLoaded', () => this.calculate());
+                },
+
+                openModal: function(target) {
+                    const title = target === 'slab' ? 'Select GST Slab' : (target === 'origin' ? 'Origin State' : 'Supply Destination');
+                    document.getElementById('sm-title').innerText = title;
+                    document.getElementById('sm-search-container').style.display = target === 'slab' ? 'none' : 'block';
+                    
+                    this.currentTarget = target;
+                    this.populateList();
+
+                    const m = document.getElementById('ss-modal');
+                    m.style.display = 'flex';
+                    setTimeout(() => m.classList.add('sm-open'), 10);
+                },
+
+                populateList: function(filter = "") {
+                    const list = document.getElementById('sm-list');
+                    list.innerHTML = '';
+                    const target = this.currentTarget;
+
+                    if(target === 'slab') {
+                        [0, 0.1, 0.25, 3, 5, 12, 18, 28].forEach(v => {
+                            const active = this.state.slab == v;
+                            const div = document.createElement('div');
+                            div.className = `sl-item ${active?'active':''}`;
+                            div.onclick = () => {
+                                this.state.slab = v;
+                                document.getElementById('sel-slab-text').innerHTML = `<i class="fas fa-percent" style="color:#eab308;"></i> ${v}% GST`;
+                                this.closeModal();
+                                this.calculate();
+                            };
+                            div.innerHTML = `<span class="sl-name">${v}% GST</span><i class="fas fa-check sl-check"></i>`;
+                            list.appendChild(div);
+                        });
+                    } else {
+                        const search = filter.toLowerCase();
+                        this.locations.forEach(loc => {
+                            if(search && !loc.n.toLowerCase().includes(search)) return;
+                            const active = this.state[target] && this.state[target].id === loc.id;
+                            const div = document.createElement('div');
+                            div.className = `sl-item ${active?'active':''}`;
+                            div.onclick = () => {
+                                this.state[target] = loc;
+                                const icon = target === 'origin' ? 'fa-map-pin' : 'fa-truck-loading';
+                                const color = target === 'origin' ? '#f43f5e' : '#10b981';
+                                document.getElementById(`sel-${target}-text`).innerHTML = `<i class="fas ${icon}" style="color:${color};"></i> ${loc.n}`;
+                                this.closeModal();
+                                this.calculate();
+                            };
+                            div.innerHTML = `<span class="sl-name">${loc.n} ${loc.ut?'<span class="sl-ut">UT</span>':''}</span><i class="fas fa-check sl-check"></i>`;
+                            list.appendChild(div);
+                        });
+                    }
+                },
+
+                filterStates: function() {
+                    const val = document.getElementById('sm-search-inp').value;
+                    this.populateList(val);
+                },
+
+                closeModal: function() {
+                    const m = document.getElementById('ss-modal');
+                    m.classList.remove('sm-open');
+                    setTimeout(() => m.style.display = 'none', 300);
+                    document.getElementById('sm-search-inp').value = '';
+                },
+
+                toggleSEZ: function() {
+                    this.state.isSEZ = !this.state.isSEZ;
+                    document.getElementById('sez-toggle').classList.toggle('sez-active', this.state.isSEZ);
+                    this.calculate();
+                },
+
+                calculate: function() {
+                    const val = parseFloat(document.getElementById('inp-value').value);
+                    const { origin, dest, isSEZ, slab } = this.state;
+
+                    if(!val || val <= 0 || !origin || !dest) {
+                        document.getElementById('empty-state').classList.remove('hidden');
+                        document.getElementById('res-dashboard').classList.add('hidden');
+                        return;
+                    }
+
+                    document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('res-dashboard').classList.remove('hidden');
+
+                    const totalTax = val * (slab / 100);
+                    const grandTotal = val + totalTax;
+
+                    // --- THE LAW ENGINE (ISRO LEVEL) ---
+                    // Rule 1: If SEZ is involved -> Always IGST
+                    // Rule 2: If Origin State != Destination State -> IGST
+                    // Rule 3: If Origin State == Destination State -> CGST + SGST/UTGST
+                    
+                    let isInter = false;
+                    if(isSEZ) {
+                        isInter = true;
+                    } else if(origin.id !== dest.id) {
+                        isInter = true;
+                    }
+
+                    this.render(val, totalTax, grandTotal, isInter, dest);
+                },
+
+                render: function(taxable, tax, total, isInter, dest) {
+                    const fmt = (v) => '₹' + v.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+                    
+                    document.getElementById('res-total').innerText = fmt(total);
+                    document.getElementById('res-taxable').innerText = fmt(taxable);
+                    document.getElementById('res-tax-sum').innerText = fmt(tax);
+
+                    const rowIGST = document.getElementById('row-igst');
+                    const rowCGST = document.getElementById('row-cgst');
+                    const rowSGST = document.getElementById('row-sgst');
+                    const lblSGST = document.getElementById('lbl-sgst');
+
+                    if(isInter) {
+                        document.getElementById('res-type').innerText = "INTER-STATE";
+                        document.getElementById('res-type').style.color = "#38bdf8";
+                        rowIGST.classList.remove('hidden');
+                        rowCGST.classList.add('hidden');
+                        rowSGST.classList.add('hidden');
+                        document.getElementById('res-igst').innerText = fmt(tax);
+                    } else {
+                        document.getElementById('res-type').innerText = "INTRA-STATE";
+                        document.getElementById('res-type').style.color = "#10b981";
+                        rowIGST.classList.add('hidden');
+                        rowCGST.classList.remove('hidden');
+                        rowSGST.classList.remove('hidden');
+                        
+                        document.getElementById('res-cgst').innerText = fmt(tax / 2);
+                        document.getElementById('res-sgst').innerText = fmt(tax / 2);
+                        
+                        // Label Logic: SGST vs UTGST
+                        lblSGST.innerText = dest.ut ? "UTGST (Union Territory)" : "SGST (State)";
+                    }
+
+                    // Legal Note
+                    document.getElementById('note-origin').innerText = this.state.origin.n;
+                    document.getElementById('note-dest').innerText = this.state.dest.n;
+                    const legalType = isInter ? (this.state.isSEZ ? "Inter-State (SEZ Rule)" : "Inter-State (IGST)") : (dest.ut ? "Intra-State (UTGST)" : "Intra-State (SGST)");
+                    document.getElementById('note-legal').innerText = legalType;
+                }
+            };
+
+            window.QS_Splitter.init();
+        })();
+    </script>
+</body>
+</html>

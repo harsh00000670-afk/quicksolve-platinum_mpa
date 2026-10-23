@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Crash & Recover Trap | Reality Check Suite | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           CRASH & RECOVER ENGINE - PLATINUM (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800;900&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-red: #ef4444;
+            --accent-red-glow: rgba(239, 68, 68, 0.3);
+            --accent-gold: #fbbd23;
+            --accent-gold-glow: rgba(251, 189, 35, 0.3);
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.25; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 250px; height: 250px; background: var(--accent-red); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-gold); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-red); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #ef4444, #fbbd23); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--text-sub); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CARDS & INPUTS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(239, 68, 68, 0.15);
+        }
+        .inp-group { margin-bottom: 18px; position: relative; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        
+        .inp-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .inp-field:focus { border-color: var(--accent-red); box-shadow: 0 0 10px var(--accent-red-glow); }
+        .inp-field::placeholder { color: var(--text-dim); font-weight: 500; }
+
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        /* CUSTOM BOTTOM SHEET TRIGGER */
+        .custom-select-trigger {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; font-family: 'Inter', sans-serif;
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s;
+        }
+        .custom-select-trigger:active { transform: scale(0.98); border-color: var(--accent-red); box-shadow: 0 0 10px var(--accent-red-glow); }
+        
+        /* BOTTOM SHEET MODAL STYLES */
+        .dest-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(4px); }
+        .dest-modal-overlay.active { opacity: 1; visibility: visible; }
+        
+        .dest-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--card-bg); border-radius: 24px 24px 0 0; z-index: 1000; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: env(safe-area-inset-bottom, 20px); border-top: 1px solid var(--border-subtle); box-shadow: 0 -10px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; max-height: 80vh; }
+        .dest-modal.active { bottom: 0; }
+        
+        .dest-modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .dest-modal-header h3 { margin: 0; color: var(--accent-red); font-size: 1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .dest-close-btn { background: rgba(255,255,255,0.05); border: none; color: var(--text-sub); width: 30px; height: 30px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+        
+        .dest-modal-body { overflow-y: auto; padding: 10px 20px 20px; }
+        .modal-opt { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; }
+        .modal-opt:last-child { border-bottom: none; }
+        .modal-opt:active { transform: scale(0.98); opacity: 0.8; }
+        
+        .opt-text { font-size: 1rem; color: var(--text-main); font-weight: 600; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; gap: 4px;}
+        .opt-text small { color: var(--text-sub); font-size: 0.75rem; font-family: 'JetBrains Mono', monospace;}
+        
+        .opt-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--text-dim); position: relative; transition: 0.2s; flex-shrink: 0; margin-left: 15px;}
+        .modal-opt.active .opt-radio { border-color: var(--accent-red); }
+        .modal-opt.active .opt-radio::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: var(--accent-red); border-radius: 50%; }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #ef4444, #fbbd23);
+            color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px var(--accent-red-glow); display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 10px;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD & GRID */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 20px; 
+            padding: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(239, 68, 68, 0.2); display: none; text-align: center;
+        }
+
+        .output-row { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
+        .res-box { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 18px 15px; text-align: left;}
+        
+        .res-box-lbl { font-size: 0.7rem; color: var(--text-sub); text-transform: uppercase; font-weight: 800; margin-bottom: 8px; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;}
+        .res-box-val { font-size: 1.6rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; line-height: 1.1; margin-bottom: 8px; word-break: break-word;}
+        .res-box-desc { font-size: 0.85rem; color: var(--text-dim); font-weight: 600; line-height: 1.5; }
+
+        .res-box.main-val { border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.05); box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.1); }
+        .res-box.main-val .res-box-val { color: var(--accent-red); font-size: 2.2rem; }
+
+        .res-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .res-grid-2 .res-box-val { font-size: 1.4rem; }
+
+        /* INTENSITY METER */
+        .intensity-wrap { margin-top: 15px; margin-bottom: 5px; }
+        .intensity-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; position: relative;}
+        .intensity-bar-fill { height: 100%; width: 0%; transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .intensity-lbl { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; display: flex; justify-content: space-between;}
+
+        /* THEMATIC COLORS */
+        .color-green { color: var(--accent-green) !important; }
+        .color-gold { color: var(--accent-gold) !important; }
+        .color-red { color: var(--accent-red) !important; }
+
+        .bg-green { background: var(--accent-green) !important; box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+        .bg-gold { background: var(--accent-gold) !important; box-shadow: 0 0 10px rgba(251, 189, 35, 0.5); }
+        .bg-red { background: var(--accent-red) !important; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+
+        /* LIST STYLES */
+        .psy-list { list-style: none; padding: 0; margin: 0; }
+        .psy-list li { font-size: 0.85rem; color: var(--text-main); font-weight: 600; margin-bottom: 8px; display: flex; gap: 8px; align-items: flex-start;}
+        .psy-list li i { color: var(--accent-gold); margin-top: 3px; font-size: 0.75rem;}
+
+        /* SAVAGE QUOTE VERDICT */
+        .savage-quote {
+            background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--accent-red);
+            padding: 18px 15px; margin-top: 20px; border-radius: 0 12px 12px 0;
+            font-size: 0.9rem; color: var(--text-main); font-weight: 600; text-align: left;
+            line-height: 1.6;
+        }
+        .savage-quote b { color: var(--accent-red); font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
+
+        /* CUSTOM TOAST */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px var(--accent-red-glow); display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .toast.show { bottom: 30px; }
+
+        /* ANIMATIONS */
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-heartbeat"></i> CRASH & RECOVER</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>The Recovery Trap</h1>
+            <p>> math --expose_illusion --loss</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            
+            <div class="inp-group">
+                <label class="inp-lbl">1. Original Portfolio Value (₹)</label>
+                <input type="number" id="inp-portfolio" class="inp-field" placeholder="e.g. 100000" min="0">
+            </div>
+
+            <div class="inp-group">
+                <label class="inp-lbl">2. Drop Type</label>
+                <div class="custom-select-trigger" onclick="openModeModal()">
+                    <span id="mode-display">Single Crash (%)</span>
+                    <i class="fas fa-chevron-down" style="color: var(--text-sub); font-size: 0.9rem;"></i>
+                </div>
+                <input type="hidden" id="inp-mode" value="single">
+            </div>
+
+            <div class="inp-group">
+                <label class="inp-lbl">3. Percentage Drop(s)</label>
+                <input type="text" id="inp-drop" class="inp-field" placeholder="e.g. 40 (or 10, 20, 15)">
+            </div>
+
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">4. Expected CAGR (%) <span style="text-transform:none; color:var(--text-dim);">(Opt)</span></label>
+                    <input type="number" id="inp-cagr" class="inp-field" value="12" placeholder="e.g. 12" min="0">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">5. Monthly SIP (₹) <span style="text-transform:none; color:var(--text-dim);">(Opt)</span></label>
+                    <input type="number" id="inp-sip" class="inp-field" placeholder="e.g. 5000" min="0">
+                </div>
+            </div>
+
+            <button class="calc-btn" onclick="CrashEngine.calculate()">
+                <i class="fas fa-biohazard"></i> Run Reality Check
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container">
+            
+            <div class="output-row">
+                
+                <div class="res-box main-val">
+                    <div class="res-box-lbl"><i class="fas fa-wallet"></i> 1. Current Portfolio Value</div>
+                    <div class="res-box-val" id="out-current-val">₹0</div>
+                    <div class="res-box-desc" style="color:var(--text-main); font-weight:700;">
+                        Your portfolio has now depreciated to <span id="out-current-text">₹0</span>.
+                    </div>
+                    <hr style="border-color: rgba(255,255,255,0.05); margin: 12px 0;">
+                    <div class="res-box-lbl" style="color: var(--accent-red);"><i class="fas fa-fire"></i> 7. Capital Destroyed</div>
+                    <div class="res-box-desc" style="color:var(--accent-red); font-weight:700;">
+                        A total of <span id="out-destroyed-text">₹0</span> has been temporarily wiped out from your net worth.
+                    </div>
+                </div>
+
+                <div class="res-box">
+                    <div class="res-box-lbl"><i class="fas fa-tachometer-alt"></i> 6. Drawdown Intensity Meter</div>
+                    <div class="intensity-wrap">
+                        <div class="intensity-bar-bg">
+                            <div class="intensity-bar-fill" id="out-intensity-bar"></div>
+                        </div>
+                        <div class="intensity-lbl">
+                            <span id="out-intensity-label" class="color-green">EASY RECOVERY</span>
+                            <span id="out-intensity-pct">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="res-grid-2">
+                    <div class="res-box">
+                        <div class="res-box-lbl" style="color:var(--accent-gold);">2. Effective Total Loss</div>
+                        <div class="res-box-val color-gold" id="out-eff-loss">0%</div>
+                        <div class="res-box-desc" id="out-eff-desc" style="font-size: 0.75rem;">If the market falls in stages, the actual compounded loss is worse than simple addition.</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-box-lbl" style="color:var(--accent-blue);">3. Required Recovery</div>
+                        <div class="res-box-val" id="out-req-recovery" style="color:var(--accent-blue);">0%</div>
+                        <div class="res-box-desc" style="font-size: 0.75rem;">To restore your original capital, you require a <span id="out-req-text">0%</span> exponential gain.</div>
+                    </div>
+                </div>
+
+                <div class="res-grid-2">
+                    <div class="res-box">
+                        <div class="res-box-lbl">4. Time (Without SIP)</div>
+                        <div class="res-box-val" id="out-time-no-sip">0 Yrs</div>
+                        <div class="res-box-desc" style="font-size: 0.75rem;">Assuming a <span id="out-cagr-text">0</span>% annual return, it will take approximately this many years to recover.</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-box-lbl">5. Time (With SIP)</div>
+                        <div class="res-box-val" id="out-time-sip">0 Yrs</div>
+                        <div class="res-box-desc" style="font-size: 0.75rem;">By actively investing <span id="out-sip-text">₹0</span> monthly, your recovery time accelerates significantly.</div>
+                    </div>
+                </div>
+
+                <div class="res-box">
+                    <div class="res-box-lbl" style="color: var(--accent-purple);"><i class="fas fa-chart-area"></i> 8. Recovery Curve Insight</div>
+                    <div class="res-box-desc" style="color:var(--text-main); font-weight:600;">
+                        Portfolios fall like a rock but climb back like a snail. This asymmetrical timeline is exactly where most investors panic sell.
+                    </div>
+                </div>
+
+                <div class="res-box">
+                    <div class="res-box-lbl" style="color: var(--accent-gold);"><i class="fas fa-brain"></i> 9. Psychology Reality Check</div>
+                    <ul class="psy-list">
+                        <li><i class="fas fa-chevron-right"></i> You will panic looking at the absolute loss.</li>
+                        <li><i class="fas fa-chevron-right"></i> The recovery phase will feel unbearably slow.</li>
+                        <li><i class="fas fa-chevron-right"></i> This psychological pressure forces retail investors to sell at the exact bottom.</li>
+                        <li><i class="fas fa-chevron-right"></i> Smart money manages risk; dumb money manages ego.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="savage-quote">
+                <b><i class="fas fa-skull"></i> 10. THE FINAL REALITY CHECK</b>
+                "Losing money in the market is easy, but mathematical recovery is strictly exponential. The deeper the drawdown, the more time and rigid discipline required to bounce back. Stop-losses and rigorous risk management are the only true holy grails of investing."
+            </div>
+
+        </div>
+
+    </main>
+
+    <div class="dest-modal-overlay" id="mode-overlay" onclick="closeModeModal()"></div>
+    <div class="dest-modal" id="mode-bottom-sheet">
+        <div class="dest-modal-header">
+            <h3>Select Drop Pattern</h3>
+            <button class="dest-close-btn" onclick="closeModeModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="dest-modal-body">
+            <div class="modal-opt active" onclick="selectMode('single', 'Single Crash (%)', this)">
+                <div class="opt-text">Single Crash <small>A massive one-time drop (e.g. 40)</small></div><div class="opt-radio"></div>
+            </div>
+            <div class="modal-opt" onclick="selectMode('multi', 'Multi-Stage Crash (%)', this)">
+                <div class="opt-text">Multi-Stage Crash <small>Real market simulation (e.g. 10, 20, 15)</small></div><div class="opt-radio"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - CRASH & RECOVER ENGINE */
+        
+        // --- CUSTOM MODAL LOGIC ---
+        function openModeModal() {
+            if(window.CrashEngine.haptic) window.CrashEngine.haptic();
+            document.getElementById('mode-overlay').classList.add('active');
+            document.getElementById('mode-bottom-sheet').classList.add('active');
+        }
+
+        function closeModeModal() {
+            document.getElementById('mode-overlay').classList.remove('active');
+            document.getElementById('mode-bottom-sheet').classList.remove('active');
+        }
+
+        function selectMode(val, text, element) {
+            if(window.CrashEngine.haptic) window.CrashEngine.haptic();
+            
+            document.getElementById('inp-mode').value = val;
+            document.getElementById('mode-display').innerText = text;
+
+            document.querySelectorAll('.modal-opt').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            // Update Placeholder
+            if(val === 'multi') {
+                document.getElementById('inp-drop').placeholder = "e.g. 10, 20, 15";
+            } else {
+                document.getElementById('inp-drop').placeholder = "e.g. 40";
+            }
+
+            closeModeModal();
+        }
+
+        // --- MATH ENGINE ---
+        window.CrashEngine = {
+            haptic: function() { if(navigator.vibrate) navigator.vibrate(20); },
+
+            showToast: function(msg) {
+                const toast = document.getElementById('custom-toast');
+                document.getElementById('toast-msg').innerText = msg;
+                if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            },
+
+            formatCurrency: function(val) {
+                return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val).replace('₹', '₹');
+            },
+
+            calcTimeToRecoverWithSIP: function(initial, current, cagr, sip) {
+                if (sip <= 0) return this.calcTimeToRecoverNoSIP(initial, current, cagr);
+                
+                let r = (cagr / 100) / 12; // monthly rate
+                if (r === 0) {
+                    let deficit = initial - current;
+                    return deficit > 0 ? (deficit / sip) / 12 : 0;
+                }
+
+                // FV = P(1+r)^n + SIP * ((1+r)^n - 1) / r
+                // Solve for n: n = log((FV + SIP/r) / (P + SIP/r)) / log(1+r)
+                let fv = initial;
+                let p = current;
+                let num = fv + (sip / r);
+                let den = p + (sip / r);
+                
+                if (num <= 0 || den <= 0) return Infinity;
+
+                let nMonths = Math.log(num / den) / Math.log(1 + r);
+                return nMonths / 12;
+            },
+
+            calcTimeToRecoverNoSIP: function(initial, current, cagr) {
+                if (cagr <= 0 || current <= 0) return Infinity;
+                let r = cagr / 100;
+                // FV = P(1+r)^t => t = log(FV/P) / log(1+r)
+                return Math.log(initial / current) / Math.log(1 + r);
+            },
+
+            calculate: function() {
+                this.haptic();
+
+                // 1. Get Inputs
+                const initialVal = parseFloat(document.getElementById('inp-portfolio').value);
+                const mode = document.getElementById('inp-mode').value;
+                const dropStr = document.getElementById('inp-drop').value;
+                let cagr = parseFloat(document.getElementById('inp-cagr').value) || 0;
+                let sip = parseFloat(document.getElementById('inp-sip').value) || 0;
+
+                // Validations
+                if(isNaN(initialVal) || initialVal <= 0) { this.showToast("Invalid Input: Original Portfolio Value is required."); return; }
+                if(!dropStr.trim()) { this.showToast("Invalid Input: Percentage drop is missing."); return; }
+
+                // 2. Parse Drop(s)
+                let dropMultiplier = 1;
+                let drops = [];
+                
+                if (mode === 'multi') {
+                    let parts = dropStr.split(',');
+                    for(let part of parts) {
+                        let p = parseFloat(part.trim().replace('-', '')); // Allow negative sign logically
+                        if (!isNaN(p) && p > 0 && p <= 100) {
+                            drops.push(p);
+                            dropMultiplier *= (1 - (p / 100));
+                        }
+                    }
+                    if (drops.length === 0) { this.showToast("Error: Separate valid drop percentages with a comma."); return; }
+                } else {
+                    let p = parseFloat(dropStr.replace('-', ''));
+                    if (isNaN(p) || p <= 0 || p >= 100) { this.showToast("Error: Enter a valid drop percentage (0 to 99)."); return; }
+                    drops.push(p);
+                    dropMultiplier = 1 - (p / 100);
+                }
+
+                // 3. Core Math
+                let currentVal = initialVal * dropMultiplier;
+                let capitalDestroyed = initialVal - currentVal;
+                let effLossPct = (1 - dropMultiplier) * 100;
+                let reqRecoveryPct = ((initialVal / currentVal) - 1) * 100;
+
+                // Time Math
+                let timeNoSip = this.calcTimeToRecoverNoSIP(initialVal, currentVal, cagr);
+                let timeSip = this.calcTimeToRecoverWithSIP(initialVal, currentVal, cagr, sip);
+
+                // --- UI INJECTION ---
+                
+                // Output 1 & 7
+                document.getElementById('out-current-val').innerText = this.formatCurrency(currentVal);
+                document.getElementById('out-current-text').innerText = this.formatCurrency(currentVal);
+                document.getElementById('out-destroyed-text').innerText = this.formatCurrency(capitalDestroyed);
+
+                // Output 2 & 3
+                document.getElementById('out-eff-loss').innerText = `-${effLossPct.toFixed(2)}%`;
+                
+                if (mode === 'multi') {
+                    let rawSum = drops.reduce((a,b)=>a+b, 0);
+                    let formulaStr = drops.map(d=>`-${d}%`).join(', ');
+                    document.getElementById('out-eff-desc').innerText = `Example: ${formulaStr} ≠ -${rawSum}% (Actual compounded loss is -${effLossPct.toFixed(1)}%)`;
+                } else {
+                    document.getElementById('out-eff-desc').innerText = `A single drop of ${effLossPct.toFixed(1)}% applied directly on your initial capital.`;
+                }
+
+                document.getElementById('out-req-recovery').innerText = `+${reqRecoveryPct.toFixed(2)}%`;
+                document.getElementById('out-req-text').innerText = `${reqRecoveryPct.toFixed(1)}%`;
+
+                // Output 4 & 5 (Time)
+                document.getElementById('out-cagr-text').innerText = cagr;
+                if (!isFinite(timeNoSip)) {
+                    document.getElementById('out-time-no-sip').innerText = "Never";
+                } else {
+                    document.getElementById('out-time-no-sip').innerText = `${timeNoSip.toFixed(1)} Yrs`;
+                }
+
+                document.getElementById('out-sip-text').innerText = this.formatCurrency(sip);
+                if (sip === 0) {
+                    document.getElementById('out-time-sip').innerText = "N/A";
+                } else if (!isFinite(timeSip)) {
+                    document.getElementById('out-time-sip').innerText = "Never";
+                } else {
+                    document.getElementById('out-time-sip').innerText = `${timeSip.toFixed(1)} Yrs`;
+                }
+
+                // Output 6: Intensity Meter
+                let barFill = document.getElementById('out-intensity-bar');
+                let barLabel = document.getElementById('out-intensity-label');
+                let barPct = document.getElementById('out-intensity-pct');
+
+                barPct.innerText = `${effLossPct.toFixed(1)}%`;
+                barFill.style.width = `${Math.min(effLossPct, 100)}%`;
+                
+                barLabel.className = ''; // reset
+                if (effLossPct <= 20) {
+                    barFill.className = 'intensity-bar-fill bg-green';
+                    barLabel.classList.add('color-green');
+                    barLabel.innerText = "EASY RECOVERY";
+                } else if (effLossPct <= 40) {
+                    barFill.className = 'intensity-bar-fill bg-gold';
+                    barLabel.classList.add('color-gold');
+                    barLabel.innerText = "MEDIUM PAIN";
+                } else {
+                    barFill.className = 'intensity-bar-fill bg-red';
+                    barLabel.classList.add('color-red');
+                    barLabel.innerText = "BRUTAL (CAPITAL DAMAGE)";
+                }
+
+                // Reveal UI
+                const resCard = document.getElementById('results-container');
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-up');
+                void resCard.offsetWidth; // trigger reflow
+                resCard.classList.add('anim-up');
+                
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+        };
+    </script>
+</body>
+</html>

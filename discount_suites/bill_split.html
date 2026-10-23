@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Food Bill Splitter | Zomato/Swiggy Hacker | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           BILL SPLITTER - PLATINUM ENGINE (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-zomato: #ef4444; /* Zomato Red */
+            --accent-swiggy: #f97316; /* Swiggy Orange */
+            --accent-zomato-glow: rgba(239, 68, 68, 0.3);
+            --accent-swiggy-glow: rgba(249, 115, 22, 0.3);
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.25; z-index: -1; pointer-events: none;}
+        .glow-1 { top: 0%; right: 0%; width: 300px; height: 300px; background: var(--accent-zomato); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-swiggy); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-swiggy); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, var(--accent-zomato), var(--accent-swiggy)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--accent-swiggy); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CARDS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(249, 115, 22, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px var(--accent-swiggy-glow);
+        }
+        .card-title { font-size: 0.9rem; color: var(--accent-swiggy); font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 10px;}
+        
+        /* INPUTS */
+        .inp-group { margin-bottom: 15px; position: relative; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        .inp-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.1rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .inp-field:focus { border-color: var(--accent-swiggy); box-shadow: 0 0 10px var(--accent-swiggy-glow); }
+        .inp-field::placeholder { color: var(--text-dim); font-weight: 500; font-family: 'Inter', sans-serif; font-size: 0.9rem;}
+
+        /* DYNAMIC FRIENDS LIST */
+        .friend-row {
+            display: flex; gap: 10px; align-items: center; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; margin-bottom: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .f-name { flex: 1.2; }
+        .f-amt { flex: 1; }
+        .f-del { 
+            background: rgba(239, 68, 68, 0.1); border: none; color: var(--accent-zomato); 
+            width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; flex-shrink: 0;
+        }
+        .f-del:active { transform: scale(0.9); background: var(--accent-zomato); color: #fff;}
+
+        /* SHARED ITEMS PILLS */
+        .shared-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        .shared-pill {
+            background: rgba(168, 85, 247, 0.1); border: 1px solid var(--accent-purple); border-radius: 10px;
+            padding: 12px 15px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .sp-info { display: flex; flex-direction: column; }
+        .sp-name { color: var(--text-main); font-weight: 800; font-size: 0.9rem; }
+        .sp-split { color: var(--accent-purple); font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; margin-top: 3px;}
+        .sp-del { background: none; border: none; color: var(--text-sub); font-size: 1rem; cursor: pointer; }
+
+        /* BUTTONS */
+        .action-btn {
+            width: 100%; background: transparent; border: 1px dashed var(--text-dim); color: var(--text-sub);
+            padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase;
+            cursor: pointer; transition: 0.3s; display: flex; justify-content: center; gap: 8px; align-items: center;
+            margin-bottom: 15px;
+        }
+        .action-btn:active { background: rgba(255,255,255,0.05); transform: scale(0.98); }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, var(--accent-zomato), var(--accent-swiggy));
+            color: #fff; border: none; padding: 18px; border-radius: 12px; font-size: 1.05rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 25px var(--accent-swiggy-glow); display: flex; justify-content: center; gap: 10px; align-items: center;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* FAUX SELECTOR */
+        .faux-select {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: 'Inter', sans-serif;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; box-sizing: border-box;
+        }
+        .faux-select:active { border-color: var(--accent-swiggy); background: rgba(249, 115, 22, 0.05); transform: scale(0.98);}
+        .faux-select i { color: var(--accent-swiggy); font-size: 1.2rem; }
+
+        /* RESULTS DASHBOARD */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 20px; 
+            padding: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(16, 185, 129, 0.2); display: none;
+        }
+        .res-head { text-align: center; margin-bottom: 20px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 15px;}
+        .res-title { font-size: 1.2rem; color: var(--accent-green); font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .res-sub { font-size: 0.8rem; color: var(--text-sub); font-family: 'JetBrains Mono', monospace; margin-top: 5px;}
+
+        /* INDIVIDUAL INVOICE CARDS */
+        .inv-card {
+            background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; 
+            padding: 15px; margin-bottom: 15px; position: relative; overflow: hidden;
+        }
+        .inv-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background: var(--accent-swiggy); }
+        .inv-card.payer::before { background: var(--accent-green); }
+
+        .inv-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;}
+        .inv-name { font-size: 1.1rem; font-weight: 900; color: var(--text-main); }
+        .inv-amt { font-size: 1.4rem; font-weight: 900; color: var(--accent-swiggy); font-family: 'JetBrains Mono', monospace; }
+        .inv-card.payer .inv-amt { color: var(--accent-green); }
+
+        .inv-breakdown { font-size: 0.75rem; color: var(--text-sub); font-family: 'JetBrains Mono', monospace; line-height: 1.6; margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 8px 10px; border-radius: 8px;}
+        
+        .upi-btn {
+            width: 100%; background: var(--accent-purple); color: #fff; border: none; padding: 12px; border-radius: 8px; 
+            font-size: 0.9rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            display: flex; justify-content: center; gap: 8px; align-items: center; text-decoration: none;
+        }
+        .upi-btn:active { transform: scale(0.98); }
+        .payer-badge { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); padding: 8px; border-radius: 8px; text-align: center; font-weight: 800; font-size: 0.8rem; text-transform: uppercase;}
+
+        /* BOTTOM SHEETS */
+        .bs-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(8px); }
+        .bs-sheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: #151322; border-top: 1px solid var(--accent-swiggy); border-radius: 24px 24px 0 0; z-index: 1001; padding: 25px 20px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 -10px 50px var(--accent-swiggy-glow); display: flex; flex-direction: column; gap: 15px; box-sizing: border-box; max-height: 80vh; overflow-y: auto;}
+        .bs-overlay.show { display: block; opacity: 1; }
+        .bs-sheet.show { bottom: 0; }
+
+        .bs-title { color: var(--text-main); font-weight: 900; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center;}
+        
+        /* Custom Checkbox List for Shared Items */
+        .chk-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; max-height: 200px; overflow-y: auto;}
+        .chk-item { display: flex; align-items: center; justify-content: space-between; background: #1a1829; padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s;}
+        .chk-item.active { border-color: var(--accent-purple); background: rgba(168, 85, 247, 0.1); }
+        .chk-name { font-weight: 700; font-size: 0.95rem; color: var(--text-main); }
+        .chk-box { width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--text-dim); display: flex; align-items: center; justify-content: center; color: transparent; transition: 0.2s;}
+        .chk-item.active .chk-box { background: var(--accent-purple); border-color: var(--accent-purple); color: #fff; }
+
+        .bs-btn { width: 100%; background: var(--accent-swiggy); color: #fff; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 10px;}
+        .bs-btn:active { transform: scale(0.98); }
+
+        /* Drum List for Payer Select */
+        .drum-wrapper { display: flex; justify-content: center; align-items: center; position: relative; padding: 10px 0;}
+        .drum-col { display: flex; flex-direction: column; align-items: center; width: 100%; position: relative; z-index: 2; }
+        .drum-btn { background: transparent; border: none; color: var(--accent-swiggy); font-size: 1.5rem; padding: 5px 0; cursor: pointer;}
+        .d-list { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; margin: 10px 0; }
+        .d-item { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-dim); transition: 0.3s; }
+        .d-item.active { font-size: 1.4rem; font-weight: 900; color: var(--text-main); }
+        .drum-highlight { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 95%; height: 48px; border: 2px solid var(--accent-swiggy); border-radius: 12px; background: rgba(249, 115, 22, 0.1); z-index: 1; pointer-events: none;}
+
+        /* CUSTOM TOAST */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4); display: flex; align-items: center; gap: 8px;
+        }
+        .toast.show { bottom: 30px; }
+
+        /* ANIMATIONS */
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-pizza-slice"></i> BILL SPLITTER</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>The Fair Justice</h1>
+            <p>> no_more_hostel_fights</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            <div class="card-title"><i class="fas fa-receipt"></i> 1. The Global Bill</div>
+            
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">Item Total (₹)</label>
+                    <input type="number" id="gb-total" class="inp-field" placeholder="e.g. 1000" min="0">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl" style="color:var(--accent-green);">Total Discount (₹)</label>
+                    <input type="number" id="gb-disc" class="inp-field" placeholder="e.g. 200" min="0">
+                </div>
+            </div>
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">Taxes & Rest. Chrg (₹)</label>
+                    <input type="number" id="gb-tax" class="inp-field" placeholder="e.g. 50" min="0">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">Delivery & Platform (₹)</label>
+                    <input type="number" id="gb-del" class="inp-field" placeholder="e.g. 40" min="0">
+                </div>
+            </div>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.3s;">
+            <div class="card-title"><i class="fas fa-users"></i> 2. The Khau-Gali (Friends)</div>
+            
+            <div id="friends-container">
+                <div class="friend-row">
+                    <input type="text" class="inp-field f-name" placeholder="Name" value="Me">
+                    <input type="number" class="inp-field f-amt" placeholder="Amt (₹)" min="0">
+                    <button class="f-del" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
+                </div>
+                <div class="friend-row">
+                    <input type="text" class="inp-field f-name" placeholder="Name" value="Friend 1">
+                    <input type="number" class="inp-field f-amt" placeholder="Amt (₹)" min="0">
+                    <button class="f-del" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+
+            <button class="action-btn" onclick="SSJ4_Splitter.addFriend()">
+                <i class="fas fa-plus-circle"></i> Add Person
+            </button>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.4s;">
+            <div class="card-title"><i class="fas fa-share-alt"></i> 3. Shared Items (Platinum)</div>
+            
+            <div class="shared-list" id="shared-container">
+                </div>
+
+            <button class="action-btn" style="color:var(--accent-purple); border-color:var(--accent-purple);" onclick="SSJ4_Splitter.openSharedSheet()">
+                <i class="fas fa-pizza-slice"></i> Add Shared Item (e.g. Garlic Bread)
+            </button>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.5s;">
+            <div class="card-title"><i class="fas fa-hand-holding-usd"></i> 4. Settlement Details</div>
+            
+            <div class="inp-group">
+                <label class="inp-lbl">Who Paid The Bill?</label>
+                <div class="faux-select" onclick="SSJ4_Splitter.openPayerSheet()" id="payer-disp">
+                    <span id="payer-val">Select Friend</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            
+            <div class="inp-group" style="margin-bottom:0;">
+                <label class="inp-lbl" style="color:var(--accent-purple);">Payer's UPI ID (For Magic Link)</label>
+                <input type="text" id="payer-upi" class="inp-field" placeholder="e.g. rahul@okicici">
+            </div>
+        </div>
+
+        <button class="calc-btn anim-up" style="animation-delay: 0.6s;" onclick="SSJ4_Splitter.calculate()">
+            <i class="fas fa-balance-scale-right"></i> Enforce Justice
+        </button>
+
+        <div class="res-card" id="results-container">
+            <div class="res-head">
+                <div class="res-title">The No-Argument Settlement</div>
+                <div class="res-sub" id="res-total-math">Total Paid: ₹0</div>
+            </div>
+            
+            <div id="invoices-container">
+                </div>
+        </div>
+
+    </main>
+
+    <div class="bs-overlay" id="bs-shared-overlay" onclick="SSJ4_Splitter.closeSharedSheet()"></div>
+    <div class="bs-sheet" id="bs-shared-sheet">
+        <div class="bs-title">
+            <span>Add Shared Item</span>
+            <i class="fas fa-times" style="color:var(--text-sub); cursor:pointer;" onclick="SSJ4_Splitter.closeSharedSheet()"></i>
+        </div>
+        
+        <div class="inp-grid">
+            <div class="inp-group" style="margin-bottom:0;">
+                <label class="inp-lbl">Item Name</label>
+                <input type="text" id="sh-name" class="inp-field" placeholder="e.g. Garlic Bread">
+            </div>
+            <div class="inp-group" style="margin-bottom:0;">
+                <label class="inp-lbl">Total Price (₹)</label>
+                <input type="number" id="sh-price" class="inp-field" placeholder="e.g. 150">
+            </div>
+        </div>
+
+        <label class="inp-lbl" style="margin-top:10px; margin-bottom:0;">Shared By (Select Friends)</label>
+        <div class="chk-list" id="sh-friends-list">
+            </div>
+
+        <button class="bs-btn" onclick="SSJ4_Splitter.saveSharedItem()">Save Item</button>
+    </div>
+
+    <div class="bs-overlay" id="bs-payer-overlay" onclick="SSJ4_Splitter.closePayerSheet()"></div>
+    <div class="bs-sheet" id="bs-payer-sheet">
+        <div class="bs-title">
+            <span>Who Paid The Bill?</span>
+            <i class="fas fa-times" style="color:var(--text-sub); cursor:pointer;" onclick="SSJ4_Splitter.closePayerSheet()"></i>
+        </div>
+        
+        <div class="drum-wrapper">
+            <div class="drum-highlight"></div>
+            <div class="drum-col">
+                <button class="drum-btn" onclick="SSJ4_Splitter.movePayer(-1)"><i class="fas fa-chevron-up"></i></button>
+                <div id="payer-drum-list" class="d-list"></div>
+                <button class="drum-btn" onclick="SSJ4_Splitter.movePayer(1)"><i class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+
+        <button class="bs-btn" onclick="SSJ4_Splitter.setPayer()">Confirm Payer</button>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - THE FAIR JUSTICE ENGINE */
+
+        window.SSJ4_Splitter = {
+            sharedItems: [],
+            currPayerIdx: 0,
+            selectedPayerName: "",
+
+            haptic: function() { if(navigator.vibrate) navigator.vibrate(15); },
+            
+            showToast: function(msg) {
+                const t = document.getElementById('custom-toast');
+                document.getElementById('toast-msg').innerText = msg;
+                if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 3000);
+            },
+
+            // --- FRIENDS MANAGEMENT ---
+            getFriendsFromDOM: function() {
+                let friends = [];
+                const rows = document.querySelectorAll('.friend-row');
+                rows.forEach((row, index) => {
+                    let name = row.querySelector('.f-name').value.trim() || `Friend ${index+1}`;
+                    let amt = parseFloat(row.querySelector('.f-amt').value) || 0;
+                    friends.push({ id: `f_${index}`, name: name, personalBase: amt });
+                });
+                return friends;
+            },
+
+            addFriend: function() {
+                this.haptic();
+                const container = document.getElementById('friends-container');
+                const div = document.createElement('div');
+                div.className = 'friend-row';
+                div.innerHTML = `
+                    <input type="text" class="inp-field f-name" placeholder="Name">
+                    <input type="number" class="inp-field f-amt" placeholder="Amt (₹)" min="0">
+                    <button class="f-del" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
+                `;
+                container.appendChild(div);
+            },
+
+            // --- SHARED ITEMS MANAGEMENT ---
+            openSharedSheet: function() {
+                this.haptic();
+                document.getElementById('sh-name').value = '';
+                document.getElementById('sh-price').value = '';
+                
+                const friends = this.getFriendsFromDOM();
+                if(friends.length === 0) { this.showToast("Add some friends first!"); return; }
+
+                const list = document.getElementById('sh-friends-list');
+                list.innerHTML = '';
+                friends.forEach(f => {
+                    list.innerHTML += `
+                        <div class="chk-item active" onclick="this.classList.toggle('active')" data-id="${f.id}">
+                            <span class="chk-name">${f.name}</span>
+                            <div class="chk-box"><i class="fas fa-check"></i></div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('bs-shared-overlay').classList.add('show');
+                setTimeout(() => document.getElementById('bs-shared-sheet').classList.add('show'), 10);
+            },
+
+            closeSharedSheet: function() {
+                this.haptic();
+                document.getElementById('bs-shared-sheet').classList.remove('show');
+                setTimeout(() => document.getElementById('bs-shared-overlay').classList.remove('show'), 300);
+            },
+
+            saveSharedItem: function() {
+                this.haptic();
+                const name = document.getElementById('sh-name').value || "Shared Item";
+                const price = parseFloat(document.getElementById('sh-price').value);
+                
+                if(isNaN(price) || price <= 0) { this.showToast("Enter a valid price!"); return; }
+
+                let sharedByArr = [];
+                document.querySelectorAll('.chk-item.active').forEach(el => {
+                    sharedByArr.push(el.getAttribute('data-id'));
+                });
+
+                if(sharedByArr.length === 0) { this.showToast("Select at least one friend!"); return; }
+
+                this.sharedItems.push({ id: Date.now(), name: name, price: price, sharedBy: sharedByArr });
+                this.renderSharedPills();
+                this.closeSharedSheet();
+            },
+
+            renderSharedPills: function() {
+                const container = document.getElementById('shared-container');
+                container.innerHTML = '';
+                const friends = this.getFriendsFromDOM(); // To map IDs to Names
+                
+                this.sharedItems.forEach(item => {
+                    let names = item.sharedBy.map(id => {
+                        let f = friends.find(x => x.id === id);
+                        return f ? f.name : 'Unknown';
+                    }).join(', ');
+
+                    container.innerHTML += `
+                        <div class="shared-pill">
+                            <div class="sp-info">
+                                <span class="sp-name">${item.name} (₹${item.price})</span>
+                                <span class="sp-split">Split between: ${names}</span>
+                            </div>
+                            <button class="sp-del" onclick="SSJ4_Splitter.deleteShared(${item.id})"><i class="fas fa-times-circle"></i></button>
+                        </div>
+                    `;
+                });
+            },
+
+            deleteShared: function(id) {
+                this.haptic();
+                this.sharedItems = this.sharedItems.filter(i => i.id !== id);
+                this.renderSharedPills();
+            },
+
+            // --- PAYER DRUM ENGINE ---
+            openPayerSheet: function() {
+                this.haptic();
+                const friends = this.getFriendsFromDOM();
+                if(friends.length === 0) { this.showToast("Add friends first!"); return; }
+                
+                this.currPayerIdx = 0;
+                this.renderPayerDrum();
+
+                document.getElementById('bs-payer-overlay').classList.add('show');
+                setTimeout(() => document.getElementById('bs-payer-sheet').classList.add('show'), 10);
+            },
+            closePayerSheet: function() {
+                this.haptic();
+                document.getElementById('bs-payer-sheet').classList.remove('show');
+                setTimeout(() => document.getElementById('bs-payer-overlay').classList.remove('show'), 300);
+            },
+            movePayer: function(dir) {
+                this.haptic();
+                const friends = this.getFriendsFromDOM();
+                this.currPayerIdx = (this.currPayerIdx + dir + friends.length) % friends.length;
+                this.renderPayerDrum();
+            },
+            renderPayerDrum: function() {
+                const friends = this.getFriendsFromDOM();
+                const el = document.getElementById('payer-drum-list');
+                let html = '';
+                for(let i = -1; i <= 1; i++) {
+                    let idx = (this.currPayerIdx + i + friends.length) % friends.length;
+                    let cls = i === 0 ? 'd-item active' : 'd-item near';
+                    html += `<div class="${cls}">${friends[idx].name}</div>`;
+                }
+                el.innerHTML = html;
+            },
+            setPayer: function() {
+                this.haptic(30);
+                const friends = this.getFriendsFromDOM();
+                this.selectedPayerName = friends[this.currPayerIdx].name;
+                document.getElementById('payer-val').innerText = this.selectedPayerName;
+                this.closePayerSheet();
+            },
+
+            // --- THE MATH ENGINE (Proportional Distribution) ---
+            calculate: function() {
+                this.haptic([30, 50]);
+
+                const gbTotal = parseFloat(document.getElementById('gb-total').value) || 0;
+                const gbDisc = parseFloat(document.getElementById('gb-disc').value) || 0;
+                const gbTax = parseFloat(document.getElementById('gb-tax').value) || 0;
+                const gbDel = parseFloat(document.getElementById('gb-del').value) || 0;
+                const payerUPI = document.getElementById('payer-upi').value.trim();
+
+                if(gbTotal <= 0) { this.showToast("Enter Global Item Total!"); return; }
+                if(!this.selectedPayerName) { this.showToast("Select who paid the bill!"); return; }
+
+                let friends = this.getFriendsFromDOM();
+                
+                // 1. Calculate Base Consumption for each
+                let calculatedTotalBase = 0;
+                
+                // Add shared items to personal bases
+                this.sharedItems.forEach(item => {
+                    let splitAmt = item.price / item.sharedBy.length;
+                    item.sharedBy.forEach(sid => {
+                        let f = friends.find(x => x.id === sid);
+                        if(f) f.personalBase += splitAmt;
+                    });
+                });
+
+                friends.forEach(f => calculatedTotalBase += f.personalBase);
+
+                if(calculatedTotalBase === 0) { this.showToast("No items eaten! Math failed."); return; }
+
+                // 2. The Final Settlement Loop
+                const container = document.getElementById('invoices-container');
+                container.innerHTML = '';
+                let finalBillCheck = 0;
+
+                friends.forEach(f => {
+                    // Ratio of this friend
+                    let ratio = f.personalBase / calculatedTotalBase;
+                    
+                    // Apportioning
+                    let myDisc = gbDisc * ratio;
+                    let myTax = gbTax * ratio;
+                    let myDel = gbDel * ratio;
+
+                    let finalOwes = f.personalBase - myDisc + myTax + myDel;
+                    // Ensure we don't get weird negative numbers due to extreme discounts
+                    if(finalOwes < 0) finalOwes = 0; 
+                    
+                    finalBillCheck += finalOwes;
+
+                    let isPayer = (f.name === this.selectedPayerName);
+                    let cardCls = isPayer ? 'inv-card payer' : 'inv-card';
+                    
+                    // Deep Link Generation
+                    let upiHtml = '';
+                    if(!isPayer && payerUPI !== '') {
+                        // upi://pay?pa=UPIID&pn=NAME&am=AMOUNT&cu=INR
+                        let link = `upi://pay?pa=${payerUPI}&pn=${encodeURIComponent(this.selectedPayerName)}&am=${finalOwes.toFixed(2)}&cu=INR&tn=Swiggy+Split`;
+                        upiHtml = `<a href="${link}" class="upi-btn"><i class="fas fa-paper-plane"></i> Pay via UPI</a>`;
+                    } else if (isPayer) {
+                        upiHtml = `<div class="payer-badge"><i class="fas fa-crown"></i> Paid The Main Bill</div>`;
+                    }
+
+                    container.innerHTML += `
+                        <div class="${cardCls}">
+                            <div class="inv-header">
+                                <div class="inv-name">${f.name}</div>
+                                <div class="inv-amt">₹${finalOwes.toFixed(0)}</div>
+                            </div>
+                            <div class="inv-breakdown">
+                                Base Eaten: ₹${f.personalBase.toFixed(1)}<br>
+                                Discount Apportioned: -₹${myDisc.toFixed(1)}<br>
+                                Taxes & Fees Share: +₹${(myTax + myDel).toFixed(1)}
+                            </div>
+                            ${upiHtml}
+                        </div>
+                    `;
+                });
+
+                document.getElementById('res-total-math').innerText = `Total Paid: ₹${finalBillCheck.toFixed(0)}`;
+
+                // Show Results
+                const resCard = document.getElementById('results-container');
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-up');
+                void resCard.offsetWidth; 
+                resCard.classList.add('anim-up');
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+        };
+
+    </script>
+</body>
+</html>

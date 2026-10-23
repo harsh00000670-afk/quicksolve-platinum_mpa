@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>BOGO Reality Check | Deal Hacker | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           BOGO REALITY CHECKER - PLATINUM ENGINE
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-gold: #fbbd23;
+            --accent-gold-glow: rgba(251, 189, 35, 0.3);
+            --accent-red: #ef4444;
+            --accent-red-glow: rgba(239, 68, 68, 0.3);
+            --accent-cyan: #22d3ee;
+            --accent-green: #10b981;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.25; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 250px; height: 250px; background: var(--accent-gold); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-red); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-gold); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #fbbd23, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--accent-gold); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CONFIG CARD */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(251, 189, 35, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px var(--accent-gold-glow);
+        }
+        .sec-lbl { font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+        
+        .inp-group { margin-bottom: 20px; position: relative; }
+        .inp-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;}
+
+        /* CUSTOM SEGMENTED CONTROLS (Replaces Select) */
+        .seg-control {
+            display: flex; background: #1a1829; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;
+            padding: 4px; position: relative; overflow: hidden;
+        }
+        .seg-btn {
+            flex: 1; text-align: center; padding: 12px 5px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase;
+            color: var(--text-dim); cursor: pointer; transition: 0.3s; z-index: 2;
+        }
+        .seg-btn.active { color: #000; }
+        .seg-slider {
+            position: absolute; top: 4px; bottom: 4px; width: calc(50% - 4px); background: var(--accent-gold);
+            border-radius: 8px; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1; box-shadow: 0 0 15px var(--accent-gold-glow);
+        }
+
+        /* QTY CONTROLS */
+        .qty-ctrl {
+            display: flex; align-items: center; background: #1a1829; border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; overflow: hidden; height: 48px;
+        }
+        .qty-btn {
+            background: rgba(255,255,255,0.02); border: none; color: var(--accent-gold); width: 40px; height: 100%;
+            font-size: 1.2rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center;
+        }
+        .qty-btn:active { background: rgba(251, 189, 35, 0.2); }
+        .qty-val { flex: 1; text-align: center; font-size: 1.2rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; color: var(--text-main); }
+
+        /* INPUT FIELDS */
+        .inp-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.1rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .inp-field:focus { border-color: var(--accent-gold); box-shadow: 0 0 10px var(--accent-gold-glow); }
+        .inp-field::placeholder { color: var(--text-dim); font-weight: 500; font-family: 'Inter', sans-serif; font-size: 0.9rem;}
+
+        /* DYNAMIC PRICE GRID */
+        #dynamic-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .dp-wrap { position: relative; }
+        .dp-wrap span { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-dim); font-weight: 800; font-size: 0.8rem;}
+        .dp-wrap input { padding-left: 35px; font-size: 1rem; }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #fbbd23, #ef4444);
+            color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px var(--accent-gold-glow); display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 5px;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(251, 189, 35, 0.4); border-radius: 20px; 
+            padding: 25px 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(251, 189, 35, 0.2); display: none; text-align: center;
+        }
+        
+        .res-lbl { font-size: 0.75rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; margin-bottom: 5px; }
+        .res-main-val { font-size: 2.8rem; color: var(--accent-gold); font-weight: 900; font-family: 'JetBrains Mono', monospace; margin-bottom: 20px; line-height: 1; text-shadow: 0 0 20px var(--accent-gold-glow);}
+        .res-main-val small { font-size: 1.5rem; color: var(--text-sub); }
+        
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px;}
+        .res-box { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px 10px; }
+        .res-box-lbl { font-size: 0.65rem; color: var(--text-sub); text-transform: uppercase; font-weight: 800; margin-bottom: 5px; letter-spacing: 0.5px;}
+        .res-box-val { font-size: 1.2rem; color: var(--text-main); font-weight: 900; font-family: 'JetBrains Mono', monospace; }
+
+        /* ILLUSION CHECK & THE LOGIC EXPOSER */
+        .illusion-box {
+            background: rgba(239, 68, 68, 0.1); border: 1px solid var(--accent-red); border-radius: 12px;
+            padding: 15px; margin-bottom: 20px; color: var(--text-main); font-size: 0.85rem; font-weight: 600; line-height: 1.5;
+        }
+        .illusion-box b { color: var(--accent-red); font-weight: 900; font-family: 'JetBrains Mono', monospace; font-size: 0.95rem;}
+
+        .exposer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; }
+        .exp-col { background: #1a1829; border-radius: 10px; padding: 12px; border: 1px solid rgba(255,255,255,0.05);}
+        .exp-col.paid { border-top: 3px solid var(--accent-red); }
+        .exp-col.free { border-top: 3px solid var(--accent-green); }
+        .exp-tit { font-size: 0.65rem; text-transform: uppercase; font-weight: 800; margin-bottom: 8px; color: var(--text-sub);}
+        .exp-list { margin: 0; padding-left: 15px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-main); font-weight: 700;}
+        .exp-list li { margin-bottom: 4px; }
+
+        /* CUSTOM TOAST */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px var(--accent-red-glow); display: flex; align-items: center; gap: 8px;
+        }
+        .toast.show { bottom: 30px; }
+
+        /* ANIMATIONS */
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-gift"></i> BOGO REALITY CHECK</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>The Mall Trap</h1>
+            <p>> expose_retailer --descending_sort</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            
+            <div class="inp-group">
+                <span class="sec-lbl">1. Offer Type</span>
+                <div class="seg-control" id="seg-offer">
+                    <div class="seg-slider" id="sl-offer" style="left: 4px;"></div>
+                    <div class="seg-btn active" onclick="SSJ4_Bogo.setOffer('free')">Get Y Free</div>
+                    <div class="seg-btn" onclick="SSJ4_Bogo.setOffer('pct')">Get Y @ Z% Off</div>
+                </div>
+            </div>
+
+            <div class="inp-group" id="grp-disc-pct" style="display: none;">
+                <span class="sec-lbl">Discount on 'Get' Items (%)</span>
+                <input type="number" id="inp-disc-pct" class="inp-field" placeholder="e.g. 50" min="1" max="99">
+            </div>
+
+            <div class="inp-grid-2">
+                <div>
+                    <span class="sec-lbl">Buy Qty (X)</span>
+                    <div class="qty-ctrl">
+                        <button class="qty-btn" onclick="SSJ4_Bogo.changeQty('x', -1)"><i class="fas fa-minus"></i></button>
+                        <div class="qty-val" id="qty-x-val">2</div>
+                        <button class="qty-btn" onclick="SSJ4_Bogo.changeQty('x', 1)"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+                <div>
+                    <span class="sec-lbl">Get Qty (Y)</span>
+                    <div class="qty-ctrl">
+                        <button class="qty-btn" onclick="SSJ4_Bogo.changeQty('y', -1)"><i class="fas fa-minus"></i></button>
+                        <div class="qty-val" id="qty-y-val">3</div>
+                        <button class="qty-btn" onclick="SSJ4_Bogo.changeQty('y', 1)"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inp-group">
+                <span class="sec-lbl">4. Item Pricing Mode</span>
+                <div class="seg-control" id="seg-price">
+                    <div class="seg-slider" id="sl-price" style="left: calc(50% + 0px);"></div>
+                    <div class="seg-btn" onclick="SSJ4_Bogo.setPriceMode('same')">Same Price</div>
+                    <div class="seg-btn active" onclick="SSJ4_Bogo.setPriceMode('diff')">Different Prices</div>
+                </div>
+
+                <div id="dynamic-prices">
+                    </div>
+            </div>
+
+            <div class="inp-group" style="margin-bottom: 0;">
+                <span class="sec-lbl">5. Taxation (GST)</span>
+                <div class="seg-control" id="seg-tax" style="margin-bottom: 10px;">
+                    <div class="seg-slider" id="sl-tax" style="left: 4px;"></div>
+                    <div class="seg-btn active" onclick="SSJ4_Bogo.setTax('incl')">Inclusive (MRP)</div>
+                    <div class="seg-btn" onclick="SSJ4_Bogo.setTax('excl')">Extra GST %</div>
+                </div>
+                <input type="number" id="inp-gst" class="inp-field" placeholder="e.g. 18 (GST %)" style="display: none;" min="0">
+            </div>
+
+            <button class="calc-btn" onclick="SSJ4_Bogo.calculate()">
+                <i class="fas fa-eye"></i> Expose The Truth
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container">
+            <div class="res-lbl" style="color: var(--accent-gold);">Final Payable Amount</div>
+            <div class="res-main-val" id="res-payable"><small>₹</small>--</div>
+            
+            <div class="res-grid">
+                <div class="res-box">
+                    <div class="res-box-lbl">Total Cart Value</div>
+                    <div class="res-box-val" id="res-total-val" style="color:var(--text-sub); text-decoration: line-through;">₹--</div>
+                </div>
+                <div class="res-box">
+                    <div class="res-box-lbl">Real Discount %</div>
+                    <div class="res-box-val" id="res-eff-pct" style="color:var(--accent-cyan);">--%</div>
+                </div>
+            </div>
+
+            <div class="illusion-box" id="illusion-box">
+                </div>
+
+            <div class="exposer-grid">
+                <div class="exp-col paid">
+                    <div class="exp-tit">You Paid Full Price For:</div>
+                    <ul class="exp-list" id="list-paid"></ul>
+                </div>
+                <div class="exp-col free">
+                    <div class="exp-tit">You Got Discounted/Free:</div>
+                    <ul class="exp-list" id="list-free"></ul>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - BOGO REALITY CHECKER ENGINE */
+        
+        window.SSJ4_Bogo = {
+            offerMode: 'free', // 'free' or 'pct'
+            priceMode: 'diff', // 'same' or 'diff'
+            taxMode: 'incl',   // 'incl' or 'excl'
+            qtyX: 2,
+            qtyY: 3,
+
+            init: function() {
+                this.updateDynamicUI();
+            },
+
+            haptic: function() { if(navigator.vibrate) navigator.vibrate(15); },
+
+            showToast: function(msg) {
+                const toast = document.getElementById('custom-toast');
+                document.getElementById('toast-msg').innerText = msg;
+                if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            },
+
+            // --- SEGMENTED CONTROLS LOGIC ---
+            setOffer: function(mode) {
+                this.haptic();
+                this.offerMode = mode;
+                const sl = document.getElementById('sl-offer');
+                const btns = document.getElementById('seg-offer').querySelectorAll('.seg-btn');
+                btns[0].classList.remove('active'); btns[1].classList.remove('active');
+                
+                if(mode === 'free') {
+                    sl.style.left = '4px'; btns[0].classList.add('active');
+                    document.getElementById('grp-disc-pct').style.display = 'none';
+                } else {
+                    sl.style.left = 'calc(50% + 0px)'; btns[1].classList.add('active');
+                    document.getElementById('grp-disc-pct').style.display = 'block';
+                }
+            },
+
+            setPriceMode: function(mode) {
+                this.haptic();
+                this.priceMode = mode;
+                const sl = document.getElementById('sl-price');
+                const btns = document.getElementById('seg-price').querySelectorAll('.seg-btn');
+                btns[0].classList.remove('active'); btns[1].classList.remove('active');
+                
+                if(mode === 'same') {
+                    sl.style.left = '4px'; btns[0].classList.add('active');
+                } else {
+                    sl.style.left = 'calc(50% + 0px)'; btns[1].classList.add('active');
+                }
+                this.updateDynamicUI();
+            },
+
+            setTax: function(mode) {
+                this.haptic();
+                this.taxMode = mode;
+                const sl = document.getElementById('sl-tax');
+                const btns = document.getElementById('seg-tax').querySelectorAll('.seg-btn');
+                btns[0].classList.remove('active'); btns[1].classList.remove('active');
+                
+                if(mode === 'incl') {
+                    sl.style.left = '4px'; btns[0].classList.add('active');
+                    document.getElementById('inp-gst').style.display = 'none';
+                } else {
+                    sl.style.left = 'calc(50% + 0px)'; btns[1].classList.add('active');
+                    document.getElementById('inp-gst').style.display = 'block';
+                }
+            },
+
+            // --- QTY CONTROLS ---
+            changeQty: function(type, dir) {
+                this.haptic();
+                if(type === 'x') {
+                    this.qtyX += dir;
+                    if(this.qtyX < 1) this.qtyX = 1;
+                    document.getElementById('qty-x-val').innerText = this.qtyX;
+                } else {
+                    this.qtyY += dir;
+                    if(this.qtyY < 1) this.qtyY = 1;
+                    document.getElementById('qty-y-val').innerText = this.qtyY;
+                }
+                if(this.priceMode === 'diff') this.updateDynamicUI();
+            },
+
+            // --- DYNAMIC INPUT GENERATOR ---
+            updateDynamicUI: function() {
+                const container = document.getElementById('dynamic-prices');
+                container.innerHTML = '';
+                
+                if(this.priceMode === 'same') {
+                    container.innerHTML = `
+                        <div class="dp-wrap" style="grid-column: span 2;">
+                            <input type="number" id="price-same" class="inp-field" placeholder="Enter Price per item (₹)">
+                        </div>`;
+                } else {
+                    const totalItems = this.qtyX + this.qtyY;
+                    for(let i=1; i<=totalItems; i++) {
+                        container.innerHTML += `
+                            <div class="dp-wrap">
+                                <span>#${i}</span>
+                                <input type="number" class="inp-field dyn-price" placeholder="Price">
+                            </div>`;
+                    }
+                }
+            },
+
+            // --- THE RETAILER'S LOGIC ENGINE ---
+            calculate: function() {
+                this.haptic();
+                let prices = [];
+
+                // 1. Gather Prices
+                if(this.priceMode === 'same') {
+                    let p = parseFloat(document.getElementById('price-same')?.value);
+                    if(isNaN(p) || p <= 0) { this.showToast("Enter a valid price!"); return; }
+                    for(let i=0; i<(this.qtyX + this.qtyY); i++) prices.push(p);
+                } else {
+                    const inputs = document.querySelectorAll('.dyn-price');
+                    for(let inp of inputs) {
+                        let p = parseFloat(inp.value);
+                        if(isNaN(p) || p <= 0) { this.showToast("Fill all price fields correctly!"); return; }
+                        prices.push(p);
+                    }
+                }
+
+                // 2. Sort Descending (Retailer's Trap)
+                prices.sort((a, b) => b - a);
+
+                // 3. Split Arrays
+                const paidItems = prices.slice(0, this.qtyX);
+                const getItems = prices.slice(this.qtyX, this.qtyX + this.qtyY);
+
+                // 4. Calculate Base Totals
+                let totalOriginal = prices.reduce((a, b) => a + b, 0);
+                let paidTotal = paidItems.reduce((a, b) => a + b, 0);
+                
+                // Deal with 'Get' Items discount
+                let getDiscountPct = 100; // default for 'Free'
+                if(this.offerMode === 'pct') {
+                    getDiscountPct = parseFloat(document.getElementById('inp-disc-pct').value);
+                    if(isNaN(getDiscountPct) || getDiscountPct <= 0 || getDiscountPct > 100) {
+                        this.showToast("Enter a valid discount % for 'Get' items."); return;
+                    }
+                }
+
+                let getItemsTotalOriginal = getItems.reduce((a, b) => a + b, 0);
+                let getItemsPaidAmount = getItemsTotalOriginal * (1 - (getDiscountPct / 100));
+
+                let finalBase = paidTotal + getItemsPaidAmount;
+
+                // 5. Taxation
+                let gstPct = 0;
+                if(this.taxMode === 'excl') {
+                    gstPct = parseFloat(document.getElementById('inp-gst').value) || 0;
+                }
+                
+                let finalPayable = finalBase * (1 + (gstPct/100));
+                let totalCartValWithTax = totalOriginal * (1 + (gstPct/100));
+
+                // 6. Effective %
+                let effectiveDiscountPct = ((totalCartValWithTax - finalPayable) / totalCartValWithTax) * 100;
+
+                // --- RENDER RESULTS ---
+                document.getElementById('res-payable').innerHTML = `<small>₹</small>${finalPayable.toLocaleString('en-IN', {maximumFractionDigits: 0})}`;
+                document.getElementById('res-total-val').innerText = `₹${totalCartValWithTax.toLocaleString('en-IN', {maximumFractionDigits: 0})}`;
+                document.getElementById('res-eff-pct').innerText = `${effectiveDiscountPct.toFixed(1)}%`;
+
+                // Illusion Box
+                let illusionText = "";
+                let expectedPct = (this.qtyY / (this.qtyX + this.qtyY)) * getDiscountPct;
+                if(this.priceMode === 'diff') {
+                    illusionText = `You probably thought you're getting around <b>~${expectedPct.toFixed(0)}%</b> off, but because retailers give the <b>cheapest items</b> as discounted/free, your real discount is only <b>${effectiveDiscountPct.toFixed(1)}%</b>.`;
+                } else {
+                    illusionText = `Since all items are the same price, the math is straightforward. Your real overall discount on the cart is exactly <b>${effectiveDiscountPct.toFixed(1)}%</b>.`;
+                }
+                document.getElementById('illusion-box').innerHTML = illusionText;
+
+                // The Exposer Lists
+                const formatList = (arr) => arr.map(p => `<li>₹${p.toLocaleString('en-IN')}</li>`).join('');
+                document.getElementById('list-paid').innerHTML = formatList(paidItems);
+                
+                if(this.offerMode === 'free') {
+                    document.getElementById('list-free').innerHTML = getItems.map(p => `<li><strike style="color:var(--text-dim)">₹${p}</strike> <span style="color:var(--accent-green)">₹0</span></li>`).join('');
+                } else {
+                    document.getElementById('list-free').innerHTML = getItems.map(p => {
+                        let dp = p * (1 - (getDiscountPct/100));
+                        return `<li><strike style="color:var(--text-dim)">₹${p}</strike> <span style="color:var(--accent-green)">₹${dp.toFixed(0)}</span></li>`;
+                    }).join('');
+                }
+
+                // Show Card Animation
+                const resCard = document.getElementById('results-container');
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-up');
+                void resCard.offsetWidth; // trigger reflow
+                resCard.classList.add('anim-up');
+                
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+        };
+
+        // Initialize UI
+        document.addEventListener('DOMContentLoaded', () => {
+            SSJ4_Bogo.init();
+        });
+    </script>
+</body>
+</html>

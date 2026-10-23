@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>About Platinum | QuickSolve SSJ4</title>
+    
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           ABOUT GOD - CLEAN STAGGERED FLY-IN UI
+           Theme: Obsidian / Clean UI / Smooth Scroll
+           ========================================= */
+        
+        :root {
+            --bg-void: #020617;
+            --card-bg: #0f172a;
+            --border-subtle: #1e293b;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-gold: #f59e0b;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+        }
+
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            background-color: var(--bg-void);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+        }
+
+        #about-god-overlay {
+            display: flex; flex-direction: column;
+            height: 100dvh; width: 100vw;
+            background-color: var(--bg-void);
+        }
+
+        /* 🛡️ HEADER */
+        .ab-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 15px 20px; background: var(--bg-void); 
+            border-bottom: 1px solid var(--border-subtle);
+            flex-shrink: 0; position: sticky; top: 0; z-index: 100;
+        }
+        .ab-back { background: none; border: none; color: var(--accent-blue); font-size: 1.4rem; cursor: pointer; transition: 0.2s; }
+        .ab-back:active { transform: scale(0.9) translateX(-5px); }
+        .ab-tit { color: var(--text-main); font-weight: 800; font-size: 1.05rem; letter-spacing: 1.5px; text-transform: uppercase; }
+        
+        /* 🧱 BODY (Natural Free Scrolling) */
+        .ab-body {
+            flex: 1; overflow-y: auto; padding: 20px; 
+            display: flex; flex-direction: column; gap: 15px;
+            padding-bottom: 60px; /* Extra space at bottom */
+            scroll-behavior: smooth;
+        }
+        .ab-body::-webkit-scrollbar { width: 0px; display: none; }
+
+        /* =========================================
+           🚀 THE "FLY-IN & GROW" ANIMATION ENGINE
+           ========================================= */
+        .anim-card {
+            opacity: 0; /* Hidden initially */
+            transform: scale(0.5) translateY(50px); /* Start small and lower */
+            /* Bouncy cubic-bezier for that premium pop-in feel */
+            animation: flyInGrow 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            will-change: transform, opacity;
+        }
+
+        @keyframes flyInGrow {
+            0% { opacity: 0; transform: scale(0.5) translateY(50px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Staggered Delays */
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+        .delay-7 { animation-delay: 0.7s; }
+        .delay-8 { animation-delay: 0.8s; }
+        .delay-9 { animation-delay: 0.9s; }
+        .delay-10 { animation-delay: 1.0s; }
+
+        /* UI ELEMENTS */
+        .card-box {
+            background: var(--card-bg); border-radius: 16px; padding: 20px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .hero-sec { text-align: center; padding: 10px 0 20px; border: none; background: transparent; }
+        
+        .hero-logo {
+            width: 75px; height: 75px; margin: 0 auto 15px;
+            background: linear-gradient(180deg, #38bdf8, #f59e0b);
+            border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.3);
+        }
+        .hero-svg-cube { width: 40px; height: 40px; fill: none; stroke: #fff; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+        
+        .hero-name { font-size: 1.7rem; font-weight: 900; color: var(--text-main); letter-spacing: -0.5px; margin-bottom: 5px;}
+        .hero-tag { color: var(--accent-gold); font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+        
+        .tc-head { color: var(--text-main); font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .tc-icon { font-size: 1.2rem; }
+        
+        .tc-p { color: var(--text-sub); font-size: 0.95rem; line-height: 1.6; margin: 0 0 15px 0; font-weight: 500; }
+        .tc-p:last-child { margin-bottom: 0; }
+        .hi-gold { color: var(--accent-gold); font-weight: 700; }
+
+        /* Custom Card Borders */
+        .privacy-card { border-left: 4px solid var(--accent-blue); }
+        .founder-card { border-left: 4px solid var(--accent-gold); }
+        .tribute-card { border-left: 4px solid var(--accent-purple); }
+        .msg-card { border-left: 4px solid var(--accent-green); }
+
+        /* GLOWING TEXT EFFECTS */
+        .glow-text {
+            color: #38bdf8;
+            font-weight: 900;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.8), 0 0 20px rgba(56, 189, 248, 0.4);
+            letter-spacing: 0.5px;
+        }
+
+        .glow-bolt {
+            color: #ffdb13;
+            margin-right: 5px;
+            display: inline-block;
+            filter: drop-shadow(0 0 5px #fff700);
+            animation: lightning-pulse 1.5s infinite alternate;
+        }
+        @keyframes lightning-pulse {
+            0% { text-shadow: 0 0 5px #fff700, 0 0 10px #ffcc00; transform: scale(1); }
+            100% { text-shadow: 0 0 15px #fff700, 0 0 25px #ffcc00, 0 0 35px #ff9900; transform: scale(1.1); }
+        }
+
+        /* Info Grid */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0; background: transparent; border: none; }
+        .ig-box { background: var(--card-bg); padding: 18px 15px; border-radius: 12px; border: 1px solid var(--border-subtle); text-align: center; }
+        .ig-lbl { color: #64748b; font-size: 0.65rem; text-transform: uppercase; font-weight: 800; margin-bottom: 5px; letter-spacing: 1px; }
+        .ig-val { font-weight: 800; font-size: 0.9rem; font-family: monospace; }
+        
+        .c-white { color: #fff; }
+        .c-blue { color: var(--accent-blue); }
+        .c-green { color: var(--accent-green); }
+        .c-gold { color: var(--accent-gold); }
+
+        .final-word { text-align: center; padding: 20px 10px; color: var(--text-sub); font-style: italic; line-height: 1.5; font-size: 0.9rem; border: none; background: transparent; }
+        .fw-big { color: var(--text-main); font-weight: 900; font-size: 1.2rem; margin-top: 10px; display: block; font-style: normal; letter-spacing: 1px; }
+
+        .dev-tag { text-align: center; font-size: 0.75rem; color: #475569; padding-bottom: 20px; font-weight: 700; letter-spacing: 0.5px; border: none; background: transparent; }
+    </style>
+</head>
+<body>
+    <div id="about-god-overlay">
+
+        <header class="ab-head">
+            <button class="ab-back qs-back-btn" onclick="window.history.back();" aria-label="Go Back">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="ab-tit">ABOUT PLATINUM</div>
+            <div style="width:24px"></div>
+        </header>
+
+        <div class="ab-body">
+            
+            <div class="hero-sec anim-card delay-1">
+                <div class="hero-logo">
+                    <svg class="hero-svg-cube" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                </div>
+                <div class="hero-name">QuickSolve Platinum</div>
+                <div class="hero-tag">SSJ4 ARCHITECTURE</div>
+            </div>
+
+            <div class="card-box anim-card delay-2">
+                <p class="tc-p">QuickSolve Platinum is not just another calculator.</p>
+                <p class="tc-p">It is a high-performance, modular engine designed to replace cluttered tools with a single, unified system.</p>
+                <p class="tc-p">Built for speed, accuracy, and absolute control — no page reloads, no lag, no unnecessary complexity.</p>
+                <p class="tc-p" style="margin-bottom:0;"><span class="hi-gold">Just clean math, instant results, and zero nonsense.</span></p>
+            </div>
+
+            <div class="card-box founder-card anim-card delay-3">
+                <div class="tc-head">
+                    <i class="fas fa-user-ninja tc-icon" style="color: var(--accent-gold);"></i>
+                    The Founder's Story
+                </div>
+                <p class="tc-p">QuickSolve Platinum didn’t start as a product. It started as a simple observation.</p>
+                <p class="tc-p">Everywhere I looked, I saw the same problem — for every small task, there was a different calculator, a different website, a different login. Too much friction. Too much clutter. I saw a gap.</p>
+                <p class="tc-p">What if everything could exist in one place? One platform where anyone — a student, a founder, or a normal user — could just come, calculate, and leave. No accounts. No sign-ups. No distractions. That idea became QuickSolve Platinum.</p>
+                <p class="tc-p">I started building this in Class 12. No big team. No funding. Just a vision. At the beginning, I didn’t know everything. I wasn’t an expert. I just had one thing — the intent to build something useful.</p>
+                <p class="tc-p">So I started from basics. I searched, analyzed, and studied existing tools. I asked a simple question: "If these tools already exist, why are people not satisfied?" And the answer was clear — they were slow, outdated, cluttered, and disconnected.</p>
+                <p class="tc-p">So I turned their weaknesses into my strengths. Instead of treating a calculator like a boring box, I built it like a modern machine — fast, clean, and powerful.</p>
+                <p class="tc-p" style="margin-bottom:0;">Today, QuickSolve Platinum runs with 60+ calculators, each designed to solve real-world problems with precision and clarity. And this is just the beginning.</p>
+            </div>
+
+            <div class="card-box tribute-card anim-card delay-4">
+                <div class="tc-head">
+                    <i class="fab fa-linux tc-icon" style="color: var(--accent-purple);"></i>
+                    Inspired by a Legend
+                </div>
+                <p class="tc-p">This project is deeply inspired by the creator of Linux, <span class="glow-text">Mr. Linus Torvalds</span>.</p>
+                <p class="tc-p">When I read the story of how he built a free operating system from scratch in his dorm room and gave it to the world, it changed my perspective completely. He didn't build it for corporate greed; he built it because he wanted a better system. He proved that a solo developer with pure intent can write code that runs the entire world.</p>
+                <p class="tc-p" style="margin-bottom:0;">That philosophy is the beating heart of QuickSolve Platinum: Building high-quality, powerful tools for the people, keeping them accessible, and focusing purely on raw performance. Thank you, <span class="glow-text">Linus</span>, for being the ultimate legend.</p>
+            </div>
+
+            <div class="card-box anim-card delay-5">
+                <div class="tc-head">
+                    <i class="fas fa-brain tc-icon" style="color: var(--accent-gold);"></i>
+                    What Makes Us Different
+                </div>
+                <p class="tc-p" style="margin-bottom:12px;"><i class="fas fa-bolt glow-bolt"></i> <strong style="color:#fff">Modular Architecture:</strong> Each calculator runs independently on the SSJ4 engine. This means isolated logic, zero cross-lag, and blazing-fast execution.</p>
+                <p class="tc-p" style="margin-bottom:12px;"><i class="fas fa-bolt glow-bolt"></i> <strong style="color:#fff">Zero-Server Design:</strong> No accounts. No uploads. No database hacking risks. Everything stays strictly on your device.</p>
+                <p class="tc-p" style="margin-bottom:12px;"><i class="fas fa-bolt glow-bolt"></i> <strong style="color:#fff">Client-Side Raw Power:</strong> From basic EMI loops to complex BigInt conversions, the app utilizes your device's local processor. Military-grade privacy meets extreme performance.</p>
+                <p class="tc-p" style="margin-bottom:12px;"><i class="fas fa-bolt glow-bolt"></i> <strong style="color:#fff">Bloat-Free Experience:</strong> No annoying pop-ups, no newsletters, and no premium paywalls locking basic mathematics. We respect your time.</p>
+                <p class="tc-p" style="margin-bottom:0;"><i class="fas fa-bolt glow-bolt"></i> <strong style="color:#fff">God-Tier Calculators:</strong> Simple on the surface. Powerful underneath. Tools built not just to give an answer, but to expose financial traps and hidden costs.</p>
+            </div>
+
+            <div class="card-box privacy-card anim-card delay-6">
+                <div class="tc-head" style="color: var(--accent-blue);">
+                    <i class="fas fa-shield-alt tc-icon"></i>
+                    Privacy Comes First
+                </div>
+                <p class="tc-p">QuickSolve Platinum does not track you.</p>
+                <p class="tc-p">It does not profile you.</p>
+                <p class="tc-p">It does not sell your data.</p>
+                <p class="tc-p">No ads. No invasive analytics.</p>
+                <p class="tc-p" style="font-weight:800; color:#fff; margin-bottom:0;">Your data stays exactly where it belongs — with you.</p>
+            </div>
+
+            <div class="info-grid anim-card delay-7">
+                <div class="ig-box"><div class="ig-lbl">Live Since</div><div class="ig-val c-white">Jan 16, 2026</div></div>
+                <div class="ig-box"><div class="ig-lbl">Core Engine</div><div class="ig-val c-blue">SSJ4 v1.3</div></div>
+                <div class="ig-box"><div class="ig-lbl">Mode</div><div class="ig-val c-green">Modular MPA</div></div>
+                <div class="ig-box"><div class="ig-lbl">Region</div><div class="ig-val c-gold">India 🇮🇳</div></div>
+            </div>
+
+            <div class="card-box msg-card anim-card delay-8">
+                <div class="tc-head" style="color: var(--accent-green);">
+                    <i class="fas fa-pen-nib tc-icon"></i>
+                    Founder’s Message
+                </div>
+                <p class="tc-p">If you truly want to build something, thinking alone is not enough. You have to start. You have to build. You have to fail, learn, and keep going.</p>
+                <p class="tc-p" style="margin-bottom:0;">Because sometimes, in the middle of the process, ideas appear that feel almost like magic. Enjoy the process — no matter how difficult the path is. The results will take care of themselves.</p>
+            </div>
+
+            <div class="final-word anim-card delay-9">
+                QuickSolve Platinum is built for people who don’t just calculate —<br>
+                they want to understand the truth behind the numbers.
+                <span class="fw-big">WELCOME TO SSJ4.</span>
+            </div>
+
+            <div class="dev-tag anim-card delay-10">
+                Made with precision by QuickSolve Solo Dev
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

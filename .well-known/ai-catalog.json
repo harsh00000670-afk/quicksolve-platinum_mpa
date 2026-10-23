@@ -1,0 +1,187 @@
+{
+  "version": "1.0",
+  "site": "https://quicksolve-platinum.netlify.app",
+  "name": "QuickSolve Platinum",
+  "description": "70+ offline-first calculators for finance, health, programming, science, and daily life.",
+  "resources": [
+    {
+      "id": "home",
+      "displayName": "QuickSolve Home",
+      "mediaType": "text/html",
+      "url": "https://quicksolve-platinum.netlify.app/",
+      "queries": [
+        "calculator suite",
+        "all tools",
+        "quick solve"
+      ]
+    },
+    {
+      "id": "scientific",
+      "displayName": "Scientific Calculator",
+      "mediaType": "text/html",
+      "url": "https://quicksolve-platinum.netlify.app/scientific_suite/scientific.html",
+      "queries": [
+        "scientific calculator",
+        "voice math",
+        "trigonometry",
+        "logarithm"
+      ]
+    },
+    {
+      "id": "programmer",
+      "displayName": "Programmer Toolkit",
+      "mediaType": "text/html",
+      "url": "https://quicksolve-platinum.netlify.app/programmer.html",
+      "queries": [
+        "base converter",
+        "json formatter",
+        "unix timestamp",
+        "subnet calculator",
+        "bitwise",
+        "hash",
+        "cron"
+      ]
+    },
+    {
+      "id": "gst",
+      "displayName": "GST Suite (India)",
+      "mediaType": "text/html",
+      "url": "https://quicksolve-platinum.netlify.app/gst.html",
+      "queries": [
+        "gst calculator",
+        "input tax credit",
+        "gst late fee",
+        "reverse charge",
+        "composition scheme"
+      ]
+    },
+    {
+      "id": "loan",
+      "displayName": "Loan & EMI Suite",
+      "mediaType": "text/html",
+      "url": "https://quicksolve-platinum.netlify.app/loan.html",
+      "queries": [
+        "emi calculator",
+        "loan eligibility",
+        "prepayment",
+        "apr",
+        "balance transfer",
+        "flat rate"
+      ]
+    },
+    {
+      "id": "currency",
+      "displayName": "Currency & Crypto Suite",
+      "mediaType": "text/html",
+      "url": "https://quicksolve-platinum.netlify.app/currency.html",
+      "queries": [
+        "currency converter",
+        "crypto converter",
+        "forex",
+        "ppp",
+        "gas fees",
+        "arbitrage"
+      ]
+    },
+    {
+      "id": "unit",
+      "displayName": "Unit Converter",
+      "mediaType": "text/html",
+      "url": "https://quicksolve-platinum.netlify.app/unit.html",
+      "queries": [
+        "unit converter",
+        "length converter",
+        "temperature converter",
+        "energy converter",
+        "digital storage"
+      ]
+    },
+    {
+      "id": "percentage",
+      "displayName": "Percentage Reality Checks",
+      "mediaType": "text/html",
+      "url": "https://quicksolve-platinum.netlify.app/percentage.html",
+      "queries": [
+        "percentage calculator",
+        "margin vs markup",
+        "inflation adjusted salary",
+        "crash recovery"
+      ]
+    },
+    {
+      "id": "discount",
+      "displayName": "Discount Analysis",
+      "mediaType": "text/html",
+      "url": "https://quicksolve-platinum.netlify.app/discount.html",
+      "queries": [
+        "discount calculator",
+        "bogo",
+        "stacked discounts",
+        "emi vs cash",
+        "hidden fees"
+      ]
+    },
+    {
+      "id": "health",
+      "displayName": "Health Analytics",
+      "mediaType": "text/html",
+      "url": "https://quicksolve-platinum.netlify.app/health.html",
+      "queries": [
+        "bmi calculator",
+        "body fat",
+        "lean mass",
+        "ideal weight",
+        "waist hip ratio"
+      ]
+    },
+    {
+      "id": "age",
+      "displayName": "Age & Timeline Suite",
+      "mediaType": "text/html",
+      "url": "https://quicksolve-platinum.netlify.app/age.html",
+      "queries": [
+        "age calculator",
+        "life pulse",
+        "cosmic age",
+        "pet age",
+        "retirement countdown"
+      ]
+    },
+    {
+      "id": "time",
+      "displayName": "Time Suite",
+      "mediaType": "text/html",
+      "url": "https://quicksolve-platinum.netlify.app/time.html",
+      "queries": [
+        "sleep calculator",
+        "timezone overlap",
+        "date math",
+        "pomodoro",
+        "billing tracker"
+      ]
+    },
+    {
+      "id": "graph",
+      "displayName": "Chart Master",
+      "mediaType": "text/html",
+      "url": "https://quicksolve-platinum.netlify.app/graph.html",
+      "queries": [
+        "equation plotter",
+        "compounding chart",
+        "break even chart",
+        "depreciation chart"
+      ]
+    },
+    {
+      "id": "agent-skills",
+      "displayName": "Agent Skills Manifest",
+      "mediaType": "application/json",
+      "url": "https://quicksolve-platinum.netlify.app/.well-known/agent-skills/index.json",
+      "queries": [
+        "agent skills",
+        "tool registry",
+        "what can agents do"
+      ]
+    }
+  ]
+}

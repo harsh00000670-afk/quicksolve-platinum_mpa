@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>The Life Pulse | Real-Time Age & Biological Tracker | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate your exact age down to the second. Track total heartbeats, breaths taken, and view your life progress bar in real-time. 100% Offline.">
+    <meta name="keywords" content="real time age calculator, exact age in seconds, life progress bar, total heartbeats calculator, next birthday countdown, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/age_suites/life_pulse.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="The Life Pulse - Real-Time Existence Tracker">
+    <meta property="og:description" content="Watch your age tick in seconds. See your total heartbeats and life progress bar live.">
+    <meta property="og:image" content="../logo.png">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           THE LIFE PULSE (PLATINUM GOD MODE V2)
+           Theme: Chronos Pink/Purple (Compact)
+           ========================================= */
+        #mod-pulse-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: var(--bg-body, #09090b); z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .lp-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .lp-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .lp-tit { color: #ec4899; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .lp-body { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 12px; }
+
+        /* Sleek Cards */
+        .lp-card { 
+            flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 10px; 
+            padding: 12px; display: flex; flex-direction: column; gap: 8px; transition: 0.2s; position: relative;
+        }
+        .lp-card:focus-within { border-color: #ec4899; box-shadow: 0 0 12px rgba(236, 72, 153, 0.15); }
+
+        .lp-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; margin-bottom: 3px; }
+        
+        .lp-inp-wrap { display: flex; align-items: center; gap: 8px; background: rgba(2, 6, 23, 0.5); padding: 10px 10px; border-radius: 8px; border: 1px solid #334155; cursor: pointer; transition: 0.2s;}
+        .lp-inp-wrap:active { border-color: #ec4899; }
+        .lp-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1rem; font-weight: 900; outline: none; width: 100%; font-family: monospace; }
+        .lp-inp::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; color: #ec4899; }
+        
+        /* Custom Select Trigger */
+        .lp-select-text { flex: 1; color: #fff; font-size: 0.95rem; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 10px; }
+
+        /* Dashboard Hero - Ticking Seconds */
+        .dash-hero { background: #0f172a; border: 1px solid #ec4899; border-radius: 10px; padding: 15px 12px; text-align: center; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(236, 72, 153, 0.05); }
+        .dash-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #ec4899, #8b5cf6); }
+        
+        .dh-title { font-size: 0.7rem; color: #f8fafc; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+        .dh-val { font-size: 2.2rem; font-weight: 900; color: #ec4899; font-family: monospace; letter-spacing: -1px; text-shadow: 0 0 12px rgba(236, 72, 153, 0.4); line-height: 1.1; }
+        .dh-sub { font-size: 0.75rem; color: #94a3b8; font-weight: bold; margin-top: 4px; }
+
+        /* Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+        .stat-box { background: rgba(2, 6, 23, 0.6); border: 1px solid #334155; padding: 10px 5px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; gap: 4px; }
+        .st-lbl { font-size: 0.55rem; color: #94a3b8; text-transform: uppercase; font-weight: 900; }
+        .st-val { font-size: 1rem; color: #f8fafc; font-weight: bold; font-family: monospace; }
+        .st-hl { color: #8b5cf6; }
+
+        /* Biological Tracker */
+        .bio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .bio-box { background: #1e293b; border: 1px dashed #334155; border-radius: 8px; padding: 12px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .bio-icon { font-size: 1.5rem; margin-bottom: 6px; }
+        .bio-icon.heart { color: #ef4444; animation: heartbeat 1s infinite; }
+        .bio-icon.breath { color: #0ea5e9; animation: breathe 3s infinite; }
+        .bio-val { font-size: 1.2rem; font-weight: 900; color: #f8fafc; font-family: monospace; }
+        
+        @keyframes heartbeat { 0% { transform: scale(1); } 20% { transform: scale(1.15); } 40% { transform: scale(1); } 60% { transform: scale(1.15); } 80% { transform: scale(1); } 100% { transform: scale(1); } }
+        @keyframes breathe { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
+
+        /* Progress Bar */
+        .prog-card { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px; }
+        .prog-head { display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 900; color: #f8fafc; text-transform: uppercase; margin-bottom: 6px; }
+        .prog-track { height: 10px; background: #1e293b; border-radius: 5px; overflow: hidden; position: relative; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
+        .prog-fill { height: 100%; background: linear-gradient(90deg, #ec4899, #f59e0b); width: 0%; border-radius: 5px; transition: width 1s cubic-bezier(0.1, 0.9, 0.2, 1); box-shadow: 0 0 10px rgba(236, 72, 153, 0.5); }
+        .prog-desc { font-size: 0.6rem; color: #94a3b8; margin-top: 6px; text-align: center; }
+
+        /* Next Birthday Countdown */
+        .bday-box { background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 8px; padding: 12px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .bday-lbl { font-size: 0.7rem; color: #10b981; font-weight: 900; text-transform: uppercase; margin-bottom: 4px; }
+        .bday-timer { font-size: 1.2rem; font-weight: 900; color: #f8fafc; font-family: monospace; letter-spacing: 1px; }
+
+        /* Custom Bottom Sheet Modal (Platinum) */
+        #em-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .em-content { background: #1e293b; border-top-left-radius: 20px; border-top-right-radius: 20px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .em-open .em-content { transform: translateY(0); }
+        
+        .em-head { padding: 15px 20px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
+        .em-head span { color: #ec4899; font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .em-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        
+        .em-search { padding: 10px 15px; border-bottom: 1px solid #334155; background: #0f172a; }
+        .em-search-inp { width: 100%; background: #1e293b; border: 1px solid #475569; padding: 10px; border-radius: 8px; color: #fff; outline: none; font-family: sans-serif; }
+        .em-search-inp:focus { border-color: #ec4899; }
+
+        .em-list { flex: 1; overflow-y: auto; padding: 5px 0; }
+        .el-item { display: flex; align-items: center; padding: 12px 20px; gap: 15px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); cursor: pointer; transition: 0.2s; }
+        .el-item:active { background: rgba(236, 72, 153, 0.1); }
+        .el-icon { font-size: 1.5rem; text-align: center; }
+        .el-details { flex: 1; display: flex; flex-direction: column; }
+        .el-name { font-weight: 900; color: #f8fafc; font-size: 0.95rem; }
+        .el-sub { color: #94a3b8; font-size: 0.65rem; font-weight: bold; margin-top: 2px; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <main id="mod-pulse-overlay" role="main" aria-label="Life Pulse Age Calculator">
+        <header class="lp-head">
+            <a href="../age.html" class="qs-back-btn" aria-label="Go Back">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            </a>
+            <div class="lp-tit"><i class="fas fa-fingerprint" aria-hidden="true"></i> THE LIFE PULSE</div>
+        </header>
+
+        <section class="lp-body">
+            
+            <div class="lp-card">
+                <div class="lp-lbl">
+                    <label for="inp-dob">Date & Time of Birth</label>
+                </div>
+                <div class="lp-inp-wrap" style="cursor: text;">
+                    <i class="fas fa-calendar-alt" style="color:#ec4899;" aria-hidden="true"></i>
+                    <input type="datetime-local" id="inp-dob" class="lp-inp" onchange="QS_Pulse.startEngine()" aria-label="Enter Date and Time of Birth">
+                </div>
+
+                <div class="lp-lbl" style="margin-top:8px;">
+                    <label>Life Expectancy (For Progress Bar)</label>
+                </div>
+                <div class="lp-inp-wrap" onclick="QS_Pulse.openModal()" aria-label="Select Region Life Expectancy">
+                    <div id="sel-exp-text" class="lp-select-text">
+                        🌍 Global Average (~73 Years)
+                    </div>
+                    <i class="fas fa-chevron-down" style="color:#64748b; font-size:0.8rem;"></i>
+                </div>
+            </div>
+
+            <div id="empty-state" style="text-align:center; padding: 30px 20px; color:#64748b;">
+                <i class="fas fa-hourglass-start fa-3x" style="margin-bottom:12px; opacity:0.5;"></i>
+                <div style="font-size:0.85rem; font-weight:bold;">Enter your birth details to awaken Chronos.</div>
+            </div>
+
+            <div id="pulse-dashboard" class="hidden" aria-live="polite">
+                
+                <div class="dash-hero">
+                    <div class="dh-title">Total Ticking Seconds</div>
+                    <div class="dh-val" id="res-seconds">0</div>
+                    <div class="dh-sub" id="res-exact-age">0 Yrs, 0 Mos, 0 Days</div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <span class="st-lbl">Total Days</span>
+                            <span class="st-val st-hl" id="res-days">0</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="st-lbl">Total Hours</span>
+                            <span class="st-val st-hl" id="res-hours">0</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="st-lbl">Total Mins</span>
+                            <span class="st-val st-hl" id="res-mins">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bio-grid">
+                    <div class="bio-box">
+                        <i class="fas fa-heart bio-icon heart" aria-hidden="true"></i>
+                        <span class="st-lbl" style="margin-bottom:4px;">Heartbeats (Approx)</span>
+                        <span class="bio-val" id="res-heart">0</span>
+                    </div>
+                    <div class="bio-box">
+                        <i class="fas fa-wind bio-icon breath" aria-hidden="true"></i>
+                        <span class="st-lbl" style="margin-bottom:4px;">Breaths Taken</span>
+                        <span class="bio-val" id="res-breath">0</span>
+                    </div>
+                </div>
+
+                <div class="prog-card">
+                    <div class="prog-head">
+                        <span>Life Progress</span>
+                        <span id="res-prog-pct" style="color:#ec4899;">0.00%</span>
+                    </div>
+                    <div class="prog-track" aria-hidden="true">
+                        <div class="prog-fill" id="prog-bar"></div>
+                    </div>
+                    <div class="prog-desc">Based on selected life expectancy. Make every second count.</div>
+                </div>
+
+                <div class="bday-box">
+                    <span class="bday-lbl"><i class="fas fa-birthday-cake" aria-hidden="true"></i> Next Birthday In</span>
+                    <div class="bday-timer" id="res-bday">00d : 00h : 00m : 00s</div>
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <div id="em-modal">
+        <div class="em-content">
+            <div class="em-head">
+                <span>Select Target Region</span>
+                <button class="em-close" onclick="QS_Pulse.closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="em-search">
+                <input type="text" id="em-search-inp" class="em-search-inp" placeholder="Search Countries..." onkeyup="QS_Pulse.filterExpectancy()">
+            </div>
+            <div class="em-list" id="expectancy-list">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - THE LIFE PULSE ENGINE V2
+           Features: Custom Bottom Sheet, 20+ Regions, Live Ticking Engine
+        */
+
+        (function() {
+            window.QS_Pulse = {
+                
+                timerId: null,
+                currentExpectancy: 73, // Default global
+
+                // Platinum Database for Life Expectancy
+                expectancyDb: {
+                    'global': { n: 'Global Average', f: '🌍', y: 73 },
+                    'in': { n: 'India', f: '🇮🇳', y: 70 },
+                    'us': { n: 'United States', f: '🇺🇸', y: 79 },
+                    'jp': { n: 'Japan', f: '🇯🇵', y: 84 },
+                    'uk': { n: 'United Kingdom', f: '🇬🇧', y: 81 },
+                    'ca': { n: 'Canada', f: '🇨🇦', y: 82 },
+                    'au': { n: 'Australia', f: '🇦🇺', y: 83 },
+                    'de': { n: 'Germany', f: '🇩🇪', y: 81 },
+                    'fr': { n: 'France', f: '🇫🇷', y: 83 },
+                    'it': { n: 'Italy', f: '🇮🇹', y: 83 },
+                    'cn': { n: 'China', f: '🇨🇳', y: 78 },
+                    'br': { n: 'Brazil', f: '🇧🇷', y: 76 },
+                    'za': { n: 'South Africa', f: '🇿🇦', y: 64 },
+                    'ng': { n: 'Nigeria', f: '🇳🇬', y: 55 },
+                    'kr': { n: 'South Korea', f: '🇰🇷', y: 83 },
+                    'ae': { n: 'UAE', f: '🇦🇪', y: 78 },
+                    'sa': { n: 'Saudi Arabia', f: '🇸🇦', y: 75 },
+                    'sg': { n: 'Singapore', f: '🇸🇬', y: 84 },
+                    'ch': { n: 'Switzerland', f: '🇨🇭', y: 84 },
+                    'opt': { n: 'Optimistic Limit', f: '🧬', y: 100 },
+                    'max': { n: 'Biological Max', f: '⚡', y: 120 }
+                },
+                
+                initListener: function() {
+                    // Pre-fill DOB to 20 years ago for visual testing if empty
+                    const dobInp = document.getElementById('inp-dob');
+                    if(dobInp && !dobInp.value) {
+                        let d = new Date();
+                        d.setFullYear(d.getFullYear() - 20);
+                        let iso = d.toISOString();
+                        dobInp.value = iso.substring(0, 16);
+                    }
+
+                    this.populateModal();
+
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'age_suites/life_pulse.js') {
+                            this.startEngine();
+                        }
+                    });
+
+                    if(document.readyState === 'complete' || document.readyState === 'interactive'){
+                         setTimeout(() => this.startEngine(), 100);
+                    } else {
+                         document.addEventListener('DOMContentLoaded', () => this.startEngine());
+                    }
+                },
+
+                populateModal: function(filter = "") {
+                    const listObj = document.getElementById('expectancy-list');
+                    if(!listObj) return;
+                    listObj.innerHTML = '';
+
+                    filter = filter.toLowerCase();
+
+                    Object.keys(this.expectancyDb).forEach(code => {
+                        let data = this.expectancyDb[code];
+                        if(filter && !data.n.toLowerCase().includes(filter)) return;
+
+                        let div = document.createElement('div');
+                        div.className = "el-item";
+                        div.onclick = () => this.selectExpectancy(code);
+                        
+                        div.innerHTML = `
+                            <span class="el-icon">${data.f}</span>
+                            <div class="el-details">
+                                <span class="el-name">${data.n}</span>
+                                <span class="el-sub">Average Expectancy: ~${data.y} Years</span>
+                            </div>
+                        `;
+                        listObj.appendChild(div);
+                    });
+                },
+
+                filterExpectancy: function() {
+                    const val = document.getElementById('em-search-inp').value;
+                    this.populateModal(val);
+                },
+
+                openModal: function() {
+                    const modal = document.getElementById('em-modal');
+                    if(modal) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => { modal.classList.add('em-open'); }, 10);
+                        document.getElementById('em-search-inp').value = '';
+                        this.populateModal();
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                closeModal: function() {
+                    const modal = document.getElementById('em-modal');
+                    if(modal) {
+                        modal.classList.remove('em-open');
+                        setTimeout(() => { modal.style.display = 'none'; }, 300);
+                    }
+                    if(window.doHaptic) window.doHaptic();
+                },
+
+                selectExpectancy: function(code) {
+                    const data = this.expectancyDb[code];
+                    this.currentExpectancy = data.y;
+                    document.getElementById('sel-exp-text').innerHTML = `${data.f} ${data.n} (~${data.y} Years)`;
+                    this.closeModal();
+                    this.startEngine();
+                },
+
+                startEngine: function() {
+                    const dobVal = document.getElementById('inp-dob').value;
+                    if (!dobVal) return;
+
+                    document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('pulse-dashboard').classList.remove('hidden');
+
+                    if (this.timerId) clearInterval(this.timerId);
+                    
+                    this.calculate();
+                    
+                    this.timerId = setInterval(() => {
+                        this.calculate();
+                    }, 1000);
+                },
+
+                calculate: function() {
+                    const dobVal = document.getElementById('inp-dob').value;
+                    if (!dobVal) return;
+
+                    const dob = new Date(dobVal);
+                    const now = new Date();
+                    
+                    if (dob > now) {
+                        if(document.getElementById('res-seconds')) document.getElementById('res-seconds').innerText = "ERROR";
+                        if(document.getElementById('res-exact-age')) document.getElementById('res-exact-age').innerText = "Time traveler detected!";
+                        return;
+                    }
+
+                    // Time Diff Math
+                    const diffMs = now - dob;
+                    const diffSec = Math.floor(diffMs / 1000);
+                    const diffMin = Math.floor(diffSec / 60);
+                    const diffHrs = Math.floor(diffMin / 60);
+                    const diffDays = Math.floor(diffHrs / 24);
+
+                    // Exact Age
+                    let ageY = now.getFullYear() - dob.getFullYear();
+                    let ageM = now.getMonth() - dob.getMonth();
+                    let ageD = now.getDate() - dob.getDate();
+
+                    if (ageD < 0) {
+                        ageM--;
+                        let prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                        ageD += prevMonth.getDate();
+                    }
+                    if (ageM < 0) {
+                        ageY--;
+                        ageM += 12;
+                    }
+
+                    // Biological Math
+                    const totalHeartbeats = diffMin * 80;
+                    const totalBreaths = diffMin * 16;
+
+                    // Progress Bar
+                    const expectYears = this.currentExpectancy;
+                    const expectedDays = expectYears * 365.25; 
+                    let progPct = (diffDays / expectedDays) * 100;
+                    if (progPct > 100) progPct = 100;
+                    if (progPct < 0) progPct = 0;
+
+                    // Next Birthday
+                    let nextBday = new Date(dob);
+                    nextBday.setFullYear(now.getFullYear());
+                    if (now > nextBday) {
+                        nextBday.setFullYear(now.getFullYear() + 1);
+                    }
+                    
+                    let bdayDiffMs = nextBday - now;
+                    let bSec = Math.floor((bdayDiffMs / 1000) % 60);
+                    let bMin = Math.floor((bdayDiffMs / 1000 / 60) % 60);
+                    let bHr = Math.floor((bdayDiffMs / (1000 * 60 * 60)) % 24);
+                    let bDays = Math.floor(bdayDiffMs / (1000 * 60 * 60 * 24));
+
+                    const pad = (num) => num.toString().padStart(2, '0');
+                    const fmt = (n) => n.toLocaleString('en-US');
+                    
+                    if(document.getElementById('res-seconds')) document.getElementById('res-seconds').innerText = fmt(diffSec);
+                    if(document.getElementById('res-exact-age')) document.getElementById('res-exact-age').innerText = `${ageY} Yrs, ${ageM} Mos, ${ageD} Days`;
+                    
+                    if(document.getElementById('res-days')) document.getElementById('res-days').innerText = fmt(diffDays);
+                    if(document.getElementById('res-hours')) document.getElementById('res-hours').innerText = fmt(diffHrs);
+                    if(document.getElementById('res-mins')) document.getElementById('res-mins').innerText = fmt(diffMin);
+                    
+                    if(document.getElementById('res-heart')) document.getElementById('res-heart').innerText = fmt(totalHeartbeats);
+                    if(document.getElementById('res-breath')) document.getElementById('res-breath').innerText = fmt(totalBreaths);
+                    
+                    if(document.getElementById('res-prog-pct')) document.getElementById('res-prog-pct').innerText = progPct.toFixed(2) + '%';
+                    if(document.getElementById('prog-bar')) document.getElementById('prog-bar').style.width = progPct + '%';
+                    
+                    if(document.getElementById('res-bday')) document.getElementById('res-bday').innerText = `${pad(bDays)}d : ${pad(bHr)}h : ${pad(bMin)}m : ${pad(bSec)}s`;
+                }
+            };
+
+            window.QS_Pulse.initListener();
+        })();
+    </script>
+</body>
+</html>

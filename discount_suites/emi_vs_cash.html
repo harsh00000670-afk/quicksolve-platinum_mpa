@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>EMI vs Cash | Bank Exposer | QuickSolve Platinum</title>
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --void: #020617;
+            --card-bg: #0f172a;
+            --border: #1e293b;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-green: #10b981;
+            --accent-red: #f43f5e;
+            --accent-gold: #fbbf24;
+        }
+
+        body { 
+            margin: 0; background-color: var(--void); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+        }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(2, 6, 23, 0.85); 
+            backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); 
+            padding: 15px 20px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { background: #1e293b; border: none; color: var(--text-sub); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .brand { color: var(--accent-blue); font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* SCROLLABLE BODY */
+        main { padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 50px; }
+
+        .hero { text-align: center; margin-bottom: 25px; }
+        .hero h1 { margin: 0; font-size: 1.8rem; background: linear-gradient(90deg, #60a5fa, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
+        .hero p { color: var(--text-sub); font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-top: 5px; }
+
+        /* SECTION CARDS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; 
+            padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .sec-title { 
+            font-size: 0.7rem; color: var(--accent-blue); font-weight: 800; text-transform: uppercase; 
+            letter-spacing: 1.5px; margin-bottom: 15px; border-bottom: 1px solid var(--border); 
+            padding-bottom: 8px; display: flex; align-items: center; gap: 8px;
+        }
+
+        .inp-group { margin-bottom: 18px; }
+        .inp-lbl { display: block; font-size: 0.7rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; }
+        
+        /* DIRECT INPUT STYLE */
+        .inp-field {
+            width: 100%; background: #020617; border: 1px solid var(--border); color: var(--text-main); 
+            padding: 12px 15px; border-radius: 12px; font-size: 1rem; font-weight: 700; 
+            font-family: 'JetBrains Mono', monospace; outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .inp-field:focus { border-color: var(--accent-blue); box-shadow: 0 0 10px rgba(56, 189, 248, 0.15); }
+
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        /* CALC BUTTON */
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #3b82f6, #10b981);
+            color: #fff; border: none; padding: 18px; border-radius: 15px; font-size: 1rem; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; 
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); transition: 0.2s;
+        }
+        .calc-btn:active { transform: scale(0.98); }
+
+        /* RESULTS DASHBOARD */
+        #results-container { display: none; margin-top: 30px; animation: slideIn 0.5s ease-out; }
+
+        .verdict-banner {
+            padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 20px;
+            font-weight: 900; font-size: 1.1rem; text-transform: uppercase; border: 2px solid;
+        }
+        .v-cash { background: rgba(16, 185, 129, 0.1); border-color: var(--accent-green); color: var(--accent-green); }
+        .v-emi { background: rgba(56, 189, 248, 0.1); border-color: var(--accent-blue); color: var(--accent-blue); }
+
+        .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .comp-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 15px; text-align: center; }
+        .comp-val { font-size: 1.2rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; display: block; margin-top: 5px;}
+        
+        .receipt-card {
+            background: #020617; border: 1px dashed var(--border); border-radius: 16px; padding: 20px; margin-bottom: 20px;
+        }
+        .r-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .r-row:last-child { border-bottom: none; }
+        .r-lbl { font-size: 0.75rem; color: var(--text-sub); }
+        .r-val { font-size: 0.85rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+
+        .insight-box {
+            background: rgba(251, 191, 36, 0.05); border: 1px solid rgba(251, 191, 36, 0.2); 
+            border-radius: 12px; padding: 15px; color: var(--accent-gold); font-size: 0.8rem; line-height: 1.6;
+        }
+
+        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand">EMI vs Cash Exposer</div>
+        <div style="width:36px"></div>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1>Bank Reality Check</h1>
+            <p>> decrypt_no_cost_emi_illusion</p>
+        </div>
+
+        <div class="config-card">
+            <div class="sec-title"><i class="fas fa-tag"></i> Section A: The Deal</div>
+            <div class="inp-group">
+                <label class="inp-lbl">Product Price (MRP/Cart ₹)</label>
+                <input type="number" id="p-price" class="inp-field" placeholder="e.g. 50000">
+            </div>
+            <div class="inp-group" style="margin-bottom:0">
+                <label class="inp-lbl">Instant Discount for Cash (₹)</label>
+                <input type="number" id="p-disc" class="inp-field" placeholder="e.g. 5000">
+            </div>
+        </div>
+
+        <div class="config-card">
+            <div class="sec-title"><i class="fas fa-university"></i> Section B: EMI Trap Details</div>
+            <div class="inp-group">
+                <label class="inp-lbl">Tenure (Months)</label>
+                <input type="number" id="p-tenure" class="inp-field" value="6" placeholder="3, 6, 9, 12...">
+            </div>
+            <div class="inp-group">
+                <label class="inp-lbl">Bank's Interest Rate (% p.a.)</label>
+                <input type="number" id="p-rate" class="inp-field" value="15">
+            </div>
+            <div class="inp-grid" style="margin-bottom:0">
+                <div class="inp-group">
+                    <label class="inp-lbl">Processing Fee (₹)</label>
+                    <input type="number" id="p-fee" class="inp-field" value="199">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">GST on Fee (%)</label>
+                    <input type="number" id="p-feegst" class="inp-field" value="18">
+                </div>
+            </div>
+        </div>
+
+        <div class="config-card">
+            <div class="sec-title"><i class="fas fa-chart-line"></i> Section C: Opportunity Cost</div>
+            <div class="inp-group" style="margin-bottom:0">
+                <label class="inp-lbl">Your Savings Return (ROI % p.a.)</label>
+                <input type="number" id="p-roi" class="inp-field" placeholder="e.g. 7% for FD, 12% for Mutual Funds">
+            </div>
+        </div>
+
+        <button class="calc-btn" onclick="SSJ4_EMI.analyze()">
+            <i class="fas fa-brain"></i> EXPOSE BEST PATH
+        </button>
+
+        <div id="results-container">
+            <div id="res-verdict" class="verdict-banner"></div>
+
+            <div class="comp-grid">
+                <div class="comp-card">
+                    <span class="inp-lbl">Upfront Cash</span>
+                    <span class="comp-val" id="res-cash-val">₹0</span>
+                </div>
+                <div class="comp-card" style="border-color: var(--accent-red)">
+                    <span class="inp-lbl">EMI Outflow</span>
+                    <span class="comp-val" id="res-emi-val" style="color:var(--accent-red)">₹0</span>
+                </div>
+            </div>
+
+            <div class="receipt-card">
+                <div class="sec-title" style="border:none; justify-content:center">The Bank's Secret Receipt</div>
+                <div class="r-row">
+                    <span class="r-lbl">Processing Fee + GST</span>
+                    <span class="r-val" id="rec-total-fee">₹0</span>
+                </div>
+                <div class="r-row">
+                    <span class="r-lbl">18% GST on Interest</span>
+                    <span class="r-val" id="rec-gst-interest">₹0</span>
+                </div>
+                <div class="r-row" style="border:none">
+                    <span class="r-lbl">Lost Cash Discount</span>
+                    <span class="r-val" id="rec-lost-disc" style="color:var(--accent-red)">₹0</span>
+                </div>
+            </div>
+
+            <div id="res-insight" class="insight-box"></div>
+        </div>
+    </main>
+
+    <script>
+        window.SSJ4_EMI = {
+            analyze: function() {
+                // 1. Inputs
+                const price = parseFloat(document.getElementById('p-price').value) || 0;
+                const cashDisc = parseFloat(document.getElementById('p-disc').value) || 0;
+                const tenure = parseInt(document.getElementById('p-tenure').value) || 1;
+                const bankRate = parseFloat(document.getElementById('p-rate').value) / 100;
+                const procFee = parseFloat(document.getElementById('p-fee').value) || 0;
+                const feeGst = parseFloat(document.getElementById('p-feegst').value) / 100;
+                const userROI = parseFloat(document.getElementById('p-roi').value) / 100 || 0;
+
+                if (price <= 0) { alert("Bhai, price toh daal pehle!"); return; }
+
+                // 2. Logic Flow
+                // Step 1: Upfront
+                const totalUpfrontCost = price - cashDisc;
+
+                // Step 2: EMI Illusion
+                const monthlyEMI = price / tenure;
+                
+                // Amortization to find interest component
+                // Platform discounts the interest to make it 'No Cost', but bank charges GST on that implicit interest
+                let totalImplicitInterest = 0;
+                let tempBalance = price;
+                let monthlyRate = bankRate / 12;
+                
+                for(let i=0; i<tenure; i++) {
+                    let interestThisMonth = tempBalance * monthlyRate;
+                    totalImplicitInterest += interestThisMonth;
+                    tempBalance -= (monthlyEMI - interestThisMonth);
+                }
+
+                const totalGstOnInterest = totalImplicitInterest * 0.18;
+                const totalProcessingWithGst = procFee * (1 + feeGst);
+                const totalEmiOutflow = price + totalGstOnInterest + totalProcessingWithGst;
+
+                // Step 3: Opportunity Cost (God Level Math)
+                let currentInvBalance = totalUpfrontCost;
+                let interestEarned = 0;
+                for(let i=0; i<tenure; i++) {
+                    let monthlyReturn = currentInvBalance * (userROI / 12);
+                    interestEarned += monthlyReturn;
+                    currentInvBalance = (currentInvBalance + monthlyReturn) - monthlyEMI;
+                }
+                const netRealEmiCost = totalEmiOutflow - interestEarned;
+
+                // 3. UI Dashboard Injection
+                document.getElementById('results-container').style.display = 'block';
+                
+                const verdictBox = document.getElementById('res-verdict');
+                if(totalUpfrontCost < netRealEmiCost) {
+                    let savings = netRealEmiCost - totalUpfrontCost;
+                    verdictBox.innerText = `Go for Upfront Cash! You save ₹${Math.round(savings).toLocaleString()}`;
+                    verdictBox.className = "verdict-banner v-cash";
+                } else {
+                    let gain = totalUpfrontCost - netRealEmiCost;
+                    verdictBox.innerText = `EMI is actually better! You gain ₹${Math.round(gain).toLocaleString()}`;
+                    verdictBox.className = "verdict-banner v-emi";
+                }
+
+                document.getElementById('res-cash-val').innerText = `₹${totalUpfrontCost.toLocaleString()}`;
+                document.getElementById('res-emi-val').innerText = `₹${Math.round(totalEmiOutflow).toLocaleString()}`;
+                
+                document.getElementById('rec-total-fee').innerText = `₹${Math.round(totalProcessingWithGst)}`;
+                document.getElementById('rec-gst-interest').innerText = `₹${Math.round(totalGstOnInterest)}`;
+                document.getElementById('rec-lost-disc').innerText = `₹${cashDisc.toLocaleString()}`;
+
+                let insight = `Because of 18% GST on Interest, your 'No-Cost' EMI actually has a hidden cost of <b>₹${Math.round(totalGstOnInterest + totalProcessingWithGst).toLocaleString()}</b>.`;
+                if(userROI > 0) {
+                    insight += `<br><br><b>Smart Money:</b> Since your money earns ${(userROI*100)}%, keeping ₹${totalUpfrontCost.toLocaleString()} in your account earns you <b>₹${Math.round(interestEarned).toLocaleString()}</b> over ${tenure} months.`;
+                }
+                document.getElementById('res-insight').innerHTML = insight;
+
+                // Smooth Scroll
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                if(navigator.vibrate) navigator.vibrate(30);
+            }
+        };
+    </script>
+</body>
+</html>

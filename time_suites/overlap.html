@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Meeting Sync | Global Overlap | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           MEETING SYNC - PLATINUM ENGINE (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-blue: #3b82f6;
+            --accent-blue-glow: rgba(59, 130, 246, 0.3);
+            --accent-green: #10b981;
+            --accent-green-glow: rgba(16, 185, 129, 0.3);
+            --accent-gold: #fbbd23;
+            --accent-red: #ef4444;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.35; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 250px; height: 250px; background: var(--accent-blue); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-green); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-blue); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 25px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #3b82f6, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--accent-blue); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CONFIG CARD */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px var(--accent-blue-glow);
+        }
+        .sec-lbl { font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+        
+        /* FAUX SELECTOR (Triggers Drum) */
+        .faux-select {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 16px 15px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; box-sizing: border-box; margin-bottom: 18px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .faux-select:active { border-color: var(--accent-blue); background: rgba(59, 130, 246, 0.05); transform: scale(0.98);}
+        .faux-select i { color: var(--accent-blue); font-size: 1.2rem; margin-left: 10px;}
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #3b82f6, #10b981);
+            color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 0.95rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px var(--accent-blue-glow); display: flex; justify-content: center; gap: 10px; align-items: center;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 20px; 
+            padding: 25px 20px; margin-bottom: 30px; box-shadow: 0 10px 40px var(--accent-green-glow); display: none; text-align: center;
+        }
+        .res-badge {
+            background: rgba(16, 185, 129, 0.15); border: 1px solid var(--accent-green); color: var(--accent-green);
+            padding: 8px 15px; border-radius: 30px; font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 0.85rem;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 25px; box-shadow: 0 0 15px var(--accent-green-glow);
+        }
+        
+        .overlap-slot {
+            background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 15px; margin-bottom: 15px; text-align: left;
+        }
+        .overlap-slot:last-child { margin-bottom: 0; }
+        
+        .slot-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); }
+        .slot-row:last-child { border-bottom: none; }
+        .sr-city { font-size: 0.85rem; color: var(--text-sub); font-weight: 700; display: flex; align-items: center; gap: 8px;}
+        .sr-city i { color: var(--accent-blue); width: 15px; text-align: center;}
+        .sr-time { font-size: 1.1rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; color: var(--text-main); }
+        .sr-time.highlight { color: var(--accent-green); font-size: 1.2rem;}
+
+        /* SINGLE MEGA-DRUM MODAL */
+        .drum-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(8px); }
+        .drum-sheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: #151322; border-top: 1px solid var(--accent-blue); border-radius: 24px 24px 0 0; z-index: 1001; padding: 25px 20px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 -10px 50px var(--accent-blue-glow); display: flex; flex-direction: column; gap: 15px;}
+        .drum-overlay.show { display: block; opacity: 1; }
+        .drum-sheet.show { bottom: 0; }
+
+        .ds-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .ds-title { color: var(--text-main); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .drum-wrapper { display: flex; justify-content: center; align-items: center; position: relative; padding: 10px 0;}
+        .drum-col { display: flex; flex-direction: column; align-items: center; width: 100%; position: relative; z-index: 2; }
+        .drum-btn { background: transparent; border: none; color: var(--accent-blue); font-size: 1.5rem; padding: 5px 0; cursor: pointer; transition: 0.2s;}
+        .drum-btn:active { transform: scale(0.8); }
+        
+        .d-list { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; margin: 10px 0; }
+        .d-item { font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--text-dim); transition: 0.3s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 95%; text-align: center;}
+        .d-item.active { font-size: 1.3rem; font-weight: 900; color: var(--text-main); }
+        .d-item.near { color: var(--text-sub); }
+
+        .drum-highlight { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 48px; border: 2px solid var(--accent-blue); border-radius: 12px; background: rgba(59, 130, 246, 0.1); z-index: 1; pointer-events: none;}
+
+        .ds-actions { display: flex; gap: 15px; margin-top: 15px; }
+        .ds-btn { flex: 1; padding: 15px; border-radius: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; border: none; transition: 0.2s;}
+        .ds-cancel { background: transparent; border: 1px solid var(--text-dim); color: var(--text-sub); }
+        .ds-cancel:active { background: rgba(255,255,255,0.05); }
+        .ds-set { background: var(--accent-blue); color: #000; box-shadow: 0 0 15px var(--accent-blue-glow);}
+        .ds-set:active { transform: scale(0.98); }
+
+        /* CUSTOM TOAST */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4); display: flex; align-items: center; gap: 8px;
+        }
+        .toast.show { bottom: 30px; }
+
+        /* ANIMATIONS */
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">No Overlap</span></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-globe"></i> GLOBAL SYNC</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>Meeting Sync</h1>
+            <p>> find_overlap --awake_hours</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            <span class="sec-lbl">Your Local Zone</span>
+            <div class="faux-select" onclick="SSJ4_ZonePicker.open('zone-1')" id="zone-1-disp">
+                <span id="zone-1-val">New Delhi, India (UTC +5.5)</span>
+                <i class="fas fa-map-marker-alt"></i>
+            </div>
+
+            <span class="sec-lbl">Client Zone 1</span>
+            <div class="faux-select" onclick="SSJ4_ZonePicker.open('zone-2')" id="zone-2-disp">
+                <span id="zone-2-val">New York, USA (UTC -5.0)</span>
+                <i class="fas fa-building"></i>
+            </div>
+
+            <span class="sec-lbl">Client Zone 2</span>
+            <div class="faux-select" onclick="SSJ4_ZonePicker.open('zone-3')" id="zone-3-disp">
+                <span id="zone-3-val">London, UK (UTC +0.0)</span>
+                <i class="fas fa-handshake"></i>
+            </div>
+
+            <button class="calc-btn" onclick="SSJ4_Overlap.calculate()">
+                <i class="fas fa-search-location"></i> Find Overlap Window
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container">
+            <div class="res-badge"><i class="fas fa-check-circle"></i> Perfect Time Found</div>
+            <div id="overlap-list"></div>
+        </div>
+
+    </main>
+
+    <div class="drum-overlay" id="p-overlay" onclick="SSJ4_ZonePicker.close()"></div>
+    <div class="drum-sheet" id="p-sheet">
+        <div class="ds-header">
+            <span class="ds-title">Select Region</span>
+            <i class="fas fa-times" style="color:var(--text-sub); cursor:pointer; font-size: 1.2rem;" onclick="SSJ4_ZonePicker.close()"></i>
+        </div>
+
+        <div class="drum-wrapper">
+            <div class="drum-highlight"></div>
+            <div class="drum-col">
+                <button class="drum-btn" onclick="SSJ4_ZonePicker.move(-1)"><i class="fas fa-chevron-up"></i></button>
+                <div id="drum-list" class="d-list"></div>
+                <button class="drum-btn" onclick="SSJ4_ZonePicker.move(1)"><i class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+
+        <div class="ds-actions">
+            <button class="ds-btn ds-cancel" onclick="SSJ4_ZonePicker.close()">Cancel</button>
+            <button class="ds-btn ds-set" onclick="SSJ4_ZonePicker.set()">Set Zone</button>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - GLOBAL MEETING OVERLAP ENGINE */
+
+        function showToast(msg) {
+            const toast = document.getElementById('custom-toast');
+            document.getElementById('toast-msg').innerText = msg;
+            if(navigator.vibrate) try { navigator.vibrate([50, 50, 50]); } catch(e){}
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // --- GLOBAL ZONE DATABASE (ULTIMATE EDITION) ---
+        const zonesDB = [
+            { name: "Baker Island, UMI", offset: -12.0 },
+            { name: "Pago Pago, ASM", offset: -11.0 },
+            { name: "Honolulu, USA", offset: -10.0 },
+            { name: "Anchorage, USA", offset: -9.0 },
+            { name: "Los Angeles, USA", offset: -8.0 },
+            { name: "Vancouver, CAN", offset: -8.0 },
+            { name: "Denver, USA", offset: -7.0 },
+            { name: "Phoenix, USA", offset: -7.0 },
+            { name: "Chicago, USA", offset: -6.0 },
+            { name: "Mexico City, MEX", offset: -6.0 },
+            { name: "New York, USA", offset: -5.0 },
+            { name: "Toronto, CAN", offset: -5.0 },
+            { name: "Caracas, VEN", offset: -4.0 },
+            { name: "Santiago, CHL", offset: -4.0 },
+            { name: "Buenos Aires, ARG", offset: -3.0 },
+            { name: "São Paulo, BRA", offset: -3.0 },
+            { name: "South Georgia, SGS", offset: -2.0 },
+            { name: "Cabo Verde, CPV", offset: -1.0 },
+            { name: "Azores, CPV", offset: -1.0 },
+            { name: "London, UK", offset: 0.0 },
+            { name: "Dublin, IRL", offset: 0.0 },
+            { name: "Reykjavik, ISL", offset: 0.0 },
+            { name: "Paris, FRA", offset: 1.0 },
+            { name: "Berlin, GER", offset: 1.0 },
+            { name: "Rome, ITA", offset: 1.0 },
+            { name: "Lagos, NGA", offset: 1.0 },
+            { name: "Cairo, EGY", offset: 2.0 },
+            { name: "Johannesburg, ZAF", offset: 2.0 },
+            { name: "Athens, GRE", offset: 2.0 },
+            { name: "Moscow, RUS", offset: 3.0 },
+            { name: "Istanbul, TUR", offset: 3.0 },
+            { name: "Riyadh, SAU", offset: 3.0 },
+            { name: "Nairobi, NGA", offset: 3.0 },
+            { name: "Dubai, UAE", offset: 4.0 },
+            { name: "Baku, AZE", offset: 4.0 },
+            { name: "Kabul, AFG", offset: 4.5 },
+            { name: "Karachi, PAK", offset: 5.0 },
+            { name: "Tashkent, AZE", offset: 5.0 },
+            { name: "New Delhi, IND", offset: 5.5 },
+            { name: "Colombo, LKA", offset: 5.5 },
+            { name: "Kathmandu, NPL", offset: 5.75 },
+            { name: "Dhaka, BGD", offset: 6.0 },
+            { name: "Almaty, UZB", offset: 6.0 },
+            { name: "Yangon, MMR", offset: 6.5 },
+            { name: "Bangkok, THA", offset: 7.0 },
+            { name: "Jakarta, IDN", offset: 7.0 },
+            { name: "Ho Chi Minh, IDN", offset: 7.0 },
+            { name: "Beijing, CHN", offset: 8.0 },
+            { name: "Singapore, SGP", offset: 8.0 },
+            { name: "Perth, AUS", offset: 8.0 },
+            { name: "Taipei, CHN", offset: 8.0 },
+            { name: "Tokyo, JPN", offset: 9.0 },
+            { name: "Seoul, KOR", offset: 9.0 },
+            { name: "Adelaide, AUS", offset: 9.5 },
+            { name: "Darwin, AUS", offset: 9.5 },
+            { name: "Sydney, AUS", offset: 10.0 },
+            { name: "Brisbane, AUS", offset: 10.0 },
+            { name: "Noumea, NCL", offset: 11.0 },
+            { name: "Auckland, NZL", offset: 12.0 },
+            { name: "Fiji, FJI", offset: 12.0 },
+            { name: "Chatham, NZL", offset: 12.75 },
+            { name: "Apia, WSM", offset: 13.0 },
+            { name: "Nuku'alofa, WSM", offset: 13.0 },
+            { name: "Kiritimati, KIR", offset: 14.0 }
+        ];
+
+        function formatOffset(off) {
+            return off >= 0 ? `+${off.toFixed(2).replace('.00','')}` : `${off.toFixed(2).replace('.00','')}`;
+        }
+
+        // Dynamic State Initializer
+        const activeZones = {
+            'zone-1': zonesDB.findIndex(z => z.name.includes("New Delhi")),
+            'zone-2': zonesDB.findIndex(z => z.name.includes("New York")),
+            'zone-3': zonesDB.findIndex(z => z.name.includes("London"))
+        };
+
+        // --- CUSTOM MEGA DRUM ENGINE ---
+        window.SSJ4_ZonePicker = {
+            currIdx: 0,
+            activeTarget: null,
+
+            init: function() {
+                document.getElementById('zone-1-val').innerText = `${zonesDB[activeZones['zone-1']].name} (UTC ${formatOffset(zonesDB[activeZones['zone-1']].offset)})`;
+                document.getElementById('zone-2-val').innerText = `${zonesDB[activeZones['zone-2']].name} (UTC ${formatOffset(zonesDB[activeZones['zone-2']].offset)})`;
+                document.getElementById('zone-3-val').innerText = `${zonesDB[activeZones['zone-3']].name} (UTC ${formatOffset(zonesDB[activeZones['zone-3']].offset)})`;
+            },
+
+            haptic: function() { if(navigator.vibrate) navigator.vibrate(15); },
+
+            open: function(targetId) {
+                this.haptic();
+                this.activeTarget = targetId;
+                this.currIdx = activeZones[targetId];
+                this.render();
+                
+                document.getElementById('p-overlay').classList.add('show');
+                setTimeout(() => document.getElementById('p-sheet').classList.add('show'), 10);
+            },
+
+            close: function() {
+                this.haptic();
+                document.getElementById('p-sheet').classList.remove('show');
+                setTimeout(() => document.getElementById('p-overlay').classList.remove('show'), 300);
+            },
+
+            move: function(dir) {
+                this.haptic();
+                this.currIdx = (this.currIdx + dir + zonesDB.length) % zonesDB.length;
+                this.render();
+            },
+
+            render: function() {
+                const el = document.getElementById('drum-list');
+                let html = '';
+                for(let i = -2; i <= 2; i++) {
+                    let idx = (this.currIdx + i + zonesDB.length) % zonesDB.length;
+                    let cls = i === 0 ? 'd-item active' : (Math.abs(i) === 1 ? 'd-item near' : 'd-item');
+                    let z = zonesDB[idx];
+                    html += `<div class="${cls}">${z.name} <small>(UTC ${formatOffset(z.offset)})</small></div>`;
+                }
+                el.innerHTML = html;
+            },
+
+            set: function() {
+                this.haptic();
+                activeZones[this.activeTarget] = this.currIdx;
+                let z = zonesDB[this.currIdx];
+                document.getElementById(`${this.activeTarget}-val`).innerText = `${z.name} (UTC ${formatOffset(z.offset)})`;
+                this.close();
+            }
+        };
+
+        // --- OVERLAP MATH ENGINE ---
+        window.SSJ4_Overlap = {
+            haptic: function() { if(navigator.vibrate) navigator.vibrate(30); },
+
+            formatHourAMPM: function(hFloat) {
+                let hInt = Math.floor(hFloat);
+                let mInt = Math.round((hFloat - hInt) * 60);
+                
+                if (hInt >= 24) hInt -= 24;
+                if (hInt < 0) hInt += 24;
+
+                let ampm = hInt >= 12 ? 'PM' : 'AM';
+                let hDisp = hInt % 12;
+                if(hDisp === 0) hDisp = 12;
+
+                return `${String(hDisp).padStart(2,'0')}:${String(mInt).padStart(2,'0')} ${ampm}`;
+            },
+
+            calculate: function() {
+                this.haptic();
+                
+                const z1 = zonesDB[activeZones['zone-1']];
+                const z2 = zonesDB[activeZones['zone-2']];
+                const z3 = zonesDB[activeZones['zone-3']];
+
+                const awakeStart = 8.0; // 8 AM
+                const awakeEnd = 22.0;  // 10 PM
+
+                let overlappingHours = [];
+
+                for (let utc = 0; utc < 24; utc++) {
+                    let l1 = (utc + z1.offset + 24) % 24;
+                    let l2 = (utc + z2.offset + 24) % 24;
+                    let l3 = (utc + z3.offset + 24) % 24;
+
+                    if (
+                        (l1 >= awakeStart && l1 < awakeEnd) &&
+                        (l2 >= awakeStart && l2 < awakeEnd) &&
+                        (l3 >= awakeStart && l3 < awakeEnd)
+                    ) {
+                        overlappingHours.push({ utc: utc, l1: l1, l2: l2, l3: l3 });
+                    }
+                }
+
+                if (overlappingHours.length === 0) {
+                    showToast("No common awake hours found!");
+                    return;
+                }
+
+                const list = document.getElementById('overlap-list');
+                list.innerHTML = '';
+
+                overlappingHours.forEach(hr => {
+                    let end1 = (hr.l1 + 1) % 24;
+                    let end2 = (hr.l2 + 1) % 24;
+                    let end3 = (hr.l3 + 1) % 24;
+
+                    list.innerHTML += `
+                        <div class="overlap-slot">
+                            <div class="slot-row">
+                                <span class="sr-city"><i class="fas fa-map-marker-alt"></i> ${z1.name.split(',')[0]} (You)</span>
+                                <span class="sr-time highlight">${this.formatHourAMPM(hr.l1)} - ${this.formatHourAMPM(end1)}</span>
+                            </div>
+                            <div class="slot-row">
+                                <span class="sr-city"><i class="fas fa-building"></i> ${z2.name.split(',')[0]}</span>
+                                <span class="sr-time">${this.formatHourAMPM(hr.l2)} - ${this.formatHourAMPM(end2)}</span>
+                            </div>
+                            <div class="slot-row">
+                                <span class="sr-city"><i class="fas fa-handshake"></i> ${z3.name.split(',')[0]}</span>
+                                <span class="sr-time">${this.formatHourAMPM(hr.l3)} - ${this.formatHourAMPM(end3)}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                const resCard = document.getElementById('results-container');
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-up');
+                void resCard.offsetWidth; 
+                resCard.classList.add('anim-up');
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'end' }); }, 100);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => { SSJ4_ZonePicker.init(); });
+    </script>
+</body>
+</html>

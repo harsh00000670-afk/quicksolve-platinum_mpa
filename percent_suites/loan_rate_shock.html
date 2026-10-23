@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Loan Rate Shock | Reality Check Suite | QuickSolve Platinum</title>
+    <meta name="theme-color" content="#0d0a15">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           LOAN SHOCK ENGINE - PLATINUM (SSJ4)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800;900&family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --bg-deep: #0d0a15;
+            --card-bg: #151322;
+            --border-subtle: #31354A;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-dim: #475569;
+            --accent-red: #ef4444;
+            --accent-red-glow: rgba(239, 68, 68, 0.3);
+            --accent-gold: #fbbd23;
+            --accent-gold-glow: rgba(251, 189, 35, 0.3);
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-cyan: #06b6d4;
+        }
+
+        body { 
+            margin: 0; background-color: var(--bg-deep); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; 
+            overflow-x: hidden; position: relative;
+        }
+
+        /* Glowing Orbs */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.25; z-index: -1; pointer-events: none;}
+        .glow-1 { top: -5%; right: -5%; width: 250px; height: 250px; background: var(--accent-red); }
+        .glow-2 { bottom: 10%; left: -10%; width: 250px; height: 250px; background: var(--accent-gold); }
+
+        /* HEADER */
+        .app-header {
+            position: sticky; top: 0; z-index: 100; background: rgba(13, 10, 21, 0.85); backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .qs-back-btn { 
+            background: #1f1b2e; border: none; color: var(--text-sub); width: 36px; height: 36px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.2s; 
+        }
+        .qs-back-btn:active { transform: scale(0.9); color: var(--text-main); }
+        .brand { color: var(--accent-red); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 20px; padding-top: 10px;}
+        .hero h1 { margin: 0; font-size: 2rem; background: linear-gradient(90deg, #ef4444, #fbbd23); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: -0.5px;}
+        .hero p { color: var(--text-sub); font-size: 0.85rem; margin-top: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 1px;}
+
+        /* CARDS & INPUTS */
+        .config-card {
+            background: var(--card-bg); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 20px; 
+            padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(239, 68, 68, 0.15);
+        }
+        .inp-group { margin-bottom: 18px; position: relative; }
+        .inp-lbl { display: block; font-size: 0.75rem; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        
+        .inp-field {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+            outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .inp-field:focus { border-color: var(--accent-red); box-shadow: 0 0 10px var(--accent-red-glow); }
+        .inp-field::placeholder { color: var(--text-dim); font-weight: 500; }
+
+        .inp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        /* CUSTOM BOTTOM SHEET TRIGGER */
+        .custom-select-trigger {
+            width: 100%; background: #1a1829; border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 14px 15px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; font-family: 'Inter', sans-serif;
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s;
+        }
+        .custom-select-trigger:active { transform: scale(0.98); border-color: var(--accent-red); box-shadow: 0 0 10px var(--accent-red-glow); }
+        
+        /* BOTTOM SHEET MODAL STYLES */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(4px); }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        
+        .custom-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--card-bg); border-radius: 24px 24px 0 0; z-index: 1000; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: env(safe-area-inset-bottom, 20px); border-top: 1px solid var(--border-subtle); box-shadow: 0 -10px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; max-height: 80vh; }
+        .custom-modal.active { bottom: 0; }
+        
+        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .modal-header h3 { margin: 0; color: var(--accent-red); font-size: 1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .close-btn { background: rgba(255,255,255,0.05); border: none; color: var(--text-sub); width: 30px; height: 30px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+        
+        .modal-body { overflow-y: auto; padding: 10px 20px 20px; }
+        .modal-opt { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; }
+        .modal-opt:last-child { border-bottom: none; }
+        .modal-opt:active { transform: scale(0.98); opacity: 0.8; }
+        
+        .opt-text { font-size: 1rem; color: var(--text-main); font-weight: 600; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; gap: 4px;}
+        .opt-text small { color: var(--text-sub); font-size: 0.75rem; font-family: 'JetBrains Mono', monospace;}
+        
+        .opt-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--text-dim); position: relative; transition: 0.2s; flex-shrink: 0; margin-left: 15px;}
+        .modal-opt.active .opt-radio { border-color: var(--accent-red); }
+        .modal-opt.active .opt-radio::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: var(--accent-red); border-radius: 50%; }
+
+        .calc-btn {
+            width: 100%; background: linear-gradient(90deg, #ef4444, #fbbd23);
+            color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 20px var(--accent-red-glow); display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 10px;
+        }
+        .calc-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        /* RESULTS CARD & GRID */
+        .res-card {
+            background: linear-gradient(180deg, #1a1829, var(--card-bg)); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 20px; 
+            padding: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(239, 68, 68, 0.15); display: none; text-align: center;
+        }
+
+        .output-row { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
+        .res-box { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 18px 15px; text-align: left;}
+        
+        .res-box-lbl { font-size: 0.7rem; color: var(--text-sub); text-transform: uppercase; font-weight: 800; margin-bottom: 8px; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;}
+        .res-box-val { font-size: 1.6rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; line-height: 1.1; margin-bottom: 8px; word-break: break-word;}
+        .res-box-desc { font-size: 0.85rem; color: var(--text-dim); font-weight: 600; line-height: 1.5; }
+
+        .res-box.main-val { border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.05); box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.1); }
+        .res-box.main-val .res-box-val { color: var(--accent-red); font-size: 2.2rem; }
+
+        .res-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .res-grid-2 .res-box-val { font-size: 1.4rem; }
+
+        /* THEMATIC COLORS */
+        .color-green { color: var(--accent-green) !important; }
+        .color-gold { color: var(--accent-gold) !important; }
+        .color-red { color: var(--accent-red) !important; }
+        .color-purple { color: var(--accent-purple) !important; }
+
+        /* ALERTS */
+        .trap-alert {
+            background: rgba(239, 68, 68, 0.1); border: 1px solid var(--accent-red); border-radius: 12px;
+            padding: 15px; text-align: left; display: none; align-items: flex-start; gap: 12px; margin-top: 15px;
+        }
+        .trap-icon { font-size: 1.5rem; color: var(--accent-red); margin-top: 2px;}
+        .trap-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.5; font-weight: 600;}
+        .trap-text b { color: var(--accent-red); font-weight: 900; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;}
+
+        .info-alert {
+            background: rgba(251, 189, 35, 0.1); border: 1px solid var(--accent-gold); border-radius: 12px;
+            padding: 15px; text-align: left; display: none; align-items: flex-start; gap: 12px; margin-top: 15px;
+        }
+        .info-icon { font-size: 1.5rem; color: var(--accent-gold); margin-top: 2px;}
+        .info-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.5; font-weight: 600;}
+
+        /* LIST STYLES */
+        .psy-list { list-style: none; padding: 0; margin: 0; }
+        .psy-list li { font-size: 0.85rem; color: var(--text-main); font-weight: 600; margin-bottom: 8px; display: flex; gap: 8px; align-items: flex-start;}
+        .psy-list li i { color: var(--accent-gold); margin-top: 3px; font-size: 0.75rem;}
+
+        /* SAVAGE QUOTE VERDICT */
+        .savage-quote {
+            background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--accent-red);
+            padding: 18px 15px; margin-top: 20px; border-radius: 0 12px 12px 0;
+            font-size: 0.9rem; color: var(--text-main); font-weight: 600; text-align: left;
+            line-height: 1.6;
+        }
+        .savage-quote b { color: var(--accent-red); font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
+
+        /* CUSTOM TOAST */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            z-index: 9999; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px var(--accent-red-glow); display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .toast.show { bottom: 30px; }
+
+        /* ANIMATIONS */
+        .anim-up { animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(25px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    
+    <div class="toast" id="custom-toast"><i class="fas fa-exclamation-triangle"></i> <span id="toast-msg">Error</span></div>
+
+    <header class="app-header">
+        <button onclick="window.history.back()" class="qs-back-btn"><i class="fas fa-arrow-left"></i></button>
+        <div class="brand"><i class="fas fa-bolt"></i> LOAN REALITY SHOCK</div>
+    </header>
+
+    <main style="padding: 15px; max-width: 600px; margin: 0 auto; padding-bottom: 80px;">
+        
+        <div class="hero anim-up" style="animation-delay: 0.1s;">
+            <h1>The Rate Shock Trap</h1>
+            <p>> expose_interest --debt_burden</p>
+        </div>
+
+        <div class="config-card anim-up" style="animation-delay: 0.2s;">
+            
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">1. Old Interest Rate (%)</label>
+                    <input type="number" id="inp-old-rate" class="inp-field" placeholder="e.g. 7" min="0">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">2. New Interest Rate (%)</label>
+                    <input type="number" id="inp-new-rate" class="inp-field" placeholder="e.g. 8" min="0">
+                </div>
+            </div>
+
+            <div class="inp-group">
+                <label class="inp-lbl">3. Total Loan Amount (₹)</label>
+                <input type="number" id="inp-loan" class="inp-field" placeholder="e.g. 5000000" min="0">
+            </div>
+
+            <div class="inp-grid">
+                <div class="inp-group">
+                    <label class="inp-lbl">4. Loan Tenure (Yrs) <span style="text-transform:none; color:var(--text-dim);">(Opt)</span></label>
+                    <input type="number" id="inp-tenure" class="inp-field" placeholder="e.g. 20" min="0">
+                </div>
+                <div class="inp-group">
+                    <label class="inp-lbl">5. EMI Amortization Type</label>
+                    <div class="custom-select-trigger" onclick="openAmortModal()">
+                        <span id="amort-display">Reducing Balance</span>
+                        <i class="fas fa-chevron-down" style="color: var(--text-sub); font-size: 0.9rem;"></i>
+                    </div>
+                    <input type="hidden" id="inp-amort" value="reducing">
+                </div>
+            </div>
+
+            <button class="calc-btn" onclick="LoanShockEngine.calculate()">
+                <i class="fas fa-search-dollar"></i> Expose Real Interest Burden
+            </button>
+        </div>
+
+        <div class="res-card" id="results-container">
+            
+            <div class="output-row">
+                
+                <div class="res-box main-val">
+                    <div class="res-box-lbl"><i class="fas fa-percent"></i> 1. Nominal Point Difference</div>
+                    <div class="res-box-val" id="out-point-diff" style="font-size: 1.6rem;">0%</div>
+                    <div class="res-box-desc" style="color:var(--text-main); font-weight:600;">
+                        The bank claims the rate has increased by only <span id="lbl-point-diff">0</span> percentage points. It sounds deceptively small.
+                    </div>
+                    <hr style="border-color: rgba(239, 68, 68, 0.2); margin: 15px 0;">
+                    <div class="res-box-lbl" style="color: var(--accent-red);"><i class="fas fa-fire"></i> 2. Effective Interest Burden Growth</div>
+                    <div class="res-box-val" id="out-actual-burden">0%</div>
+                    <div class="res-box-desc" style="color:var(--text-main); font-weight:700;">
+                        This is the mathematical reality. Your actual debt servicing burden has exponentially surged by this exact percentage.
+                    </div>
+                </div>
+
+                <div class="res-box">
+                    <div class="res-box-lbl" style="color: var(--accent-gold);"><i class="fas fa-money-bill-wave"></i> 3. Additional Annual Cash Outflow</div>
+                    <div class="res-box-val color-gold" id="out-annual-extra">₹0</div>
+                    <div class="res-box-desc" style="color:var(--text-main); font-weight:600;">
+                        Due to this "minor" rate hike, you are bleeding this exact amount of extra liquidity every single year.
+                    </div>
+                </div>
+
+                <div class="res-grid-2">
+                    <div class="res-box">
+                        <div class="res-box-lbl" style="color:var(--accent-purple);">4. Monthly EMI Inflation</div>
+                        <div class="res-box-val color-purple" id="out-emi-shock">N/A</div>
+                        <div class="res-box-desc" style="font-size: 0.75rem;">Your mandatory monthly payment increases by this absolute value.</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-box-lbl" style="color:var(--accent-red);">5. Lifetime Interest Penalty</div>
+                        <div class="res-box-val color-red" id="out-lifetime-extra">N/A</div>
+                        <div class="res-box-desc" style="font-size: 0.75rem;">Over the full tenure, this is the catastrophic extra capital you will surrender to the bank.</div>
+                    </div>
+                </div>
+
+                <div class="info-alert" id="tradeoff-trap" style="display: flex;">
+                    <div class="info-icon"><i class="fas fa-balance-scale"></i></div>
+                    <div class="info-text">
+                        <b style="color:var(--accent-gold);">6. THE EXTENSION TRAP (TIME VS EMI)</b><br>
+                        If you choose to keep your EMI constant, the bank will quietly extend your loan tenure by years, multiplying the total interest. If you keep the tenure constant, your EMI spikes immediately. The bank wins exponentially in both scenarios.
+                    </div>
+                </div>
+
+                <div class="trap-alert" id="sensitivity-trap" style="display: flex;">
+                    <div class="trap-icon"><i class="fas fa-radiation"></i></div>
+                    <div class="trap-text">
+                        <b style="color:var(--accent-red);">7. RATE RISK & SENSITIVITY CHECK</b><br>
+                        If the macroeconomic policy pushes the rate up by another 1-2%, your discretionary budget will be entirely consumed by debt servicing. You are operating dangerously close to margin calls.
+                    </div>
+                </div>
+
+                <div class="res-box" id="affordability-box" style="display: none; border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.05);">
+                    <div class="res-box-lbl" style="color: var(--accent-red);"><i class="fas fa-heartbeat"></i> 9. Affordability Stress Indicator</div>
+                    <div class="res-box-desc" id="out-affordability" style="color:var(--text-main); font-weight:700;">
+                        </div>
+                </div>
+
+                <div class="res-box">
+                    <div class="res-box-lbl" style="color: var(--accent-green);"><i class="fas fa-brain"></i> 8. Borrower Psychology Insights</div>
+                    <ul class="psy-list">
+                        <li><i class="fas fa-chevron-right"></i> "1%" sounds psychologically insignificant, causing borrowers to ignore catastrophic wealth drain.</li>
+                        <li><i class="fas fa-chevron-right"></i> Retail borrowers fixate purely on the monthly EMI quantum, remaining blind to total lifetime interest.</li>
+                        <li><i class="fas fa-chevron-right"></i> Banks weaponize this cognitive bias to maximize their unearned yield over decades.</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="savage-quote">
+                <b><i class="fas fa-gavel"></i> 10. THE FINAL REALITY CHECK</b>
+                "In the realm of compounded debt, microscopic percentage point shifts extract astronomical sums of capital. Banks communicate in percentage points to minimize panic, but you must evaluate the absolute cash hemorrhage. A smart borrower disregards the EMI illusion and optimizes entirely for total lifetime interest and principal reduction."
+            </div>
+
+        </div>
+
+    </main>
+
+    <div class="modal-overlay" id="amort-overlay" onclick="closeAmortModal()"></div>
+    <div class="custom-modal" id="amort-bottom-sheet">
+        <div class="modal-header">
+            <h3>Select Amortization Profile</h3>
+            <button class="close-btn" onclick="closeAmortModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-opt active" onclick="selectAmort('reducing', 'Reducing Balance (Standard EMI)', this)">
+                <div class="opt-text">Reducing Balance <small>Standard Home/Auto Loan format</small></div><div class="opt-radio"></div>
+            </div>
+            <div class="modal-opt" onclick="selectAmort('flat', 'Flat Rate (Personal/Micro Loans)', this)">
+                <div class="opt-text">Flat Rate <small>Calculated on the full original principal</small></div><div class="opt-radio"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - LOAN SHOCK ENGINE */
+        
+        // --- CUSTOM MODAL LOGIC ---
+        function openAmortModal() {
+            if(window.LoanShockEngine.haptic) window.LoanShockEngine.haptic();
+            document.getElementById('amort-overlay').classList.add('active');
+            document.getElementById('amort-bottom-sheet').classList.add('active');
+        }
+
+        function closeAmortModal() {
+            document.getElementById('amort-overlay').classList.remove('active');
+            document.getElementById('amort-bottom-sheet').classList.remove('active');
+        }
+
+        function selectAmort(val, text, element) {
+            if(window.LoanShockEngine.haptic) window.LoanShockEngine.haptic();
+            
+            document.getElementById('inp-amort').value = val;
+            document.getElementById('amort-display').innerText = text;
+
+            document.querySelectorAll('.modal-opt').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            closeAmortModal();
+        }
+
+        // --- MATH ENGINE ---
+        window.LoanShockEngine = {
+            haptic: function() { if(navigator.vibrate) navigator.vibrate(20); },
+
+            showToast: function(msg) {
+                const toast = document.getElementById('custom-toast');
+                document.getElementById('toast-msg').innerText = msg;
+                if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            },
+
+            formatCurrency: function(val) {
+                return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val).replace('₹', '₹');
+            },
+
+            calculateEMI: function(p, annualRate, years, type) {
+                if (years <= 0 || annualRate <= 0) return 0;
+                let months = years * 12;
+                
+                if (type === 'reducing') {
+                    let r = (annualRate / 100) / 12;
+                    return p * r * Math.pow(1 + r, months) / (Math.pow(1 + r, months) - 1);
+                } else {
+                    // Flat rate
+                    let totalInterest = p * (annualRate / 100) * years;
+                    return (p + totalInterest) / months;
+                }
+            },
+
+            calculate: function() {
+                this.haptic();
+
+                // 1. Get Inputs
+                const oldRate = parseFloat(document.getElementById('inp-old-rate').value);
+                const newRate = parseFloat(document.getElementById('inp-new-rate').value);
+                const loanAmt = parseFloat(document.getElementById('inp-loan').value);
+                const tenure = parseFloat(document.getElementById('inp-tenure').value) || 0;
+                const amortType = document.getElementById('inp-amort').value;
+
+                // Validations
+                if(isNaN(oldRate) || oldRate <= 0) { this.showToast("Invalid Input: Original Interest Rate is required."); return; }
+                if(isNaN(newRate) || newRate <= 0) { this.showToast("Invalid Input: New Interest Rate is required."); return; }
+                if(isNaN(loanAmt) || loanAmt <= 0) { this.showToast("Invalid Input: Total Loan Amount is required."); return; }
+                if(newRate <= oldRate) { this.showToast("Error: The New Rate must be strictly higher than the Old Rate to simulate a shock."); return; }
+
+                // 2. Base Math (Outputs 1, 2, 3)
+                let pointDiff = newRate - oldRate;
+                let actualBurdenIncrease = ((newRate - oldRate) / oldRate) * 100;
+                
+                // Simplified Annual Extra (Useful if tenure is unknown)
+                let oldAnnualSimple = loanAmt * (oldRate / 100);
+                let newAnnualSimple = loanAmt * (newRate / 100);
+                let extraAnnualOutflow = newAnnualSimple - oldAnnualSimple;
+
+                // --- UI INJECTION FOR BASE METRICS ---
+                document.getElementById('out-point-diff').innerText = `${pointDiff.toFixed(2)}%`;
+                document.getElementById('lbl-point-diff').innerText = `${pointDiff.toFixed(2)}`;
+                document.getElementById('out-actual-burden').innerText = `+${actualBurdenIncrease.toFixed(2)}%`;
+                document.getElementById('out-annual-extra').innerText = `+${this.formatCurrency(extraAnnualOutflow)}`;
+
+                // 3. Complex Math (Outputs 4, 5, 9 - Only if tenure is provided)
+                if (tenure > 0) {
+                    let oldEMI = this.calculateEMI(loanAmt, oldRate, tenure, amortType);
+                    let newEMI = this.calculateEMI(loanAmt, newRate, tenure, amortType);
+                    
+                    let emiShock = newEMI - oldEMI;
+                    
+                    let oldTotalInterest = (oldEMI * tenure * 12) - loanAmt;
+                    let newTotalInterest = (newEMI * tenure * 12) - loanAmt;
+                    let lifetimePenalty = newTotalInterest - oldTotalInterest;
+
+                    document.getElementById('out-emi-shock').innerText = `+${this.formatCurrency(emiShock)}`;
+                    document.getElementById('out-lifetime-extra').innerText = `+${this.formatCurrency(lifetimePenalty)}`;
+
+                    // Output 9: Affordability Stress (Rule of Thumb: EMI shouldn't exceed 40% of income. We simulate the required income jump)
+                    const affordBox = document.getElementById('affordability-box');
+                    let assumedSafeIncomeOld = oldEMI / 0.4;
+                    let newAffordabilityRatio = (newEMI / assumedSafeIncomeOld) * 100;
+                    
+                    document.getElementById('out-affordability').innerHTML = `Assuming your initial EMI was safely capped at 40% of your net income, this new EMI consumes <b>${newAffordabilityRatio.toFixed(1)}%</b> of that same income. If this crosses 45%, you are entering the critical default danger zone.`;
+                    affordBox.style.display = 'block';
+
+                } else {
+                    document.getElementById('out-emi-shock').innerText = "Tenure Req.";
+                    document.getElementById('out-lifetime-extra').innerText = "Tenure Req.";
+                    document.getElementById('affordability-box').style.display = 'none';
+                }
+
+                // Reveal UI
+                const resCard = document.getElementById('results-container');
+                resCard.style.display = 'block';
+                resCard.classList.remove('anim-up');
+                void resCard.offsetWidth; // trigger reflow
+                resCard.classList.add('anim-up');
+                
+                setTimeout(() => { resCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+        };
+    </script>
+</body>
+</html>

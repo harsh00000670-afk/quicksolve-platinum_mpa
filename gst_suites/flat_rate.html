@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>6% Flat GST Scheme Calculator | Sec 10(2A) Optimizer | QuickSolve Platinum</title>
+    <meta name="description" content="Professional GST calculator for service providers under Section 10(2A). Compare 6% Flat Rate vs 18% Regular GST with ITC. 100% Offline.">
+    <meta name="keywords" content="6 percent gst calculator, service provider composition scheme, section 10(2a) gst, freelancer gst calculator, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/gst_suites/flat_rate.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#020617">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           FLAT RATE SCHEME (PLATINUM GOD MODE)
+           Theme: Obsidian / Royal Amethyst / Teal
+           ========================================= */
+        #mod-flat-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: #020617; z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .fr-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #1e1b4b; border-bottom: 1px solid #312e81;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .fr-head .qs-back-btn { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .fr-tit { color: #a78bfa; font-weight: 900; font-size: 0.9rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .fr-body { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 100px; }
+
+        /* Sleek Cards */
+        .fr-card { 
+            background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; 
+            padding: 15px; display: flex; flex-direction: column; gap: 10px;
+        }
+        
+        .fr-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; }
+        .fr-lbl span { color: #a78bfa; }
+
+        .fr-inp-wrap { display: flex; align-items: center; gap: 10px; background: rgba(2, 6, 23, 0.5); padding: 10px 12px; border-radius: 8px; border: 1px solid #1e293b; transition: 0.2s; }
+        .fr-inp-wrap:focus-within { border-color: #a78bfa; box-shadow: 0 0 10px rgba(167, 139, 250, 0.1); }
+        .fr-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1rem; font-weight: 900; outline: none; width: 100%; text-align: right; font-family: monospace; }
+        .fr-pre { color: #475569; font-weight: 900; font-size: 0.8rem; }
+
+        .fr-select-trigger { flex: 1; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: #fff; font-weight: 900; font-size: 0.9rem; }
+
+        /* Results Panel */
+        .res-hero { background: #020617; border: 1px solid #a78bfa; border-radius: 12px; padding: 25px 15px; text-align: center; position: relative; box-shadow: inset 0 0 30px rgba(167, 139, 250, 0.05); }
+        .res-hero::before { content: 'QUARTERLY LIABILITY'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #a78bfa; color: #020617; font-size: 0.6rem; font-weight: 900; padding: 2px 10px; border-radius: 4px; letter-spacing: 1px; }
+        
+        .main-tax { font-size: 2.8rem; font-weight: 900; color: #a78bfa; font-family: monospace; line-height: 1; }
+        .main-sub { font-size: 0.75rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; margin-top: 10px; }
+
+        /* Optimization Verdict */
+        .verdict-card { background: rgba(167, 139, 250, 0.05); border: 1px dashed #a78bfa; border-radius: 10px; padding: 15px; margin-top: 5px; }
+        .v-tit { font-size: 0.65rem; color: #94a3b8; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .v-msg { font-size: 0.85rem; color: #f8fafc; font-weight: 900; line-height: 1.4; }
+
+        /* Detail Grid */
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .d-box { background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 10px; padding: 12px; text-align: left; }
+        .d-lbl { font-size: 0.55rem; color: #64748b; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        .d-val { font-size: 0.95rem; color: #fff; font-weight: 900; font-family: monospace; }
+        .val-warn { color: #f43f5e; }
+
+        /* Warning Banner */
+        .limit-warn { background: #ef4444; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 900; text-align: center; margin-bottom: 10px; display: none; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+        /* Modals */
+        .fr-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0, 0, 0, 0.8); z-index: 9999; flex-direction: column; justify-content: flex-end; animation: fadeIn 0.2s; }
+        .fr-content { background: #0f172a; border-top-left-radius: 20px; border-top-right-radius: 20px; display: flex; flex-direction: column; overflow: hidden; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .fr-open .fr-content { transform: translateY(0); }
+        .fr-modal-head { padding: 15px 20px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; }
+        .fr-modal-head span { color: #a78bfa; font-weight: 900; font-size: 1rem; text-transform: uppercase; }
+        .fr-close { background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+        .fr-list { padding: 10px 0; max-height: 55vh; overflow-y: auto; }
+        .fi-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); cursor: pointer; }
+        .fi-name { font-weight: 900; color: #f8fafc; font-size: 0.9rem; }
+        .fi-sub { display: block; font-size: 0.6rem; color: #64748b; margin-top: 2px; }
+        .fi-check { color: #a78bfa; display: none; }
+        .fi-item.active .fi-check { display: block; }
+        .fi-item.active .fi-name { color: #a78bfa; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <main id="mod-flat-overlay" role="main" aria-label="6% Flat GST Optimizer">
+        <header class="fr-head">
+            <a href="../gst.html" class="qs-back-btn" aria-label="Go Back"><i class="fas fa-arrow-left"></i></a>
+            <div class="fr-tit"><i class="fas fa-percentage"></i> 6% FLAT OPTIMIZER</div>
+        </header>
+
+        <section class="fr-body">
+            
+            <div id="limit-alert" class="limit-warn">
+                <i class="fas fa-exclamation-triangle"></i> TURNOVER EXCEEDS ₹50 LAKH LIMIT
+            </div>
+
+            <div class="fr-card">
+                <div class="fr-lbl">Service Category <span>SECTOR</span></div>
+                <div class="fr-inp-wrap" onclick="QS_Flat.openModal('category')">
+                    <div class="fr-select-trigger">
+                        <span id="lbl-category">Freelancer / IT Services</span> <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i>
+                    </div>
+                </div>
+
+                <div class="fr-lbl">Estimated Quarterly Revenue <span>SALES</span></div>
+                <div class="fr-inp-wrap">
+                    <span class="fr-pre">₹</span>
+                    <input type="number" id="inp-revenue" class="fr-inp" placeholder="0.00" oninput="QS_Flat.calculate()">
+                </div>
+            </div>
+
+            <div class="fr-card">
+                <div class="fr-lbl">Quarterly Business Expenses <span>FOR COMPARISON</span></div>
+                <div class="fr-inp-wrap">
+                    <span class="fr-pre">₹</span>
+                    <input type="number" id="inp-expense" class="fr-inp" placeholder="e.g. Office Rent, Laptop" oninput="QS_Flat.calculate()">
+                </div>
+
+                <div class="fr-lbl">Avg. GST Rate on Expenses</div>
+                <div class="fr-inp-wrap" onclick="QS_Flat.openModal('exp-rate')">
+                    <div class="fr-select-trigger">
+                        <span id="lbl-exp-rate">18% GST</span> <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div id="empty-state" style="text-align:center; padding: 30px; color:#475569;">
+                <i class="fas fa-user-tie fa-4x" style="margin-bottom:15px; opacity:0.2;"></i>
+                <div style="font-size:0.85rem; font-weight:bold;">Enter revenue to analyze Section 10(2A) benefits.</div>
+            </div>
+
+            <div id="res-dashboard" class="hidden" aria-live="polite">
+                
+                <div class="res-hero">
+                    <div class="main-tax" id="res-tax">₹0.00</div>
+                    <div class="main-sub">Total 6% Flat Tax (CGST+SGST)</div>
+                </div>
+
+                <div class="verdict-card">
+                    <div class="v-tit"><i class="fas fa-robot"></i> PLATINUM VERDICT</div>
+                    <div class="v-msg" id="res-verdict">Calculating optimization path...</div>
+                </div>
+
+                <div class="detail-grid">
+                    <div class="d-box">
+                        <span class="d-lbl">Regular (Net Tax)</span>
+                        <span class="d-val" id="res-reg-tax">₹0.00</span>
+                    </div>
+                    <div class="d-box">
+                        <span class="d-lbl">Potential Savings</span>
+                        <span class="d-val" id="res-savings" style="color:#10b981;">₹0.00</span>
+                    </div>
+                    <div class="d-box">
+                        <span class="d-lbl">CGST (3%)</span>
+                        <span class="d-val" id="res-cgst">₹0.00</span>
+                    </div>
+                    <div class="d-box">
+                        <span class="d-lbl">SGST (3%)</span>
+                        <span class="d-val" id="res-sgst">₹0.00</span>
+                    </div>
+                </div>
+
+                <div style="margin-top:15px; background: rgba(167, 139, 250, 0.1); border: 1px solid #a78bfa; border-radius: 8px; padding: 12px; font-size: 0.65rem; color: #cbd5e1; line-height: 1.5; text-align: left;">
+                    <i class="fas fa-info-circle" style="color:#a78bfa;"></i> <b>Compliance Note:</b> Under Section 10(2A), you <b>cannot</b> collect GST from customers and <b>cannot</b> claim Input Tax Credit (ITC). You must pay 6% from your own pocket on the total turnover.
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <div id="fr-modal" class="fr-modal">
+        <div class="fr-content">
+            <div class="fr-modal-head"><span id="fr-title">Select</span><button class="fr-close" onclick="QS_Flat.closeModal()"><i class="fas fa-times"></i></button></div>
+            <div class="fr-list" id="fr-list"></div>
+        </div>
+    </div>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - 6% FLAT SCHEME ENGINE
+           Features: Section 10(2A) Limit Sentinel, Comparative ITC Simulation, Savings Engine.
+        */
+        (function() {
+            window.QS_Flat = {
+                state: {
+                    category: 'it',
+                    expRate: 18,
+                    limit: 5000000 // 50 Lakhs
+                },
+
+                categories: {
+                    'it': { n: 'Freelancer / IT Services', sub: 'Coding, Designing, Marketing' },
+                    'repair': { n: 'Repair Services', sub: 'Electronics, Bike, Mobile' },
+                    'consult': { n: 'Professional Consultant', sub: 'Legal, Tax, Business advice' },
+                    'tailor': { n: 'Tailoring / Boutique', sub: 'Custom clothing services' },
+                    'salon': { n: 'Salon / Beauty Parlor', sub: 'Personal grooming services' }
+                },
+
+                init: function() {
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'gst_suites/flat_rate.js') this.calculate();
+                    });
+                    if(document.readyState === 'complete') this.calculate();
+                    else document.addEventListener('DOMContentLoaded', () => this.calculate());
+                },
+
+                openModal: function(target) {
+                    const title = target === 'category' ? 'Service Category' : 'Expense GST Rate';
+                    document.getElementById('fr-title').innerText = title;
+                    const list = document.getElementById('fr-list');
+                    list.innerHTML = '';
+
+                    if(target === 'category') {
+                        Object.keys(this.categories).forEach(key => {
+                            const cat = this.categories[key];
+                            const active = this.state.category === key;
+                            const div = document.createElement('div');
+                            div.className = `fi-item ${active?'active':''}`;
+                            div.onclick = () => {
+                                this.state.category = key;
+                                document.getElementById('lbl-category').innerText = cat.n;
+                                this.closeModal();
+                                this.calculate();
+                            };
+                            div.innerHTML = `<div><span class="fi-name">${cat.n}</span><span class="fi-sub">${cat.sub}</span></div><i class="fas fa-check fi-check"></i>`;
+                            list.appendChild(div);
+                        });
+                    } else {
+                        [0, 5, 12, 18, 28].forEach(v => {
+                            const active = this.state.expRate == v;
+                            const div = document.createElement('div');
+                            div.className = `fi-item ${active?'active':''}`;
+                            div.onclick = () => {
+                                this.state.expRate = v;
+                                document.getElementById('lbl-exp-rate').innerText = v + '% GST';
+                                this.closeModal();
+                                this.calculate();
+                            };
+                            div.innerHTML = `<span class="fi-name">${v}% GST</span><i class="fas fa-check fi-check"></i>`;
+                            list.appendChild(div);
+                        });
+                    }
+
+                    const m = document.getElementById('fr-modal');
+                    m.style.display = 'flex';
+                    setTimeout(() => m.classList.add('fr-open'), 10);
+                },
+
+                closeModal: function() {
+                    const m = document.getElementById('fr-modal');
+                    m.classList.remove('fr-open');
+                    setTimeout(() => m.style.display = 'none', 300);
+                },
+
+                calculate: function() {
+                    const revenue = parseFloat(document.getElementById('inp-revenue').value);
+                    const expense = parseFloat(document.getElementById('inp-expense').value) || 0;
+
+                    if(!revenue || revenue <= 0) {
+                        document.getElementById('empty-state').classList.remove('hidden');
+                        document.getElementById('res-dashboard').classList.add('hidden');
+                        document.getElementById('limit-alert').style.display = 'none';
+                        return;
+                    }
+
+                    document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('res-dashboard').classList.remove('hidden');
+
+                    // 1. Threshold Sentinel (Assuming Annual revenue is 4x Quarterly)
+                    const annualEst = revenue * 4;
+                    document.getElementById('limit-alert').style.display = annualEst > this.state.limit ? 'block' : 'none';
+
+                    // 2. Flat Scheme Math (6% on Turnover)
+                    const flatTax = revenue * 0.06;
+                    const cgst = flatTax / 2;
+                    const sgst = flatTax / 2;
+
+                    // 3. Regular Scheme Simulation (18% Output - ITC)
+                    const regOutput = revenue * 0.18;
+                    const itcPotential = expense * (this.state.expRate / 100);
+                    const regNetTax = Math.max(0, regOutput - itcPotential);
+
+                    // 4. Comparison Logic
+                    const savings = regNetTax - flatTax;
+                    const isFlatBetter = savings > 0;
+
+                    this.render(flatTax, cgst, sgst, regNetTax, savings, isFlatBetter, annualEst);
+                },
+
+                render: function(tax, c, s, reg, sav, better, annual) {
+                    const fmt = (v) => '₹' + v.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+                    
+                    document.getElementById('res-tax').innerText = fmt(tax);
+                    document.getElementById('res-cgst').innerText = fmt(c);
+                    document.getElementById('res-sgst').innerText = fmt(s);
+                    document.getElementById('res-reg-tax').innerText = fmt(reg);
+                    document.getElementById('res-savings').innerText = (sav > 0 ? '+ ' : '') + fmt(sav);
+                    document.getElementById('res-savings').style.color = sav > 0 ? "#10b981" : "#f43f5e";
+
+                    const verdict = document.getElementById('res-verdict');
+                    if(annual > this.state.limit) {
+                        verdict.innerHTML = `<span style="color:#ef4444;">INELIGIBLE:</span> Annual turnover exceeds ₹50L. You must switch to Regular Scheme.`;
+                    } else if(better) {
+                        verdict.innerHTML = `Choose <span style="color:#10b981;">FLAT 6%</span>. You will save approximately <span style="color:#10b981;">${fmt(sav)}</span> this quarter by avoiding 18% GST.`;
+                    } else {
+                        verdict.innerHTML = `Choose <span style="color:#38bdf8;">REGULAR 18%</span>. Your high business expenses (ITC) make the regular scheme cheaper by <span style="color:#38bdf8;">${fmt(Math.abs(sav))}</span>.`;
+                    }
+                }
+            };
+
+            window.QS_Flat.init();
+        })();
+    </script>
+</body>
+</html>

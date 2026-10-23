@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Advanced Zodiac & Birth Trivia | Lunar Phase | QuickSolve Platinum</title>
+    <meta name="description" content="Discover your exact moon phase at birth, deep Chinese elemental zodiac, birthstones, generational cohort, and calendar trivia. 100% Offline.">
+    <meta name="keywords" content="moon phase at birth calculator, exact chinese zodiac element, generation calculator gen z millennial, birthstone calculator, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/age_suites/zodiac_trivia.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Cosmic Identity & Birth Trivia">
+    <meta property="og:description" content="Find out what the moon looked like the day you were born and your exact cosmic profile.">
+    <meta property="og:image" content="../logo.png">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           ZODIAC & TRIVIA (GOD MODE)
+           Theme: Mystic Gold & Starlight Purple
+           ========================================= */
+        #mod-trivia-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: var(--bg-body, #09090b); z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .tr-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .tr-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .tr-tit { color: #f59e0b; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .tr-body { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 12px; }
+
+        /* Sleek Cards */
+        .tr-card { 
+            flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 10px; 
+            padding: 12px; display: flex; flex-direction: column; gap: 8px; transition: 0.2s; position: relative;
+        }
+        .tr-card:focus-within { border-color: #f59e0b; box-shadow: 0 0 12px rgba(245, 158, 11, 0.15); }
+
+        .tr-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; margin-bottom: 3px; }
+        
+        .tr-inp-wrap { display: flex; align-items: center; gap: 8px; background: rgba(2, 6, 23, 0.5); padding: 8px 10px; border-radius: 8px; border: 1px solid #334155; }
+        .tr-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1rem; font-weight: 900; outline: none; width: 100%; font-family: monospace; }
+        .tr-inp::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; color: #f59e0b; }
+
+        /* Section Divider */
+        .tr-sec-tit { font-size: 0.65rem; color: #f59e0b; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+        .tr-sec-tit::after { content: ''; flex: 1; height: 1px; background: #334155; }
+
+        /* Results Grid */
+        .tr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        .tr-box { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; }
+        .tr-box.full { grid-column: span 2; }
+        
+        .tr-icon { font-size: 1.8rem; }
+        .tr-b-tit { font-size: 0.6rem; color: #94a3b8; font-weight: 900; text-transform: uppercase; }
+        .tr-b-val { font-size: 1.1rem; color: #f8fafc; font-weight: 900; font-family: monospace; }
+        .tr-b-sub { font-size: 0.65rem; color: #64748b; font-weight: bold; }
+
+        /* Colors for different modules */
+        .c-zodiac { color: #a855f7; }
+        .c-moon { color: #e2e8f0; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .c-chinese { color: #ef4444; }
+        .c-gem { color: #22d3ee; }
+        .c-cal { color: #10b981; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <main id="mod-trivia-overlay" role="main" aria-label="Zodiac and Birth Trivia">
+        <header class="tr-head">
+            <a href="../age.html" class="qs-back-btn" aria-label="Go Back">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            </a>
+            <div class="tr-tit"><i class="fas fa-star-and-crescent" aria-hidden="true"></i> COSMIC IDENTITY</div>
+        </header>
+
+        <section class="tr-body">
+            
+            <div class="tr-card">
+                <div class="tr-lbl">
+                    <label for="inp-dob">Enter Date of Birth</label>
+                </div>
+                <div class="tr-inp-wrap">
+                    <i class="fas fa-calendar-day" style="color:#f59e0b;" aria-hidden="true"></i>
+                    <input type="date" id="inp-dob" class="tr-inp" onchange="QS_Trivia.calculate()" aria-label="Date of Birth">
+                </div>
+            </div>
+
+            <div id="empty-state" style="text-align:center; padding: 40px 20px; color:#64748b;">
+                <i class="fas fa-om fa-3x" style="margin-bottom:12px; opacity:0.5;"></i>
+                <div style="font-size:0.85rem; font-weight:bold;">Enter your birth date to decode your celestial signature.</div>
+            </div>
+
+            <div id="trivia-dashboard" class="hidden" aria-live="polite">
+                
+                <div class="tr-sec-tit">Celestial Alignment</div>
+                <div class="tr-grid">
+                    <div class="tr-box">
+                        <i class="fas fa-sun tr-icon c-zodiac" aria-hidden="true"></i>
+                        <span class="tr-b-tit">Sun Sign</span>
+                        <span class="tr-b-val c-zodiac" id="res-zodiac">--</span>
+                        <span class="tr-b-sub" id="res-z-elem">--</span>
+                    </div>
+
+                    <div class="tr-box">
+                        <i class="fas fa-moon tr-icon c-moon" aria-hidden="true" id="moon-icon"></i>
+                        <span class="tr-b-tit">Moon Phase</span>
+                        <span class="tr-b-val c-moon" id="res-moon" style="font-size: 0.95rem;">--</span>
+                        <span class="tr-b-sub">At the exact day of birth</span>
+                    </div>
+
+                    <div class="tr-box full" style="border-color: #ef4444; background: rgba(239, 68, 68, 0.05);">
+                        <i class="fas fa-dragon tr-icon c-chinese" aria-hidden="true"></i>
+                        <span class="tr-b-tit" style="color:#ef4444;">Chinese Zodiac (Elemental)</span>
+                        <span class="tr-b-val c-chinese" id="res-chinese" style="font-size: 1.4rem;">--</span>
+                        <span class="tr-b-sub" id="res-c-yin">--</span>
+                    </div>
+                </div>
+
+                <div class="tr-sec-tit">Demographics & Nature</div>
+                <div class="tr-grid">
+                    <div class="tr-box">
+                        <i class="fas fa-users tr-icon" style="color:#8b5cf6;" aria-hidden="true"></i>
+                        <span class="tr-b-tit">Generation</span>
+                        <span class="tr-b-val" id="res-gen" style="color:#8b5cf6; font-size: 0.95rem;">--</span>
+                        <span class="tr-b-sub">Global Cohort</span>
+                    </div>
+
+                    <div class="tr-box">
+                        <i class="fas fa-gem tr-icon c-gem" aria-hidden="true"></i>
+                        <span class="tr-b-tit">Birth Gemstone</span>
+                        <span class="tr-b-val c-gem" id="res-gem" style="font-size: 0.95rem;">--</span>
+                        <span class="tr-b-sub" id="res-flower">--</span>
+                    </div>
+                </div>
+
+                <div class="tr-sec-tit">Calendar Mathematics</div>
+                <div class="tr-grid">
+                    <div class="tr-box">
+                        <i class="fas fa-calendar-alt tr-icon c-cal" aria-hidden="true"></i>
+                        <span class="tr-b-tit">Day of the Week</span>
+                        <span class="tr-b-val c-cal" id="res-weekday">--</span>
+                    </div>
+                    <div class="tr-box">
+                        <i class="fas fa-stopwatch tr-icon c-cal" aria-hidden="true"></i>
+                        <span class="tr-b-tit">Day of the Year</span>
+                        <span class="tr-b-val c-cal" id="res-daynum">-- / 365</span>
+                    </div>
+                    <div class="tr-box full">
+                        <span class="tr-b-val" id="res-leap" style="font-size:0.85rem; color:#94a3b8;">--</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - ASTRO & TRIVIA ENGINE
+           Features: Lunar Phase Synodic Math, Elemental Chinese Zodiac, Calendar Algorithms.
+        */
+        (function() {
+            window.QS_Trivia = {
+                
+                initListener: function() {
+                    const dobInp = document.getElementById('inp-dob');
+                    if(dobInp && !dobInp.value) {
+                        let d = new Date();
+                        d.setFullYear(d.getFullYear() - 22);
+                        dobInp.value = d.toISOString().split('T')[0];
+                    }
+
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'age_suites/zodiac_trivia.js') {
+                            this.calculate();
+                        }
+                    });
+
+                    if(document.readyState === 'complete' || document.readyState === 'interactive'){
+                         setTimeout(() => this.calculate(), 100);
+                    } else {
+                         document.addEventListener('DOMContentLoaded', () => this.calculate());
+                    }
+                },
+
+                getWesternZodiac: function(day, month) {
+                    const zodiacs = [
+                        { sign: "Capricorn", element: "Earth 🌍", end: 19 },
+                        { sign: "Aquarius", element: "Air 💨", end: 18 },
+                        { sign: "Pisces", element: "Water 💧", end: 20 },
+                        { sign: "Aries", element: "Fire 🔥", end: 19 },
+                        { sign: "Taurus", element: "Earth 🌍", end: 20 },
+                        { sign: "Gemini", element: "Air 💨", end: 20 },
+                        { sign: "Cancer", element: "Water 💧", end: 22 },
+                        { sign: "Leo", element: "Fire 🔥", end: 22 },
+                        { sign: "Virgo", element: "Earth 🌍", end: 22 },
+                        { sign: "Libra", element: "Air 💨", end: 22 },
+                        { sign: "Scorpio", element: "Water 💧", end: 21 },
+                        { sign: "Sagittarius", element: "Fire 🔥", end: 21 },
+                        { sign: "Capricorn", element: "Earth 🌍", end: 31 }
+                    ];
+                    // month is 0-indexed
+                    if (day > zodiacs[month].end) {
+                        return zodiacs[month + 1];
+                    } else {
+                        return zodiacs[month];
+                    }
+                },
+
+                getChineseZodiac: function(year) {
+                    const animals = ["Monkey", "Rooster", "Dog", "Pig", "Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat"];
+                    const elements = ["Metal", "Metal", "Water", "Water", "Wood", "Wood", "Fire", "Fire", "Earth", "Earth"];
+                    
+                    const animal = animals[year % 12];
+                    const element = elements[year % 10]; // Last digit of year determines element
+                    const yinYang = (year % 2 === 0) ? "Yang (Active)" : "Yin (Passive)";
+                    
+                    return { full: `${element} ${animal}`, desc: `${yinYang} Energy` };
+                },
+
+                getMoonPhase: function(date) {
+                    // Astronomical calculation based on synodic month (29.53058867 days)
+                    // Known new moon: Jan 6, 2000, 18:14 UTC
+                    const lp = 2551442.977; // Lunar cycle in seconds
+                    const newMoon = new Date(Date.UTC(2000, 0, 6, 18, 14, 0));
+                    const phase = ((date.getTime() - newMoon.getTime()) / 1000) % lp;
+                    const phaseFraction = (phase < 0 ? phase + lp : phase) / lp;
+                    
+                    if (phaseFraction < 0.03 || phaseFraction > 0.97) return { n: "New Moon", i: "fa-circle", o: 0.2 };
+                    if (phaseFraction < 0.22) return { n: "Waxing Crescent", i: "fa-moon", o: 0.8 };
+                    if (phaseFraction < 0.28) return { n: "First Quarter", i: "fa-adjust", o: 1 };
+                    if (phaseFraction < 0.47) return { n: "Waxing Gibbous", i: "fa-moon", o: 1 }; // Approx visual
+                    if (phaseFraction < 0.53) return { n: "Full Moon", i: "fa-circle", o: 1 };
+                    if (phaseFraction < 0.72) return { n: "Waning Gibbous", i: "fa-moon", o: 1, flip: true };
+                    if (phaseFraction < 0.78) return { n: "Last Quarter", i: "fa-adjust", o: 1, flip: true };
+                    return { n: "Waning Crescent", i: "fa-moon", o: 0.8, flip: true };
+                },
+
+                getGeneration: function(year) {
+                    if (year >= 2013) return "Gen Alpha";
+                    if (year >= 1997) return "Gen Z (Zoomer)";
+                    if (year >= 1981) return "Millennial (Gen Y)";
+                    if (year >= 1965) return "Generation X";
+                    if (year >= 1946) return "Baby Boomer";
+                    return "Silent Generation";
+                },
+
+                getGemsAndFlowers: function(month) {
+                    const gems = ["Garnet", "Amethyst", "Aquamarine", "Diamond", "Emerald", "Pearl/Alexandrite", "Ruby", "Peridot", "Sapphire", "Opal", "Topaz", "Turquoise"];
+                    const flowers = ["Carnation", "Violet", "Daffodil", "Daisy", "Lily of the Valley", "Rose", "Larkspur", "Gladiolus", "Aster", "Morning Glory", "Marigold", "Chrysanthemum"];
+                    return { gem: gems[month], flower: `Flower: ${flowers[month]}` };
+                },
+
+                calculate: function() {
+                    const dobVal = document.getElementById('inp-dob').value;
+                    if (!dobVal) return;
+
+                    const dob = new Date(dobVal);
+                    if (isNaN(dob.getTime())) return;
+
+                    document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('trivia-dashboard').classList.remove('hidden');
+
+                    const y = dob.getFullYear();
+                    const m = dob.getMonth();
+                    const d = dob.getDate();
+
+                    // 1. Western Zodiac
+                    const wZodiac = this.getWesternZodiac(d, m);
+                    document.getElementById('res-zodiac').innerText = wZodiac.sign;
+                    document.getElementById('res-z-elem').innerText = wZodiac.element;
+
+                    // 2. Chinese Zodiac
+                    const cZodiac = this.getChineseZodiac(y);
+                    document.getElementById('res-chinese').innerText = cZodiac.full;
+                    document.getElementById('res-c-yin').innerText = cZodiac.desc;
+
+                    // 3. Moon Phase
+                    const moon = this.getMoonPhase(dob);
+                    const mIcon = document.getElementById('moon-icon');
+                    document.getElementById('res-moon').innerText = moon.n;
+                    mIcon.className = `fas ${moon.i} tr-icon c-moon`;
+                    mIcon.style.opacity = moon.o;
+                    mIcon.style.transform = moon.flip ? 'scaleX(-1)' : 'scaleX(1)';
+
+                    // 4. Generation
+                    document.getElementById('res-gen').innerText = this.getGeneration(y);
+
+                    // 5. Gems & Flowers
+                    const gf = this.getGemsAndFlowers(m);
+                    document.getElementById('res-gem').innerText = gf.gem;
+                    document.getElementById('res-flower').innerText = gf.flower;
+
+                    // 6. Calendar Math
+                    const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                    document.getElementById('res-weekday').innerText = weekdays[dob.getDay()];
+
+                    const startOfYear = new Date(y, 0, 0);
+                    const diff = (dob - startOfYear) + ((startOfYear.getTimezoneOffset() - dob.getTimezoneOffset()) * 60 * 1000);
+                    const oneDay = 1000 * 60 * 60 * 24;
+                    const dayOfYear = Math.floor(diff / oneDay);
+                    
+                    const isLeap = (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0);
+                    const totalDays = isLeap ? 366 : 365;
+
+                    document.getElementById('res-daynum').innerText = `Day ${dayOfYear} / ${totalDays}`;
+                    document.getElementById('res-leap').innerHTML = isLeap ? 
+                        `<i class="fas fa-frog" style="color:#10b981;"></i> You were born in a Leap Year!` : 
+                        "You were born in a standard 365-day year.";
+                }
+            };
+            window.QS_Trivia.initListener();
+        })();
+    </script>
+</body>
+</html>

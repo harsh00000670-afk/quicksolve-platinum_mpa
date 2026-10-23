@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="max-age=3600, must-revalidate">
+
+    <title>Cosmic Planet Age Calculator | Age on Mars & Jupiter | QuickSolve Platinum</title>
+    <meta name="description" content="Calculate your exact age on different planets in our solar system. Find out how many years old you are on Mars, Jupiter, Mercury and more. 100% Offline.">
+    <meta name="keywords" content="age on other planets, mars age calculator, jupiter age calculator, space age, cosmic age, planetary years, QuickSolve Platinum">
+    <meta name="author" content="Harsh - QuickSolve Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://quicksolve-platinum.netlify.app/age_suites/cosmic_age.html">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#09090b">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QuickSolve Platinum">
+    <meta property="og:title" content="Cosmic Planet Age - Your Age in the Stars">
+    <meta property="og:description" content="Ever wondered how old you'd be on Neptune? Discover your planetary age across the solar system instantly.">
+    <meta property="og:image" content="../logo.png">
+
+    <link rel="icon" type="image/png" href="../logo.png">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* =========================================
+           COSMIC PLANET AGE (GOD MODE)
+           Theme: Deep Space / Cyan Neon
+           ========================================= */
+        #mod-cosmic-overlay {
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100dvh;
+            background-color: var(--bg-body, #09090b); z-index: 5000 !important;
+            display: flex; flex-direction: column; animation: fadeIn 0.3s ease;
+            font-family: sans-serif;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .ca-head {
+            display: flex; align-items: center; padding: 12px 15px; 
+            background: #121214; border-bottom: 1px solid #334155;
+            position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+        }
+        .ca-head .qs-back-btn { background: none; border: none; color: var(--text-main, #f4f4f5); font-size: 1.2rem; cursor: pointer; text-decoration: none;}
+        .ca-tit { color: #0ea5e9; font-weight: 800; font-size: 1rem; margin-left: 15px; text-transform: uppercase; letter-spacing: 2px;}
+
+        .ca-body { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 12px; }
+
+        /* Sleek Input Card */
+        .ca-card { 
+            flex-shrink: 0; background: #1e293b; border: 1px solid #475569; border-radius: 10px; 
+            padding: 12px; display: flex; flex-direction: column; gap: 8px; transition: 0.2s; position: relative;
+        }
+        .ca-card:focus-within { border-color: #0ea5e9; box-shadow: 0 0 12px rgba(14, 165, 233, 0.15); }
+
+        .ca-lbl { font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; margin-bottom: 3px; }
+        
+        .ca-inp-wrap { display: flex; align-items: center; gap: 8px; background: rgba(2, 6, 23, 0.5); padding: 8px 10px; border-radius: 8px; border: 1px solid #334155; }
+        .ca-inp { flex: 1; background: transparent; border: none; color: #fff; font-size: 1rem; font-weight: 900; outline: none; width: 100%; font-family: monospace; }
+        .ca-inp::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+
+        /* Planetary Grid */
+        .planet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        .p-box { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; transition: 0.3s; }
+        .p-box:active { transform: scale(0.98); border-color: #0ea5e9; }
+        
+        .p-icon { font-size: 2rem; position: relative; }
+        /* Simple planetary glow effects */
+        .p-icon.mercury { color: #94a3b8; }
+        .p-icon.venus { color: #f59e0b; }
+        .p-icon.mars { color: #ef4444; }
+        .p-icon.jupiter { color: #fbbf24; }
+        .p-icon.saturn { color: #e9d5ff; }
+        .p-icon.uranus { color: #22d3ee; }
+        .p-icon.neptune { color: #3b82f6; }
+
+        .p-name { font-size: 0.75rem; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+        .p-val { font-size: 1.4rem; font-weight: 900; color: #f8fafc; font-family: monospace; }
+        .p-sub { font-size: 0.6rem; color: #64748b; font-weight: bold; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <main id="mod-cosmic-overlay" role="main" aria-label="Planetary Age Calculator">
+        <header class="ca-head">
+            <a href="../age.html" class="qs-back-btn" aria-label="Go Back">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            </a>
+            <div class="ca-tit"><i class="fas fa-meteor" aria-hidden="true"></i> COSMIC AGE</div>
+        </header>
+
+        <section class="ca-body">
+            
+            <div class="ca-card">
+                <div class="ca-lbl">
+                    <label for="inp-dob">Earth Date of Birth</label>
+                </div>
+                <div class="ca-inp-wrap">
+                    <i class="fas fa-globe-americas" style="color:#0ea5e9;" aria-hidden="true"></i>
+                    <input type="date" id="inp-dob" class="ca-inp" onchange="QS_Cosmic.calculate()" aria-label="Enter Date of Birth">
+                </div>
+            </div>
+
+            <div id="empty-state" style="text-align:center; padding: 30px 20px; color:#64748b;">
+                <i class="fas fa-satellite fa-3x" style="margin-bottom:12px; opacity:0.5;"></i>
+                <div style="font-size:0.85rem; font-weight:bold;">Input your DOB to see your age across the system.</div>
+            </div>
+
+            <div id="cosmic-dashboard" class="planet-grid hidden" aria-live="polite">
+                
+                <div class="p-box">
+                    <i class="fas fa-circle p-icon mercury" aria-hidden="true"></i>
+                    <span class="p-name">Mercury</span>
+                    <span class="p-val" id="age-mercury">0</span>
+                    <span class="p-sub">Orbital Period: 88 Days</span>
+                </div>
+
+                <div class="p-box">
+                    <i class="fas fa-circle p-icon venus" aria-hidden="true"></i>
+                    <span class="p-name">Venus</span>
+                    <span class="p-val" id="age-venus">0</span>
+                    <span class="p-sub">Orbital Period: 225 Days</span>
+                </div>
+
+                <div class="p-box">
+                    <i class="fas fa-circle p-icon mars" aria-hidden="true"></i>
+                    <span class="p-name">Mars</span>
+                    <span class="p-val" id="age-mars">0</span>
+                    <span class="p-sub">Orbital Period: 1.88 Earth Yrs</span>
+                </div>
+
+                <div class="p-box">
+                    <i class="fas fa-circle p-icon jupiter" aria-hidden="true"></i>
+                    <span class="p-name">Jupiter</span>
+                    <span class="p-val" id="age-jupiter">0</span>
+                    <span class="p-sub">Orbital Period: 11.86 Earth Yrs</span>
+                </div>
+
+                <div class="p-box">
+                    <i class="fas fa-circle p-icon saturn" aria-hidden="true"></i>
+                    <span class="p-name">Saturn</span>
+                    <span class="p-val" id="age-saturn">0</span>
+                    <span class="p-sub">Orbital Period: 29.45 Earth Yrs</span>
+                </div>
+
+                <div class="p-box">
+                    <i class="fas fa-circle p-icon uranus" aria-hidden="true"></i>
+                    <span class="p-name">Uranus</span>
+                    <span class="p-val" id="age-uranus">0</span>
+                    <span class="p-sub">Orbital Period: 84 Earth Yrs</span>
+                </div>
+
+                <div class="p-box" style="grid-column: span 2;">
+                    <i class="fas fa-circle p-icon neptune" aria-hidden="true"></i>
+                    <span class="p-name">Neptune</span>
+                    <span class="p-val" id="age-neptune">0</span>
+                    <span class="p-sub">Orbital Period: 164.8 Earth Yrs</span>
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <script>
+        /* QUICKSOLVE PLATINUM - COSMIC AGE ENGINE
+           Features: Precise planetary orbital period math.
+        */
+        (function() {
+            window.QS_Cosmic = {
+                // Orbital periods in Earth Years
+                periods: {
+                    mercury: 0.2408467,
+                    venus: 0.61519726,
+                    mars: 1.8808158,
+                    jupiter: 11.862615,
+                    saturn: 29.447498,
+                    uranus: 84.016846,
+                    neptune: 164.79132
+                },
+
+                initListener: function() {
+                    const dobInp = document.getElementById('inp-dob');
+                    if(dobInp && !dobInp.value) {
+                        let d = new Date();
+                        d.setFullYear(d.getFullYear() - 25);
+                        dobInp.value = d.toISOString().split('T')[0];
+                    }
+
+                    window.addEventListener('qs-tool-opened', (e) => {
+                        if(e.detail && e.detail.tool === 'age_suites/cosmic_age.js') {
+                            this.calculate();
+                        }
+                    });
+
+                    // Standalone Boot
+                    if(document.readyState === 'complete' || document.readyState === 'interactive'){
+                         setTimeout(() => this.calculate(), 100);
+                    } else {
+                         document.addEventListener('DOMContentLoaded', () => this.calculate());
+                    }
+                },
+
+                calculate: function() {
+                    const dobVal = document.getElementById('inp-dob').value;
+                    if (!dobVal) return;
+
+                    const dob = new Date(dobVal);
+                    const now = new Date();
+                    
+                    if (dob > now) return;
+
+                    document.getElementById('empty-state').classList.add('hidden');
+                    document.getElementById('cosmic-dashboard').classList.remove('hidden');
+
+                    // 1. Calculate age in Earth years (Precise decimal)
+                    const diffMs = now - dob;
+                    const earthYears = diffMs / (1000 * 60 * 60 * 24 * 365.25);
+
+                    // 2. Map to each planet
+                    Object.keys(this.periods).forEach(planet => {
+                        const planetAge = earthYears / this.periods[planet];
+                        const el = document.getElementById(`age-${planet}`);
+                        if(el) {
+                            // If age is very small (Neptune), show more decimals
+                            let decimals = planetAge < 1 ? 4 : 2;
+                            el.innerText = planetAge.toLocaleString('en-US', {
+                                minimumFractionDigits: decimals,
+                                maximumFractionDigits: decimals
+                            });
+                        }
+                    });
+                }
+            };
+            window.QS_Cosmic.initListener();
+        })();
+    </script>
+</body>
+</html>

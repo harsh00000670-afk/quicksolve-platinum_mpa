@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Voice Command Guide | QuickSolve Platinum</title>
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    
+    <style>
+        body { background-color: #0f172a; color: #e2e8f0; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+        
+        .help-header {
+            display: flex; align-items: center; justify-content: center; padding: 15px; 
+            background: #1e293b; border-bottom: 1px solid #334155; position: relative;
+        }
+        .back-btn { position: absolute; left: 15px; color: #38bdf8; font-size: 1.3rem; text-decoration: none; }
+        .help-title { color: #f8fafc; font-weight: 800; font-size: 1.2rem; letter-spacing: 0.5px; }
+
+        .help-container { padding: 20px; max-width: 600px; margin: 0 auto; overflow-y: auto; height: calc(100vh - 60px); }
+        
+        .intro-text { color: #94a3b8; font-size: 0.9rem; line-height: 1.5; margin-bottom: 25px; text-align: center; }
+        .feature-badge { background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; vertical-align: middle; margin-left: 8px; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .feature-badge.pro { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border-color: rgba(245, 158, 11, 0.3); }
+
+        .cmd-section { margin-bottom: 25px; background: #1e293b; border-radius: 12px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .sec-title { color: #38bdf8; font-size: 0.85rem; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; margin-bottom: 15px; border-bottom: 1px dashed #334155; padding-bottom: 8px; display: flex; align-items: center; justify-content: space-between;}
+        
+        .cmd-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.02); }
+        .cmd-row:last-child { border-bottom: none; }
+        
+        .cmd-action { font-weight: 700; color: #f8fafc; font-size: 0.95rem; flex: 1; display: flex; flex-direction: column; gap: 3px; }
+        .cmd-action small { color: #64748b; font-size: 0.75rem; font-weight: 500; }
+        
+        .cmd-speak { background: #0f172a; color: #10b981; padding: 6px 10px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; border: 1px solid #334155; text-align: right; flex: 2; line-height: 1.4; word-wrap: break-word;}
+        .cmd-speak.alt { color: #f59e0b; }
+        .cmd-speak.hin { color: #a78bfa; }
+
+        .help-example { background: rgba(56, 189, 248, 0.1); border-left: 4px solid #38bdf8; padding: 15px; border-radius: 0 8px 8px 0; margin-top: 20px; }
+        .help-example-text { color: #f8fafc; font-style: italic; font-size: 0.95rem; font-weight: 600; display: block; margin-bottom: 8px;}
+        .help-example-desc { display: block; color: #94a3b8; font-size: 0.85rem; line-height: 1.5; }
+
+        .ui-tip { display: flex; gap: 15px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .ui-tip:last-child { border-bottom: none; }
+        .ui-tip i { font-size: 1.5rem; color: #38bdf8; margin-top: 2px; }
+        .ui-tip-text h4 { margin: 0 0 5px 0; color: #f8fafc; font-size: 0.95rem; }
+        .ui-tip-text p { margin: 0; color: #94a3b8; font-size: 0.8rem; line-height: 1.4; }
+    </style>
+</head>
+<body>
+
+    <header class="help-header">
+        <a href="scientific.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="help-title">VOICE COMMAND DICTIONARY</div>
+    </header>
+
+    <div class="help-container">
+        <p class="intro-text">
+            Tap the <i class="fas fa-microphone" style="color: #38bdf8;"></i> icon and speak naturally. Our <strong>MathCore Engine</strong> features <span style="color:#10b981; font-weight:bold;">Live Voice Typing</span>—watch your words turn into math instantly! Understands English, Hinglish, and scientific jargon.
+        </p>
+
+        <div class="cmd-section">
+            <div class="sec-title">🛠️ Pro Gestures & UI <span class="feature-badge pro">NEW</span></div>
+            
+            <div class="ui-tip">
+                <i class="fas fa-history"></i>
+                <div class="ui-tip-text">
+                    <h4>Smart History Tape</h4>
+                    <p>Tap the clock icon on the left to view your last 10 calculations. Tap any past calculation to instantly load it back onto the screen.</p>
+                </div>
+            </div>
+            <div class="ui-tip">
+                <i class="fas fa-atom" style="color: #a78bfa;"></i>
+                <div class="ui-tip-text">
+                    <h4>Constants Vault</h4>
+                    <p>Need Planck's constant or the speed of light quickly? Tap the atom icon to open the quick-access vault for 20+ physics and chemistry constants.</p>
+                </div>
+            </div>
+            <div class="ui-tip">
+                <i class="fas fa-angle-right" style="color: #f59e0b;"></i>
+                <div class="ui-tip-text">
+                    <h4>DEG / RAD Toggle</h4>
+                    <p>Tap the 'DEG' or 'RAD' button on the left stack to switch angle modes instantly for your trigonometric calculations.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cmd-section">
+            <div class="sec-title">🔬 Physics & Chem Constants <span class="feature-badge">PRO</span></div>
+            <div class="cmd-row">
+                <span class="cmd-action">Speed of Light (c)<small>299,792,458 m/s</small></span>
+                <span class="cmd-speak">speed of light, c value</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Planck Constant (h)<small>6.626 × 10⁻³⁴</small></span>
+                <span class="cmd-speak alt">planck constant, planck, h value</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Avogadro Number (Nᴀ)<small>6.022 × 10²³</small></span>
+                <span class="cmd-speak">avogadro number, avogadro</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Gravitational Const. (G)<small>6.674 × 10⁻¹¹</small></span>
+                <span class="cmd-speak alt">gravitational constant, capital g</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Elementary Charge (e)<small>1.602 × 10⁻¹⁹</small></span>
+                <span class="cmd-speak">elementary charge, electron charge</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Mass of Electron (mₑ)<small>9.109 × 10⁻³¹</small></span>
+                <span class="cmd-speak alt">electron mass, m e</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Rydberg Constant (R∞)<small>1.097 × 10⁷</small></span>
+                <span class="cmd-speak">rydberg constant, r infinity</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Vacuum Permittivity (ε₀)<small>8.854 × 10⁻¹²</small></span>
+                <span class="cmd-speak alt">vacuum permittivity, epsilon not</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Gas Constant (R)<small>8.314 J/(mol·K)</small></span>
+                <span class="cmd-speak">gas constant, capital r</span>
+            </div>
+            <div class="cmd-row" style="padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.05);">
+                <span style="color: #94a3b8; font-size: 0.75rem; font-style: italic; width: 100%; text-align: center;">...and 10 more constants available via voice or the Vault!</span>
+            </div>
+        </div>
+
+        <div class="cmd-section">
+            <div class="sec-title">1. Basic Operations & Controls</div>
+            <div class="cmd-row">
+                <span class="cmd-action">Calculate (=)</span>
+                <span class="cmd-speak">equal, equals, solve, result, answer, is, gives, batao</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Clear Screen (AC)</span>
+                <span class="cmd-speak alt">clear, all clear, reset, delete all</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Backspace (DEL)</span>
+                <span class="cmd-speak">delete, backspace, remove, piche</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Add (+)</span>
+                <span class="cmd-speak hin">plus, add, and, jod</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Subtract (-)</span>
+                <span class="cmd-speak hin">minus, subtract, sub, ghata</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Multiply (×)</span>
+                <span class="cmd-speak hin">multiply, into, times, x, guna, gunna</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Divide (÷)</span>
+                <span class="cmd-speak hin">divide, by, over, upon, bhag, bhaag</span>
+            </div>
+        </div>
+
+        <div class="cmd-section">
+            <div class="sec-title">2. Numbers & Standard Constants</div>
+            <div class="cmd-row">
+                <span class="cmd-action">Numbers (0-10)</span>
+                <span class="cmd-speak">zero/shunya, one/ek, two/do... ten/das</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Decimal (.)</span>
+                <span class="cmd-speak alt">point, dot, decimal</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Pi (π)</span>
+                <span class="cmd-speak alt">pi, pie, pai</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Euler's Number (e)</span>
+                <span class="cmd-speak">eular, euler, constant e, exponential</span>
+            </div>
+        </div>
+
+        <div class="cmd-section">
+            <div class="sec-title">3. Trigonometry</div>
+            <div class="cmd-row">
+                <span class="cmd-action">Sine (sin)</span>
+                <span class="cmd-speak hin">sine, sign, sin, seen</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Cosine (cos)</span>
+                <span class="cmd-speak hin">cos, cosine, cause</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Tangent (tan)</span>
+                <span class="cmd-speak hin">tan, tangent, ten</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Inverse Trig (sin⁻¹)</span>
+                <span class="cmd-speak">sin inverse, inverse sine, arc sine, a sin</span>
+            </div>
+        </div>
+
+        <div class="cmd-section">
+            <div class="sec-title">4. Powers, Roots & Logs</div>
+            <div class="cmd-row">
+                <span class="cmd-action">Square (x²)</span>
+                <span class="cmd-speak alt">square, squared, ka square</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Cube (x³)</span>
+                <span class="cmd-speak alt">cube, cubed, ka cube</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Power (xʸ)</span>
+                <span class="cmd-speak">raise to the power, power, raise to, ki power</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Square Root (√)</span>
+                <span class="cmd-speak hin">square root, root, under root</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Base 10 Log (log)</span>
+                <span class="cmd-speak alt">log, logarithm, base ten log</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Natural Log (ln)</span>
+                <span class="cmd-speak">natural log, l n, el en</span>
+            </div>
+        </div>
+
+        <div class="cmd-section">
+            <div class="sec-title">5. Combinatorics & Advanced</div>
+            <div class="cmd-row">
+                <span class="cmd-action">Factorial (!)</span>
+                <span class="cmd-speak">factorial</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Combinations (nCr)</span>
+                <span class="cmd-speak hin">combination, ncr, n c r</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Permutations (nPr)</span>
+                <span class="cmd-speak hin">permutation, npr, n p r</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Modulo (mod)</span>
+                <span class="cmd-speak">modulo, remainder, mod</span>
+            </div>
+        </div>
+
+        <div class="cmd-section">
+            <div class="sec-title">6. Brackets & Rounding</div>
+            <div class="cmd-row">
+                <span class="cmd-action">Floor (⌊x⌋)</span>
+                <span class="cmd-speak">floor, round down, lowest integer</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Open Bracket (()</span>
+                <span class="cmd-speak">open bracket, bracket open, start bracket</span>
+            </div>
+            <div class="cmd-row">
+                <span class="cmd-action">Close Bracket ())</span>
+                <span class="cmd-speak">close bracket, bracket close, end bracket</span>
+            </div>
+        </div>
+
+        <div class="help-example">
+            <span class="help-example-text">"planck constant multiply by speed of light divide by 500 nanometers"</span>
+            <span class="help-example-desc">Directly solve photon energy equations from NKS Sir's mechanics notes! The MathCore engine will automatically inject \(6.626 \times 10^{-34}\) and \(299792458\).</span>
+        </div>
+        
+        <div class="help-example" style="border-color: #f59e0b; background: rgba(245, 158, 11, 0.1);">
+            <span class="help-example-text">"five combination two batao"</span>
+            <span class="help-example-desc">Uses Hinglish perfectly! Evaluates as 5nCr2 and instantly gives the probability result.</span>
+        </div>
+
+        <div class="help-example" style="border-color: #10b981; background: rgba(16, 185, 129, 0.1);">
+            <span class="help-example-text">"two moles multiply by avogadro number"</span>
+            <span class="help-example-desc">Calculate atoms directly for NA Sir's physical chemistry problems without typing a single digit.</span>
+        </div>
+
+        <div style="height: 40px;"></div>
+    </div>
+
+</body>
+</html>
